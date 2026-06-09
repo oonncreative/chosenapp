@@ -55,6 +55,17 @@ function HomePage() {
           ))}
         </div>
       </section>
+
+      <footer className="mt-auto py-4 text-center">
+        <a 
+          href="https://oonn.com.br" 
+          target="_blank" 
+          rel="noopener noreferrer"
+          className="text-[9px] font-light tracking-[0.2em] text-gray-300 uppercase transition-colors hover:text-gray-400"
+        >
+          OONN Creative — oonn.com.br
+        </a>
+      </footer>
     </div>
   );
 }
