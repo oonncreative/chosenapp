@@ -52,7 +52,7 @@ function MensagemPage() {
   };
 
   return (
-    <div className="relative flex h-screen w-full flex-col overflow-hidden bg-background p-8">
+    <div className="relative flex h-screen w-full flex-col overflow-hidden bg-white p-8">
       {/* Elemento oculto para geração da imagem de compartilhamento */}
       <div 
         ref={shareRef}
@@ -73,41 +73,39 @@ function MensagemPage() {
       <header className="flex h-12 items-center">
         <Link 
           to="/home" 
-          className="flex h-10 w-10 items-center justify-center rounded-full transition-colors hover:bg-muted"
+          className="flex h-10 w-10 items-center justify-center rounded-full transition-colors hover:bg-gray-100"
         >
-          <ArrowLeft className="h-5 w-5 text-muted-foreground" />
+          <ArrowLeft className="h-5 w-5 text-gray-400" />
         </Link>
       </header>
 
       <main className="flex flex-1 flex-col items-center justify-center px-4 text-center">
         <div key={mensagem.id} className="w-full max-w-md animate-in fade-in duration-700">
-          <p className="text-3xl font-bold leading-tight tracking-tight text-black md:text-4xl">
+          <p className="text-2xl font-light leading-relaxed text-black md:text-3xl tracking-tight">
             "{mensagem.texto}"
           </p>
-          <p className="mt-8 text-sm font-bold tracking-widest uppercase text-black/40">
+          <p className="mt-8 text-xs font-medium tracking-[0.2em] uppercase text-gray-300">
             {mensagem.referencia}
           </p>
-
         </div>
       </main>
 
-      <footer className="flex flex-col gap-3 pb-4">
+      <footer className="flex flex-col gap-2.5 pb-4">
         <Button
           onClick={handleRefresh}
-          className="h-[72px] rounded-[36px] bg-[#F0F26C] text-2xl font-bold tracking-tight text-black hover:bg-[#F0F26C]/90 shadow-none border-none"
+          className="h-[60px] rounded-[30px] bg-[#F0F26C] text-xl font-bold tracking-tight text-black hover:bg-[#F0F26C]/90 shadow-none border-none"
         >
           Nova mensagem
         </Button>
         <Button
           variant="outline"
           onClick={handleShare}
-          className="h-[72px] rounded-[36px] border-2 border-black bg-white text-xl font-bold tracking-tight text-black hover:bg-gray-50 shadow-none"
+          className="h-[60px] rounded-[30px] border-2 border-black bg-white text-lg font-bold tracking-tight text-black hover:bg-gray-50 shadow-none"
         >
-          <Share2 className="mr-2 h-5 w-5" />
+          <Share2 className="mr-2 h-4 w-4" />
           Compartilhar
         </Button>
       </footer>
-
     </div>
   );
 }

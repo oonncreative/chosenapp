@@ -21,31 +21,27 @@ const colors = [
 function HomePage() {
   return (
     <div className="h-screen overflow-hidden bg-white p-6 pt-8 flex flex-col">
-      <header className="mb-10 flex flex-col gap-2 shrink-0">
-        <h1 className="text-[10px] font-light tracking-[0.35em] text-gray-300 uppercase">Ressoa</h1>
-
-        <div className="mt-8">
-          <p className="text-2xl font-bold tracking-tight text-black">Qual seu sentimento?</p>
+      <header className="mb-8 flex flex-col gap-2 shrink-0">
+        <h1 className="text-[10px] font-extralight tracking-[0.4em] text-gray-300 uppercase">Ressoa</h1>
+        <div className="mt-6">
+          <p className="text-xl font-light tracking-tight text-black">Qual seu sentimento?</p>
         </div>
       </header>
 
-      <section className="flex-1 overflow-y-auto no-scrollbar pb-8">
-        <div className="flex flex-col gap-3">
+      <section className="flex-1 overflow-y-auto no-scrollbar pb-6">
+        <div className="flex flex-col gap-2.5">
           {CATEGORIAS.map((sentimento, index) => (
             <Link
               key={sentimento}
               to="/mensagem/$sentimento"
               params={{ sentimento }}
-              className={`flex h-[72px] items-center rounded-[36px] px-8 transition-all active:scale-[0.98] ${colors[index % colors.length]}`}
+              className={`flex h-[60px] items-center rounded-[30px] px-8 transition-all active:scale-[0.98] ${colors[index % colors.length]}`}
             >
-              <span className="text-2xl font-bold tracking-tight">{sentimento}</span>
+              <span className="text-xl font-bold tracking-tight">{sentimento}</span>
             </Link>
           ))}
         </div>
       </section>
     </div>
-
-
-
   );
 }
