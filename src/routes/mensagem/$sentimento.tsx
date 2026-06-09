@@ -11,11 +11,12 @@ export const Route = createFileRoute("/mensagem/$sentimento")({
 
 function MensagemPage() {
   const { sentimento } = Route.useParams();
+  const navigate = useNavigate();
   const [mensagem, setMensagem] = useState<Mensagem>(() => getProximaMensagem(sentimento as Categoria));
   const shareRef = useRef<HTMLDivElement>(null);
 
   const handleRefresh = () => {
-    setMensagem(getProximaMensagem(sentimento as Categoria));
+    navigate({ to: "/home" });
   };
 
   const handleShare = async () => {
@@ -65,22 +66,34 @@ function MensagemPage() {
 
   return (
     <div className="relative flex h-screen w-full flex-col overflow-hidden bg-white p-8">
-      {/* Elemento oculto para geração da imagem de compartilhamento */}
+      {/* Elemento para geração da imagem de compartilhamento - movido para fora do viewport mas visível para o html-to-image */}
       <div 
+        style={{ 
+          position: 'absolute',
+          left: '-2000px',
+          top: '0',
+          width: '1080px',
+          height: '1920px',
+          backgroundColor: '#ffffff',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+          textAlign: 'center',
+          padding: '80px'
+        }}
         ref={shareRef}
-        className="fixed left-[-9999px] top-0 flex flex-col items-center justify-center bg-white p-20 text-center z-[-1]"
-        style={{ width: "1080px", height: "1920px", display: "flex" }}
       >
-        <span className="absolute top-20 text-2xl font-extralight tracking-[0.4em] text-black/20 uppercase">RESSOA</span>
-        <div className="flex flex-col items-center gap-12 px-12">
-          <p className="text-5xl font-light leading-[1.4] text-black">
+        <span style={{ position: 'absolute', top: '80px', fontSize: '24px', fontWeight: '200', letterSpacing: '0.4em', color: 'rgba(0,0,0,0.2)', textTransform: 'uppercase' }}>RESSOA</span>
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '48px' }}>
+          <p style={{ fontSize: '48px', fontWeight: '300', lineHeight: '1.4', color: '#000000', margin: '0' }}>
             "{mensagem.texto}"
           </p>
-          <p className="text-2xl font-medium tracking-[0.1em] text-black/50 uppercase">
+          <p style={{ fontSize: '24px', fontWeight: '500', letterSpacing: '0.1em', color: 'rgba(0,0,0,0.5)', textTransform: 'uppercase', margin: '0' }}>
             {mensagem.referencia}
           </p>
           {mensagem.fraseMotivacional && (
-            <p className="mt-8 text-3xl font-light italic text-black/40 px-20">
+            <p style={{ marginTop: '32px', fontSize: '30px', fontWeight: '300', fontStyle: 'italic', color: 'rgba(0,0,0,0.4)', padding: '0 80px' }}>
               {mensagem.fraseMotivacional}
             </p>
           )}
@@ -117,17 +130,17 @@ function MensagemPage() {
         </div>
       </main>
 
-      <footer className="flex flex-col gap-2.5 pb-4">
+      <footer className="flex gap-2.5 pb-4">
         <Button
           onClick={handleRefresh}
-          className="h-[60px] rounded-[30px] bg-[#F0F26C] text-xl font-bold tracking-tight text-black hover:bg-[#F0F26C]/90 shadow-none border-none"
+          className="flex-1 h-[60px] rounded-[30px] bg-[#F0F26C] text-lg font-bold tracking-tight text-black hover:bg-[#F0F26C]/90 shadow-none border-none"
         >
-          Nova mensagem
+          Novo sentimento
         </Button>
         <Button
           variant="outline"
           onClick={handleShare}
-          className="h-[60px] rounded-[30px] border-2 border-black bg-white text-lg font-bold tracking-tight text-black hover:bg-gray-50 shadow-none"
+          className="flex-1 h-[60px] rounded-[30px] border-2 border-black bg-white text-lg font-bold tracking-tight text-black hover:bg-gray-50 shadow-none"
         >
           <Share2 className="mr-2 h-4 w-4" />
           Compartilhar
