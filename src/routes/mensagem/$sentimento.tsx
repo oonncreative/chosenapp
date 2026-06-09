@@ -1,8 +1,9 @@
 import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
-import { getVersiculoAleatorio, type Categoria } from "@/lib/data";
+import { getProximaMensagem, type Categoria, type Mensagem } from "@/lib/data";
 import { Button } from "@/components/ui/button";
-import { useState, useEffect } from "react";
+import { useState, useRef } from "react";
 import { Share2, RefreshCw, ArrowLeft } from "lucide-react";
+import { toPng } from "html-to-image";
 
 export const Route = createFileRoute("/mensagem/$sentimento")({
   component: MensagemPage,
@@ -10,66 +11,102 @@ export const Route = createFileRoute("/mensagem/$sentimento")({
 
 function MensagemPage() {
   const { sentimento } = Route.useParams();
-  const navigate = useNavigate();
-  const [versiculo, setVersiculo] = useState(() => getVersiculoAleatorio(sentimento as Categoria));
+  const [mensagem, setMensagem] = useState<Mensagem>(() => getProximaMensagem(sentimento as Categoria));
+  const shareRef = useRef<HTMLDivElement>(null);
 
   const handleRefresh = () => {
-    setVersiculo(getVersiculoAleatorio(sentimento as Categoria));
+    setMensagem(getProximaMensagem(sentimento as Categoria));
   };
 
-  const handleShare = () => {
-    if (navigator.share) {
-      navigator.share({
-        title: "Ressoa",
-        text: `"${versiculo.texto}" - ${versiculo.referencia}`,
-        url: window.location.href,
+  const handleShare = async () => {
+    if (!shareRef.current) return;
+
+    try {
+      const dataUrl = await toPng(shareRef.current, {
+        width: 1080,
+        height: 1920,
+        style: {
+          display: "flex",
+          visibility: "visible",
+        },
       });
-    } else {
-      alert("Copiado para a área de transferência!");
-      navigator.clipboard.writeText(`"${versiculo.texto}" - ${versiculo.referencia}`);
+
+      const blob = await (await fetch(dataUrl)).blob();
+      const file = new File([blob], "ressoa-mensagem.png", { type: "image/png" });
+
+      if (navigator.share && navigator.canShare?.({ files: [file] })) {
+        await navigator.share({
+          files: [file],
+          title: "Ressoa",
+          text: "Uma palavra para você.",
+        });
+      } else {
+        const link = document.createElement("a");
+        link.download = "ressoa.png";
+        link.href = dataUrl;
+        link.click();
+      }
+    } catch (err) {
+      console.error("Erro ao compartilhar:", err);
     }
   };
 
   return (
-    <div className="flex min-h-screen flex-col bg-background p-8">
-      <Link 
-        to="/home" 
-        className="mb-12 flex h-10 w-10 items-center justify-center rounded-full bg-muted/50 text-muted-foreground transition-colors hover:bg-muted"
+    <div className="relative flex h-screen w-full flex-col overflow-hidden bg-background p-8">
+      {/* Elemento oculto para geração da imagem de compartilhamento */}
+      <div 
+        ref={shareRef}
+        className="fixed left-[-9999px] top-0 flex flex-col items-center justify-center bg-white p-20 text-center"
+        style={{ width: "1080px", height: "1920px" }}
       >
-        <ArrowLeft className="h-5 w-5" />
-      </Link>
-
-      <div className="flex flex-1 flex-col items-center justify-center text-center">
-        <div className="w-full max-w-sm animate-in fade-in zoom-in-95 duration-500">
-          <p className="text-2xl font-light italic leading-relaxed text-foreground md:text-3xl">
-            "{versiculo.texto}"
+        <span className="absolute top-20 text-xl font-medium tracking-[0.2em] text-black/40">RESSOA</span>
+        <div className="flex flex-col items-center gap-12 px-12">
+          <p className="text-5xl font-light leading-[1.4] text-black">
+            "{mensagem.texto}"
           </p>
-          <p className="mt-6 text-sm font-medium tracking-widest uppercase text-muted-foreground">
-            {versiculo.referencia}
-          </p>
-          <p className="mt-12 text-base font-light leading-relaxed text-muted-foreground/80">
-            {versiculo.reflexao}
+          <p className="text-2xl font-medium tracking-[0.1em] text-black/50 uppercase">
+            {mensagem.referencia}
           </p>
         </div>
       </div>
 
-      <div className="mt-auto grid grid-cols-2 gap-4 pt-12">
+      <header className="flex h-12 items-center">
+        <Link 
+          to="/home" 
+          className="flex h-10 w-10 items-center justify-center rounded-full transition-colors hover:bg-muted"
+        >
+          <ArrowLeft className="h-5 w-5 text-muted-foreground" />
+        </Link>
+      </header>
+
+      <main className="flex flex-1 flex-col items-center justify-center px-4 text-center">
+        <div key={mensagem.id} className="w-full max-w-md animate-in fade-in duration-700">
+          <p className="text-2xl font-light leading-relaxed text-foreground md:text-3xl">
+            "{mensagem.texto}"
+          </p>
+          <p className="mt-8 text-xs font-medium tracking-[0.2em] uppercase text-muted-foreground">
+            {mensagem.referencia}
+          </p>
+        </div>
+      </main>
+
+      <footer className="grid grid-cols-2 gap-4 pb-4">
         <Button
           variant="outline"
           onClick={handleShare}
-          className="h-14 rounded-2xl border-muted/50 font-light hover:bg-primary/5"
+          className="h-14 rounded-full border-muted/40 font-light hover:bg-accent"
         >
           <Share2 className="mr-2 h-4 w-4" />
           Compartilhar
         </Button>
         <Button
           onClick={handleRefresh}
-          className="h-14 rounded-2xl bg-primary font-light text-primary-foreground hover:bg-primary/90"
+          className="h-14 rounded-full bg-primary font-light text-primary-foreground hover:bg-primary/90"
         >
           <RefreshCw className="mr-2 h-4 w-4" />
           Nova mensagem
         </Button>
-      </div>
+      </footer>
     </div>
   );
 }

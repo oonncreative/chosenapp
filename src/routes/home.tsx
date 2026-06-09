@@ -19,14 +19,14 @@ const colors = [
 
 function HomePage() {
   return (
-    <div className="min-h-screen bg-background p-8 pt-12">
-      <header className="mb-12 flex flex-col gap-1">
-        <h1 className="text-lg font-medium tracking-tight text-foreground/80">Ressoa</h1>
-        <p className="text-2xl font-light text-foreground">Inspire-se nas palavras de Deus</p>
+    <div className="h-screen overflow-hidden bg-background p-8 pt-12 flex flex-col">
+      <header className="mb-12 flex flex-col gap-1 shrink-0">
+        <h1 className="text-xs font-medium uppercase tracking-[0.2em] text-muted-foreground">Ressoa</h1>
+        <p className="text-xl font-light text-foreground">Inspire-se nas palavras de Deus</p>
       </header>
 
-      <section>
-        <h2 className="mb-8 text-sm font-medium uppercase tracking-widest text-muted-foreground">Leia-me quando...</h2>
+      <section className="flex-1 overflow-y-auto no-scrollbar pb-8">
+        <h2 className="mb-8 text-[10px] font-semibold uppercase tracking-[0.2em] text-muted-foreground/60">Leia-me quando...</h2>
         
         <div className="grid grid-cols-2 gap-4">
           {CATEGORIAS.map((sentimento, index) => (
@@ -34,13 +34,14 @@ function HomePage() {
               key={sentimento}
               to="/mensagem/$sentimento"
               params={{ sentimento }}
-              className={`flex h-28 flex-col items-center justify-center rounded-3xl border px-4 text-center transition-all hover:scale-[0.98] active:scale-95 ${colors[index % colors.length]}`}
+              className={`flex h-28 flex-col items-center justify-center rounded-3xl border px-4 text-center transition-all active:scale-[0.98] ${colors[index % colors.length]}`}
             >
-              <span className="text-sm font-medium leading-tight">{sentimento}</span>
+              <span className="text-xs font-medium leading-tight tracking-wide">{sentimento}</span>
             </Link>
           ))}
         </div>
       </section>
     </div>
+
   );
 }
