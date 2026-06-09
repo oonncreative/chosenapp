@@ -9,10 +9,10 @@ function Index() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Redireciona para onboarding na primeira visita
-    // Em um app real, verificaríamos o localStorage aqui
-    navigate({ to: "/onboarding" });
+    // Sempre mostrar diretamente a tela de sentimentos ao abrir o app
+    navigate({ to: "/home" });
   }, [navigate]);
+
 
   return null;
 }
