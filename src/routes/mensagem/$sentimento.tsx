@@ -127,20 +127,20 @@ function MensagemPage() {
         </div>
       </main>
 
-      <footer className="flex gap-2.5 pb-4">
+      <footer className="grid grid-cols-2 gap-3 pb-6 shrink-0">
         <Button
           onClick={handleRefresh}
-          className="flex-1 h-[60px] rounded-[30px] bg-[#F0F26C] text-lg font-bold tracking-tight text-black hover:bg-[#F0F26C]/90 shadow-none border-none"
+          className="h-[56px] rounded-full bg-[#F0F26C] text-sm font-bold tracking-tight text-black hover:bg-[#F0F26C]/90 shadow-none border-none whitespace-nowrap px-2"
         >
           Novo sentimento
         </Button>
         <Button
           variant="outline"
           onClick={handleShare}
-          className="flex-1 h-[60px] rounded-[30px] border-2 border-black bg-white text-lg font-bold tracking-tight text-black hover:bg-gray-50 shadow-none"
+          className="h-[56px] rounded-full border-2 border-black bg-white text-sm font-bold tracking-tight text-black hover:bg-gray-50 shadow-none flex items-center justify-center gap-2 px-2"
         >
-          <Share2 className="mr-2 h-4 w-4" />
-          Compartilhar
+          <Share2 className="h-4 w-4 shrink-0" />
+          <span className="whitespace-nowrap">Compartilhar</span>
         </Button>
       </footer>
     </div>
