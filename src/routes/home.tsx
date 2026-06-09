@@ -22,7 +22,20 @@ function HomePage() {
   return (
     <div className="h-screen overflow-hidden bg-white p-6 pt-8 flex flex-col">
       <header className="mb-8 flex flex-col gap-2 shrink-0">
-        <h1 className="text-[10px] font-extralight tracking-[0.4em] text-gray-300 uppercase">Ressoa</h1>
+        <div className="flex items-center justify-between">
+          <h1 className="text-[10px] font-extralight tracking-[0.4em] text-gray-300 uppercase">Ressoa</h1>
+          <button 
+            onClick={() => window.location.href = '/'}
+            className="flex items-center gap-1.5 transition-opacity active:opacity-50"
+          >
+            <span className="text-[9px] font-light tracking-wider text-gray-300 uppercase">Atualizar</span>
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="text-gray-300">
+              <path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8" strokeLinecap="round" strokeLinejoin="round"/>
+              <path d="M21 3v5h-5" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+          </button>
+        </div>
+
         <div className="mt-6">
           <p className="text-xl font-light tracking-tight text-black">Qual seu sentimento?</p>
         </div>
