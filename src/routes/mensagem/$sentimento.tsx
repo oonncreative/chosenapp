@@ -81,32 +81,33 @@ function MensagemPage() {
 
       <main className="flex flex-1 flex-col items-center justify-center px-4 text-center">
         <div key={mensagem.id} className="w-full max-w-md animate-in fade-in duration-700">
-          <p className="text-2xl font-light leading-relaxed text-foreground md:text-3xl">
+          <p className="text-3xl font-bold leading-tight tracking-tight text-black md:text-4xl">
             "{mensagem.texto}"
           </p>
-          <p className="mt-8 text-xs font-medium tracking-[0.2em] uppercase text-muted-foreground">
+          <p className="mt-8 text-sm font-bold tracking-widest uppercase text-black/40">
             {mensagem.referencia}
           </p>
+
         </div>
       </main>
 
-      <footer className="grid grid-cols-2 gap-4 pb-4">
+      <footer className="flex flex-col gap-3 pb-4">
+        <Button
+          onClick={handleRefresh}
+          className="h-[72px] rounded-[36px] bg-[#F0F26C] text-2xl font-bold tracking-tight text-black hover:bg-[#F0F26C]/90 shadow-none border-none"
+        >
+          Nova mensagem
+        </Button>
         <Button
           variant="outline"
           onClick={handleShare}
-          className="h-14 rounded-full border-muted/40 font-light hover:bg-accent"
+          className="h-[72px] rounded-[36px] border-2 border-black bg-white text-xl font-bold tracking-tight text-black hover:bg-gray-50 shadow-none"
         >
-          <Share2 className="mr-2 h-4 w-4" />
+          <Share2 className="mr-2 h-5 w-5" />
           Compartilhar
         </Button>
-        <Button
-          onClick={handleRefresh}
-          className="h-14 rounded-full bg-primary font-light text-primary-foreground hover:bg-primary/90"
-        >
-          <RefreshCw className="mr-2 h-4 w-4" />
-          Nova mensagem
-        </Button>
       </footer>
+
     </div>
   );
 }
