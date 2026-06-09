@@ -5,6 +5,7 @@ export interface Mensagem {
   texto: string;
   referencia: string;
   tipo: TipoMensagem;
+  fraseMotivacional?: string;
 }
 
 export const CATEGORIAS = [
@@ -15,67 +16,58 @@ export type Categoria = typeof CATEGORIAS[number];
 
 export const MENSAGENS: Record<Categoria, Mensagem[]> = {
   "Feliz": [
-    { id: "f1", tipo: "versiculo", texto: "Alegrem-se sempre no Senhor. Novamente direi: alegrem-se!", referencia: "Filipenses 4:4" },
-    { id: "f2", tipo: "salmo", texto: "Este é o dia que o Senhor fez; regozijemo-nos e alegremo-nos nele.", referencia: "Salmos 118:24" },
-    { id: "f3", tipo: "reflexao", texto: "A felicidade não é um destino, é a presença de Deus no caminho.", referencia: "Ressoa" },
-    { id: "f4", tipo: "versiculo", texto: "O coração alegre aformoseia o rosto.", referencia: "Provérbios 15:13" },
-    { id: "f5", tipo: "salmo", texto: "Tu me farás conhecer a vereda da vida, a alegria plena da tua presença.", referencia: "Salmos 16:11" },
+    { id: "f1", tipo: "versiculo", texto: "Alegrem-se sempre no Senhor. Novamente direi: alegrem-se!", referencia: "Filipenses 4:4", fraseMotivacional: "A alegria que vem de Deus é a sua maior força hoje." },
+    { id: "f2", tipo: "salmo", texto: "Este é o dia que o Senhor fez; regozijemo-nos e alegremo-nos nele.", referencia: "Salmos 118:24", fraseMotivacional: "Cada novo dia é um presente único para ser celebrado." },
+    { id: "f4", tipo: "versiculo", texto: "O coração alegre aformoseia o rosto.", referencia: "Provérbios 15:13", fraseMotivacional: "Deixe seu brilho interno iluminar o seu caminho." },
+    { id: "f5", tipo: "salmo", texto: "Tu me farás conhecer a vereda da vida, a alegria plena da tua presença.", referencia: "Salmos 16:11", fraseMotivacional: "Caminhe com a certeza de que a felicidade te acompanha." },
   ],
   "Ansioso": [
-    { id: "a1", tipo: "versiculo", texto: "Não andem ansiosos por coisa alguma, mas em tudo apresentem seus pedidos a Deus.", referencia: "Filipenses 4:6" },
-    { id: "a2", tipo: "versiculo", texto: "Lancem sobre ele toda a sua ansiedade, porque ele tem cuidado de vocês.", referencia: "1 Pedro 5:7" },
-    { id: "a3", tipo: "reflexao", texto: "O amanhã pertence a Deus. Respire e confie no agora.", referencia: "Ressoa" },
-    { id: "a4", tipo: "salmo", texto: "Quando a ansiedade já me dominava, o teu consolo trouxe alívio à minha alma.", referencia: "Salmos 94:19" },
-    { id: "a5", tipo: "versiculo", texto: "Quem de vocês, por mais que se preocupe, pode acrescentar uma hora que seja à sua vida?", referencia: "Mateus 6:27" },
+    { id: "a1", tipo: "versiculo", texto: "Não andem ansiosos por coisa alguma, mas em tudo apresentem seus pedidos a Deus.", referencia: "Filipenses 4:6", fraseMotivacional: "Troque a preocupação pela confiança e sinta a paz chegar." },
+    { id: "a2", tipo: "versiculo", texto: "Lancem sobre ele toda a sua ansiedade, porque ele tem cuidado de vocês.", referencia: "1 Pedro 5:7", fraseMotivacional: "Você não precisa carregar o mundo nas costas. Descanse." },
+    { id: "a4", tipo: "salmo", texto: "Quando a ansiedade já me dominava, o teu consolo trouxe alívio à minha alma.", referencia: "Salmos 94:19", fraseMotivacional: "Respire fundo. O alívio que você precisa já está a caminho." },
+    { id: "a5", tipo: "versiculo", texto: "Quem de vocês, por mais que se preocupe, pode acrescentar uma hora que seja à sua vida?", referencia: "Mateus 6:27", fraseMotivacional: "Concentre-se no agora; o amanhã se cuidará sozinho." },
   ],
   "Triste": [
-    { id: "t1", tipo: "versiculo", texto: "O Senhor está perto dos que têm o coração quebrantado.", referencia: "Salmos 34:18" },
-    { id: "t2", tipo: "versiculo", texto: "Bem-aventurados os que choram, pois serão consolados.", referencia: "Mateus 5:4" },
-    { id: "t3", tipo: "reflexao", texto: "Mesmo nas noites mais escuras, o sol da justiça nunca deixa de brilhar.", referencia: "Ressoa" },
-    { id: "t4", tipo: "salmo", texto: "O choro pode durar uma noite, mas a alegria vem pela manhã.", referencia: "Salmos 30:5" },
-    { id: "t5", tipo: "versiculo", texto: "Ele enxugará dos seus olhos toda lágrima.", referencia: "Apocalipse 21:4" },
+    { id: "t1", tipo: "versiculo", texto: "O Senhor está perto dos que têm o coração quebrantado.", referencia: "Salmos 34:18", fraseMotivacional: "Sinta o abraço de quem nunca te deixa sozinho nos momentos difíceis." },
+    { id: "t2", tipo: "versiculo", texto: "Bem-aventurados os que choram, pois serão consolados.", referencia: "Mateus 5:4", fraseMotivacional: "Suas lágrimas são sementes de uma alegria que em breve florescerá." },
+    { id: "t4", tipo: "salmo", texto: "O choro pode durar uma noite, mas a alegria vem pela manhã.", referencia: "Salmos 30:5", fraseMotivacional: "A noite pode ser longa, mas o sol sempre volta a brilhar." },
+    { id: "t5", tipo: "versiculo", texto: "Ele enxugará dos seus olhos toda lágrima.", referencia: "Apocalipse 21:4", fraseMotivacional: "O consolo que você busca está mais perto do que você imagina." },
   ],
   "Sozinho": [
-    { id: "s1", tipo: "versiculo", texto: "E eu estarei sempre com vocês, até o fim dos tempos.", referencia: "Mateus 28:20" },
-    { id: "s2", tipo: "versiculo", texto: "Ele nunca o deixará, nunca o abandonará. Não tenha medo!", referencia: "Deuteronômio 31:8" },
-    { id: "s3", tipo: "reflexao", texto: "Você nunca está sozinho quando está na presença do Criador.", referencia: "Ressoa" },
-    { id: "s4", tipo: "salmo", texto: "Ainda que meu pai e minha mãe me abandonem, o Senhor me acolherá.", referencia: "Salmos 27:10" },
-    { id: "s5", tipo: "versiculo", texto: "Não os deixarei órfãos; voltarei para vocês.", referencia: "João 14:18" },
+    { id: "s1", tipo: "versiculo", texto: "E eu estarei sempre com vocês, até o fim dos tempos.", referencia: "Mateus 28:20", fraseMotivacional: "Existe uma presença constante ao seu lado, mesmo no silêncio." },
+    { id: "s2", tipo: "versiculo", texto: "Ele nunca o deixará, nunca o abandonará. Não tenha medo!", referencia: "Deuteronômio 31:8", fraseMotivacional: "A coragem nasce quando percebemos que nunca caminhamos sós." },
+    { id: "s4", tipo: "salmo", texto: "Ainda que meu pai e minha mãe me abandonem, o Senhor me acolherá.", referencia: "Salmos 27:10", fraseMotivacional: "Você é amado com um amor que supera qualquer distância." },
+    { id: "s5", tipo: "versiculo", texto: "Não os deixarei órfãos; voltarei para vocês.", referencia: "João 14:18", fraseMotivacional: "O sentimento de solidão é passageiro, a companhia divina é eterna." },
   ],
   "Agradecido": [
-    { id: "ag1", tipo: "versiculo", texto: "Dêem graças ao Senhor, porque ele é bom; o seu amor dura para sempre.", referencia: "Salmos 107:1" },
-    { id: "ag2", tipo: "versiculo", texto: "Deem graças em todas as circunstâncias.", referencia: "1 Tessalonicenses 5:18" },
-    { id: "ag3", tipo: "reflexao", texto: "Um coração grato é um ímã para novos milagres.", referencia: "Ressoa" },
-    { id: "ag4", tipo: "salmo", texto: "Bendize, ó minha alma, ao Senhor, e não te esqueças de nenhum de seus benefícios.", referencia: "Salmos 103:2" },
-    { id: "ag5", tipo: "versiculo", texto: "Toda boa dádiva e todo dom perfeito vêm do alto.", referencia: "Tiago 1:17" },
+    { id: "ag1", tipo: "versiculo", texto: "Dêem graças ao Senhor, porque ele é bom; o seu amor dura para sempre.", referencia: "Salmos 107:1", fraseMotivacional: "A gratidão transforma o que temos em suficiente." },
+    { id: "ag2", tipo: "versiculo", texto: "Deem graças em todas as circunstâncias.", referencia: "1 Tessalonicenses 5:18", fraseMotivacional: "Até nos pequenos detalhes existe um motivo para agradecer." },
+    { id: "ag4", tipo: "salmo", texto: "Bendize, ó minha alma, ao Senhor, e não te esqueças de nenhum de seus benefícios.", referencia: "Salmos 103:2", fraseMotivacional: "Lembre-se de tudo que já superou e sinta orgulho da sua jornada." },
+    { id: "ag5", tipo: "versiculo", texto: "Toda boa dádiva e todo dom perfeito vêm do alto.", referencia: "Tiago 1:17", fraseMotivacional: "Sua vida é um conjunto de milagres diários. Reconheça-os." },
   ],
   "Nervoso": [
-    { id: "n1", tipo: "versiculo", texto: "O Senhor é a minha luz e a minha salvação; de quem terei temor?", referencia: "Salmos 27:1" },
-    { id: "n2", tipo: "versiculo", texto: "Pois Deus não nos deu espírito de covardia, mas de poder e equilíbrio.", referencia: "2 Timóteo 1:7" },
-    { id: "n3", tipo: "reflexao", texto: "A paz começa quando o seu controle termina e a confiança em Deus assume.", referencia: "Ressoa" },
-    { id: "n4", tipo: "salmo", texto: "Em paz me deito e logo pego no sono, pois só tu, Senhor, me fazes viver em segurança.", referencia: "Salmos 4:8" },
-    { id: "n5", tipo: "versiculo", texto: "Aquietai-vos e sabei que eu sou Deus.", referencia: "Salmos 46:10" },
+    { id: "n1", tipo: "versiculo", texto: "O Senhor é a minha luz e a minha salvação; de quem terei temor?", referencia: "Salmos 27:1", fraseMotivacional: "A calma é a sua maior aliada diante de qualquer desafio." },
+    { id: "n2", tipo: "versiculo", texto: "Pois Deus não nos deu espírito de covardia, mas de poder e equilíbrio.", referencia: "2 Timóteo 1:7", fraseMotivacional: "Resgate o seu equilíbrio interno e tudo se ajustará." },
+    { id: "n4", tipo: "salmo", texto: "Em paz me deito e logo pego no sono, pois só tu, Senhor, me fazes viver em segurança.", referencia: "Salmos 4:8", fraseMotivacional: "Onde há confiança, o medo não encontra espaço para ficar." },
+    { id: "n5", tipo: "versiculo", texto: "Aquietai-vos e sabei que eu sou Deus.", referencia: "Salmos 46:10", fraseMotivacional: "No silêncio e na quietude, você encontrará a resposta que precisa." },
   ],
   "Preciso de esperança": [
-    { id: "e1", tipo: "versiculo", texto: "Pois eu bem sei os planos que tenho para vocês, planos de dar a vocês esperança.", referencia: "Jeremias 29:11" },
-    { id: "e2", tipo: "versiculo", texto: "Mas aqueles que esperam no Senhor renovam as suas forças.", referencia: "Isaías 40:31" },
-    { id: "e3", tipo: "reflexao", texto: "A esperança é a âncora da alma, firme e segura.", referencia: "Ressoa" },
-    { id: "e4", tipo: "salmo", texto: "Por que você está assim tão triste, ó minha alma? Ponha a sua esperança em Deus!", referencia: "Salmos 42:11" },
-    { id: "e5", tipo: "versiculo", texto: "A esperança não nos decepciona, porque Deus derramou seu amor em nossos corações.", referencia: "Romanos 5:5" },
+    { id: "e1", tipo: "versiculo", texto: "Pois eu bem sei os planos que tenho para vocês, planos de dar a vocês esperança.", referencia: "Jeremias 29:11", fraseMotivacional: "O melhor ainda está por vir. Continue acreditando." },
+    { id: "e2", tipo: "versiculo", texto: "Mas aqueles que esperam no Senhor renovam as suas forças.", referencia: "Isaías 40:31", fraseMotivacional: "Sua força está sendo renovada agora mesmo. Não desista." },
+    { id: "e4", tipo: "salmo", texto: "Por que você está assim tão triste, ó minha alma? Ponha a sua esperança em Deus!", referencia: "Salmos 42:11", fraseMotivacional: "Mantenha seus olhos no horizonte; a luz está chegando." },
+    { id: "e5", tipo: "versiculo", texto: "A esperança não nos decepciona, porque Deus derramou seu amor em nossos corações.", referencia: "Romanos 5:5", fraseMotivacional: "A esperança é o combustível que mantém a alma acesa." },
   ],
   "Preciso de paz": [
-    { id: "p1", tipo: "versiculo", texto: "Deixo-lhes a paz; a minha paz lhes dou.", referencia: "João 14:27" },
-    { id: "p2", tipo: "versiculo", texto: "Tu, Senhor, guardarás em perfeita paz aquele cujo propósito está firme.", referencia: "Isaías 26:3" },
-    { id: "p3", tipo: "reflexao", texto: "A paz não é a ausência de tempestade, é o silêncio de Deus dentro de você.", referencia: "Ressoa" },
-    { id: "p4", tipo: "salmo", texto: "O Senhor abençoa o seu povo com paz.", referencia: "Salmos 29:11" },
-    { id: "p5", tipo: "versiculo", texto: "E a paz de Deus, que excede todo o entendimento, guardará os seus corações.", referencia: "Filipenses 4:7" },
+    { id: "p1", tipo: "versiculo", texto: "Deixo-lhes a paz; a minha paz lhes dou.", referencia: "João 14:27", fraseMotivacional: "Receba hoje uma paz que acalma qualquer tempestade mental." },
+    { id: "p2", tipo: "versiculo", texto: "Tu, Senhor, guardarás em perfeita paz aquele cujo propósito está firme.", referencia: "Isaías 26:3", fraseMotivacional: "Mantenha o seu foco no bem e a tranquilidade será o seu lar." },
+    { id: "p4", tipo: "salmo", texto: "O Senhor abençoa o seu povo com paz.", referencia: "Salmos 29:11", fraseMotivacional: "A paz é um presente que você merece desfrutar agora." },
+    { id: "p5", tipo: "versiculo", texto: "E a paz de Deus, que excede todo o entendimento, guardará os seus corações.", referencia: "Filipenses 4:7", fraseMotivacional: "Deixe que a serenidade envolva cada pensamento seu hoje." },
   ],
   "Preciso de força": [
-    { id: "f1_forca", tipo: "versiculo", texto: "Tudo posso naquele que me fortalece.", referencia: "Filipenses 4:13" },
-    { id: "f2_forca", tipo: "salmo", texto: "O Senhor é a minha força e o meu escudo; nele o meu coração confia.", referencia: "Salmos 28:7" },
-    { id: "f3", tipo: "reflexao", texto: "Sua fraqueza é o palco onde a força de Deus se manifesta.", referencia: "Ressoa" },
-    { id: "f4", tipo: "versiculo", texto: "O Senhor dá força ao seu povo.", referencia: "Salmos 29:11" },
-    { id: "f5", tipo: "versiculo", texto: "A minha graça é suficiente para você, pois o meu poder se aperfeiçoa na fraqueza.", referencia: "2 Coríntios 12:9" },
+    { id: "f1_forca", tipo: "versiculo", texto: "Tudo posso naquele que me fortalece.", referencia: "Filipenses 4:13", fraseMotivacional: "Você é capaz de superar muito mais do que imagina." },
+    { id: "f2_forca", tipo: "salmo", texto: "O Senhor é a minha força e o meu escudo; nele o meu coração confia.", referencia: "Salmos 28:7", fraseMotivacional: "Sua proteção é real e sua força é inesgotável." },
+    { id: "f4", tipo: "versiculo", texto: "O Senhor dá força ao seu povo.", referencia: "Salmos 29:11", fraseMotivacional: "Mesmo cansado, você encontrará energia para o próximo passo." },
+    { id: "f5", tipo: "versiculo", texto: "A minha graça é suficiente para você, pois o meu poder se aperfeiçoa na fraqueza.", referencia: "2 Coríntios 12:9", fraseMotivacional: "Suas limitações são o espaço onde o impossível acontece." },
   ]
 };
 

@@ -79,6 +79,11 @@ function MensagemPage() {
           <p className="text-2xl font-medium tracking-[0.1em] text-black/50 uppercase">
             {mensagem.referencia}
           </p>
+          {mensagem.fraseMotivacional && (
+            <p className="mt-8 text-3xl font-light italic text-black/40 px-20">
+              {mensagem.fraseMotivacional}
+            </p>
+          )}
         </div>
       </div>
 
@@ -96,13 +101,19 @@ function MensagemPage() {
       </header>
 
       <main className="flex flex-1 flex-col items-center justify-center px-4 text-center">
-        <div key={mensagem.id} className="w-full max-w-md animate-in fade-in duration-700">
+        <div key={mensagem.id} className="w-full max-w-md animate-in fade-in duration-700 flex flex-col items-center">
           <p className="text-2xl font-light leading-relaxed text-black md:text-3xl tracking-tight">
             "{mensagem.texto}"
           </p>
-          <p className="mt-8 text-xs font-medium tracking-[0.2em] uppercase text-gray-300">
+          <p className="mt-4 text-[10px] font-medium tracking-[0.2em] uppercase text-gray-300">
             {mensagem.referencia}
           </p>
+          
+          {mensagem.fraseMotivacional && (
+            <p className="mt-12 text-sm font-light italic text-gray-400 max-w-[280px]">
+              {mensagem.fraseMotivacional}
+            </p>
+          )}
         </div>
       </main>
 
