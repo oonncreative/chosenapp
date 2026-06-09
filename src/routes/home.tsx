@@ -71,18 +71,18 @@ function HomePage() {
         </div>
       </header>
 
-      <section className="flex-1 overflow-y-auto no-scrollbar pb-6">
-        <div className={viewMode === "list" ? "flex flex-col gap-1.5" : "grid grid-cols-2 gap-1"}>
+      <section className="flex-1 min-h-0 pb-4">
+        <div className={viewMode === "list" ? "flex flex-col h-full gap-1.5" : "grid grid-cols-2 gap-1"}>
           {CATEGORIAS.map((sentimento, index) => (
             <Link
               key={sentimento}
               to="/mensagem/$sentimento"
               params={{ sentimento }}
               className={`flex items-center justify-center transition-all active:scale-[0.98] ${colors[index % colors.length]} ${
-                viewMode === "list" ? "h-[48px] px-8 justify-start rounded-[24px]" : "aspect-square p-4 text-center rounded-sm"
+                viewMode === "list" ? "flex-1 px-8 justify-start rounded-[15px]" : "aspect-square p-4 text-center rounded-sm"
               }`}
             >
-              <span className={`${viewMode === "list" ? "text-lg" : "text-sm"} font-bold tracking-tight`}>
+              <span className={`${viewMode === "list" ? "text-lg md:text-xl" : "text-sm"} font-bold tracking-tight`}>
                 {sentimento}
               </span>
             </Link>
