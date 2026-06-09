@@ -9,9 +9,10 @@ function Index() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Sempre mostrar diretamente a tela de sentimentos ao abrir o app
-    navigate({ to: "/home" });
+    // Redireciona para onboarding na primeira visita
+    navigate({ to: "/onboarding" });
   }, [navigate]);
+
 
 
   return null;
