@@ -22,7 +22,12 @@ function MensagemPage() {
     if (!shareRef.current) return;
 
     try {
+      // Pequeno delay para garantir que o DOM está pronto se necessário
+      await new Promise(resolve => setTimeout(resolve, 100));
+      
       const dataUrl = await toPng(shareRef.current, {
+        cacheBust: true,
+        backgroundColor: "#ffffff",
         width: 1080,
         height: 1920,
         style: {
@@ -31,23 +36,30 @@ function MensagemPage() {
         },
       });
 
-      const blob = await (await fetch(dataUrl)).blob();
-      const file = new File([blob], "ressoa-mensagem.png", { type: "image/png" });
-
-      if (navigator.share && navigator.canShare?.({ files: [file] })) {
-        await navigator.share({
-          files: [file],
-          title: "Ressoa",
-          text: "Uma palavra para você.",
-        });
-      } else {
-        const link = document.createElement("a");
-        link.download = "ressoa.png";
-        link.href = dataUrl;
-        link.click();
+      // Baixar a imagem diretamente como fallback e principal método para garantir que funciona
+      const link = document.createElement("a");
+      link.download = "ressoa-mensagem.png";
+      link.href = dataUrl;
+      link.click();
+      
+      // Tentar compartilhar via API se disponível
+      if (navigator.share) {
+        try {
+          const blob = await (await fetch(dataUrl)).blob();
+          const file = new File([blob], "ressoa.png", { type: "image/png" });
+          if (navigator.canShare && navigator.canShare({ files: [file] })) {
+            await navigator.share({
+              files: [file],
+              title: "Ressoa",
+              text: "Uma palavra para você.",
+            });
+          }
+        } catch (shareErr) {
+          console.log("Navegador não suporta compartilhamento de arquivos direto, download realizado.");
+        }
       }
     } catch (err) {
-      console.error("Erro ao compartilhar:", err);
+      console.error("Erro ao gerar imagem:", err);
     }
   };
 
@@ -56,10 +68,10 @@ function MensagemPage() {
       {/* Elemento oculto para geração da imagem de compartilhamento */}
       <div 
         ref={shareRef}
-        className="fixed left-[-9999px] top-0 flex flex-col items-center justify-center bg-white p-20 text-center"
-        style={{ width: "1080px", height: "1920px" }}
+        className="fixed left-[-9999px] top-0 flex flex-col items-center justify-center bg-white p-20 text-center z-[-1]"
+        style={{ width: "1080px", height: "1920px", display: "flex" }}
       >
-        <span className="absolute top-20 text-xl font-medium tracking-[0.2em] text-black/40">RESSOA</span>
+        <span className="absolute top-20 text-2xl font-extralight tracking-[0.4em] text-black/20 uppercase">RESSOA</span>
         <div className="flex flex-col items-center gap-12 px-12">
           <p className="text-5xl font-light leading-[1.4] text-black">
             "{mensagem.texto}"
@@ -70,13 +82,17 @@ function MensagemPage() {
         </div>
       </div>
 
-      <header className="flex h-12 items-center">
+      <header className="flex h-12 items-center justify-between relative">
         <Link 
           to="/home" 
-          className="flex h-10 w-10 items-center justify-center rounded-full transition-colors hover:bg-gray-100"
+          className="flex h-10 w-10 items-center justify-center rounded-full transition-colors hover:bg-gray-100 z-10"
         >
           <ArrowLeft className="h-5 w-5 text-gray-400" />
         </Link>
+        <h1 className="absolute inset-0 flex items-center justify-center text-[10px] font-extralight tracking-[0.4em] text-gray-300 uppercase pointer-events-none">
+          Ressoa
+        </h1>
+        <div className="w-10 h-10" /> {/* Spacer */}
       </header>
 
       <main className="flex flex-1 flex-col items-center justify-center px-4 text-center">
