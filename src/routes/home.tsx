@@ -71,7 +71,7 @@ function HomePage() {
         </div>
       </header>
 
-      <section className="flex-1 min-h-0 pb-4">
+      <section className="flex-1 min-h-0 overflow-y-auto no-scrollbar pb-4">
         <div className={viewMode === "list" ? "flex flex-col h-full gap-1.5" : "grid grid-cols-2 gap-1"}>
           {CATEGORIAS.map((sentimento, index) => (
             <Link
