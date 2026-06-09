@@ -20,9 +20,10 @@ const colors = [
 
 function HomePage() {
   return (
-    <div className="h-screen overflow-hidden bg-white p-6 pt-10 flex flex-col">
+    <div className="h-screen overflow-hidden bg-white p-6 pt-8 flex flex-col">
       <header className="mb-10 flex flex-col gap-2 shrink-0">
-        <h1 className="text-xs font-light tracking-[0.2em] text-gray-400 uppercase">Ressoa</h1>
+        <h1 className="text-[10px] font-light tracking-[0.35em] text-gray-300 uppercase">Ressoa</h1>
+
         <div className="mt-8">
           <p className="text-2xl font-bold tracking-tight text-black">Qual seu sentimento?</p>
         </div>
