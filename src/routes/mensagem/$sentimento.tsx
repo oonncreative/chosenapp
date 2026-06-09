@@ -31,10 +31,7 @@ function MensagemPage() {
         backgroundColor: "#ffffff",
         width: 1080,
         height: 1920,
-        style: {
-          display: "flex",
-          visibility: "visible",
-        },
+        pixelRatio: 1, // Fixar ratio para evitar problemas de escala
       });
 
       // Baixar a imagem diretamente como fallback e principal método para garantir que funciona
