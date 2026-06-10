@@ -143,14 +143,17 @@ function RootComponent() {
   const [initialLoad, setInitialLoad] = useState(!appReady);
 
   useEffect(() => {
+    if (appReady) return;
+
     // Only run this on the very first mount of the RootComponent
     const timer = setTimeout(() => {
       setAppReady(true);
       setInitialLoad(false);
+      sessionStorage.setItem('app_initialized', 'true');
     }, 1200);
 
     return () => clearTimeout(timer);
-  }, []);
+  }, [appReady]);
 
   return (
     <QueryClientProvider client={queryClient}>
