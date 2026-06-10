@@ -102,7 +102,7 @@ function MensagemPage() {
         ref={shareRef}
         style={{ 
           position: 'fixed',
-          left: '-9999px', // Mais longe para garantir
+          left: '0',
           top: '0',
           width: '1080px',
           height: '1920px',
@@ -112,9 +112,9 @@ function MensagemPage() {
           alignItems: 'center',
           justifyContent: 'center',
           textAlign: 'center',
-          zIndex: -1,
-          opacity: 1,
-          visibility: 'visible',
+          zIndex: -100, // Muito atrás de tudo
+          opacity: 0.01, // Quase invisível mas presente para o browser
+          pointerEvents: 'none',
         }}
       >
         <div style={{ position: 'absolute', top: '150px', width: '100%', display: 'flex', justifyContent: 'center' }}>
