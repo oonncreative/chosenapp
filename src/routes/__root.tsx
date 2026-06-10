@@ -137,21 +137,16 @@ function RootComponent() {
   const { queryClient } = Route.useRouteContext();
   const router = useRouter();
   const [appReady, setAppReady] = useState(false);
-  const isLoading = router.state.isLoading;
+  const [initialLoad, setInitialLoad] = useState(true);
 
   useEffect(() => {
-    const handleBeforeUnload = () => sessionStorage.setItem('isRefreshing', 'true');
-    window.addEventListener('beforeunload', handleBeforeUnload);
-    
-    // Always show splash on first load or refresh
+    // Only show splash on the very first mount of the app
     const timer = setTimeout(() => {
       setAppReady(true);
+      setInitialLoad(false);
     }, 1200);
 
-    return () => {
-      clearTimeout(timer);
-      window.removeEventListener('beforeunload', handleBeforeUnload);
-    };
+    return () => clearTimeout(timer);
   }, []);
 
   return (
