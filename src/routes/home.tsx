@@ -54,7 +54,10 @@ function HomePage() {
             </button>
 
             <button 
-              onClick={() => window.location.href = '/'}
+              onClick={() => {
+                const router = window.history;
+                window.location.reload();
+              }}
               className="flex items-center gap-1.5 transition-opacity active:opacity-50"
             >
               <span className="text-[9px] font-light tracking-wider text-gray-300 uppercase">Atualizar</span>
