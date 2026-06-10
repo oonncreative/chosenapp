@@ -14,6 +14,19 @@ function MensagemPage() {
   const navigate = useNavigate();
   const [mensagem] = useState<Mensagem>(() => getProximaMensagem(sentimento as Categoria));
   const shareRef = useRef<HTMLDivElement>(null);
+  const [logoBase64, setLogoBase64] = useState<string>("");
+
+  useEffect(() => {
+    // Converter logo para base64 para garantir que seja incluída na imagem
+    fetch("/0novalogo.png")
+      .then(r => r.blob())
+      .then(blob => {
+        const reader = new FileReader();
+        reader.onloadend = () => setLogoBase64(reader.result as string);
+        reader.readAsDataURL(blob);
+      })
+      .catch(err => console.error("Erro ao carregar logo para base64:", err));
+  }, []);
 
   const handleRefresh = () => {
     navigate({ to: "/home" });
