@@ -127,7 +127,7 @@ function MensagemPage() {
             lineHeight: '1.4', 
             color: '#000000', 
             margin: '0',
-            fontFamily: 'sans-serif'
+            fontFamily: 'system-ui, -apple-system, sans-serif'
           }}>
             "{mensagem.texto}"
           </p>
@@ -138,7 +138,7 @@ function MensagemPage() {
             color: '#000000', 
             textTransform: 'uppercase', 
             margin: '0',
-            fontFamily: 'sans-serif'
+            fontFamily: 'system-ui, -apple-system, sans-serif'
           }}>
             {mensagem.referencia}
           </p>
@@ -150,7 +150,7 @@ function MensagemPage() {
               fontStyle: 'italic', 
               color: 'rgba(0,0,0,0.5)', 
               padding: '0 40px',
-              fontFamily: 'sans-serif'
+              fontFamily: 'system-ui, -apple-system, sans-serif'
             }}>
               {mensagem.fraseMotivacional}
             </p>
