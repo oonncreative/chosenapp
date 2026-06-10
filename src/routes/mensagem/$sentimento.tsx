@@ -42,23 +42,26 @@ function MensagemPage() {
     if (!shareRef.current) return;
 
     try {
-      // Pequeno delay para garantir que o DOM está pronto
-      await new Promise(resolve => setTimeout(resolve, 200));
+      // Pequeno delay para garantir que o DOM está pronto e imagens carregadas
+      await new Promise(resolve => setTimeout(resolve, 500));
       
-      const dataUrl = await htmlToImage.toPng(shareRef.current, {
+      // Ocultar temporariamente os botões para a captura (embora o shareRef já aponte para um elemento separado)
+      // Garantimos que o elemento está visível mas fora da tela
+      const element = shareRef.current;
+      
+      const dataUrl = await htmlToImage.toPng(element, {
         cacheBust: true,
         backgroundColor: "#ffffff",
         width: 1080,
         height: 1920,
         pixelRatio: 2,
-        style: {
-          opacity: '1',
-          visibility: 'visible',
-          transform: 'none',
-          left: '0',
-          top: '0'
-        }
+        // Garantir que fontes e imagens externas sejam carregadas
+        skipFonts: false,
       });
+
+      if (!dataUrl || dataUrl === "data:,") {
+        throw new Error("Imagem gerada está vazia");
+      }
 
       // Se for mobile e tiver API de share, priorizar ela
       if (navigator.share) {
@@ -73,7 +76,7 @@ function MensagemPage() {
               title: "Ressoa",
               text: `"${mensagem.texto}" - ${mensagem.referencia}`,
             });
-            return; // Sucesso no share nativo, não precisa baixar
+            return;
           }
         } catch (shareErr) {
           console.log("Erro no share nativo, tentando fallback de download:", shareErr);
@@ -98,7 +101,7 @@ function MensagemPage() {
         ref={shareRef}
         style={{ 
           position: 'fixed',
-          left: '-5000px',
+          left: '-9999px', // Mais longe para garantir
           top: '0',
           width: '1080px',
           height: '1920px',
@@ -109,6 +112,8 @@ function MensagemPage() {
           justifyContent: 'center',
           textAlign: 'center',
           zIndex: -1,
+          opacity: 1,
+          visibility: 'visible',
         }}
       >
         <div style={{ position: 'absolute', top: '150px', width: '100%', display: 'flex', justifyContent: 'center' }}>
