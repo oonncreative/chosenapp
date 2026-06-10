@@ -8,7 +8,6 @@ import {
   Scripts,
 } from "@tanstack/react-router";
 import { useEffect, type ReactNode } from "react";
-import { useNotifications } from "../hooks/useNotifications";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
@@ -77,18 +76,25 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
   head: () => ({
     meta: [
       { charSet: "utf-8" },
-      { name: "viewport", content: "width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" },
-      { title: "Ressoa" },
-      { name: "description", content: "Mensagens de fé e esperança para o seu momento." },
-      { name: "theme-color", content: "#ffffff" },
-      { name: "apple-mobile-web-app-capable", content: "yes" },
-      { name: "apple-mobile-web-app-status-bar-style", content: "default" },
-      { name: "apple-mobile-web-app-title", content: "Ressoa" },
+      { name: "viewport", content: "width=device-width, initial-scale=1" },
+      { title: "RESSOA" },
+      { name: "description", content: "Inspire-se nas palavras de Deus." },
+      { name: "author", content: "Lovable" },
+      { property: "og:title", content: "RESSOA" },
+      { property: "og:description", content: "Inspire-se nas palavras de Deus." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
+      { name: "twitter:site", content: "@Lovable" },
+      { name: "twitter:title", content: "RESSOA" },
+      { name: "twitter:description", content: "Inspire-se nas palavras de Deus." },
+      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/79a239ae-7698-47c3-82db-6b952f4833e0/id-preview-a8617a9a--cf808645-b75a-4bfa-9566-876b26385e38.lovable.app-1781041712808.png" },
+      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/79a239ae-7698-47c3-82db-6b952f4833e0/id-preview-a8617a9a--cf808645-b75a-4bfa-9566-876b26385e38.lovable.app-1781041712808.png" },
     ],
     links: [
-      { rel: "stylesheet", href: appCss },
-      { rel: "manifest", href: "/manifest.json" },
-      { rel: "apple-touch-icon", href: "https://cdn.lovable.dev/assets/favicon.ico" },
+      {
+        rel: "stylesheet",
+        href: appCss,
+      },
     ],
   }),
   shellComponent: RootShell,
@@ -113,7 +119,6 @@ function RootShell({ children }: { children: ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
-  useNotifications();
 
   return (
     <QueryClientProvider client={queryClient}>
