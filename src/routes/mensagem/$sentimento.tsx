@@ -3,7 +3,7 @@ import { getProximaMensagem, type Categoria, type Mensagem } from "@/lib/data";
 import { Button } from "@/components/ui/button";
 import { useState, useRef, useEffect } from "react";
 import { Share2, ArrowLeft } from "lucide-react";
-import * as htmlToImage from "html-to-image";
+import html2canvas from "html2canvas";
 
 export const Route = createFileRoute("/mensagem/$sentimento")({
   validateSearch: (search: Record<string, unknown>) => {
