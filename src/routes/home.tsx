@@ -7,53 +7,28 @@ export const Route = createFileRoute("/home")({
 });
 
 const colors = [
-  "bg-[#F0F26C] text-black", // Amarelo vibrante
-  "bg-[#98D8B1] text-black", // Verde água/menta
-  "bg-[#B4B1E8] text-black", // Roxo pastel
-  "bg-[#B1E2F0] text-black", // Azul claro
-  "bg-[#F7C1E1] text-black", // Rosa pastel
-  "bg-[#FCE5C9] text-black", // Bege/pêssego
-  "bg-[#91F2EB] text-black", // Ciano/turquesa
-  "bg-[#E8C1F7] text-black", // Lavanda
-  "bg-[#F7E1C1] text-black", // Creme
+  "bg-[#F7C1E1] text-white", // Rosa (Jastin Philips style)
+  "bg-[#2D8C3C] text-white", // Verde (Michael Jordan style)
+  "bg-[#007AFF] text-white", // Azul (Bergsonist style)
+  "bg-white text-black border-2 border-black", // Branco com borda (Cullen Omori style)
+  "bg-[#FFCC00] text-black", // Amarelo
+  "bg-[#FF3B30] text-white", // Vermelho
+  "bg-[#5856D6] text-white", // Indigo
+  "bg-[#AF52DE] text-white", // Roxo
+  "bg-[#FF9500] text-white", // Laranja
 ];
 
 
 function HomePage() {
   const navigate = useNavigate();
-  const [viewMode, setViewMode] = useState<"list" | "grid">("list");
 
   return (
-    <div className="h-screen overflow-hidden bg-white p-6 pt-10 flex flex-col">
-      <header className="mb-8 flex flex-col gap-2 shrink-0">
+    <div className="h-screen overflow-hidden bg-white flex flex-col">
+      <header className="p-6 pt-10 flex flex-col gap-2 shrink-0 bg-white z-10">
         <div className="flex items-center justify-between">
-          <h1 className="text-[11px] font-bold tracking-[0.4em] text-black uppercase">Ressoa</h1>
+          <h1 className="text-[11px] font-bold tracking-[0.4em] text-black uppercase">RESSOA</h1>
           
           <div className="flex items-center gap-4">
-            <button 
-              onClick={() => setViewMode(viewMode === "list" ? "grid" : "list")}
-              className="flex items-center gap-1.5 transition-opacity active:opacity-50"
-              title={viewMode === "list" ? "Ver em grade" : "Ver em lista"}
-            >
-              {viewMode === "list" ? (
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="text-gray-300">
-                  <rect x="3" y="3" width="7" height="7" />
-                  <rect x="14" y="3" width="7" height="7" />
-                  <rect x="14" y="14" width="7" height="7" />
-                  <rect x="3" y="14" width="7" height="7" />
-                </svg>
-              ) : (
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="text-gray-300">
-                  <line x1="8" y1="6" x2="21" y2="6" />
-                  <line x1="8" y1="12" x2="21" y2="12" />
-                  <line x1="8" y1="18" x2="21" y2="18" />
-                  <line x1="3" y1="6" x2="3.01" y2="6" />
-                  <line x1="3" y1="12" x2="3.01" y2="12" />
-                  <line x1="3" y1="18" x2="3.01" y2="18" />
-                </svg>
-              )}
-            </button>
-
             <button 
               onClick={() => {
                 navigate({ to: "/onboarding" });
@@ -69,36 +44,52 @@ function HomePage() {
           </div>
         </div>
 
-        <div className="mt-6">
-          <p className="text-xl font-light tracking-tight text-black">Qual seu sentimento?</p>
+        <div className="mt-4">
+          <p className="text-2xl font-bold tracking-tighter text-black uppercase italic">Qual seu sentimento?</p>
         </div>
       </header>
 
-      <section className="flex-1 min-h-0 overflow-y-auto no-scrollbar pb-4">
-        <div className={viewMode === "list" ? "flex flex-col h-full gap-1.5" : "grid grid-cols-2 gap-1"}>
-          {CATEGORIAS.map((sentimento, index) => (
-            <Link
-              key={sentimento}
-              to="/mensagem/$sentimento"
-              params={{ sentimento }}
-              className={`flex items-center justify-center transition-all active:scale-[0.98] ${colors[index % colors.length]} ${
-                viewMode === "list" ? "flex-1 px-8 justify-start rounded-[15px]" : "aspect-square p-4 text-center rounded-sm"
-              }`}
-            >
-              <span className={`${viewMode === "list" ? "text-lg md:text-xl" : "text-sm"} font-bold tracking-tight`}>
-                {sentimento}
-              </span>
-            </Link>
-          ))}
+      <section className="flex-1 min-h-0 overflow-y-auto no-scrollbar px-4 pb-6">
+        <div className="flex flex-col gap-2">
+          {CATEGORIAS.map((sentimento, index) => {
+            const colorClass = colors[index % colors.length];
+            
+            // Alternar inclinação para dar o efeito visual da imagem
+            const rotation = index % 2 === 0 ? "rotate-[-1.5deg]" : "rotate-[1.5deg]";
+            
+            return (
+              <Link
+                key={sentimento}
+                to="/mensagem/$sentimento"
+                params={{ sentimento }}
+                className={`group relative flex items-center justify-between min-h-[140px] px-8 py-6 transition-all active:scale-[0.97] rounded-[24px] overflow-hidden ${colorClass} ${rotation} hover:rotate-0`}
+              >
+                <div className="flex flex-col">
+                  <span className="text-[10px] opacity-60 font-bold uppercase tracking-widest mb-1">
+                    {String(index + 9).padStart(2, '0')}:00
+                  </span>
+                  <span className="text-3xl font-black leading-[0.9] tracking-tighter max-w-[200px] break-words uppercase italic">
+                    {sentimento}
+                  </span>
+                </div>
+                
+                <div className="absolute right-6 bottom-6 opacity-20 group-hover:opacity-100 transition-opacity">
+                   <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
+                     <path d="M5 12h14M12 5l7 7-7 7" strokeLinecap="round" strokeLinejoin="round"/>
+                   </svg>
+                </div>
+              </Link>
+            );
+          })}
         </div>
       </section>
 
-      <footer className="mt-auto py-4 text-center">
+      <footer className="py-4 text-center bg-white border-t border-gray-50 shrink-0">
         <a 
           href="https://oonn.com.br" 
           target="_blank" 
           rel="noopener noreferrer"
-          className="text-[9px] font-light tracking-[0.2em] text-gray-300 uppercase transition-colors hover:text-gray-400"
+          className="text-[9px] font-light tracking-[0.2em] text-gray-400 uppercase transition-colors hover:text-black"
         >
           OONN Creative — oonn.com.br
         </a>
