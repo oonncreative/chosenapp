@@ -151,7 +151,7 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      {(!appReady || isLoading) && (
+      {initialLoad && !appReady && (
         <div id="initial-splash" className="fixed inset-0 z-[9999] flex items-center justify-center bg-white transition-opacity duration-500">
           <div className="flex flex-col items-center gap-6">
             <img 
