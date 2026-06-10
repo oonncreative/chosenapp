@@ -21,11 +21,11 @@ function Onboarding() {
   const getStepStyles = () => {
     switch(step) {
       case 1:
-        return { btn: "bg-[#F0F26C] text-black" };
+        return { btn: "bg-[#2D8C3C] text-white" };
       case 2:
-        return { btn: "bg-[#B4B1E8] text-black" };
+        return { btn: "bg-[#007AFF] text-white" };
       case 3:
-        return { btn: "bg-[#98D8B1] text-black" };
+        return { btn: "bg-[#F7C1E1] text-white" };
       default:
         return { btn: "bg-black text-white" };
     }
@@ -41,7 +41,7 @@ function Onboarding() {
           
           {step === 1 && (
             <div className="animate-in fade-in slide-in-from-bottom-4 duration-700 flex flex-col items-center gap-4">
-              <h1 className="text-4xl font-extralight tracking-[0.1em] text-black uppercase">Ressoa</h1>
+              <h1 className="text-[11px] font-bold tracking-[0.4em] text-black uppercase">Ressoa</h1>
               <p className="text-lg text-black/60 font-light tracking-tight italic">Inspire-se nas palavras de Deus</p>
             </div>
           )}
@@ -63,7 +63,7 @@ function Onboarding() {
               </p>
               <Button 
                 variant="outline" 
-                className="mt-6 h-12 w-full rounded-none border-black/10 bg-gray-50 font-light text-black hover:bg-gray-100"
+                className="mt-6 h-[60px] w-full rounded-[24px] border-2 border-black bg-white text-lg font-black tracking-tighter text-black hover:bg-gray-50 uppercase italic transition-all active:scale-95 shadow-none"
                 onClick={() => {
                   if ("Notification" in window) {
                     Notification.requestPermission();
@@ -78,7 +78,7 @@ function Onboarding() {
 
         <div className="w-full px-4">
           <Button 
-            className={`w-full h-[60px] rounded-none ${styles.btn} hover:opacity-90 text-lg font-bold tracking-tight transition-all active:scale-95 border-none shadow-none`}
+            className={`w-full h-[60px] rounded-[24px] ${styles.btn} hover:opacity-90 text-lg font-black tracking-tighter uppercase italic transition-all active:scale-95 border-none shadow-none`}
             onClick={nextStep}
           >
             {step === 3 ? "Começar" : "Continuar"}
