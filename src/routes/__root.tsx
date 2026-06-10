@@ -119,10 +119,19 @@ function RootShell({ children }: { children: ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+  const router = useRouter();
+  const isLoading = router.state.isLoading;
 
   return (
     <QueryClientProvider client={queryClient}>
-      {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
+      {isLoading && (
+        <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-white">
+          <div className="flex flex-col items-center gap-4">
+            <div className="h-10 w-10 animate-spin rounded-full border-2 border-gray-200 border-t-black" />
+            <p className="text-[10px] font-extralight tracking-[0.4em] text-gray-400 uppercase">Ressoa</p>
+          </div>
+        </div>
+      )}
       <Outlet />
     </QueryClientProvider>
   );
