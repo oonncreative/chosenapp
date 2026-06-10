@@ -1,9 +1,9 @@
 import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
 import { getProximaMensagem, type Categoria, type Mensagem } from "@/lib/data";
 import { Button } from "@/components/ui/button";
-import { useState, useRef } from "react";
-import { Share2, RefreshCw, ArrowLeft } from "lucide-react";
-import { toPng } from "html-to-image";
+import { useState, useRef, useEffect } from "react";
+import { Share2, ArrowLeft } from "lucide-react";
+import * as htmlToImage from "html-to-image";
 
 export const Route = createFileRoute("/mensagem/$sentimento")({
   component: MensagemPage,
