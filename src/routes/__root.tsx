@@ -7,7 +7,7 @@ import {
   HeadContent,
   Scripts,
 } from "@tanstack/react-router";
-import { useEffect, type ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
@@ -120,15 +120,31 @@ function RootShell({ children }: { children: ReactNode }) {
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
   const router = useRouter();
+  const [appReady, setAppReady] = useState(false);
   const isLoading = router.state.isLoading;
+
+  useEffect(() => {
+    const handleBeforeUnload = () => sessionStorage.setItem('isRefreshing', 'true');
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    
+    // Always show splash on first load or refresh
+    const timer = setTimeout(() => {
+      setAppReady(true);
+    }, 1200);
+
+    return () => {
+      clearTimeout(timer);
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+    };
+  }, []);
 
   return (
     <QueryClientProvider client={queryClient}>
-      {isLoading && (
-        <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-white">
+      {(!appReady || isLoading) && (
+        <div id="initial-splash" className="fixed inset-0 z-[9999] flex items-center justify-center bg-white transition-opacity duration-500">
           <div className="flex flex-col items-center gap-4">
-            <div className="h-10 w-10 animate-spin rounded-full border-2 border-gray-200 border-t-black" />
-            <p className="text-[10px] font-extralight tracking-[0.4em] text-gray-400 uppercase">Ressoa</p>
+            <div className="h-10 w-10 animate-spin rounded-full border-2 border-gray-100 border-t-black" />
+            <p className="text-[10px] font-extralight tracking-[0.4em] text-gray-400 uppercase animate-pulse">Ressoa</p>
           </div>
         </div>
       )}
