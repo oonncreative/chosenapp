@@ -3,7 +3,7 @@ import { getProximaMensagem, type Categoria, type Mensagem } from "@/lib/data";
 import { Button } from "@/components/ui/button";
 import { useState, useRef, useEffect } from "react";
 import { Share2, ArrowLeft } from "lucide-react";
-import * as htmlToImage from "html-to-image";
+import html2canvas from "html2canvas";
 
 export const Route = createFileRoute("/mensagem/$sentimento")({
   validateSearch: (search: Record<string, unknown>) => {
@@ -45,19 +45,20 @@ function MensagemPage() {
       // Pequeno delay para garantir que o DOM está pronto e imagens carregadas
       await new Promise(resolve => setTimeout(resolve, 500));
       
-      // Ocultar temporariamente os botões para a captura (embora o shareRef já aponte para um elemento separado)
-      // Garantimos que o elemento está visível mas fora da tela
       const element = shareRef.current;
       
-      const dataUrl = await htmlToImage.toPng(element, {
-        cacheBust: true,
+      // Usando html2canvas que é mais confiável no iOS
+      const canvas = await html2canvas(element, {
+        useCORS: true,
+        allowTaint: true,
         backgroundColor: "#ffffff",
+        scale: 2, // Melhor qualidade
+        logging: false,
         width: 1080,
         height: 1920,
-        pixelRatio: 2,
-        // Garantir que fontes e imagens externas sejam carregadas
-        skipFonts: false,
       });
+
+      const dataUrl = canvas.toDataURL("image/png");
 
       if (!dataUrl || dataUrl === "data:,") {
         throw new Error("Imagem gerada está vazia");
@@ -101,7 +102,7 @@ function MensagemPage() {
         ref={shareRef}
         style={{ 
           position: 'fixed',
-          left: '-9999px', // Mais longe para garantir
+          left: '0',
           top: '0',
           width: '1080px',
           height: '1920px',
@@ -111,9 +112,9 @@ function MensagemPage() {
           alignItems: 'center',
           justifyContent: 'center',
           textAlign: 'center',
-          zIndex: -1,
-          opacity: 1,
-          visibility: 'visible',
+          zIndex: -100, // Muito atrás de tudo
+          opacity: 0.01, // Quase invisível mas presente para o browser
+          pointerEvents: 'none',
         }}
       >
         <div style={{ position: 'absolute', top: '150px', width: '100%', display: 'flex', justifyContent: 'center' }}>
