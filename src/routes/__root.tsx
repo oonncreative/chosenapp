@@ -76,7 +76,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
   head: () => ({
     meta: [
       { charSet: "utf-8" },
-      { name: "viewport", content: "width=device-width, initial-scale=1" },
+      { name: "viewport", content: "width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0, viewport-fit=cover" },
       { title: "RESSOA" },
       { name: "description", content: "Inspire-se nas palavras de Deus." },
       { name: "author", content: "Lovable" },
@@ -89,6 +89,9 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "twitter:description", content: "Inspire-se nas palavras de Deus." },
       { property: "og:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/09141173-e117-4059-bd5e-51e8c7469f4c" },
       { name: "twitter:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/09141173-e117-4059-bd5e-51e8c7469f4c" },
+      { name: "apple-mobile-web-app-capable", content: "yes" },
+      { name: "apple-mobile-web-app-status-bar-style", content: "black-translucent" },
+      { name: "mobile-web-app-capable", content: "yes" },
     ],
     links: [
       {
@@ -118,7 +121,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 
 function RootShell({ children }: { children: ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="pt-BR">
       <head>
         <HeadContent />
       </head>
@@ -157,13 +160,13 @@ function RootComponent() {
         <div id="initial-splash" className="fixed inset-0 z-[9999] flex items-center justify-center bg-white transition-opacity duration-500">
           <div className="flex flex-col items-center gap-6">
             <img 
-              src="/icon-192.png" 
+              src="/0novalogo.png" 
               alt="Ressoa Logo" 
-              className="h-24 w-24 animate-pulse rounded-2xl shadow-sm"
+              className="h-24 w-24 animate-pulse rounded-2xl"
             />
             <div className="flex flex-col items-center gap-2">
               <div className="h-6 w-6 animate-spin rounded-full border-2 border-gray-100 border-t-black" />
-              <p className="text-[10px] font-extralight tracking-[0.4em] text-gray-400 uppercase">Ressoa</p>
+              <p className="text-[10px] font-extralight tracking-[0.4em] text-black uppercase">Ressoa</p>
             </div>
           </div>
         </div>
