@@ -6,11 +6,17 @@ import { Share2, ArrowLeft } from "lucide-react";
 import * as htmlToImage from "html-to-image";
 
 export const Route = createFileRoute("/mensagem/$sentimento")({
+  validateSearch: (search: Record<string, unknown>) => {
+    return {
+      color: (search.color as string) || "#2D8C3C",
+    };
+  },
   component: MensagemPage,
 });
 
 function MensagemPage() {
   const { sentimento } = Route.useParams();
+  const { color } = Route.useSearch();
   const navigate = useNavigate();
   const [mensagem] = useState<Mensagem>(() => getProximaMensagem(sentimento as Categoria));
   const shareRef = useRef<HTMLDivElement>(null);
