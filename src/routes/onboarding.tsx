@@ -39,6 +39,7 @@ function Onboarding() {
         <div className="flex-1 flex flex-col items-center justify-center gap-6">
           {step === 1 && (
             <div className="animate-in fade-in slide-in-from-bottom-4 duration-700 flex flex-col items-center gap-4">
+              <img src="/0novalogo.png" alt="Ressoa" className="h-16 w-16 mb-2" />
               <h1 className="text-4xl font-extralight tracking-[0.1em] text-black">Ressoa</h1>
               <p className="text-lg text-black/60 font-light tracking-tight italic">Inspire-se nas palavras de Deus</p>
             </div>
@@ -46,6 +47,7 @@ function Onboarding() {
 
           {step === 2 && (
             <div className="animate-in fade-in slide-in-from-bottom-4 duration-700 flex flex-col items-center gap-4 px-4">
+              <img src="/0novalogo.png" alt="Ressoa" className="h-12 w-12 mb-2" />
               <h2 className="text-2xl font-light tracking-tight text-black">Escolha como você se sente</h2>
               <p className="text-sm text-black/60 font-light leading-relaxed">
                 Encontraremos a mensagem certa para o seu momento.
@@ -55,6 +57,7 @@ function Onboarding() {
 
           {step === 3 && (
             <div className="animate-in fade-in slide-in-from-bottom-4 duration-700 flex flex-col items-center gap-4 px-4">
+              <img src="/0novalogo.png" alt="Ressoa" className="h-12 w-12 mb-2" />
               <h2 className="text-2xl font-light tracking-tight text-black">Ativar notificações</h2>
               <p className="text-sm text-black/60 font-light leading-relaxed">
                 Receba lembretes diários de esperança e paz.

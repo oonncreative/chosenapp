@@ -23,10 +23,10 @@ function HomePage() {
   const [viewMode, setViewMode] = useState<"list" | "grid">("list");
 
   return (
-    <div className="h-screen overflow-hidden bg-white p-6 pt-8 flex flex-col">
+    <div className="h-screen overflow-hidden bg-white p-6 pt-10 flex flex-col">
       <header className="mb-8 flex flex-col gap-2 shrink-0">
         <div className="flex items-center justify-between">
-          <h1 className="text-[10px] font-extralight tracking-[0.4em] text-gray-300 uppercase">Ressoa</h1>
+          <img src="/0novalogo.png" alt="Ressoa" className="h-6 w-6 object-contain" />
           
           <div className="flex items-center gap-4">
             <button 
@@ -60,8 +60,8 @@ function HomePage() {
               }}
               className="flex items-center gap-1.5 transition-opacity active:opacity-50"
             >
-              <span className="text-[9px] font-light tracking-wider text-gray-300 uppercase">Atualizar</span>
-              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="text-gray-300">
+              <span className="text-[9px] font-medium tracking-wider text-black uppercase">Atualizar</span>
+              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="black" strokeWidth="2">
                 <path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8" strokeLinecap="round" strokeLinejoin="round"/>
                 <path d="M21 3v5h-5" strokeLinecap="round" strokeLinejoin="round"/>
               </svg>

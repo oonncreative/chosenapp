@@ -81,12 +81,12 @@ function MensagemPage() {
         }}
         ref={shareRef}
       >
-        <span style={{ position: 'absolute', top: '80px', fontSize: '24px', fontWeight: '200', letterSpacing: '0.4em', color: 'rgba(0,0,0,0.2)', textTransform: 'uppercase' }}>RESSOA</span>
+        <img src="/0novalogo.png" alt="Ressoa" style={{ position: 'absolute', top: '80px', width: '60px', height: '60px' }} />
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '48px' }}>
           <p style={{ fontSize: '48px', fontWeight: '300', lineHeight: '1.4', color: '#000000', margin: '0' }}>
             "{mensagem.texto}"
           </p>
-          <p style={{ fontSize: '24px', fontWeight: '500', letterSpacing: '0.1em', color: 'rgba(0,0,0,0.5)', textTransform: 'uppercase', margin: '0' }}>
+          <p style={{ fontSize: '24px', fontWeight: '600', letterSpacing: '0.1em', color: '#000000', textTransform: 'uppercase', margin: '0' }}>
             {mensagem.referencia}
           </p>
           {mensagem.fraseMotivacional && (
@@ -104,9 +104,9 @@ function MensagemPage() {
         >
           <ArrowLeft className="h-5 w-5 text-gray-400" />
         </Link>
-        <h1 className="absolute inset-0 flex items-center justify-center text-[10px] font-extralight tracking-[0.4em] text-gray-300 uppercase pointer-events-none">
-          Ressoa
-        </h1>
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+          <img src="/0novalogo.png" alt="Ressoa" className="h-6 w-6 object-contain" />
+        </div>
         <div className="w-10 h-10" /> {/* Spacer */}
       </header>
 
@@ -115,7 +115,7 @@ function MensagemPage() {
           <p className="text-2xl font-light leading-relaxed text-black md:text-3xl tracking-tight">
             "{mensagem.texto}"
           </p>
-          <p className="mt-4 text-[10px] font-medium tracking-[0.2em] uppercase text-gray-300">
+          <p className="mt-4 text-[10px] font-bold tracking-[0.2em] uppercase text-black">
             {mensagem.referencia}
           </p>
           
