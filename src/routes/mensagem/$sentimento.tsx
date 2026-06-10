@@ -183,19 +183,18 @@ function MensagemPage() {
         </div>
       </main>
 
-      <footer className="flex flex-col gap-3 pb-8 shrink-0">
+      <footer className="flex flex-row gap-3 pb-8 shrink-0 w-full">
         <Button
           onClick={handleRefresh}
-          className="h-[60px] rounded-[24px] bg-[#2D8C3C] text-lg font-black tracking-tighter text-white hover:bg-[#2D8C3C]/90 shadow-none border-none uppercase italic transition-all active:scale-95"
+          className="h-[60px] flex-1 rounded-[24px] bg-transparent border-2 border-black text-black text-sm font-black tracking-tighter hover:bg-black/5 shadow-none uppercase italic transition-all active:scale-95"
         >
           Novo sentimento
         </Button>
         <Button
-          variant="outline"
           onClick={handleShare}
-          className="h-[60px] rounded-[24px] border-2 border-black bg-white text-lg font-black tracking-tighter text-black hover:bg-gray-50 shadow-none flex items-center justify-center gap-2 uppercase italic transition-all active:scale-95"
+          className="h-[60px] flex-1 rounded-[24px] border-none bg-[#2D8C3C] text-sm font-black tracking-tighter text-white hover:bg-[#2D8C3C]/90 shadow-none flex items-center justify-center gap-2 uppercase italic transition-all active:scale-95"
         >
-          <Share2 className="h-5 w-5 shrink-0" />
+          <Share2 className="h-4 w-4 shrink-0" />
           <span>Compartilhar</span>
         </Button>
       </footer>
