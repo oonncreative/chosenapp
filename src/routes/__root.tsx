@@ -135,37 +135,9 @@ function RootShell({ children }: { children: ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
-  const router = useRouter();
-  const [appReady, setAppReady] = useState(false);
-  const [initialLoad, setInitialLoad] = useState(true);
-
-  useEffect(() => {
-    // Garantir que o splash saia após o tempo determinado, independente de qualquer estado anterior
-    const timer = setTimeout(() => {
-      setAppReady(true);
-      setInitialLoad(false);
-    }, 1500);
-
-    return () => clearTimeout(timer);
-  }, []);
 
   return (
     <QueryClientProvider client={queryClient}>
-      {initialLoad && !appReady && (
-        <div id="initial-splash" className="fixed inset-0 z-[9999] flex items-center justify-center bg-white transition-opacity duration-500">
-          <div className="flex flex-col items-center gap-6">
-            <img 
-              src="/0novalogo.png" 
-              alt="Ressoa Logo" 
-              className="h-24 w-24 animate-pulse rounded-2xl"
-            />
-            <div className="flex flex-col items-center gap-2">
-              <div className="h-6 w-6 animate-spin rounded-full border-2 border-gray-100 border-t-black" />
-              <p className="text-[10px] font-extralight tracking-[0.4em] text-black uppercase">Ressoa</p>
-            </div>
-          </div>
-        </div>
-      )}
       <Outlet />
     </QueryClientProvider>
   );
