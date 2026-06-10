@@ -136,8 +136,11 @@ function RootShell({ children }: { children: ReactNode }) {
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
   const router = useRouter();
-  const [appReady, setAppReady] = useState(false);
-  const [initialLoad, setInitialLoad] = useState(true);
+  const [appReady, setAppReady] = useState(() => {
+    // If we're already on a page that isn't the root, we might have already initialized
+    return typeof window !== 'undefined' && sessionStorage.getItem('app_initialized') === 'true';
+  });
+  const [initialLoad, setInitialLoad] = useState(!appReady);
 
   useEffect(() => {
     // Only run this on the very first mount of the RootComponent
