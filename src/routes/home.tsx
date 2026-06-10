@@ -62,6 +62,7 @@ function HomePage() {
                 key={sentimento}
                 to="/mensagem/$sentimento"
                 params={{ sentimento }}
+                search={{ color: colorClass.split(' ')[0].replace('bg-[', '').replace(']', '') }}
                 className={`group relative flex items-center justify-between min-h-[110px] px-8 py-4 transition-all active:scale-[0.97] rounded-[24px] overflow-hidden ${colorClass} ${rotation} hover:rotate-0`}
               >
                 <div className="flex flex-col">
