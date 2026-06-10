@@ -45,19 +45,20 @@ function MensagemPage() {
       // Pequeno delay para garantir que o DOM está pronto e imagens carregadas
       await new Promise(resolve => setTimeout(resolve, 500));
       
-      // Ocultar temporariamente os botões para a captura (embora o shareRef já aponte para um elemento separado)
-      // Garantimos que o elemento está visível mas fora da tela
       const element = shareRef.current;
       
-      const dataUrl = await htmlToImage.toPng(element, {
-        cacheBust: true,
+      // Usando html2canvas que é mais confiável no iOS
+      const canvas = await html2canvas(element, {
+        useCORS: true,
+        allowTaint: true,
         backgroundColor: "#ffffff",
+        scale: 2, // Melhor qualidade
+        logging: false,
         width: 1080,
         height: 1920,
-        pixelRatio: 2,
-        // Garantir que fontes e imagens externas sejam carregadas
-        skipFonts: false,
       });
+
+      const dataUrl = canvas.toDataURL("image/png");
 
       if (!dataUrl || dataUrl === "data:,") {
         throw new Error("Imagem gerada está vazia");
