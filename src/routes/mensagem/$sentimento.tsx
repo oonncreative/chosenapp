@@ -198,7 +198,8 @@ function MensagemPage() {
         </Button>
         <Button
           onClick={handleShare}
-          className="h-[60px] flex-1 rounded-[24px] border-none bg-[#2D8C3C] text-sm font-black tracking-tighter text-white hover:bg-[#2D8C3C]/90 shadow-none flex items-center justify-center gap-2 uppercase italic transition-all active:scale-95"
+          style={{ backgroundColor: color.startsWith('#') ? color : undefined }}
+          className={`h-[60px] flex-1 rounded-[24px] border-none ${!color.startsWith('#') ? color : 'text-white'} text-sm font-black tracking-tighter hover:opacity-90 shadow-none flex items-center justify-center gap-2 uppercase italic transition-all active:scale-95`}
         >
           <Share2 className="h-4 w-4 shrink-0" />
           <span>Compartilhar</span>
