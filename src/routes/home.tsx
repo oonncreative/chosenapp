@@ -45,7 +45,7 @@ function HomePage() {
         </div>
 
         <div className="mt-4">
-          <p className="text-2xl font-bold tracking-tighter text-black uppercase italic">Qual seu sentimento?</p>
+          <h1 className="text-[11px] font-bold tracking-[0.4em] text-black uppercase">Qual seu sentimento?</h1>
         </div>
       </header>
 
@@ -62,19 +62,16 @@ function HomePage() {
                 key={sentimento}
                 to="/mensagem/$sentimento"
                 params={{ sentimento }}
-                className={`group relative flex items-center justify-between min-h-[140px] px-8 py-6 transition-all active:scale-[0.97] rounded-[24px] overflow-hidden ${colorClass} ${rotation} hover:rotate-0`}
+                className={`group relative flex items-center justify-between min-h-[110px] px-8 py-4 transition-all active:scale-[0.97] rounded-[24px] overflow-hidden ${colorClass} ${rotation} hover:rotate-0`}
               >
                 <div className="flex flex-col">
-                  <span className="text-[10px] opacity-60 font-bold uppercase tracking-widest mb-1">
-                    {String(index + 9).padStart(2, '0')}:00
-                  </span>
-                  <span className="text-3xl font-black leading-[0.9] tracking-tighter max-w-[200px] break-words uppercase italic">
+                  <span className="text-2xl font-black leading-[0.9] tracking-tighter max-w-[200px] break-words uppercase italic">
                     {sentimento}
                   </span>
                 </div>
                 
-                <div className="absolute right-6 bottom-6 opacity-20 group-hover:opacity-100 transition-opacity">
-                   <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
+                <div className="absolute right-6 bottom-4 opacity-20 group-hover:opacity-100 transition-opacity">
+                   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
                      <path d="M5 12h14M12 5l7 7-7 7" strokeLinecap="round" strokeLinejoin="round"/>
                    </svg>
                 </div>
