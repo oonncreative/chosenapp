@@ -7,7 +7,7 @@ import {
   HeadContent,
   Scripts,
 } from "@tanstack/react-router";
-import { useEffect, type ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
@@ -120,31 +120,23 @@ function RootShell({ children }: { children: ReactNode }) {
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
   const router = useRouter();
-  const [isRefreshing, setIsRefreshing] = useEffect(() => {
-    // Check if we're in a "refreshing" state (first load or manual refresh)
+  const [appReady, setAppReady] = useState(false);
+  const isLoading = router.state.isLoading;
+
+  useEffect(() => {
     const handleBeforeUnload = () => sessionStorage.setItem('isRefreshing', 'true');
     window.addEventListener('beforeunload', handleBeforeUnload);
     
-    const wasRefreshing = sessionStorage.getItem('isRefreshing');
-    if (wasRefreshing) {
-      sessionStorage.removeItem('isRefreshing');
-      const timer = setTimeout(() => {
-        document.getElementById('initial-splash')?.classList.add('opacity-0');
-        setTimeout(() => setAppReady(true), 500);
-      }, 1500);
-      return () => {
-        clearTimeout(timer);
-        window.removeEventListener('beforeunload', handleBeforeUnload);
-      };
-    } else {
+    // Always show splash on first load or refresh
+    const timer = setTimeout(() => {
       setAppReady(true);
-    }
-    
-    return () => window.removeEventListener('beforeunload', handleBeforeUnload);
-  }, []);
+    }, 1200);
 
-  const [appReady, setAppReady] = useState(false);
-  const isLoading = router.state.isLoading;
+    return () => {
+      clearTimeout(timer);
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+    };
+  }, []);
 
   return (
     <QueryClientProvider client={queryClient}>
