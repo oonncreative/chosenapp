@@ -64,9 +64,16 @@ function Onboarding() {
               <Button 
                 variant="outline" 
                 className="mt-6 h-[60px] w-full rounded-[24px] border-2 border-black bg-white text-lg font-black tracking-tighter text-black hover:bg-gray-50 uppercase italic transition-all active:scale-95 shadow-none"
-                onClick={() => {
+                onClick={async () => {
                   if ("Notification" in window) {
-                    Notification.requestPermission();
+                    const permission = await Notification.requestPermission();
+                    if (permission === "granted" && "serviceWorker" in navigator) {
+                      const registration = await navigator.serviceWorker.ready;
+                      registration.showNotification('Ressoa', {
+                        body: 'Notificações ativadas! Enviaremos mensagens de fé para você.',
+                        icon: '/logo-ressoa.png'
+                      });
+                    }
                   }
                 }}
               >
