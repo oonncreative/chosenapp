@@ -137,6 +137,36 @@ function RootShell({ children }: { children: ReactNode }) {
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
 
+  useEffect(() => {
+    // Registrar Service Worker
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js').catch(err => {
+          console.error('SW registration failed: ', err);
+        });
+      });
+    }
+
+    // Lógica para notificações agendadas (Simulação via Local Notification se permitido)
+    const setupNotifications = async () => {
+      if (!("Notification" in window)) return;
+      
+      if (Notification.permission === "granted") {
+        const lastNotif = localStorage.getItem('last_notification_time');
+        const now = Date.now();
+        const sixtyMinutes = 60 * 60 * 1000;
+
+        if (!lastNotif || (now - parseInt(lastNotif)) > sixtyMinutes) {
+          // Só envia se o app estiver em background ou após tempo suficiente
+          // Como é uma simulação PWA, vamos apenas garantir que o sistema está pronto
+          localStorage.setItem('last_notification_time', now.toString());
+        }
+      }
+    };
+
+    setupNotifications();
+  }, []);
+
   return (
     <QueryClientProvider client={queryClient}>
       <Outlet />
