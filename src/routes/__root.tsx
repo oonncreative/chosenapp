@@ -120,15 +120,39 @@ function RootShell({ children }: { children: ReactNode }) {
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
   const router = useRouter();
+  const [isRefreshing, setIsRefreshing] = useEffect(() => {
+    // Check if we're in a "refreshing" state (first load or manual refresh)
+    const handleBeforeUnload = () => sessionStorage.setItem('isRefreshing', 'true');
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    
+    const wasRefreshing = sessionStorage.getItem('isRefreshing');
+    if (wasRefreshing) {
+      sessionStorage.removeItem('isRefreshing');
+      const timer = setTimeout(() => {
+        document.getElementById('initial-splash')?.classList.add('opacity-0');
+        setTimeout(() => setAppReady(true), 500);
+      }, 1500);
+      return () => {
+        clearTimeout(timer);
+        window.removeEventListener('beforeunload', handleBeforeUnload);
+      };
+    } else {
+      setAppReady(true);
+    }
+    
+    return () => window.removeEventListener('beforeunload', handleBeforeUnload);
+  }, []);
+
+  const [appReady, setAppReady] = useState(false);
   const isLoading = router.state.isLoading;
 
   return (
     <QueryClientProvider client={queryClient}>
-      {isLoading && (
-        <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-white">
+      {(!appReady || isLoading) && (
+        <div id="initial-splash" className="fixed inset-0 z-[9999] flex items-center justify-center bg-white transition-opacity duration-500">
           <div className="flex flex-col items-center gap-4">
-            <div className="h-10 w-10 animate-spin rounded-full border-2 border-gray-200 border-t-black" />
-            <p className="text-[10px] font-extralight tracking-[0.4em] text-gray-400 uppercase">Ressoa</p>
+            <div className="h-10 w-10 animate-spin rounded-full border-2 border-gray-100 border-t-black" />
+            <p className="text-[10px] font-extralight tracking-[0.4em] text-gray-400 uppercase animate-pulse">Ressoa</p>
           </div>
         </div>
       )}
