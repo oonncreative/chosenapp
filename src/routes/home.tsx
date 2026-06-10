@@ -20,6 +20,7 @@ const colors = [
 
 
 function HomePage() {
+  const navigate = useNavigate();
   const [viewMode, setViewMode] = useState<"list" | "grid">("list");
 
   return (
