@@ -1,9 +1,9 @@
 import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
 import { getProximaMensagem, type Categoria, type Mensagem } from "@/lib/data";
 import { Button } from "@/components/ui/button";
-import { useState, useRef } from "react";
-import { Share2, RefreshCw, ArrowLeft } from "lucide-react";
-import { toPng } from "html-to-image";
+import { useState, useRef, useEffect } from "react";
+import { Share2, ArrowLeft } from "lucide-react";
+import * as htmlToImage from "html-to-image";
 
 export const Route = createFileRoute("/mensagem/$sentimento")({
   component: MensagemPage,
@@ -14,6 +14,19 @@ function MensagemPage() {
   const navigate = useNavigate();
   const [mensagem] = useState<Mensagem>(() => getProximaMensagem(sentimento as Categoria));
   const shareRef = useRef<HTMLDivElement>(null);
+  const [logoBase64, setLogoBase64] = useState<string>("");
+
+  useEffect(() => {
+    // Converter logo para base64 para garantir que seja incluída na imagem
+    fetch("/0novalogo.png")
+      .then(r => r.blob())
+      .then(blob => {
+        const reader = new FileReader();
+        reader.onloadend = () => setLogoBase64(reader.result as string);
+        reader.readAsDataURL(blob);
+      })
+      .catch(err => console.error("Erro ao carregar logo para base64:", err));
+  }, []);
 
   const handleRefresh = () => {
     navigate({ to: "/home" });
@@ -23,39 +36,50 @@ function MensagemPage() {
     if (!shareRef.current) return;
 
     try {
-      // Pequeno delay para garantir que o DOM está pronto se necessário
-      await new Promise(resolve => setTimeout(resolve, 100));
+      // Pequeno delay para garantir que o DOM está pronto
+      await new Promise(resolve => setTimeout(resolve, 200));
       
-      const dataUrl = await toPng(shareRef.current, {
+      const dataUrl = await htmlToImage.toPng(shareRef.current, {
         cacheBust: true,
         backgroundColor: "#ffffff",
         width: 1080,
         height: 1920,
-        pixelRatio: 1, // Fixar ratio para evitar problemas de escala
+        pixelRatio: 2,
+        style: {
+          opacity: '1',
+          visibility: 'visible',
+          transform: 'none',
+          left: '0',
+          top: '0'
+        }
       });
 
-      // Baixar a imagem diretamente como fallback e principal método para garantir que funciona
-      const link = document.createElement("a");
-      link.download = "ressoa-mensagem.png";
-      link.href = dataUrl;
-      link.click();
-      
-      // Tentar compartilhar via API se disponível
+      // Se for mobile e tiver API de share, priorizar ela
       if (navigator.share) {
         try {
-          const blob = await (await fetch(dataUrl)).blob();
-          const file = new File([blob], "ressoa.png", { type: "image/png" });
+          const response = await fetch(dataUrl);
+          const blob = await response.blob();
+          const file = new File([blob], "ressoa-mensagem.png", { type: "image/png" });
+          
           if (navigator.canShare && navigator.canShare({ files: [file] })) {
             await navigator.share({
               files: [file],
               title: "Ressoa",
-              text: "Uma palavra para você.",
+              text: `"${mensagem.texto}" - ${mensagem.referencia}`,
             });
+            return; // Sucesso no share nativo, não precisa baixar
           }
         } catch (shareErr) {
-          console.log("Navegador não suporta compartilhamento de arquivos direto, download realizado.");
+          console.log("Erro no share nativo, tentando fallback de download:", shareErr);
         }
       }
+
+      // Fallback para download direto
+      const link = document.createElement("a");
+      link.download = `ressoa-${sentimento}.png`;
+      link.href = dataUrl;
+      link.click();
+      
     } catch (err) {
       console.error("Erro ao gerar imagem:", err);
     }
@@ -63,11 +87,12 @@ function MensagemPage() {
 
   return (
     <div className="relative flex h-screen w-full flex-col overflow-hidden bg-white p-8">
-      {/* Elemento para geração da imagem de compartilhamento - movido para fora do viewport mas visível para o html-to-image */}
+      {/* Elemento para geração da imagem de compartilhamento - otimizado */}
       <div 
+        ref={shareRef}
         style={{ 
-          position: 'absolute',
-          left: '-2000px',
+          position: 'fixed',
+          left: '-5000px',
           top: '0',
           width: '1080px',
           height: '1920px',
@@ -77,23 +102,54 @@ function MensagemPage() {
           alignItems: 'center',
           justifyContent: 'center',
           textAlign: 'center',
-          padding: '80px'
+          zIndex: -1,
         }}
-        ref={shareRef}
       >
-        <img src="/0novalogo.png" alt="Ressoa" style={{ position: 'absolute', top: '80px', width: '60px', height: '60px' }} />
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '48px' }}>
-          <p style={{ fontSize: '48px', fontWeight: '300', lineHeight: '1.4', color: '#000000', margin: '0' }}>
+        <div style={{ position: 'absolute', top: '150px', width: '100%', display: 'flex', justifyContent: 'center' }}>
+          {logoBase64 && <img src={logoBase64} alt="Ressoa" style={{ width: '80px', height: '80px', objectFit: 'contain' }} />}
+        </div>
+
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '60px', padding: '0 100px', width: '100%' }}>
+          <p style={{ 
+            fontSize: '56px', 
+            fontWeight: '300', 
+            lineHeight: '1.4', 
+            color: '#000000', 
+            margin: '0',
+            fontFamily: 'sans-serif'
+          }}>
             "{mensagem.texto}"
           </p>
-          <p style={{ fontSize: '24px', fontWeight: '600', letterSpacing: '0.1em', color: '#000000', textTransform: 'uppercase', margin: '0' }}>
+          <p style={{ 
+            fontSize: '28px', 
+            fontWeight: '700', 
+            letterSpacing: '0.2em', 
+            color: '#000000', 
+            textTransform: 'uppercase', 
+            margin: '0',
+            fontFamily: 'sans-serif'
+          }}>
             {mensagem.referencia}
           </p>
           {mensagem.fraseMotivacional && (
-            <p style={{ marginTop: '32px', fontSize: '30px', fontWeight: '300', fontStyle: 'italic', color: 'rgba(0,0,0,0.4)', padding: '0 80px' }}>
+            <p style={{ 
+              marginTop: '40px', 
+              fontSize: '32px', 
+              fontWeight: '300', 
+              fontStyle: 'italic', 
+              color: 'rgba(0,0,0,0.5)', 
+              padding: '0 40px',
+              fontFamily: 'sans-serif'
+            }}>
               {mensagem.fraseMotivacional}
             </p>
           )}
+        </div>
+
+        <div style={{ position: 'absolute', bottom: '100px', width: '100%', textAlign: 'center' }}>
+          <p style={{ fontSize: '20px', fontWeight: '300', letterSpacing: '0.3em', color: '#cccccc', textTransform: 'uppercase' }}>
+            Ressoa
+          </p>
         </div>
       </div>
 
