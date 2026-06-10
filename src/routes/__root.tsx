@@ -92,6 +92,19 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     ],
     links: [
       {
+        rel: "icon",
+        type: "image/png",
+        href: "/favicon-32.png",
+      },
+      {
+        rel: "apple-touch-icon",
+        href: "/icon-192.png",
+      },
+      {
+        rel: "manifest",
+        href: "/manifest.json",
+      },
+      {
         rel: "stylesheet",
         href: appCss,
       },
@@ -142,9 +155,16 @@ function RootComponent() {
     <QueryClientProvider client={queryClient}>
       {(!appReady || isLoading) && (
         <div id="initial-splash" className="fixed inset-0 z-[9999] flex items-center justify-center bg-white transition-opacity duration-500">
-          <div className="flex flex-col items-center gap-4">
-            <div className="h-10 w-10 animate-spin rounded-full border-2 border-gray-100 border-t-black" />
-            <p className="text-[10px] font-extralight tracking-[0.4em] text-gray-400 uppercase animate-pulse">Ressoa</p>
+          <div className="flex flex-col items-center gap-6">
+            <img 
+              src="/icon-192.png" 
+              alt="Ressoa Logo" 
+              className="h-24 w-24 animate-pulse rounded-2xl shadow-sm"
+            />
+            <div className="flex flex-col items-center gap-2">
+              <div className="h-6 w-6 animate-spin rounded-full border-2 border-gray-100 border-t-black" />
+              <p className="text-[10px] font-extralight tracking-[0.4em] text-gray-400 uppercase">Ressoa</p>
+            </div>
           </div>
         </div>
       )}
