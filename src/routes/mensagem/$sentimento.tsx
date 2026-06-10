@@ -24,7 +24,7 @@ function MensagemPage() {
 
   useEffect(() => {
     // Converter logo para base64 para garantir que seja incluída na imagem
-    fetch("/0novalogo.png")
+    fetch("/logo-ressoa.png")
       .then(r => r.blob())
       .then(blob => {
         const reader = new FileReader();
@@ -173,7 +173,7 @@ function MensagemPage() {
           <ArrowLeft className="h-5 w-5 text-gray-400" />
         </Link>
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-          <img src="/0novalogo.png" alt="Ressoa" className="h-6 w-6 object-contain" />
+          <img src="/logo-ressoa.png" alt="Ressoa" className="h-6 w-6 object-contain" />
         </div>
         <div className="w-10 h-10" /> {/* Spacer */}
       </header>
