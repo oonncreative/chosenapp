@@ -136,24 +136,18 @@ function RootShell({ children }: { children: ReactNode }) {
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
   const router = useRouter();
-  const [appReady, setAppReady] = useState(() => {
-    // If we're already on a page that isn't the root, we might have already initialized
-    return typeof window !== 'undefined' && sessionStorage.getItem('app_initialized') === 'true';
-  });
-  const [initialLoad, setInitialLoad] = useState(!appReady);
+  const [appReady, setAppReady] = useState(false);
+  const [initialLoad, setInitialLoad] = useState(true);
 
   useEffect(() => {
-    if (appReady) return;
-
-    // Only run this on the very first mount of the RootComponent
+    // Garantir que o splash saia após o tempo determinado, independente de qualquer estado anterior
     const timer = setTimeout(() => {
       setAppReady(true);
       setInitialLoad(false);
-      sessionStorage.setItem('app_initialized', 'true');
-    }, 1200);
+    }, 1500);
 
     return () => clearTimeout(timer);
-  }, [appReady]);
+  }, []);
 
   return (
     <QueryClientProvider client={queryClient}>
