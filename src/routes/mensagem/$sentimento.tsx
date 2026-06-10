@@ -12,7 +12,7 @@ export const Route = createFileRoute("/mensagem/$sentimento")({
 function MensagemPage() {
   const { sentimento } = Route.useParams();
   const navigate = useNavigate();
-  const [mensagem, setMensagem] = useState<Mensagem>(() => getProximaMensagem(sentimento as Categoria));
+  const [mensagem] = useState<Mensagem>(() => getProximaMensagem(sentimento as Categoria));
   const shareRef = useRef<HTMLDivElement>(null);
 
   const handleRefresh = () => {
