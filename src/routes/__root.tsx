@@ -140,7 +140,7 @@ function RootComponent() {
   const [initialLoad, setInitialLoad] = useState(true);
 
   useEffect(() => {
-    // Only show splash on the very first mount of the app
+    // Only run this on the very first mount of the RootComponent
     const timer = setTimeout(() => {
       setAppReady(true);
       setInitialLoad(false);
