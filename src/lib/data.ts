@@ -47,10 +47,10 @@ export const MENSAGENS: Record<Categoria, Mensagem[]> = {
     { id: "ag5", tipo: "versiculo", texto: "Toda boa dádiva e todo dom perfeito vêm do alto.", referencia: "Tiago 1:17", resumo: "Tiago ensina que tudo o que é bom em nossa vida tem uma origem divina e generosa." },
   ],
   "Nervoso": [
-    { id: "n1", tipo: "versiculo", texto: "O Senhor é a minha luz e a minha salvação; de quem terei temor?", referencia: "Salmos 27:1", fraseMotivacional: "A calma é a sua maior aliada diante de qualquer desafio." },
-    { id: "n2", tipo: "versiculo", texto: "Pois Deus não nos deu espírito de covardia, mas de poder e equilíbrio.", referencia: "2 Timóteo 1:7", fraseMotivacional: "Resgate o seu equilíbrio interno e tudo se ajustará." },
-    { id: "n4", tipo: "salmo", texto: "Em paz me deito e logo pego no sono, pois só tu, Senhor, me fazes viver em segurança.", referencia: "Salmos 4:8", fraseMotivacional: "Onde há confiança, o medo não encontra espaço para ficar." },
-    { id: "n5", tipo: "versiculo", texto: "Aquietai-vos e sabei que eu sou Deus.", referencia: "Salmos 46:10", fraseMotivacional: "No silêncio e na quietude, você encontrará a resposta que precisa." },
+    { id: "n1", tipo: "versiculo", texto: "O Senhor é a minha luz e a minha salvação; de quem terei temor?", referencia: "Salmos 27:1", resumo: "Uma declaração de total confiança em Deus, escrita por Davi, que substitui o medo pela certeza da proteção divina." },
+    { id: "n2", tipo: "versiculo", texto: "Pois Deus não nos deu espírito de covardia, mas de poder e equilíbrio.", referencia: "2 Timóteo 1:7", resumo: "Paulo encoraja o jovem Timóteo a lembrar que a força cristã vem do Espírito Santo, trazendo clareza e autocontrole." },
+    { id: "n4", tipo: "salmo", texto: "Em paz me deito e logo pego no sono, pois só tu, Senhor, me fazes viver em segurança.", referencia: "Salmos 4:8", resumo: "Uma oração noturna que expressa como a paz interior, fruto da confiança em Deus, permite o descanso real mesmo em tempos de crise." },
+    { id: "n5", tipo: "versiculo", texto: "Aquietai-vos e sabei que eu sou Deus.", referencia: "Salmos 46:10", resumo: "Um comando para cessar as lutas e preocupações próprias, reconhecendo a soberania e o controle final de Deus sobre todas as coisas." },
   ],
   "Preciso de esperança": [
     { id: "e1", tipo: "versiculo", texto: "Pois eu bem sei os planos que tenho para vocês, planos de dar a vocês esperança.", referencia: "Jeremias 29:11", fraseMotivacional: "O melhor ainda está por vir. Continue acreditando." },
