@@ -62,8 +62,8 @@ function MensagemPage() {
 
       // dom-to-image é mais leve e costuma funcionar melhor em Safari/iOS
       const dataUrl = await domtoimage.toPng(element, {
-        width: 600,
-        height: 800,
+        width: 1080,
+        height: 1920,
         style: {
           transform: 'none',
           left: '0',
@@ -123,8 +123,8 @@ function MensagemPage() {
           position: 'fixed',
           left: '-9999px', // Mais longe para evitar interferência visual
           top: '0',
-          width: '600px', // Tamanho mais razoável para mobile sharing
-          height: '800px',
+          width: '1080px',
+          height: '1920px',
           backgroundColor: '#ffffff',
           display: 'flex',
           flexDirection: 'column',
@@ -175,8 +175,8 @@ function MensagemPage() {
           )}
         </div>
 
-        <div style={{ marginTop: 'auto', marginBottom: '40px', textAlign: 'center' }}>
-          <p style={{ fontSize: '12px', fontWeight: '300', letterSpacing: '0.3em', color: '#cccccc', textTransform: 'uppercase' }}>
+        <div style={{ paddingBottom: '120px', textAlign: 'center' }}>
+          <p style={{ fontSize: '24px', fontWeight: '300', letterSpacing: '0.4em', color: '#cccccc', textTransform: 'uppercase' }}>
             Ressoa
           </p>
         </div>
