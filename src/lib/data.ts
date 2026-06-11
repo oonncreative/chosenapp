@@ -5,7 +5,8 @@ export interface Mensagem {
   texto: string;
   referencia: string;
   tipo: TipoMensagem;
-  fraseMotivacional?: string;
+   fraseMotivacional?: string;
+  resumo?: string;
 }
 
 export const CATEGORIAS = [
