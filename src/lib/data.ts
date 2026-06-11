@@ -23,10 +23,10 @@ export const MENSAGENS: Record<Categoria, Mensagem[]> = {
     { id: "f5", tipo: "salmo", texto: "Tu me farás conhecer a vereda da vida, a alegria plena da tua presença.", referencia: "Salmos 16:11", resumo: "Um salmo de confiança de Davi, expressando que a verdadeira satisfação e o sentido da vida são encontrados na comunhão com o Criador." },
   ],
   "Ansioso": [
-    { id: "a1", tipo: "versiculo", texto: "Não andem ansiosos por coisa alguma, mas em tudo apresentem seus pedidos a Deus.", referencia: "Filipenses 4:6", fraseMotivacional: "Troque a preocupação pela confiança e sinta a paz chegar." },
-    { id: "a2", tipo: "versiculo", texto: "Lancem sobre ele toda a sua ansiedade, porque ele tem cuidado de vocês.", referencia: "1 Pedro 5:7", fraseMotivacional: "Você não precisa carregar o mundo nas costas. Descanse." },
-    { id: "a4", tipo: "salmo", texto: "Quando a ansiedade já me dominava, o teu consolo trouxe alívio à minha alma.", referencia: "Salmos 94:19", fraseMotivacional: "Respire fundo. O alívio que você precisa já está a caminho." },
-    { id: "a5", tipo: "versiculo", texto: "Quem de vocês, por mais que se preocupe, pode acrescentar uma hora que seja à sua vida?", referencia: "Mateus 6:27", fraseMotivacional: "Concentre-se no agora; o amanhã se cuidará sozinho." },
+    { id: "a1", tipo: "versiculo", texto: "Não andem ansiosos por coisa alguma, mas em tudo apresentem seus pedidos a Deus.", referencia: "Filipenses 4:6", resumo: "Paulo ensina que a oração com gratidão é o antídoto para a ansiedade, trazendo a paz que excede o entendimento." },
+    { id: "a2", tipo: "versiculo", texto: "Lancem sobre ele toda a sua ansiedade, porque ele tem cuidado de vocês.", referencia: "1 Pedro 5:7", resumo: "Pedro encoraja os cristãos a confiarem no cuidado pessoal de Deus, transferindo suas preocupações para Aquele que pode resolvê-las." },
+    { id: "a4", tipo: "salmo", texto: "Quando a ansiedade já me dominava, o teu consolo trouxe alívio à minha alma.", referencia: "Salmos 94:19", resumo: "Um salmo que reconhece a realidade das lutas internas, mas aponta para o conforto divino como a fonte de renovação mental." },
+    { id: "a5", tipo: "versiculo", texto: "Quem de vocês, por mais que se preocupe, pode acrescentar uma hora que seja à sua vida?", referencia: "Mateus 6:27", resumo: "Palavras de Jesus no Sermão do Monte, lembrando que a preocupação é ineficaz e que devemos confiar na providência diária." },
   ],
   "Triste": [
     { id: "t1", tipo: "versiculo", texto: "O Senhor está perto dos que têm o coração quebrantado.", referencia: "Salmos 34:18", fraseMotivacional: "Sinta o abraço de quem nunca te deixa sozinho nos momentos difíceis." },
