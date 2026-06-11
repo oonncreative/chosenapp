@@ -3,7 +3,7 @@ import { getMensagemById, type Categoria, type Mensagem } from "@/lib/data";
 import { Button } from "@/components/ui/button";
 import { useState, useRef, useEffect } from "react";
 import { Share2, ArrowLeft } from "lucide-react";
-import html2canvas from "html2canvas";
+import domtoimage from "dom-to-image-more";
 
 export const Route = createFileRoute("/mensagem/$sentimento")({
   validateSearch: (search: Record<string, unknown>) => {
@@ -52,31 +52,29 @@ function MensagemPage() {
     setIsSharing(true);
 
     try {
-      // Pequeno delay para garantir que o DOM está pronto e imagens carregadas
-      await new Promise(resolve => setTimeout(resolve, 500));
-      
       const element = shareRef.current;
       
-      // Usando html2canvas que é mais confiável no iOS
-      const canvas = await html2canvas(element, {
-        useCORS: true,
-        allowTaint: false,
-        backgroundColor: "#ffffff",
-        scale: 2,
-        logging: true, // Útil para depurar se algo falhar
+      // Ajustes temporários para captura
+      const originalLeft = element.style.left;
+      const originalOpacity = element.style.opacity;
+      element.style.left = '0';
+      element.style.opacity = '1';
+
+      // dom-to-image é mais leve e costuma funcionar melhor em Safari/iOS
+      const dataUrl = await domtoimage.toPng(element, {
         width: 600,
         height: 800,
-        onclone: (clonedDoc) => {
-          // Garantir que o elemento clonado seja visível para o html2canvas
-          const el = clonedDoc.querySelector('[ref="shareRef"]') as HTMLElement;
-          if (el) {
-            el.style.left = '0';
-            el.style.opacity = '1';
-          }
+        style: {
+          transform: 'none',
+          left: '0',
+          top: '0',
+          opacity: '1'
         }
       });
 
-      const dataUrl = canvas.toDataURL("image/png");
+      // Restaurar estado
+      element.style.left = originalLeft;
+      element.style.opacity = originalOpacity;
 
       if (!dataUrl || dataUrl === "data:,") {
         throw new Error("Imagem gerada está vazia");
@@ -110,6 +108,7 @@ function MensagemPage() {
       
     } catch (err) {
       console.error("Erro ao gerar imagem:", err);
+      alert("Não foi possível gerar a imagem para compartilhamento. Tente novamente.");
     } finally {
       setIsSharing(false);
     }
@@ -122,7 +121,7 @@ function MensagemPage() {
         ref={shareRef}
         style={{ 
           position: 'fixed',
-          left: '-5000px', // Fora da tela de verdade
+          left: '-9999px', // Mais longe para evitar interferência visual
           top: '0',
           width: '600px', // Tamanho mais razoável para mobile sharing
           height: '800px',
