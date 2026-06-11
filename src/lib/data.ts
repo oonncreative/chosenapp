@@ -65,10 +65,10 @@ export const MENSAGENS: Record<Categoria, Mensagem[]> = {
     { id: "p5", tipo: "versiculo", texto: "E a paz de Deus, que excede todo o entendimento, guardará os seus corações.", referencia: "Filipenses 4:7", resumo: "Uma descrição da paz divina como uma sentinela que protege nossos sentimentos e pensamentos contra a ansiedade." },
   ],
   "Preciso de força": [
-    { id: "f1_forca", tipo: "versiculo", texto: "Tudo posso naquele que me fortalece.", referencia: "Filipenses 4:13", fraseMotivacional: "Você é capaz de superar muito mais do que imagina." },
-    { id: "f2_forca", tipo: "salmo", texto: "O Senhor é a minha força e o meu escudo; nele o meu coração confia.", referencia: "Salmos 28:7", fraseMotivacional: "Sua proteção é real e sua força é inesgotável." },
-    { id: "f4", tipo: "versiculo", texto: "O Senhor dá força ao seu povo.", referencia: "Salmos 29:11", fraseMotivacional: "Mesmo cansado, você encontrará energia para o próximo passo." },
-    { id: "f5", tipo: "versiculo", texto: "A minha graça é suficiente para você, pois o meu poder se aperfeiçoa na fraqueza.", referencia: "2 Coríntios 12:9", fraseMotivacional: "Suas limitações são o espaço onde o impossível acontece." },
+    { id: "f1_forca", tipo: "versiculo", texto: "Tudo posso naquele que me fortalece.", referencia: "Filipenses 4:13", resumo: "Paulo escreveu isso na prisão, explicando que aprendeu a estar contente e forte em qualquer situação através da força de Cristo." },
+    { id: "f2_forca", tipo: "salmo", texto: "O Senhor é a minha força e o meu escudo; nele o meu coração confia.", referencia: "Salmos 28:7", resumo: "Davi combina as imagens de força interior e proteção externa para descrever como a fé em Deus o sustenta em batalhas." },
+    { id: "f4", tipo: "versiculo", texto: "O Senhor dá força ao seu povo.", referencia: "Salmos 29:11", resumo: "Um reconhecimento de que a força necessária para viver não vem de nós mesmos, mas é um suprimento divino contínuo." },
+    { id: "f5", tipo: "versiculo", texto: "A minha graça é suficiente para você, pois o meu poder se aperfeiçoa na fraqueza.", referencia: "2 Coríntios 12:9", resumo: "Deus ensinando a Paulo que a nossa fragilidade é, na verdade, o cenário ideal para que a força divina se manifeste plenamente." },
   ]
 };
 
