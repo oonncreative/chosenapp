@@ -136,13 +136,13 @@ function MensagemPage() {
           pointerEvents: 'none',
         }}
       >
-        <div style={{ padding: '40px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '30px', width: '100%' }}>
-          {logoBase64 && <img src={logoBase64} alt="Ressoa" style={{ width: '60px', height: '60px', objectFit: 'contain', marginBottom: '20px' }} />}
+        <div style={{ padding: '0 100px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '60px', width: '100%', flex: 1, justifyContent: 'center' }}>
+          {logoBase64 && <img src={logoBase64} alt="Ressoa" style={{ width: '120px', height: '120px', objectFit: 'contain', marginBottom: '40px' }} />}
           
           <p style={{ 
-            fontSize: '32px', 
+            fontSize: '64px', 
             fontWeight: '300', 
-            lineHeight: '1.4', 
+            lineHeight: '1.3', 
             color: '#000000', 
             margin: '0',
             fontFamily: 'system-ui, -apple-system, sans-serif'
@@ -150,7 +150,7 @@ function MensagemPage() {
             "{mensagem.texto}"
           </p>
           <p style={{ 
-            fontSize: '14px', 
+            fontSize: '28px', 
             fontWeight: '700', 
             letterSpacing: '0.2em', 
             color: '#000000', 
@@ -162,13 +162,14 @@ function MensagemPage() {
           </p>
           {mensagem.resumo && (
             <p style={{ 
-              marginTop: '20px', 
-              fontSize: '16px', 
+              marginTop: '40px', 
+              fontSize: '32px', 
               fontWeight: '300', 
               color: '#666666', 
-              padding: '0 20px',
+              padding: '0 40px',
               fontFamily: 'system-ui, -apple-system, sans-serif',
-              lineHeight: '1.5'
+              lineHeight: '1.5',
+              maxWidth: '800px'
             }}>
               {mensagem.resumo}
             </p>
