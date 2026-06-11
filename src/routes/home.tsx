@@ -108,7 +108,7 @@ function HomePage() {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="text-2xl font-black tracking-tight text-foreground uppercase italic"
+            className="text-2xl font-serif font-black tracking-tight text-foreground uppercase italic"
           >
             Como você se sente?
           </motion.h2>
@@ -155,7 +155,7 @@ function HomePage() {
                   className={`group relative flex items-center justify-between min-h-[120px] px-8 py-4 transition-all rounded-[32px] overflow-hidden ${colorClass} ${rotation} shadow-sm cursor-pointer`}
                 >
                   <div className="flex flex-col z-10">
-                    <span className="text-3xl font-black leading-none tracking-tighter max-w-[220px] break-words uppercase italic">
+                    <span className="text-3xl font-serif font-black leading-none tracking-tighter max-w-[220px] break-words uppercase italic">
                       {sentimento}
                     </span>
                   </div>
