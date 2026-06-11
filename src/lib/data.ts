@@ -83,13 +83,12 @@ const cache: Cache = {
   lastType: null,
 };
 
-export function getProximaMensagem(categoria: Categoria): Mensagem {
+export function getRandomIdForCategoria(categoria: Categoria): string {
   const todas = MENSAGENS[categoria];
   
-  // 1. Remover mensagens exibidas nas últimas 5 interações
+  // 1. Remover mensagens exibidas nas últimas 5 interações (cache local na memória do cliente)
   let filtradas = todas.filter(m => !cache.lastMessages.includes(m.id));
   
-  // Se filtrar tudo (muito improvável com o volume atual, mas por segurança), reseta o cache de IDs
   if (filtradas.length === 0) {
     cache.lastMessages = [];
     filtradas = todas;
@@ -98,7 +97,6 @@ export function getProximaMensagem(categoria: Categoria): Mensagem {
   // 2. Garantir que não apareça o mesmo tipo duas vezes seguidas
   let finalistas = filtradas.filter(m => m.tipo !== cache.lastType);
 
-  // Se o filtro de tipo remover todas as opções restantes, ignora a restrição de tipo
   if (finalistas.length === 0) {
     finalistas = filtradas;
   }
@@ -106,9 +104,19 @@ export function getProximaMensagem(categoria: Categoria): Mensagem {
   // 3. Selecionar aleatoriamente
   const selecionada = finalistas[Math.floor(Math.random() * finalistas.length)];
 
-  // Atualizar cache
+  // Atualizar cache (isso acontece no cliente antes de navegar)
   cache.lastMessages = [...cache.lastMessages, selecionada.id].slice(-5);
   cache.lastType = selecionada.tipo;
 
-  return selecionada;
+  return selecionada.id;
+}
+
+export function getMensagemById(categoria: Categoria, id: string): Mensagem {
+  const todas = MENSAGENS[categoria];
+  return todas.find(m => m.id === id) || todas[0];
+}
+
+export function getProximaMensagem(categoria: Categoria): Mensagem {
+  const id = getRandomIdForCategoria(categoria);
+  return getMensagemById(categoria, id);
 }

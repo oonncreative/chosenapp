@@ -1,5 +1,5 @@
 import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
-import { getProximaMensagem, type Categoria, type Mensagem } from "@/lib/data";
+import { getMensagemById, type Categoria, type Mensagem } from "@/lib/data";
 import { Button } from "@/components/ui/button";
 import { useState, useRef, useEffect } from "react";
 import { Share2, ArrowLeft } from "lucide-react";
@@ -9,11 +9,12 @@ export const Route = createFileRoute("/mensagem/$sentimento")({
   validateSearch: (search: Record<string, unknown>) => {
     return {
       color: (search.color as string) || "#2D8C3C",
+      id: search.id as string,
     };
   },
-  loader: ({ params }) => {
+  loader: ({ params, search }) => {
     return {
-      mensagem: getProximaMensagem(params.sentimento as Categoria),
+      mensagem: getMensagemById(params.sentimento as Categoria, search.id),
     };
   },
   component: MensagemPage,
@@ -43,8 +44,11 @@ function MensagemPage() {
     navigate({ to: "/home" });
   };
 
+  const [isSharing, setIsSharing] = useState(false);
+
   const handleShare = async () => {
-    if (!shareRef.current) return;
+    if (!shareRef.current || isSharing) return;
+    setIsSharing(true);
 
     try {
       // Pequeno delay para garantir que o DOM está pronto e imagens carregadas
@@ -97,6 +101,8 @@ function MensagemPage() {
       
     } catch (err) {
       console.error("Erro ao gerar imagem:", err);
+    } finally {
+      setIsSharing(false);
     }
   };
 
@@ -203,17 +209,18 @@ function MensagemPage() {
       <footer className="flex flex-row gap-3 pb-8 shrink-0 w-full">
         <Button
           onClick={handleRefresh}
-          className="h-[60px] flex-1 rounded-[24px] bg-transparent border-2 border-black text-black text-sm font-black tracking-tighter hover:bg-black/5 shadow-none uppercase italic transition-all active:scale-95"
+          className="h-[60px] flex-1 rounded-[24px] bg-transparent border-2 border-black text-black text-base font-black tracking-tighter hover:bg-black/5 shadow-none uppercase italic transition-all active:scale-95"
         >
           Novo sentimento
         </Button>
         <Button
           onClick={handleShare}
+          disabled={isSharing}
           style={{ backgroundColor: color.startsWith('#') ? color : undefined }}
-          className={`h-[60px] flex-1 rounded-[24px] border-none ${color === 'bg-white' ? 'bg-white text-black border-2 border-black' : (color.startsWith('bg-') ? `${color} text-white` : 'text-white')} text-sm font-black tracking-tighter hover:opacity-90 shadow-none flex items-center justify-center gap-2 uppercase italic transition-all active:scale-95`}
+          className={`h-[60px] flex-1 rounded-[24px] border-none ${color === 'bg-white' ? 'bg-white text-black border-2 border-black' : (color.startsWith('bg-') ? `${color} text-white` : 'text-white')} text-base font-black tracking-tighter hover:opacity-90 shadow-none flex items-center justify-center gap-2 uppercase italic transition-all active:scale-95 disabled:opacity-50`}
         >
-          <Share2 className="h-4 w-4 shrink-0" />
-          <span>Compartilhar</span>
+          <Share2 className="h-5 w-5 shrink-0" />
+          <span>{isSharing ? "Gerando..." : "Compartilhar"}</span>
         </Button>
       </footer>
     </div>

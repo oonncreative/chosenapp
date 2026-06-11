@@ -1,6 +1,6 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
-import { CATEGORIAS } from "@/lib/data";
+import { CATEGORIAS, getRandomIdForCategoria } from "@/lib/data";
 
 export const Route = createFileRoute("/home")({
   component: HomePage,
@@ -62,7 +62,10 @@ function HomePage() {
                 key={sentimento}
                 to="/mensagem/$sentimento"
                 params={{ sentimento }}
-                search={{ color: colorClass.split(' ')[0].replace('bg-[', '').replace(']', '') }}
+                search={{ 
+                  color: colorClass.split(' ')[0].replace('bg-[', '').replace(']', ''),
+                  id: getRandomIdForCategoria(sentimento)
+                }}
                 className={`group relative flex items-center justify-between min-h-[110px] px-8 py-4 transition-all active:scale-[0.97] rounded-[24px] overflow-hidden ${colorClass} ${rotation} hover:rotate-0`}
               >
                 <div className="flex flex-col">
