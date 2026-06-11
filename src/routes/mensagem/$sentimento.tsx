@@ -121,7 +121,7 @@ function MensagemPage() {
         ref={shareRef}
         style={{ 
           position: 'fixed',
-          left: '-5000px', // Fora da tela de verdade
+          left: '-9999px', // Mais longe para evitar interferência visual
           top: '0',
           width: '600px', // Tamanho mais razoável para mobile sharing
           height: '800px',
