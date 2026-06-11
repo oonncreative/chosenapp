@@ -41,10 +41,10 @@ export const MENSAGENS: Record<Categoria, Mensagem[]> = {
     { id: "s5", tipo: "versiculo", texto: "Não os deixarei órfãos; voltarei para vocês.", referencia: "João 14:18", resumo: "Jesus consolando os discípulos sobre sua partida, prometendo o Espírito Santo como o companheiro constante." },
   ],
   "Agradecido": [
-    { id: "ag1", tipo: "versiculo", texto: "Dêem graças ao Senhor, porque ele é bom; o seu amor dura para sempre.", referencia: "Salmos 107:1", fraseMotivacional: "A gratidão transforma o que temos em suficiente." },
-    { id: "ag2", tipo: "versiculo", texto: "Deem graças em todas as circunstâncias.", referencia: "1 Tessalonicenses 5:18", fraseMotivacional: "Até nos pequenos detalhes existe um motivo para agradecer." },
-    { id: "ag4", tipo: "salmo", texto: "Bendize, ó minha alma, ao Senhor, e não te esqueças de nenhum de seus benefícios.", referencia: "Salmos 103:2", fraseMotivacional: "Lembre-se de tudo que já superou e sinta orgulho da sua jornada." },
-    { id: "ag5", tipo: "versiculo", texto: "Toda boa dádiva e todo dom perfeito vêm do alto.", referencia: "Tiago 1:17", fraseMotivacional: "Sua vida é um conjunto de milagres diários. Reconheça-os." },
+    { id: "ag1", tipo: "versiculo", texto: "Dêem graças ao Senhor, porque ele é bom; o seu amor dura para sempre.", referencia: "Salmos 107:1", resumo: "Um convite à adoração comunitária, reconhecendo que a bondade de Deus é a base de toda a nossa gratidão." },
+    { id: "ag2", tipo: "versiculo", texto: "Deem graças em todas as circunstâncias.", referencia: "1 Tessalonicenses 5:18", resumo: "Uma instrução prática de Paulo que desafia a encontrar motivos para agradecer mesmo quando a vida parece difícil." },
+    { id: "ag4", tipo: "salmo", texto: "Bendize, ó minha alma, ao Senhor, e não te esqueças de nenhum de seus benefícios.", referencia: "Salmos 103:2", resumo: "Um monólogo interior onde Davi ordena a si mesmo lembrar das bênçãos recebidas, combatendo o esquecimento espiritual." },
+    { id: "ag5", tipo: "versiculo", texto: "Toda boa dádiva e todo dom perfeito vêm do alto.", referencia: "Tiago 1:17", resumo: "Tiago ensina que tudo o que é bom em nossa vida tem uma origem divina e generosa." },
   ],
   "Nervoso": [
     { id: "n1", tipo: "versiculo", texto: "O Senhor é a minha luz e a minha salvação; de quem terei temor?", referencia: "Salmos 27:1", fraseMotivacional: "A calma é a sua maior aliada diante de qualquer desafio." },
