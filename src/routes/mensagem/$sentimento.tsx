@@ -116,7 +116,7 @@ function MensagemPage() {
   };
 
   return (
-    <div className="relative flex h-screen w-full flex-col overflow-hidden bg-white px-8 pb-safe pt-safe">
+    <div className="relative flex min-h-[100dvh] w-full flex-col bg-white px-8 pb-8 pt-safe">
       {/* Elemento para geração da imagem de compartilhamento - otimizado */}
       <div 
         ref={shareRef}
@@ -196,7 +196,7 @@ function MensagemPage() {
         <div className="w-14 h-14" /> {/* Spacer */}
       </header>
 
-      <main className="flex flex-1 flex-col items-center justify-center px-4 text-center">
+      <main className="flex flex-1 flex-col items-center justify-center px-4 py-8 text-center">
         <div key={mensagem.id} className="w-full max-w-md animate-in fade-in duration-700 flex flex-col items-center">
           <p className="text-3xl font-light leading-snug text-black md:text-4xl tracking-tight">
             "{mensagem.texto}"
@@ -213,10 +213,10 @@ function MensagemPage() {
         </div>
       </main>
 
-      <footer className="flex flex-row gap-3 pb-8 pt-4 shrink-0 w-full mt-auto">
+      <footer className="flex flex-col sm:flex-row gap-3 pt-6 shrink-0 w-full mt-auto mb-safe">
         <Button
           onClick={handleRefresh}
-          className="h-[60px] flex-1 rounded-[24px] bg-transparent border-2 border-black text-black text-base font-black tracking-tighter hover:bg-black/5 shadow-none uppercase italic transition-all active:scale-95"
+          className="h-[56px] w-full sm:flex-1 rounded-[24px] bg-transparent border-2 border-black text-black text-sm font-black tracking-tighter hover:bg-black/5 shadow-none uppercase italic transition-all active:scale-95"
         >
           Novo sentimento
         </Button>
@@ -224,7 +224,7 @@ function MensagemPage() {
           onClick={handleShare}
           disabled={isSharing}
           style={{ backgroundColor: color.startsWith('#') ? color : undefined }}
-          className={`h-[60px] flex-1 rounded-[24px] border-none ${color === 'bg-white' ? 'bg-white text-black border-2 border-black' : (color.startsWith('bg-') ? `${color} text-white` : 'text-white')} text-base font-black tracking-tighter hover:opacity-90 shadow-none flex items-center justify-center gap-2 uppercase italic transition-all active:scale-95 disabled:opacity-50`}
+          className={`h-[56px] w-full sm:flex-1 rounded-[24px] border-none ${color === 'bg-white' ? 'bg-white text-black border-2 border-black' : (color.startsWith('bg-') ? `${color} text-white` : 'text-white')} text-sm font-black tracking-tighter hover:opacity-90 shadow-none flex items-center justify-center gap-2 uppercase italic transition-all active:scale-95 disabled:opacity-50`}
         >
           <Share2 className="h-5 w-5 shrink-0" />
           <span>{isSharing ? "Gerando..." : "Compartilhar"}</span>
