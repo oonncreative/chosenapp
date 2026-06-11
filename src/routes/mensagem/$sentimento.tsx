@@ -177,17 +177,17 @@ function MensagemPage() {
         </div>
       </div>
 
-      <header className="flex h-16 items-center justify-between relative">
+      <header className="flex h-20 items-center justify-between relative">
         <Link 
           to="/home" 
-          className="flex h-12 w-12 items-center justify-center rounded-full transition-colors hover:bg-gray-100 z-10"
+          className="flex h-14 w-14 items-center justify-center rounded-full transition-colors hover:bg-gray-100 z-10"
         >
-          <ArrowLeft className="h-6 w-6 text-gray-400" />
+          <ArrowLeft className="h-8 w-8 text-gray-400" />
         </Link>
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-          <img src="/logo-ressoa.png" alt="Ressoa" className="h-8 w-8 object-contain" />
+          <img src="/logo-ressoa.png" alt="Ressoa" className="h-10 w-10 object-contain" />
         </div>
-        <div className="w-12 h-12" /> {/* Spacer */}
+        <div className="w-14 h-14" /> {/* Spacer */}
       </header>
 
       <main className="flex flex-1 flex-col items-center justify-center px-4 text-center">

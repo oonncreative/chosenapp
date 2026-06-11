@@ -26,17 +26,17 @@ function HomePage() {
     <div className="h-screen overflow-hidden bg-white flex flex-col">
       <header className="p-6 pt-12 flex flex-col gap-4 shrink-0 bg-white z-10">
         <div className="flex items-center justify-between">
-          <h1 className="text-[14px] font-bold tracking-[0.4em] text-black uppercase">RESSOA</h1>
+          <h1 className="text-base font-bold tracking-[0.4em] text-black uppercase">RESSOA</h1>
           
           <div className="flex items-center gap-4">
             <button 
               onClick={() => {
                 navigate({ to: "/onboarding" });
               }}
-              className="flex items-center p-2 -mr-2 transition-opacity active:opacity-50"
+              className="flex items-center p-3 -mr-3 transition-opacity active:opacity-50"
               title="Voltar ao início"
             >
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="black" strokeWidth="2.5" className="text-black">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="black" strokeWidth="2.5" className="text-black">
                 <path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8" strokeLinecap="round" strokeLinejoin="round"/>
                 <path d="M21 3v5h-5" strokeLinecap="round" strokeLinejoin="round"/>
               </svg>
@@ -45,7 +45,7 @@ function HomePage() {
         </div>
 
         <div className="mt-2">
-          <h1 className="text-[14px] font-bold tracking-[0.4em] text-black uppercase">Qual seu sentimento?</h1>
+          <h1 className="text-base font-bold tracking-[0.4em] text-black uppercase">Qual seu sentimento?</h1>
         </div>
       </header>
 
