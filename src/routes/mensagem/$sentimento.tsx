@@ -1,5 +1,5 @@
 import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
-import { getProximaMensagem, type Categoria, type Mensagem } from "@/lib/data";
+import { getMensagemById, type Categoria, type Mensagem } from "@/lib/data";
 import { Button } from "@/components/ui/button";
 import { useState, useRef, useEffect } from "react";
 import { Share2, ArrowLeft } from "lucide-react";
@@ -9,6 +9,13 @@ export const Route = createFileRoute("/mensagem/$sentimento")({
   validateSearch: (search: Record<string, unknown>) => {
     return {
       color: (search.color as string) || "#2D8C3C",
+      id: search.id as string,
+    };
+  },
+  loaderDeps: ({ search: { id } }) => ({ id }),
+  loader: ({ params, deps: { id } }) => {
+    return {
+      mensagem: getMensagemById(params.sentimento as Categoria, id),
     };
   },
   component: MensagemPage,
@@ -17,8 +24,8 @@ export const Route = createFileRoute("/mensagem/$sentimento")({
 function MensagemPage() {
   const { sentimento } = Route.useParams();
   const { color } = Route.useSearch();
+  const { mensagem } = Route.useLoaderData();
   const navigate = useNavigate();
-  const [mensagem] = useState<Mensagem>(() => getProximaMensagem(sentimento as Categoria));
   const shareRef = useRef<HTMLDivElement>(null);
   const [logoBase64, setLogoBase64] = useState<string>("");
 
@@ -38,8 +45,11 @@ function MensagemPage() {
     navigate({ to: "/home" });
   };
 
+  const [isSharing, setIsSharing] = useState(false);
+
   const handleShare = async () => {
-    if (!shareRef.current) return;
+    if (!shareRef.current || isSharing) return;
+    setIsSharing(true);
 
     try {
       // Pequeno delay para garantir que o DOM está pronto e imagens carregadas
@@ -92,6 +102,8 @@ function MensagemPage() {
       
     } catch (err) {
       console.error("Erro ao gerar imagem:", err);
+    } finally {
+      setIsSharing(false);
     }
   };
 
@@ -165,30 +177,30 @@ function MensagemPage() {
         </div>
       </div>
 
-      <header className="flex h-12 items-center justify-between relative">
+      <header className="flex h-20 items-center justify-between relative">
         <Link 
           to="/home" 
-          className="flex h-10 w-10 items-center justify-center rounded-full transition-colors hover:bg-gray-100 z-10"
+          className="flex h-14 w-14 items-center justify-center rounded-full transition-colors hover:bg-gray-100 z-10"
         >
-          <ArrowLeft className="h-5 w-5 text-gray-400" />
+          <ArrowLeft className="h-8 w-8 text-gray-400" />
         </Link>
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-          <img src="/logo-ressoa.png" alt="Ressoa" className="h-6 w-6 object-contain" />
+          <img src="/logo-ressoa.png" alt="Ressoa" className="h-10 w-10 object-contain" />
         </div>
-        <div className="w-10 h-10" /> {/* Spacer */}
+        <div className="w-14 h-14" /> {/* Spacer */}
       </header>
 
       <main className="flex flex-1 flex-col items-center justify-center px-4 text-center">
         <div key={mensagem.id} className="w-full max-w-md animate-in fade-in duration-700 flex flex-col items-center">
-          <p className="text-2xl font-light leading-relaxed text-black md:text-3xl tracking-tight">
+          <p className="text-3xl font-light leading-snug text-black md:text-4xl tracking-tight">
             "{mensagem.texto}"
           </p>
-          <p className="mt-4 text-[10px] font-bold tracking-[0.2em] uppercase text-black">
+          <p className="mt-6 text-[12px] font-bold tracking-[0.2em] uppercase text-black">
             {mensagem.referencia}
           </p>
           
           {mensagem.fraseMotivacional && (
-            <p className="mt-12 text-sm font-light italic text-gray-400 max-w-[280px]">
+            <p className="mt-14 text-base font-light italic text-gray-400 max-w-[300px]">
               {mensagem.fraseMotivacional}
             </p>
           )}
@@ -198,17 +210,18 @@ function MensagemPage() {
       <footer className="flex flex-row gap-3 pb-8 shrink-0 w-full">
         <Button
           onClick={handleRefresh}
-          className="h-[60px] flex-1 rounded-[24px] bg-transparent border-2 border-black text-black text-sm font-black tracking-tighter hover:bg-black/5 shadow-none uppercase italic transition-all active:scale-95"
+          className="h-[60px] flex-1 rounded-[24px] bg-transparent border-2 border-black text-black text-base font-black tracking-tighter hover:bg-black/5 shadow-none uppercase italic transition-all active:scale-95"
         >
           Novo sentimento
         </Button>
         <Button
           onClick={handleShare}
+          disabled={isSharing}
           style={{ backgroundColor: color.startsWith('#') ? color : undefined }}
-          className={`h-[60px] flex-1 rounded-[24px] border-none ${color === 'bg-white' ? 'bg-white text-black border-2 border-black' : (color.startsWith('bg-') ? `${color} text-white` : 'text-white')} text-sm font-black tracking-tighter hover:opacity-90 shadow-none flex items-center justify-center gap-2 uppercase italic transition-all active:scale-95`}
+          className={`h-[60px] flex-1 rounded-[24px] border-none ${color === 'bg-white' ? 'bg-white text-black border-2 border-black' : (color.startsWith('bg-') ? `${color} text-white` : 'text-white')} text-base font-black tracking-tighter hover:opacity-90 shadow-none flex items-center justify-center gap-2 uppercase italic transition-all active:scale-95 disabled:opacity-50`}
         >
-          <Share2 className="h-4 w-4 shrink-0" />
-          <span>Compartilhar</span>
+          <Share2 className="h-5 w-5 shrink-0" />
+          <span>{isSharing ? "Gerando..." : "Compartilhar"}</span>
         </Button>
       </footer>
     </div>
