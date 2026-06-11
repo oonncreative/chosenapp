@@ -140,6 +140,14 @@
   body {
     background-color: var(--color-background);
     color: var(--color-foreground);
+    min-height: 100vh;
+    min-height: -webkit-fill-available;
+    padding-top: env(safe-area-inset-top);
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+
+  html {
+    height: -webkit-fill-available;
   }
 
   .no-scrollbar::-webkit-scrollbar {
