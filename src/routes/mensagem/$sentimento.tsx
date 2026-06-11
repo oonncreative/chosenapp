@@ -12,9 +12,10 @@ export const Route = createFileRoute("/mensagem/$sentimento")({
       id: search.id as string,
     };
   },
-  loader: ({ params, search }) => {
+  loaderDeps: ({ search: { id } }) => ({ id }),
+  loader: ({ params, deps: { id } }) => {
     return {
-      mensagem: getMensagemById(params.sentimento as Categoria, search.id),
+      mensagem: getMensagemById(params.sentimento as Categoria, id),
     };
   },
   component: MensagemPage,
