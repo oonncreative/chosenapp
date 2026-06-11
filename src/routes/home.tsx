@@ -36,10 +36,12 @@ function HomePage() {
               className="flex items-center p-3 transition-opacity active:opacity-50"
               title="Orações Diárias"
             >
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="black" strokeWidth="2.5" className="text-black">
-                <path d="M12 20c-1.5 0-3-1-3.5-2.5L7 12l2-5 3 2 3-2 2 5-1.5 5.5c-.5 1.5-2 2.5-3.5 2.5z" strokeLinecap="round" strokeLinejoin="round"/>
-                <path d="M10 10l2 2 2-2" strokeLinecap="round" strokeLinejoin="round"/>
-                <path d="M12 12v5" strokeLinecap="round" strokeLinejoin="round"/>
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="black" strokeWidth="2" className="text-black">
+                <path d="M7 20c0-1.5 1-3.5 2.5-4.5L12 14l2.5 1.5c1.5 1 2.5 3 2.5 4.5" strokeLinecap="round" strokeLinejoin="round"/>
+                <path d="M10 10c0-1.1.9-2 2-2s2 .9 2 2v4H10v-4z" strokeLinecap="round" strokeLinejoin="round"/>
+                <path d="M12 2v6" strokeLinecap="round" strokeLinejoin="round"/>
+                <path d="M8 6l2 2" strokeLinecap="round" strokeLinejoin="round"/>
+                <path d="M16 6l-2 2" strokeLinecap="round" strokeLinejoin="round"/>
               </svg>
             </button>
             <button 
