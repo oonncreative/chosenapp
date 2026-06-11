@@ -205,9 +205,9 @@ function MensagemPage() {
             {mensagem.referencia}
           </p>
           
-          {mensagem.fraseMotivacional && (
-            <p className="mt-14 text-base font-light italic text-gray-400 max-w-[300px]">
-              {mensagem.fraseMotivacional}
+          {mensagem.resumo && (
+            <p className="mt-8 text-sm font-light text-gray-500 max-w-[320px] leading-relaxed">
+              {mensagem.resumo}
             </p>
           )}
         </div>
