@@ -1,8 +1,8 @@
 import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
 import { getMensagemById, type Categoria, type Mensagem, getProximaMensagem } from "@/lib/data";
 import { Button } from "@/components/ui/button";
-import { useState, useRef, useEffect, useMemo } from "react";
-import { Share2, ArrowLeft, RefreshCw, Palette, Image as ImageIcon } from "lucide-react";
+import { useState, useRef, useEffect } from "react";
+import { Share2, ArrowLeft, RefreshCw } from "lucide-react";
 import domtoimage from "dom-to-image-more";
 import { motion, AnimatePresence } from "framer-motion";
 
