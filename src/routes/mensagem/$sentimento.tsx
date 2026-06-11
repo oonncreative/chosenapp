@@ -11,14 +11,19 @@ export const Route = createFileRoute("/mensagem/$sentimento")({
       color: (search.color as string) || "#2D8C3C",
     };
   },
+  loader: ({ params }) => {
+    return {
+      mensagem: getProximaMensagem(params.sentimento as Categoria),
+    };
+  },
   component: MensagemPage,
 });
 
 function MensagemPage() {
   const { sentimento } = Route.useParams();
   const { color } = Route.useSearch();
+  const { mensagem } = Route.useLoaderData();
   const navigate = useNavigate();
-  const [mensagem] = useState<Mensagem>(() => getProximaMensagem(sentimento as Categoria));
   const shareRef = useRef<HTMLDivElement>(null);
   const [logoBase64, setLogoBase64] = useState<string>("");
 
@@ -165,30 +170,30 @@ function MensagemPage() {
         </div>
       </div>
 
-      <header className="flex h-12 items-center justify-between relative">
+      <header className="flex h-16 items-center justify-between relative">
         <Link 
           to="/home" 
-          className="flex h-10 w-10 items-center justify-center rounded-full transition-colors hover:bg-gray-100 z-10"
+          className="flex h-12 w-12 items-center justify-center rounded-full transition-colors hover:bg-gray-100 z-10"
         >
-          <ArrowLeft className="h-5 w-5 text-gray-400" />
+          <ArrowLeft className="h-6 w-6 text-gray-400" />
         </Link>
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-          <img src="/logo-ressoa.png" alt="Ressoa" className="h-6 w-6 object-contain" />
+          <img src="/logo-ressoa.png" alt="Ressoa" className="h-8 w-8 object-contain" />
         </div>
-        <div className="w-10 h-10" /> {/* Spacer */}
+        <div className="w-12 h-12" /> {/* Spacer */}
       </header>
 
       <main className="flex flex-1 flex-col items-center justify-center px-4 text-center">
         <div key={mensagem.id} className="w-full max-w-md animate-in fade-in duration-700 flex flex-col items-center">
-          <p className="text-2xl font-light leading-relaxed text-black md:text-3xl tracking-tight">
+          <p className="text-3xl font-light leading-snug text-black md:text-4xl tracking-tight">
             "{mensagem.texto}"
           </p>
-          <p className="mt-4 text-[10px] font-bold tracking-[0.2em] uppercase text-black">
+          <p className="mt-6 text-[12px] font-bold tracking-[0.2em] uppercase text-black">
             {mensagem.referencia}
           </p>
           
           {mensagem.fraseMotivacional && (
-            <p className="mt-12 text-sm font-light italic text-gray-400 max-w-[280px]">
+            <p className="mt-14 text-base font-light italic text-gray-400 max-w-[300px]">
               {mensagem.fraseMotivacional}
             </p>
           )}

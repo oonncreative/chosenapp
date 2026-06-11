@@ -24,19 +24,19 @@ function HomePage() {
 
   return (
     <div className="h-screen overflow-hidden bg-white flex flex-col">
-      <header className="p-6 pt-10 flex flex-col gap-2 shrink-0 bg-white z-10">
+      <header className="p-6 pt-12 flex flex-col gap-4 shrink-0 bg-white z-10">
         <div className="flex items-center justify-between">
-          <h1 className="text-[11px] font-bold tracking-[0.4em] text-black uppercase">RESSOA</h1>
+          <h1 className="text-[14px] font-bold tracking-[0.4em] text-black uppercase">RESSOA</h1>
           
           <div className="flex items-center gap-4">
             <button 
               onClick={() => {
                 navigate({ to: "/onboarding" });
               }}
-              className="flex items-center transition-opacity active:opacity-50"
+              className="flex items-center p-2 -mr-2 transition-opacity active:opacity-50"
               title="Voltar ao início"
             >
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="black" strokeWidth="2" className="text-black">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="black" strokeWidth="2.5" className="text-black">
                 <path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8" strokeLinecap="round" strokeLinejoin="round"/>
                 <path d="M21 3v5h-5" strokeLinecap="round" strokeLinejoin="round"/>
               </svg>
@@ -44,8 +44,8 @@ function HomePage() {
           </div>
         </div>
 
-        <div className="mt-4">
-          <h1 className="text-[11px] font-bold tracking-[0.4em] text-black uppercase">Qual seu sentimento?</h1>
+        <div className="mt-2">
+          <h1 className="text-[14px] font-bold tracking-[0.4em] text-black uppercase">Qual seu sentimento?</h1>
         </div>
       </header>
 
@@ -66,7 +66,7 @@ function HomePage() {
                 className={`group relative flex items-center justify-between min-h-[110px] px-8 py-4 transition-all active:scale-[0.97] rounded-[24px] overflow-hidden ${colorClass} ${rotation} hover:rotate-0`}
               >
                 <div className="flex flex-col">
-                  <span className="text-2xl font-black leading-[0.9] tracking-tighter max-w-[200px] break-words uppercase italic">
+                  <span className="text-3xl font-black leading-[0.85] tracking-tighter max-w-[220px] break-words uppercase italic">
                     {sentimento}
                   </span>
                 </div>
