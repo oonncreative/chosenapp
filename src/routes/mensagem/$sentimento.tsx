@@ -60,12 +60,20 @@ function MensagemPage() {
       // Usando html2canvas que é mais confiável no iOS
       const canvas = await html2canvas(element, {
         useCORS: true,
-        allowTaint: true,
+        allowTaint: false,
         backgroundColor: "#ffffff",
-        scale: 2, // Melhor qualidade
-        logging: false,
-        width: 1080,
-        height: 1920,
+        scale: 2,
+        logging: true, // Útil para depurar se algo falhar
+        width: 600,
+        height: 800,
+        onclone: (clonedDoc) => {
+          // Garantir que o elemento clonado seja visível para o html2canvas
+          const el = clonedDoc.querySelector('[ref="shareRef"]') as HTMLElement;
+          if (el) {
+            el.style.left = '0';
+            el.style.opacity = '1';
+          }
+        }
       });
 
       const dataUrl = canvas.toDataURL("image/png");
@@ -108,34 +116,32 @@ function MensagemPage() {
   };
 
   return (
-    <div className="relative flex h-screen w-full flex-col overflow-hidden bg-white p-8">
+    <div className="relative flex h-screen w-full flex-col overflow-hidden bg-white px-8 pb-safe pt-safe">
       {/* Elemento para geração da imagem de compartilhamento - otimizado */}
       <div 
         ref={shareRef}
         style={{ 
           position: 'fixed',
-          left: '0',
+          left: '-5000px', // Fora da tela de verdade
           top: '0',
-          width: '1080px',
-          height: '1920px',
+          width: '600px', // Tamanho mais razoável para mobile sharing
+          height: '800px',
           backgroundColor: '#ffffff',
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
           justifyContent: 'center',
           textAlign: 'center',
-          zIndex: -100, // Muito atrás de tudo
-          opacity: 0.01, // Quase invisível mas presente para o browser
+          zIndex: -100,
+          opacity: 1, // Visível para o renderizador
           pointerEvents: 'none',
         }}
       >
-        <div style={{ position: 'absolute', top: '150px', width: '100%', display: 'flex', justifyContent: 'center' }}>
-          {logoBase64 && <img src={logoBase64} alt="Ressoa" style={{ width: '80px', height: '80px', objectFit: 'contain' }} />}
-        </div>
-
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '60px', padding: '0 100px', width: '100%' }}>
+        <div style={{ padding: '40px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '30px', width: '100%' }}>
+          {logoBase64 && <img src={logoBase64} alt="Ressoa" style={{ width: '60px', height: '60px', objectFit: 'contain', marginBottom: '20px' }} />}
+          
           <p style={{ 
-            fontSize: '56px', 
+            fontSize: '32px', 
             fontWeight: '300', 
             lineHeight: '1.4', 
             color: '#000000', 
@@ -145,7 +151,7 @@ function MensagemPage() {
             "{mensagem.texto}"
           </p>
           <p style={{ 
-            fontSize: '28px', 
+            fontSize: '14px', 
             fontWeight: '700', 
             letterSpacing: '0.2em', 
             color: '#000000', 
@@ -157,12 +163,12 @@ function MensagemPage() {
           </p>
           {mensagem.fraseMotivacional && (
             <p style={{ 
-              marginTop: '40px', 
-              fontSize: '32px', 
+              marginTop: '20px', 
+              fontSize: '18px', 
               fontWeight: '300', 
               fontStyle: 'italic', 
-              color: 'rgba(0,0,0,0.5)', 
-              padding: '0 40px',
+              color: '#999999', 
+              padding: '0 20px',
               fontFamily: 'system-ui, -apple-system, sans-serif'
             }}>
               {mensagem.fraseMotivacional}
@@ -170,8 +176,8 @@ function MensagemPage() {
           )}
         </div>
 
-        <div style={{ position: 'absolute', bottom: '100px', width: '100%', textAlign: 'center' }}>
-          <p style={{ fontSize: '20px', fontWeight: '300', letterSpacing: '0.3em', color: '#cccccc', textTransform: 'uppercase' }}>
+        <div style={{ marginTop: 'auto', marginBottom: '40px', textAlign: 'center' }}>
+          <p style={{ fontSize: '12px', fontWeight: '300', letterSpacing: '0.3em', color: '#cccccc', textTransform: 'uppercase' }}>
             Ressoa
           </p>
         </div>
@@ -207,7 +213,7 @@ function MensagemPage() {
         </div>
       </main>
 
-      <footer className="flex flex-row gap-3 pb-8 shrink-0 w-full">
+      <footer className="flex flex-row gap-3 pb-8 pt-4 shrink-0 w-full mt-auto">
         <Button
           onClick={handleRefresh}
           className="h-[60px] flex-1 rounded-[24px] bg-transparent border-2 border-black text-black text-base font-black tracking-tighter hover:bg-black/5 shadow-none uppercase italic transition-all active:scale-95"
