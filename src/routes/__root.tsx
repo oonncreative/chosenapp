@@ -7,9 +7,9 @@ import {
   HeadContent,
   Scripts,
 } from "@tanstack/react-router";
-import { useEffect, type ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 
-import "../styles.css";
+import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 
 function NotFoundComponent() {
@@ -108,11 +108,9 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         rel: "manifest",
         href: "/manifest.json",
       },
-      { rel: "preconnect", href: "https://fonts.googleapis.com" },
-      { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
       {
         rel: "stylesheet",
-        href: "https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap",
+        href: appCss,
       },
     ],
   }),
@@ -124,11 +122,11 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 
 function RootShell({ children }: { children: ReactNode }) {
   return (
-    <html lang="pt-BR" className="no-scrollbar">
+    <html lang="pt-BR">
       <head>
         <HeadContent />
       </head>
-      <body className="no-scrollbar bg-background text-foreground">
+      <body>
         {children}
         <Scripts />
       </body>
@@ -159,6 +157,8 @@ function RootComponent() {
         const sixtyMinutes = 60 * 60 * 1000;
 
         if (!lastNotif || (now - parseInt(lastNotif)) > sixtyMinutes) {
+          // Só envia se o app estiver em background ou após tempo suficiente
+          // Como é uma simulação PWA, vamos apenas garantir que o sistema está pronto
           localStorage.setItem('last_notification_time', now.toString());
         }
       }
