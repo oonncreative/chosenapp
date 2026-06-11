@@ -37,8 +37,9 @@ function HomePage() {
               title="Orações Diárias"
             >
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="black" strokeWidth="2.5" className="text-black">
-                <path d="M12 21c4.418 0 8-3.582 8-8V5l-8-3-8 3v8c0 4.418 3.582 8 8 8z" strokeLinecap="round" strokeLinejoin="round"/>
-                <path d="M12 7v6M12 11l-2 2M12 11l2 2" strokeLinecap="round" strokeLinejoin="round"/>
+                <path d="M12 20c-1.5 0-3-1-3.5-2.5L7 12l2-5 3 2 3-2 2 5-1.5 5.5c-.5 1.5-2 2.5-3.5 2.5z" strokeLinecap="round" strokeLinejoin="round"/>
+                <path d="M10 10l2 2 2-2" strokeLinecap="round" strokeLinejoin="round"/>
+                <path d="M12 12v5" strokeLinecap="round" strokeLinejoin="round"/>
               </svg>
             </button>
             <button 
