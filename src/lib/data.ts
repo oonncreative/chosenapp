@@ -29,10 +29,10 @@ export const MENSAGENS: Record<Categoria, Mensagem[]> = {
     { id: "a5", tipo: "versiculo", texto: "Quem de vocês, por mais que se preocupe, pode acrescentar uma hora que seja à sua vida?", referencia: "Mateus 6:27", resumo: "Palavras de Jesus no Sermão do Monte, lembrando que a preocupação é ineficaz e que devemos confiar na providência diária." },
   ],
   "Triste": [
-    { id: "t1", tipo: "versiculo", texto: "O Senhor está perto dos que têm o coração quebrantado.", referencia: "Salmos 34:18", fraseMotivacional: "Sinta o abraço de quem nunca te deixa sozinho nos momentos difíceis." },
-    { id: "t2", tipo: "versiculo", texto: "Bem-aventurados os que choram, pois serão consolados.", referencia: "Mateus 5:4", fraseMotivacional: "Suas lágrimas são sementes de uma alegria que em breve florescerá." },
-    { id: "t4", tipo: "salmo", texto: "O choro pode durar uma noite, mas a alegria vem pela manhã.", referencia: "Salmos 30:5", fraseMotivacional: "A noite pode ser longa, mas o sol sempre volta a brilhar." },
-    { id: "t5", tipo: "versiculo", texto: "Ele enxugará dos seus olhos toda lágrima.", referencia: "Apocalipse 21:4", fraseMotivacional: "O consolo que você busca está mais perto do que você imagina." },
+    { id: "t1", tipo: "versiculo", texto: "O Senhor está perto dos que têm o coração quebrantado.", referencia: "Salmos 34:18", resumo: "Davi escreveu este salmo enquanto fugia, lembrando que Deus é atraído pelo nosso sofrimento e humildade." },
+    { id: "t2", tipo: "versiculo", texto: "Bem-aventurados os que choram, pois serão consolados.", referencia: "Mateus 5:4", resumo: "Nas Bem-aventuranças, Jesus ensina que a dor não é o fim, mas uma oportunidade para experimentar o consolo profundo de Deus." },
+    { id: "t4", tipo: "salmo", texto: "O choro pode durar uma noite, mas a alegria vem pela manhã.", referencia: "Salmos 30:5", resumo: "Um hino de ação de graças que celebra a natureza passageira das dificuldades em comparação com a fidelidade eterna de Deus." },
+    { id: "t5", tipo: "versiculo", texto: "Ele enxugará dos seus olhos toda lágrima.", referencia: "Apocalipse 21:4", resumo: "A promessa final da Bíblia sobre um futuro sem dor, sofrimento ou luto, onde a presença de Deus restaurará todas as coisas." },
   ],
   "Sozinho": [
     { id: "s1", tipo: "versiculo", texto: "E eu estarei sempre com vocês, até o fim dos tempos.", referencia: "Mateus 28:20", fraseMotivacional: "Existe uma presença constante ao seu lado, mesmo no silêncio." },
