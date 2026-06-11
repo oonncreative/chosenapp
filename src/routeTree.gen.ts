@@ -9,11 +9,17 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as OracoesRouteImport } from './routes/oracoes'
 import { Route as OnboardingRouteImport } from './routes/onboarding'
 import { Route as HomeRouteImport } from './routes/home'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as MensagemSentimentoRouteImport } from './routes/mensagem/$sentimento'
 
+const OracoesRoute = OracoesRouteImport.update({
+  id: '/oracoes',
+  path: '/oracoes',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const OnboardingRoute = OnboardingRouteImport.update({
   id: '/onboarding',
   path: '/onboarding',
@@ -39,12 +45,14 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/home': typeof HomeRoute
   '/onboarding': typeof OnboardingRoute
+  '/oracoes': typeof OracoesRoute
   '/mensagem/$sentimento': typeof MensagemSentimentoRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/home': typeof HomeRoute
   '/onboarding': typeof OnboardingRoute
+  '/oracoes': typeof OracoesRoute
   '/mensagem/$sentimento': typeof MensagemSentimentoRoute
 }
 export interface FileRoutesById {
@@ -52,25 +60,45 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/home': typeof HomeRoute
   '/onboarding': typeof OnboardingRoute
+  '/oracoes': typeof OracoesRoute
   '/mensagem/$sentimento': typeof MensagemSentimentoRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/home' | '/onboarding' | '/mensagem/$sentimento'
+  fullPaths:
+    | '/'
+    | '/home'
+    | '/onboarding'
+    | '/oracoes'
+    | '/mensagem/$sentimento'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/home' | '/onboarding' | '/mensagem/$sentimento'
-  id: '__root__' | '/' | '/home' | '/onboarding' | '/mensagem/$sentimento'
+  to: '/' | '/home' | '/onboarding' | '/oracoes' | '/mensagem/$sentimento'
+  id:
+    | '__root__'
+    | '/'
+    | '/home'
+    | '/onboarding'
+    | '/oracoes'
+    | '/mensagem/$sentimento'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   HomeRoute: typeof HomeRoute
   OnboardingRoute: typeof OnboardingRoute
+  OracoesRoute: typeof OracoesRoute
   MensagemSentimentoRoute: typeof MensagemSentimentoRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/oracoes': {
+      id: '/oracoes'
+      path: '/oracoes'
+      fullPath: '/oracoes'
+      preLoaderRoute: typeof OracoesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/onboarding': {
       id: '/onboarding'
       path: '/onboarding'
@@ -106,18 +134,9 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   HomeRoute: HomeRoute,
   OnboardingRoute: OnboardingRoute,
+  OracoesRoute: OracoesRoute,
   MensagemSentimentoRoute: MensagemSentimentoRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}

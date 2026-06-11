@@ -28,7 +28,19 @@ function HomePage() {
         <div className="flex items-center justify-between">
           <h1 className="text-base font-bold tracking-[0.4em] text-black uppercase">RESSOA</h1>
           
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2">
+            <button 
+              onClick={() => {
+                navigate({ to: "/oracoes" });
+              }}
+              className="flex items-center p-3 transition-opacity active:opacity-50"
+              title="Orações Diárias"
+            >
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="black" strokeWidth="2.5" className="text-black">
+                <path d="M12 21c4.418 0 8-3.582 8-8V5l-8-3-8 3v8c0 4.418 3.582 8 8 8z" strokeLinecap="round" strokeLinejoin="round"/>
+                <path d="M12 7v6M12 11l-2 2M12 11l2 2" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+            </button>
             <button 
               onClick={() => {
                 navigate({ to: "/onboarding" });
@@ -66,7 +78,7 @@ function HomePage() {
                   color: colorClass.split(' ')[0].replace('bg-[', '').replace(']', ''),
                   id: getRandomIdForCategoria(sentimento)
                 }}
-                className={`group relative flex items-center justify-between min-h-[110px] px-8 py-4 transition-all active:scale-[0.97] rounded-[24px] overflow-hidden ${colorClass} ${rotation} hover:rotate-0`}
+                className={`group relative flex items-center justify-between min-h-[90px] px-8 py-4 transition-all active:scale-[0.97] rounded-[24px] overflow-hidden ${colorClass} ${rotation} hover:rotate-0`}
               >
                 <div className="flex flex-col">
                   <span className="text-3xl font-black leading-[0.85] tracking-tighter max-w-[220px] break-words uppercase italic">
