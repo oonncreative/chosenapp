@@ -17,10 +17,10 @@ export type Categoria = typeof CATEGORIAS[number];
 
 export const MENSAGENS: Record<Categoria, Mensagem[]> = {
   "Feliz": [
-    { id: "f1", tipo: "versiculo", texto: "Alegrem-se sempre no Senhor. Novamente direi: alegrem-se!", referencia: "Filipenses 4:4", fraseMotivacional: "A alegria que vem de Deus é a sua maior força hoje." },
-    { id: "f2", tipo: "salmo", texto: "Este é o dia que o Senhor fez; regozijemo-nos e alegremo-nos nele.", referencia: "Salmos 118:24", fraseMotivacional: "Cada novo dia é um presente único para ser celebrado." },
-    { id: "f4", tipo: "versiculo", texto: "O coração alegre aformoseia o rosto.", referencia: "Provérbios 15:13", fraseMotivacional: "Deixe seu brilho interno iluminar o seu caminho." },
-    { id: "f5", tipo: "salmo", texto: "Tu me farás conhecer a vereda da vida, a alegria plena da tua presença.", referencia: "Salmos 16:11", fraseMotivacional: "Caminhe com a certeza de que a felicidade te acompanha." },
+    { id: "f1", tipo: "versiculo", texto: "Alegrem-se sempre no Senhor. Novamente direi: alegrem-se!", referencia: "Filipenses 4:4", resumo: "Escrito por Paulo à igreja em Filipos, este versículo é um comando para manter a alegria espiritual independentemente das circunstâncias externas." },
+    { id: "f2", tipo: "salmo", texto: "Este é o dia que o Senhor fez; regozijemo-nos e alegremo-nos nele.", referencia: "Salmos 118:24", resumo: "Parte de um hino de gratidão usado em festividades em Jerusalém, celebrando a vitória e a providência de Deus em cada novo amanhecer." },
+    { id: "f4", tipo: "versiculo", texto: "O coração alegre aformoseia o rosto.", referencia: "Provérbios 15:13", resumo: "Um ensinamento de sabedoria que destaca como nosso estado emocional interno reflete diretamente em nossa aparência e saúde." },
+    { id: "f5", tipo: "salmo", texto: "Tu me farás conhecer a vereda da vida, a alegria plena da tua presença.", referencia: "Salmos 16:11", resumo: "Um salmo de confiança de Davi, expressando que a verdadeira satisfação e o sentido da vida são encontrados na comunhão com o Criador." },
   ],
   "Ansioso": [
     { id: "a1", tipo: "versiculo", texto: "Não andem ansiosos por coisa alguma, mas em tudo apresentem seus pedidos a Deus.", referencia: "Filipenses 4:6", fraseMotivacional: "Troque a preocupação pela confiança e sinta a paz chegar." },
