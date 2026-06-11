@@ -41,6 +41,7 @@
         "clsx": "^2.1.1",
         "cmdk": "^1.1.1",
         "date-fns": "^4.1.0",
+        "dom-to-image-more": "^3.8.0",
         "embla-carousel-react": "^8.6.0",
         "html-to-image": "^1.11.13",
         "html2canvas": "^1.4.1",
@@ -934,6 +935,8 @@
     "dom-helpers": ["dom-helpers@5.2.1", "", { "dependencies": { "@babel/runtime": "^7.8.7", "csstype": "^3.0.2" } }, "sha512-nRCa7CK3VTrM2NmGkIy4cbK7IZlgBE/PYMn55rrXefr5xXDP0LdtfPnblFDoVdcAfslJ7or6iqAUnx0CCGIWQA=="],
 
     "dom-serializer": ["dom-serializer@2.0.0", "", { "dependencies": { "domelementtype": "^2.3.0", "domhandler": "^5.0.2", "entities": "^4.2.0" } }, "sha512-wIkAryiqt/nV5EQKqQpo3SToSOV9J0DnbJqwK7Wv/Trc92zIAYZ4FlMu+JPFW1DfGFt81ZTCGgDEabffXeLyJg=="],
+
+    "dom-to-image-more": ["dom-to-image-more@3.8.0", "https://europe-west4-npm.pkg.dev/lovable-core-prod/sandbox-npm-cache/dom-to-image-more/-/dom-to-image-more-3.8.0.tgz", {}, "sha512-wB786zeMtsoPptRFxCcCcCgCp8Kmnjv7Edg4zSw0HNGPyfnf+jWVEDHvh46FWXdCL9kn3CNMU/MP+652HJfm/A=="],
 
     "domelementtype": ["domelementtype@2.3.0", "", {}, "sha512-OLETBj6w0OsagBwdXnPdN0cnMfF9opN69co+7ZrbfPGrdpPVNBUj02spi6B1N7wChLQiPn4CSH/zJvXw56gmHw=="],
 
