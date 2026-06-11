@@ -35,10 +35,10 @@ export const MENSAGENS: Record<Categoria, Mensagem[]> = {
     { id: "t5", tipo: "versiculo", texto: "Ele enxugará dos seus olhos toda lágrima.", referencia: "Apocalipse 21:4", resumo: "A promessa final da Bíblia sobre um futuro sem dor, sofrimento ou luto, onde a presença de Deus restaurará todas as coisas." },
   ],
   "Sozinho": [
-    { id: "s1", tipo: "versiculo", texto: "E eu estarei sempre com vocês, até o fim dos tempos.", referencia: "Mateus 28:20", fraseMotivacional: "Existe uma presença constante ao seu lado, mesmo no silêncio." },
-    { id: "s2", tipo: "versiculo", texto: "Ele nunca o deixará, nunca o abandonará. Não tenha medo!", referencia: "Deuteronômio 31:8", fraseMotivacional: "A coragem nasce quando percebemos que nunca caminhamos sós." },
-    { id: "s4", tipo: "salmo", texto: "Ainda que meu pai e minha mãe me abandonem, o Senhor me acolherá.", referencia: "Salmos 27:10", fraseMotivacional: "Você é amado com um amor que supera qualquer distância." },
-    { id: "s5", tipo: "versiculo", texto: "Não os deixarei órfãos; voltarei para vocês.", referencia: "João 14:18", fraseMotivacional: "O sentimento de solidão é passageiro, a companhia divina é eterna." },
+    { id: "s1", tipo: "versiculo", texto: "E eu estarei sempre com vocês, até o fim dos tempos.", referencia: "Mateus 28:20", resumo: "A promessa final de Jesus antes de sua ascensão, garantindo sua presença espiritual constante com todos os seus seguidores." },
+    { id: "s2", tipo: "versiculo", texto: "Ele nunca o deixará, nunca o abandonará. Não tenha medo!", referencia: "Deuteronômio 31:8", resumo: "Moisés encorajando Josué antes da conquista da terra prometida, assegurando que a liderança de Deus é inabalável." },
+    { id: "s4", tipo: "salmo", texto: "Ainda que meu pai e minha mãe me abandonem, o Senhor me acolherá.", referencia: "Salmos 27:10", resumo: "Uma declaração de fé que mostra que o amor de Deus supera até os vínculos humanos mais fundamentais." },
+    { id: "s5", tipo: "versiculo", texto: "Não os deixarei órfãos; voltarei para vocês.", referencia: "João 14:18", resumo: "Jesus consolando os discípulos sobre sua partida, prometendo o Espírito Santo como o companheiro constante." },
   ],
   "Agradecido": [
     { id: "ag1", tipo: "versiculo", texto: "Dêem graças ao Senhor, porque ele é bom; o seu amor dura para sempre.", referencia: "Salmos 107:1", fraseMotivacional: "A gratidão transforma o que temos em suficiente." },
