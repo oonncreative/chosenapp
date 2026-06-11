@@ -59,10 +59,10 @@ export const MENSAGENS: Record<Categoria, Mensagem[]> = {
     { id: "e5", tipo: "versiculo", texto: "A esperança não nos decepciona, porque Deus derramou seu amor em nossos corações.", referencia: "Romanos 5:5", resumo: "Paulo explica que a esperança cristã é segura porque está fundamentada na experiência direta do amor de Deus através do Espírito Santo." },
   ],
   "Preciso de paz": [
-    { id: "p1", tipo: "versiculo", texto: "Deixo-lhes a paz; a minha paz lhes dou.", referencia: "João 14:27", fraseMotivacional: "Receba hoje uma paz que acalma qualquer tempestade mental." },
-    { id: "p2", tipo: "versiculo", texto: "Tu, Senhor, guardarás em perfeita paz aquele cujo propósito está firme.", referencia: "Isaías 26:3", fraseMotivacional: "Mantenha o seu foco no bem e a tranquilidade será o seu lar." },
-    { id: "p4", tipo: "salmo", texto: "O Senhor abençoa o seu povo com paz.", referencia: "Salmos 29:11", fraseMotivacional: "A paz é um presente que você merece desfrutar agora." },
-    { id: "p5", tipo: "versiculo", texto: "E a paz de Deus, que excede todo o entendimento, guardará os seus corações.", referencia: "Filipenses 4:7", fraseMotivacional: "Deixe que a serenidade envolva cada pensamento seu hoje." },
+    { id: "p1", tipo: "versiculo", texto: "Deixo-lhes a paz; a minha paz lhes dou.", referencia: "João 14:27", resumo: "Jesus diferencia a paz que Ele oferece da paz do mundo, caracterizando-a como uma calma profunda que permanece mesmo em conflitos." },
+    { id: "p2", tipo: "versiculo", texto: "Tu, Senhor, guardarás em perfeita paz aquele cujo propósito está firme.", referencia: "Isaías 26:3", resumo: "Uma promessa de estabilidade emocional para aqueles que mantêm sua mente e confiança focadas na natureza imutável de Deus." },
+    { id: "p4", tipo: "salmo", texto: "O Senhor abençoa o seu povo com paz.", referencia: "Salmos 29:11", resumo: "Um salmo que descreve a majestade de Deus sobre a natureza, concluindo que o mesmo poder que domina as águas traz paz ao Seu povo." },
+    { id: "p5", tipo: "versiculo", texto: "E a paz de Deus, que excede todo o entendimento, guardará os seus corações.", referencia: "Filipenses 4:7", resumo: "Uma descrição da paz divina como uma sentinela que protege nossos sentimentos e pensamentos contra a ansiedade." },
   ],
   "Preciso de força": [
     { id: "f1_forca", tipo: "versiculo", texto: "Tudo posso naquele que me fortalece.", referencia: "Filipenses 4:13", fraseMotivacional: "Você é capaz de superar muito mais do que imagina." },
