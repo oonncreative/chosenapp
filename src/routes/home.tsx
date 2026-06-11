@@ -1,7 +1,6 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useState, useEffect } from "react";
 import { CATEGORIAS, getRandomIdForCategoria } from "@/lib/data";
-// import { motion, AnimatePresence } from "framer-motion";
 import { Moon, Sun, Search, RefreshCw } from "lucide-react";
 
 export const Route = createFileRoute("/home")({
@@ -50,40 +49,13 @@ function HomePage() {
     cat.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.05
-      }
-    }
-  };
-
-  const itemVariants = {
-    hidden: { y: 20, opacity: 0 },
-    visible: {
-      y: 0,
-      opacity: 1,
-      transition: {
-        type: "spring" as const,
-        stiffness: 300,
-        damping: 24
-      }
-    }
-  };
-
   return (
     <div className="h-screen overflow-hidden bg-background flex flex-col transition-colors duration-500">
       <header className="p-6 pt-12 flex flex-col gap-4 shrink-0 bg-background/80 backdrop-blur-md sticky top-0 z-20">
         <div className="flex items-center justify-between">
-          <motion.h1 
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            className="text-base font-bold tracking-[0.4em] text-foreground uppercase"
-          >
+          <h1 className="text-base font-bold tracking-[0.4em] text-foreground uppercase">
             RESSOA
-          </motion.h1>
+          </h1>
           
           <div className="flex items-center gap-2">
             <button 
@@ -104,14 +76,9 @@ function HomePage() {
         </div>
 
         <div className="space-y-4">
-          <motion.h2 
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1 }}
-            className="text-2xl font-black tracking-tight text-foreground uppercase italic"
-          >
+          <h2 className="text-2xl font-black tracking-tight text-foreground uppercase italic">
             Como você se sente?
-          </motion.h2>
+          </h2>
           
           <div className="relative">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
@@ -127,24 +94,13 @@ function HomePage() {
       </header>
 
       <section className="flex-1 min-h-0 overflow-y-auto no-scrollbar px-4 pb-10">
-        <motion.div 
-          variants={containerVariants}
-          initial="hidden"
-          animate="visible"
-          className="flex flex-col gap-3"
-        >
+        <div className="flex flex-col gap-3">
           {filteredCategorias.map((sentimento, index) => {
             const colorClass = colors[index % colors.length];
             const rotation = index % 2 === 0 ? "rotate-[-1deg]" : "rotate-[1deg]";
             
             return (
-              <motion.div
-                key={sentimento}
-                variants={itemVariants}
-                whileHover={{ scale: 1.02, rotate: 0 }}
-                whileTap={{ scale: 0.98 }}
-                className="w-full"
-              >
+              <div key={sentimento} className="w-full">
                 <Link
                   to="/mensagem/$sentimento"
                   params={{ sentimento }}
@@ -166,13 +122,12 @@ function HomePage() {
                      </svg>
                   </div>
 
-                  {/* Efeito de brilho/profundidade */}
                   <div className="absolute inset-0 bg-gradient-to-tr from-white/10 to-transparent pointer-events-none" />
                 </Link>
-              </motion.div>
+              </div>
             );
           })}
-        </motion.div>
+        </div>
         
         {filteredCategorias.length === 0 && (
           <div className="py-20 text-center text-muted-foreground">
@@ -194,4 +149,3 @@ function HomePage() {
     </div>
   );
 }
-
