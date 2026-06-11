@@ -2,7 +2,7 @@ import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useState, useEffect } from "react";
 import { CATEGORIAS, getRandomIdForCategoria } from "@/lib/data";
 import { motion, AnimatePresence } from "framer-motion";
-import { Moon, Sun, Search, RefreshCw } from "lucide-react";
+import { Moon, Sun, Search, RotateCcw } from "lucide-react";
 
 export const Route = createFileRoute("/home")({
   component: HomePage,
@@ -98,7 +98,7 @@ function HomePage() {
               className="p-2 rounded-full hover:bg-muted transition-colors active:scale-90"
               title="Voltar ao início"
             >
-              <RefreshCw className="h-5 w-5" />
+              <RotateCcw className="h-5 w-5" />
             </button>
           </div>
         </div>
