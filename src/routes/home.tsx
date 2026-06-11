@@ -152,7 +152,7 @@ function HomePage() {
                     color: colorClass.split(' ')[0].replace('bg-[', '').replace(']', ''),
                     id: getRandomIdForCategoria(sentimento)
                   }}
-                  className={`group relative flex items-center justify-between min-h-[120px] px-8 py-4 transition-all rounded-[32px] overflow-hidden ${colorClass} ${rotation} shadow-sm`}
+                  className={`group relative flex items-center justify-between min-h-[120px] px-8 py-4 transition-all rounded-[32px] overflow-hidden ${colorClass} ${rotation} shadow-sm cursor-pointer`}
                 >
                   <div className="flex flex-col z-10">
                     <span className="text-3xl font-black leading-none tracking-tighter max-w-[220px] break-words uppercase italic">
