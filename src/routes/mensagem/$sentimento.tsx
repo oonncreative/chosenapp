@@ -161,17 +161,17 @@ function MensagemPage() {
           }}>
             {mensagem.referencia}
           </p>
-          {mensagem.fraseMotivacional && (
+          {mensagem.resumo && (
             <p style={{ 
               marginTop: '20px', 
-              fontSize: '18px', 
+              fontSize: '16px', 
               fontWeight: '300', 
-              fontStyle: 'italic', 
-              color: '#999999', 
+              color: '#666666', 
               padding: '0 20px',
-              fontFamily: 'system-ui, -apple-system, sans-serif'
+              fontFamily: 'system-ui, -apple-system, sans-serif',
+              lineHeight: '1.5'
             }}>
-              {mensagem.fraseMotivacional}
+              {mensagem.resumo}
             </p>
           )}
         </div>
@@ -205,9 +205,9 @@ function MensagemPage() {
             {mensagem.referencia}
           </p>
           
-          {mensagem.fraseMotivacional && (
-            <p className="mt-14 text-base font-light italic text-gray-400 max-w-[300px]">
-              {mensagem.fraseMotivacional}
+          {mensagem.resumo && (
+            <p className="mt-8 text-sm font-light text-gray-500 max-w-[320px] leading-relaxed">
+              {mensagem.resumo}
             </p>
           )}
         </div>
