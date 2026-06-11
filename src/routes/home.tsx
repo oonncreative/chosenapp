@@ -1,7 +1,7 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useState, useEffect } from "react";
 import { CATEGORIAS, getRandomIdForCategoria } from "@/lib/data";
-import { motion, AnimatePresence } from "framer-motion";
+// import { motion, AnimatePresence } from "framer-motion";
 import { Moon, Sun, Search, RefreshCw } from "lucide-react";
 
 export const Route = createFileRoute("/home")({
