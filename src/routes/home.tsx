@@ -166,7 +166,6 @@ function HomePage() {
                      </svg>
                   </div>
 
-                  {/* Efeito de brilho/profundidade */}
                   <div className="absolute inset-0 bg-gradient-to-tr from-white/10 to-transparent pointer-events-none" />
                 </Link>
               </motion.div>
@@ -194,4 +193,3 @@ function HomePage() {
     </div>
   );
 }
-
