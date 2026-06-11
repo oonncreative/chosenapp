@@ -161,17 +161,17 @@ function MensagemPage() {
           }}>
             {mensagem.referencia}
           </p>
-          {mensagem.fraseMotivacional && (
+          {mensagem.resumo && (
             <p style={{ 
               marginTop: '20px', 
-              fontSize: '18px', 
+              fontSize: '16px', 
               fontWeight: '300', 
-              fontStyle: 'italic', 
-              color: '#999999', 
+              color: '#666666', 
               padding: '0 20px',
-              fontFamily: 'system-ui, -apple-system, sans-serif'
+              fontFamily: 'system-ui, -apple-system, sans-serif',
+              lineHeight: '1.5'
             }}>
-              {mensagem.fraseMotivacional}
+              {mensagem.resumo}
             </p>
           )}
         </div>
