@@ -53,10 +53,10 @@ export const MENSAGENS: Record<Categoria, Mensagem[]> = {
     { id: "n5", tipo: "versiculo", texto: "Aquietai-vos e sabei que eu sou Deus.", referencia: "Salmos 46:10", resumo: "Um comando para cessar as lutas e preocupações próprias, reconhecendo a soberania e o controle final de Deus sobre todas as coisas." },
   ],
   "Preciso de esperança": [
-    { id: "e1", tipo: "versiculo", texto: "Pois eu bem sei os planos que tenho para vocês, planos de dar a vocês esperança.", referencia: "Jeremias 29:11", fraseMotivacional: "O melhor ainda está por vir. Continue acreditando." },
-    { id: "e2", tipo: "versiculo", texto: "Mas aqueles que esperam no Senhor renovam as suas forças.", referencia: "Isaías 40:31", fraseMotivacional: "Sua força está sendo renovada agora mesmo. Não desista." },
-    { id: "e4", tipo: "salmo", texto: "Por que você está assim tão triste, ó minha alma? Ponha a sua esperança em Deus!", referencia: "Salmos 42:11", fraseMotivacional: "Mantenha seus olhos no horizonte; a luz está chegando." },
-    { id: "e5", tipo: "versiculo", texto: "A esperança não nos decepciona, porque Deus derramou seu amor em nossos corações.", referencia: "Romanos 5:5", fraseMotivacional: "A esperança é o combustível que mantém a alma acesa." },
+    { id: "e1", tipo: "versiculo", texto: "Pois eu bem sei os planos que tenho para vocês, planos de dar a vocês esperança.", referencia: "Jeremias 29:11", resumo: "Uma mensagem de Deus aos exilados em Babilônia, garantindo que, apesar do sofrimento atual, Ele tem um futuro planejado com propósito." },
+    { id: "e2", tipo: "versiculo", texto: "Mas aqueles que esperam no Senhor renovam as suas forças.", referencia: "Isaías 40:31", resumo: "O profeta Isaías descreve como a dependência de Deus fornece uma energia sobrenatural que nos faz superar o cansaço humano." },
+    { id: "e4", tipo: "salmo", texto: "Por que você está assim tão triste, ó minha alma? Ponha a sua esperança em Deus!", referencia: "Salmos 42:11", resumo: "Um salmo de lamento onde o autor questiona sua própria tristeza, escolhendo conscientemente direcionar sua fé para Deus." },
+    { id: "e5", tipo: "versiculo", texto: "A esperança não nos decepciona, porque Deus derramou seu amor em nossos corações.", referencia: "Romanos 5:5", resumo: "Paulo explica que a esperança cristã é segura porque está fundamentada na experiência direta do amor de Deus através do Espírito Santo." },
   ],
   "Preciso de paz": [
     { id: "p1", tipo: "versiculo", texto: "Deixo-lhes a paz; a minha paz lhes dou.", referencia: "João 14:27", fraseMotivacional: "Receba hoje uma paz que acalma qualquer tempestade mental." },
