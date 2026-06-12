@@ -31,7 +31,7 @@ function HomePage() {
           <div className="flex items-center gap-2">
             <button 
               onClick={() => {
-                const current = localStorage.getItem('isMono') === 'true';
+                const current = document.documentElement.classList.contains('grayscale');
                 const next = !current;
                 localStorage.setItem('isMono', next.toString());
                 if (next) {
