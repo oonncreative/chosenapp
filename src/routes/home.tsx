@@ -263,7 +263,7 @@ function HomePage() {
               return (
                 <motion.div
                   key={sentimento}
-                  initial={{ x: 0, y: -window.innerHeight, rotate: 0, opacity: 0 }}
+                  initial={{ x: 0, y: -1000, rotate: 0, opacity: 0 }}
                   animate={
                     isPicked
                       ? { x: 0, y: 0, rotate: 0, scale: 1.1, opacity: 1 }
