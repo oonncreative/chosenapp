@@ -108,20 +108,23 @@ function MensagemPage() {
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
-          justifyContent: 'center',
           textAlign: 'center',
           zIndex: -1,
           overflow: 'hidden',
           pointerEvents: 'none',
         }}
       >
-        <div style={{ padding: '0 80px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '60px', width: '100%', flex: 1, justifyContent: 'center' }}>
+        {/* Logo no topo */}
+        <div style={{ paddingTop: '100px', display: 'flex', justifyContent: 'center' }}>
           <img 
             src="/logo-ressoa.png" 
             alt="Ressoa" 
-            style={{ width: '160px', height: '160px', objectFit: 'contain', marginBottom: '60px' }} 
+            style={{ width: '140px', height: '140px', objectFit: 'contain' }} 
           />
-          
+        </div>
+
+        {/* Conteúdo central */}
+        <div style={{ padding: '0 80px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '60px', width: '100%', flex: 1, justifyContent: 'center' }}>
           <p style={{ 
             fontSize: '72px', 
             fontWeight: '300', 
@@ -163,11 +166,12 @@ function MensagemPage() {
           )}
         </div>
 
-        <div style={{ paddingBottom: '100px', textAlign: 'center', display: 'flex', flexDirection: 'column', gap: '20px' }}>
+        {/* Rodapé com link mais visível */}
+        <div style={{ paddingBottom: '100px', textAlign: 'center', display: 'flex', flexDirection: 'column', gap: '16px' }}>
           <p style={{ fontSize: '28px', fontWeight: '300', letterSpacing: '0.4em', color: '#9CA3AF', textTransform: 'uppercase', margin: 0 }}>
             Ressoa
           </p>
-          <p style={{ fontSize: '20px', fontWeight: '400', color: '#D1D5DB', margin: 0, fontFamily: 'sans-serif' }}>
+          <p style={{ fontSize: '24px', fontWeight: '500', color: '#6B7280', margin: 0, fontFamily: 'sans-serif' }}>
             ressoa.oonn.com.br
           </p>
         </div>
