@@ -146,13 +146,17 @@ function MensagemPage() {
           {mensagem.resumo && (
             <p style={{ 
               marginTop: '40px', 
-              fontSize: '34px', 
+              fontSize: mensagem.resumo.length > 600 ? '24px' : mensagem.resumo.length > 400 ? '28px' : mensagem.resumo.length > 250 ? '32px' : '34px', 
               fontWeight: '300', 
               color: '#4B5563', 
               padding: '0 40px',
               fontFamily: 'sans-serif',
               lineHeight: '1.5',
-              maxWidth: '850px'
+              maxWidth: '900px',
+              overflow: 'hidden',
+              display: '-webkit-box',
+              WebkitBoxOrient: 'vertical',
+              WebkitLineClamp: mensagem.resumo.length > 600 ? 14 : 12,
             }}>
               {mensagem.resumo}
             </p>
