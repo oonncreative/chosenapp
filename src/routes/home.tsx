@@ -7,12 +7,12 @@ export const Route = createFileRoute("/home")({
 });
 
 const colors = [
-  "bg-[#F7C1E1] text-white", // Rosa (Jastin Philips style)
-  "bg-[#2D8C3C] text-white", // Verde (Michael Jordan style)
-  "bg-[#007AFF] text-white", // Azul (Bergsonist style)
-  "bg-white text-black border-2 border-black", // Branco com borda (Cullen Omori style)
-  "bg-[#FFCC00] text-black", // Amarelo
   "bg-[#FF3B30] text-white", // Vermelho
+  "bg-[#A9A9A9] text-white", // Cinza
+  "bg-[#4CD964] text-white", // Verde
+  "bg-[#FFCC00] text-black", // Amarelo
+  "bg-[#3A3000] text-white", // Marrom Escuro
+  "bg-[#007AFF] text-white", // Azul
   "bg-[#5856D6] text-white", // Indigo
   "bg-[#AF52DE] text-white", // Roxo
   "bg-[#FF9500] text-white", // Laranja
@@ -64,13 +64,10 @@ function HomePage() {
         </div>
       </header>
 
-      <section className="flex-1 min-h-0 overflow-y-auto no-scrollbar px-4 pb-6">
-        <div className="flex flex-col gap-2">
+      <section className="flex-1 min-h-0 overflow-y-auto no-scrollbar px-6 pb-6 pt-2">
+        <div className="flex flex-col -space-y-6">
           {CATEGORIAS.map((sentimento, index) => {
             const colorClass = colors[index % colors.length];
-            
-            // Alternar inclinação para dar o efeito visual da imagem
-            const rotation = index % 2 === 0 ? "rotate-[-1.5deg]" : "rotate-[1.5deg]";
             
             return (
               <Link
@@ -81,17 +78,21 @@ function HomePage() {
                   color: colorClass.split(' ')[0].replace('bg-[', '').replace(']', ''),
                   id: getRandomIdForCategoria(sentimento)
                 }}
-                className={`group relative flex items-center justify-between min-h-[90px] px-8 py-4 transition-all active:scale-[0.97] rounded-[24px] overflow-hidden ${colorClass} ${rotation} hover:rotate-0`}
+                className={`group relative flex flex-col justify-start min-h-[120px] px-8 py-6 transition-all active:scale-[0.98] rounded-[32px] shadow-sm ${colorClass} hover:z-10 hover:-translate-y-1`}
+                style={{ zIndex: index }}
               >
-                <div className="flex flex-col">
-                  <span className="text-3xl font-black leading-[0.85] tracking-tighter max-w-[220px] break-words uppercase italic">
+                <div className="flex flex-col gap-1">
+                  <span className="text-sm font-medium opacity-80 lowercase tracking-wide">
+                    {sentimento === "Feliz" ? "sentindo" : "buscando"}
+                  </span>
+                  <span className="text-2xl font-bold tracking-tight uppercase">
                     {sentimento}
                   </span>
                 </div>
                 
-                <div className="absolute right-6 bottom-4 opacity-20 group-hover:opacity-100 transition-opacity">
-                   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
-                     <path d="M5 12h14M12 5l7 7-7 7" strokeLinecap="round" strokeLinejoin="round"/>
+                <div className="absolute right-8 top-1/2 -translate-y-1/2 opacity-30 group-hover:opacity-100 transition-opacity">
+                   <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                     <path d="M9 18l6-6-6-6" strokeLinecap="round" strokeLinejoin="round"/>
                    </svg>
                 </div>
               </Link>
