@@ -36,7 +36,7 @@ function HomePage() {
         <div className="flex items-center justify-between">
           <h1 className="text-base font-light tracking-[0.4em] text-black uppercase">RESSOA</h1>
           
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1">
             <button 
               onClick={() => {
                 const current = document.documentElement.classList.contains('grayscale');
