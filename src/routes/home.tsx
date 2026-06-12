@@ -37,6 +37,16 @@ function HomePage() {
           <h1 className="text-base font-light tracking-[0.4em] text-black uppercase">RESSOA</h1>
           
           <div className="flex items-center gap-1">
+            <button
+              onClick={() => {
+                const { categoria, id } = getRandomMensagemGlobal();
+                navigate({ to: "/mensagem/$sentimento", params: { sentimento: categoria }, search: { color: "#f1f26c", id } });
+              }}
+              className="flex items-center p-3 transition-opacity active:opacity-50"
+              title="Aleatório"
+            >
+              <Shuffle className="h-[22px] w-[22px] text-black" strokeWidth={2} />
+            </button>
             <button 
               onClick={() => {
                 const current = document.documentElement.classList.contains('grayscale');
