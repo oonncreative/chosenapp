@@ -105,21 +105,20 @@ function HomePage() {
           <h1 className="text-base font-light tracking-[0.4em] text-black uppercase">Qual seu sentimento?</h1>
         </div>
 
-        <div className="flex items-center gap-1 mt-1 -ml-2">
+        <div className="flex items-center gap-0 self-end -mr-1">
           {([
-            { key: "list", icon: List, label: "Lista" },
-            { key: "swipe", icon: GalleryHorizontal, label: "Swipe" },
-          ] as const).map(({ key, icon: Icon, label }) => (
+            { key: "list" as const, icon: List, label: "Lista" },
+            { key: "swipe" as const, icon: GalleryHorizontal, label: "Swipe" },
+          ]).map(({ key, icon: Icon, label }) => (
             <button
               key={key}
               onClick={() => setViewMode(key)}
-              className={`flex items-center gap-2 px-3 py-2 rounded-full text-[11px] tracking-[0.2em] uppercase transition-all ${
-                viewMode === key ? "bg-black text-white" : "text-black/50 hover:text-black"
+              className={`p-2.5 transition-all ${
+                viewMode === key ? "text-black" : "text-black/25 hover:text-black/60"
               }`}
               title={label}
             >
-              <Icon className="h-3.5 w-3.5" strokeWidth={2} />
-              {label}
+              <Icon className="h-[18px] w-[18px]" strokeWidth={2} />
             </button>
           ))}
         </div>
