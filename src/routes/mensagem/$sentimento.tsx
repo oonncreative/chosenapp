@@ -94,7 +94,7 @@ function MensagemPage() {
   };
 
   return (
-    <div className="relative flex min-h-[100dvh] w-full flex-col bg-white px-8 pb-8 pt-safe">
+    <div className="relative flex h-[100dvh] max-h-[100dvh] w-full max-w-[100vw] flex-col overflow-hidden bg-white px-6 pb-6 pt-safe">
       {/* Elemento para geração da imagem de compartilhamento - otimizado */}
       <div 
         ref={shareRef}
@@ -112,6 +112,7 @@ function MensagemPage() {
           textAlign: 'center',
           zIndex: -1,
           overflow: 'hidden',
+          pointerEvents: 'none',
         }}
       >
         <div style={{ padding: '0 80px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '60px', width: '100%', flex: 1, justifyContent: 'center' }}>
@@ -168,7 +169,7 @@ function MensagemPage() {
         </div>
       </div>
 
-      <header className="flex h-20 items-center justify-between relative">
+      <header className="flex h-16 shrink-0 items-center justify-between relative">
         <Link 
           to="/home" 
           className="flex h-14 w-14 items-center justify-center rounded-full transition-colors hover:bg-gray-100 z-10"
@@ -181,9 +182,9 @@ function MensagemPage() {
         <div className="w-14 h-14" /> {/* Spacer */}
       </header>
 
-      <main className="flex flex-1 flex-col items-center justify-center px-4 py-8 text-center">
+      <main className="flex flex-1 min-h-0 flex-col items-center justify-center overflow-y-auto px-2 py-4 text-center">
         <div key={mensagem.id} className="w-full max-w-md animate-in fade-in duration-700 flex flex-col items-center">
-          <p className="text-3xl font-light leading-snug text-black md:text-4xl tracking-tight">
+          <p className="text-2xl font-light leading-snug text-black sm:text-3xl md:text-4xl tracking-tight">
             "{mensagem.texto}"
           </p>
           <p className="mt-6 text-[12px] font-bold tracking-[0.2em] uppercase text-black">
@@ -206,7 +207,7 @@ function MensagemPage() {
         </div>
       </main>
 
-      <footer className="flex flex-col sm:flex-row gap-3 pt-6 shrink-0 w-full mt-auto mb-safe">
+      <footer className="flex flex-col sm:flex-row gap-3 pt-4 shrink-0 w-full mb-safe">
         <Button
           onClick={handleRefresh}
           className="h-[56px] w-full sm:flex-1 rounded-[24px] bg-transparent border-2 border-black text-black text-sm font-black tracking-tighter hover:bg-black/5 shadow-none uppercase italic transition-all active:scale-95"
