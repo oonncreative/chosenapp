@@ -1,9 +1,9 @@
 import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
 import { getMensagemById, type Categoria, type Mensagem } from "@/lib/data";
 import { Button } from "@/components/ui/button";
-import { useState, useRef, useEffect, useCallback } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Share2, ArrowLeft } from "lucide-react";
-import domtoimage from "dom-to-image-more";
+import * as htmlToImage from 'html-to-image';
 
 export const Route = createFileRoute("/mensagem/$sentimento")({
   validateSearch: (search: Record<string, unknown>) => {
@@ -23,30 +23,15 @@ export const Route = createFileRoute("/mensagem/$sentimento")({
 
 function MensagemPage() {
   const { sentimento } = Route.useParams();
-  const { color } = Route.useSearch();
   const { mensagem } = Route.useLoaderData();
   const navigate = useNavigate();
   const shareRef = useRef<HTMLDivElement>(null);
-  const [logoBase64, setLogoBase64] = useState<string>("");
   const [isExpanded, setIsExpanded] = useState(false);
-
-  useEffect(() => {
-    // Converter logo para base64 para garantir que seja incluída na imagem
-    fetch("/logo-ressoa.png")
-      .then(r => r.blob())
-      .then(blob => {
-        const reader = new FileReader();
-        reader.onloadend = () => setLogoBase64(reader.result as string);
-        reader.readAsDataURL(blob);
-      })
-      .catch(err => console.error("Erro ao carregar logo para base64:", err));
-  }, []);
+  const [isSharing, setIsSharing] = useState(false);
 
   const handleRefresh = () => {
     navigate({ to: "/home" });
   };
-
-  const [isSharing, setIsSharing] = useState(false);
 
   const handleShare = async () => {
     if (!shareRef.current || isSharing) return;
@@ -55,38 +40,32 @@ function MensagemPage() {
     try {
       const element = shareRef.current;
       
-      // Ajustes temporários para captura
-      const originalLeft = element.style.left;
-      const originalOpacity = element.style.opacity;
-      element.style.left = '0';
-      element.style.opacity = '1';
-
-      // dom-to-image é mais leve e costuma funcionar melhor em Safari/iOS
-      const dataUrl = await domtoimage.toPng(element, {
+      // html-to-image é geralmente mais robusto que dom-to-image
+      // Ele lida melhor com fontes e imagens externas
+      const dataUrl = await htmlToImage.toPng(element, {
         width: 1080,
         height: 1920,
+        pixelRatio: 1, // Fixar ratio para consistência
+        skipFonts: false,
+        fontEmbedCSS: '', // Forçar embed de fontes se necessário
         style: {
-          transform: 'none',
+          visibility: 'visible',
+          position: 'static',
           left: '0',
           top: '0',
-          opacity: '1'
+          transform: 'none',
         }
       });
-
-      // Restaurar estado
-      element.style.left = originalLeft;
-      element.style.opacity = originalOpacity;
 
       if (!dataUrl || dataUrl === "data:,") {
         throw new Error("Imagem gerada está vazia");
       }
 
-      // Se for mobile e tiver API de share, priorizar ela
       if (navigator.share) {
         try {
           const response = await fetch(dataUrl);
           const blob = await response.blob();
-          const file = new File([blob], "ressoa-mensagem.png", { type: "image/png" });
+          const file = new File([blob], `ressoa-${sentimento}.png`, { type: "image/png" });
           
           if (navigator.canShare && navigator.canShare({ files: [file] })) {
             await navigator.share({
@@ -101,7 +80,6 @@ function MensagemPage() {
         }
       }
 
-      // Fallback para download direto
       const link = document.createElement("a");
       link.download = `ressoa-${sentimento}.png`;
       link.href = dataUrl;
@@ -121,8 +99,8 @@ function MensagemPage() {
       <div 
         ref={shareRef}
         style={{ 
-          position: 'fixed',
-          left: '-9999px', // Mais longe para evitar interferência visual
+          position: 'absolute',
+          left: '-5000px',
           top: '0',
           width: '1080px',
           height: '1920px',
@@ -132,45 +110,47 @@ function MensagemPage() {
           alignItems: 'center',
           justifyContent: 'center',
           textAlign: 'center',
-          zIndex: -100,
-          opacity: 1, // Visível para o renderizador
-          pointerEvents: 'none',
+          zIndex: -1,
         }}
       >
-        <div style={{ padding: '0 100px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '60px', width: '100%', flex: 1, justifyContent: 'center' }}>
-          {logoBase64 && <img src={logoBase64} alt="Ressoa" style={{ width: '120px', height: '120px', objectFit: 'contain', marginBottom: '40px' }} />}
+        <div style={{ padding: '0 80px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '60px', width: '100%', flex: 1, justifyContent: 'center' }}>
+          <img 
+            src="/logo-ressoa.png" 
+            alt="Ressoa" 
+            style={{ width: '160px', height: '160px', objectFit: 'contain', marginBottom: '60px' }} 
+          />
           
           <p style={{ 
-            fontSize: '64px', 
+            fontSize: '72px', 
             fontWeight: '300', 
-            lineHeight: '1.3', 
+            lineHeight: '1.2', 
             color: '#000000', 
             margin: '0',
-            fontFamily: 'system-ui, -apple-system, sans-serif'
+            fontFamily: 'sans-serif'
           }}>
             "{mensagem.texto}"
           </p>
           <p style={{ 
-            fontSize: '28px', 
+            fontSize: '32px', 
             fontWeight: '700', 
             letterSpacing: '0.2em', 
             color: '#000000', 
             textTransform: 'uppercase', 
             margin: '0',
-            fontFamily: 'system-ui, -apple-system, sans-serif'
+            fontFamily: 'sans-serif'
           }}>
             {mensagem.referencia}
           </p>
           {mensagem.resumo && (
             <p style={{ 
               marginTop: '40px', 
-              fontSize: '32px', 
+              fontSize: '34px', 
               fontWeight: '300', 
-              color: '#666666', 
+              color: '#4B5563', 
               padding: '0 40px',
-              fontFamily: 'system-ui, -apple-system, sans-serif',
+              fontFamily: 'sans-serif',
               lineHeight: '1.5',
-              maxWidth: '800px'
+              maxWidth: '850px'
             }}>
               {mensagem.resumo}
             </p>
@@ -178,7 +158,7 @@ function MensagemPage() {
         </div>
 
         <div style={{ paddingBottom: '120px', textAlign: 'center' }}>
-          <p style={{ fontSize: '24px', fontWeight: '300', letterSpacing: '0.4em', color: '#cccccc', textTransform: 'uppercase' }}>
+          <p style={{ fontSize: '28px', fontWeight: '300', letterSpacing: '0.4em', color: '#9CA3AF', textTransform: 'uppercase' }}>
             Ressoa
           </p>
         </div>
