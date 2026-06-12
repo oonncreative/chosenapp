@@ -126,3 +126,9 @@ export function getProximaMensagem(categoria: Categoria): Mensagem {
   const id = getRandomIdForCategoria(categoria);
   return getMensagemById(categoria, id);
 }
+
+export function getRandomMensagemGlobal(): { categoria: Categoria; id: string } {
+  const categoria = CATEGORIAS[Math.floor(Math.random() * CATEGORIAS.length)];
+  const id = getRandomIdForCategoria(categoria);
+  return { categoria, id };
+}
