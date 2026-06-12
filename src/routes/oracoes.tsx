@@ -90,15 +90,9 @@ const ORACOES: Oracao[] = [
 ];
 
 const colors = [
-  "bg-[#FF3B30] text-white", // Vermelho
-  "bg-[#A9A9A9] text-white", // Cinza
-  "bg-[#4CD964] text-white", // Verde
-  "bg-[#FFCC00] text-black", // Amarelo
-  "bg-[#3A3000] text-white", // Marrom Escuro
-  "bg-[#007AFF] text-white", // Azul
-  "bg-[#5856D6] text-white", // Indigo
-  "bg-[#AF52DE] text-white", // Roxo
-  "bg-[#FF9500] text-white", // Laranja
+  "bg-[#f1f26c] text-black",
+  "bg-black text-white",
+  "bg-white text-black border-2 border-black",
 ];
 
 function OracoesPage() {
