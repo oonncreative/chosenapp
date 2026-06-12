@@ -99,7 +99,7 @@ function MensagemPage() {
       <div 
         ref={shareRef}
         style={{ 
-          position: 'absolute',
+          position: 'fixed',
           left: '-5000px',
           top: '0',
           width: '1080px',
@@ -111,6 +111,7 @@ function MensagemPage() {
           justifyContent: 'center',
           textAlign: 'center',
           zIndex: -1,
+          overflow: 'hidden',
         }}
       >
         <div style={{ padding: '0 80px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '60px', width: '100%', flex: 1, justifyContent: 'center' }}>
@@ -157,9 +158,12 @@ function MensagemPage() {
           )}
         </div>
 
-        <div style={{ paddingBottom: '120px', textAlign: 'center' }}>
-          <p style={{ fontSize: '28px', fontWeight: '300', letterSpacing: '0.4em', color: '#9CA3AF', textTransform: 'uppercase' }}>
+        <div style={{ paddingBottom: '100px', textAlign: 'center', display: 'flex', flexDirection: 'column', gap: '20px' }}>
+          <p style={{ fontSize: '28px', fontWeight: '300', letterSpacing: '0.4em', color: '#9CA3AF', textTransform: 'uppercase', margin: 0 }}>
             Ressoa
+          </p>
+          <p style={{ fontSize: '20px', fontWeight: '400', color: '#D1D5DB', margin: 0, fontFamily: 'sans-serif' }}>
+            ressoa.oonn.com.br
           </p>
         </div>
       </div>
