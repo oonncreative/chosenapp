@@ -97,38 +97,44 @@ function OracoesPage() {
         <p className="text-xs text-gray-500 tracking-wider uppercase">Momentos de conversa com Deus</p>
       </header>
 
-      <section className="flex-1 min-h-0 overflow-y-auto no-scrollbar px-4 pb-12">
-        <div className="flex flex-col gap-4">
-          {ORACOES.map((oracao, index) => (
-            <div 
-              key={index}
-              onClick={() => setExpandida(expandida === index ? null : index)}
-              className={`p-6 rounded-[24px] border-2 border-black transition-all cursor-pointer ${
-                expandida === index ? 'bg-black text-white' : 'bg-white text-black'
-              }`}
-            >
-              <div className="flex justify-between items-start mb-2">
-                <span className={`text-[10px] font-bold uppercase tracking-widest ${
-                  expandida === index ? 'text-gray-400' : 'text-gray-500'
-                }`}>
-                  {oracao.momento}
-                </span>
+      <section className="flex-1 min-h-0 overflow-y-auto no-scrollbar px-6 pb-12 pt-2">
+        <div className="flex flex-col -space-y-6">
+          {ORACOES.map((oracao, index) => {
+            const colorClass = colors[index % colors.length];
+            const isExpanded = expandida === index;
+            
+            return (
+              <div 
+                key={index}
+                onClick={() => setExpandida(isExpanded ? null : index)}
+                className={`group relative flex flex-col justify-start min-h-[120px] px-8 py-6 transition-all active:scale-[0.98] rounded-[32px] shadow-sm cursor-pointer ${colorClass} hover:z-20 ${isExpanded ? 'z-30 -translate-y-4 mb-10' : 'hover:-translate-y-1'}`}
+                style={{ zIndex: isExpanded ? 50 : index }}
+              >
+                <div className="flex flex-col gap-1">
+                  <span className="text-sm font-medium opacity-80 lowercase tracking-wide">
+                    {oracao.momento}
+                  </span>
+                  <span className="text-xl font-bold tracking-tight uppercase">
+                    {oracao.titulo}
+                  </span>
+                </div>
+                
+                {isExpanded ? (
+                  <div className="mt-6 animate-in fade-in slide-in-from-top-2 duration-300">
+                    <p className="text-lg leading-relaxed font-medium border-t border-white/20 pt-4">
+                      {oracao.texto}
+                    </p>
+                  </div>
+                ) : (
+                  <div className="absolute right-8 top-12 -translate-y-1/2 opacity-30 group-hover:opacity-100 transition-opacity">
+                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                       <path d="M19 9l-7 7-7-7" strokeLinecap="round" strokeLinejoin="round"/>
+                     </svg>
+                  </div>
+                )}
               </div>
-              <h3 className="text-xl font-black uppercase italic mb-2 tracking-tighter">
-                {oracao.titulo}
-              </h3>
-              {expandida === index && (
-                <p className="text-lg leading-relaxed font-medium mt-4 border-t border-gray-700 pt-4 animate-in fade-in slide-in-from-top-2 duration-300">
-                  {oracao.texto}
-                </p>
-              )}
-              {expandida !== index && (
-                <p className="text-sm opacity-60 line-clamp-1 italic">
-                  Clique para ler a oração completa...
-                </p>
-              )}
-            </div>
-          ))}
+            );
+          })}
         </div>
       </section>
 
