@@ -162,9 +162,6 @@ function OracoesPage() {
                 style={{ zIndex: isExpanded ? 50 : index }}
               >
                 <div className="flex flex-col gap-1">
-                  <span className="text-sm font-medium opacity-80 lowercase tracking-wide">
-                    {oracao.momento}
-                  </span>
                   <span className="text-xl font-medium tracking-tight uppercase">
                     {oracao.titulo}
                   </span>
