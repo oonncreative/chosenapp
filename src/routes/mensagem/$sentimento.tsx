@@ -94,7 +94,7 @@ function MensagemPage() {
   };
 
   return (
-    <div className="relative flex min-h-[100dvh] w-full flex-col bg-white px-8 pb-8 pt-safe">
+    <div className="relative flex h-[100dvh] max-h-[100dvh] w-full max-w-[100vw] flex-col overflow-hidden bg-white px-6 pb-6 pt-safe">
       {/* Elemento para geração da imagem de compartilhamento - otimizado */}
       <div 
         ref={shareRef}
@@ -112,6 +112,7 @@ function MensagemPage() {
           textAlign: 'center',
           zIndex: -1,
           overflow: 'hidden',
+          pointerEvents: 'none',
         }}
       >
         <div style={{ padding: '0 80px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '60px', width: '100%', flex: 1, justifyContent: 'center' }}>
