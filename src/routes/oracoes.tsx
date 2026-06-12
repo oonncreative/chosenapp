@@ -18,14 +18,24 @@ const ORACOES: Oracao[] = [
     texto: "Senhor, obrigado por mais este fôlego de vida. Entrego meu dia em Tuas mãos. Que a Tua paz guie meus passos e que eu seja luz por onde eu passar. Amém."
   },
   {
-    titulo: "Antes do Trabalho/Estudo",
+    titulo: "Força no Desafio",
+    momento: "Sempre",
+    texto: "Senhor, em meio às lutas, renova minhas forças. Que eu não desfaleça, mas persevere com fé, sabendo que Tu és o meu auxílio bem presente na angústia. Amém."
+  },
+  {
+    titulo: "Trabalho e Estudo",
     momento: "Dia",
     texto: "Pai, dai-me sabedoria e paciência. Que meu trabalho seja feito com excelência e que eu encontre graça diante dos desafios. Fortaleça minha mente e meu foco. Amém."
   },
   {
-    titulo: "Momento de Ansiedade",
+    titulo: "Paz na Ansiedade",
     momento: "Sempre",
     texto: "Deus, meu coração está inquieto. Trago a Ti minhas preocupações. Peço que a Tua paz, que excede o entendimento, guarde meus pensamentos e acalme minha alma agora. Amém."
+  },
+  {
+    titulo: "Pela Sabedoria",
+    momento: "Sempre",
+    texto: "Espírito Santo, ilumina meu entendimento. Que minhas escolhas hoje sejam guiadas pela Tua vontade e que eu saiba agir com discernimento e amor em cada situação. Amém."
   },
   {
     titulo: "Gratidão nas Refeições",
@@ -33,15 +43,37 @@ const ORACOES: Oracao[] = [
     texto: "Obrigado, Senhor, pelo alimento em nossa mesa. Abençoa quem o preparou e que nunca falte o pão aos que têm fome. Nutre também nosso espírito com Tua palavra. Amém."
   },
   {
+    titulo: "Saúde e Cura",
+    momento: "Sempre",
+    texto: "Pai celestial, Tu és o Deus que cura. Peço por saúde e restauração, tanto física quanto emocional. Que Tua mão de misericórdia toque cada área da minha vida. Amém."
+  },
+  {
     titulo: "Proteção da Família",
     momento: "Sempre",
     texto: "Senhor, coloco minha família sob Tua proteção. Guarda nossa casa, afasta todo mal e mantém-nos unidos em Teu amor e em Tua verdade. Amém."
   },
   {
-    titulo: "Antes de Dormir",
+    titulo: "Pelo Próximo",
+    momento: "Sempre",
+    texto: "Deus, abre meus olhos para as necessidades dos que me cercam. Que eu possa ser um instrumento de Tua bondade, levando consolo e ajuda a quem precisa hoje. Amém."
+  },
+  {
+    titulo: "Ao Deitar",
     momento: "Noite",
     texto: "Pai, obrigado por este dia. Perdoa minhas falhas. Entrego meu descanso a Ti e confio que cuidas de tudo enquanto durmo. Renova minhas forças para o amanhã. Amém."
   }
+];
+
+const colors = [
+  "bg-[#FF3B30] text-white", // Vermelho
+  "bg-[#A9A9A9] text-white", // Cinza
+  "bg-[#4CD964] text-white", // Verde
+  "bg-[#FFCC00] text-black", // Amarelo
+  "bg-[#3A3000] text-white", // Marrom Escuro
+  "bg-[#007AFF] text-white", // Azul
+  "bg-[#5856D6] text-white", // Indigo
+  "bg-[#AF52DE] text-white", // Roxo
+  "bg-[#FF9500] text-white", // Laranja
 ];
 
 function OracoesPage() {
