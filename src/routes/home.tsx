@@ -83,7 +83,7 @@ function HomePage() {
               >
                 <div className="flex flex-col gap-1">
 
-                  <span className="text-2xl font-bold tracking-tight uppercase">
+                  <span className="text-xl font-bold tracking-tight uppercase">
                     {sentimento}
                   </span>
                 </div>
