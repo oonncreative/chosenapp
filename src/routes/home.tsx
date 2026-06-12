@@ -7,7 +7,15 @@ export const Route = createFileRoute("/home")({
 });
 
 const colors = [
-  "bg-[#f1f26c] text-black",
+  "bg-[#FF3B30] text-white", // Vermelho
+  "bg-[#A9A9A9] text-white", // Cinza
+  "bg-[#4CD964] text-white", // Verde
+  "bg-[#FFCC00] text-black", // Amarelo
+  "bg-[#3A3000] text-white", // Marrom Escuro
+  "bg-[#007AFF] text-white", // Azul
+  "bg-[#5856D6] text-white", // Indigo
+  "bg-[#AF52DE] text-white", // Roxo
+  "bg-[#FF9500] text-white", // Laranja
 ];
 
 
