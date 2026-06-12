@@ -163,7 +163,7 @@ function OracoesPage() {
                 
                 {isExpanded ? (
                   <div className="mt-6 animate-in fade-in slide-in-from-top-2 duration-300">
-                    <p className="text-lg leading-relaxed font-medium border-t border-white/20 pt-4">
+                    <p className="text-lg leading-relaxed font-medium border-t border-current/20 pt-4">
                       {oracao.texto}
                     </p>
                   </div>
