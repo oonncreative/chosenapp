@@ -1,5 +1,5 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { Shuffle, List, GalleryHorizontal, Layers } from "lucide-react";
+import { Shuffle, List, GalleryHorizontal } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { CATEGORIAS, getRandomIdForCategoria, getRandomMensagemGlobal } from "@/lib/data";
 import mascote1 from "@/assets/mascotes/mascote-1.png.asset.json";
