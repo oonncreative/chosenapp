@@ -26,7 +26,7 @@ function HomePage() {
     <div className="h-screen overflow-hidden bg-white flex flex-col">
       <header className="p-6 pt-12 flex flex-col gap-4 shrink-0 bg-white z-10">
         <div className="flex items-center justify-between">
-          <h1 className="text-base font-bold tracking-[0.4em] text-black uppercase">RESSOA</h1>
+          <h1 className="text-base font-light tracking-[0.4em] text-black uppercase">RESSOA</h1>
           
           <div className="flex items-center gap-2">
             <button 
@@ -75,7 +75,7 @@ function HomePage() {
         </div>
 
         <div className="mt-2">
-          <h1 className="text-base font-bold tracking-[0.4em] text-black uppercase">Qual seu sentimento?</h1>
+          <h1 className="text-base font-light tracking-[0.4em] text-black uppercase">Qual seu sentimento?</h1>
         </div>
       </header>
 
@@ -98,7 +98,7 @@ function HomePage() {
               >
                 <div className="flex flex-col gap-1">
 
-                  <span className="text-xl font-bold tracking-tight uppercase">
+                  <span className="text-xl font-medium tracking-tight uppercase">
                     {sentimento}
                   </span>
                 </div>
