@@ -108,18 +108,44 @@ function OracoesPage() {
     <div className="h-screen overflow-hidden bg-white flex flex-col">
       <header className="p-6 pt-12 flex flex-col gap-4 shrink-0 bg-white z-10">
         <div className="flex items-center justify-between">
-          <h1 className="text-base font-bold tracking-[0.4em] text-black uppercase">ORAÇÕES</h1>
+          <h1 className="text-base font-light tracking-[0.4em] text-black uppercase">ORAÇÕES</h1>
           
-          <button 
-            onClick={() => window.history.back()}
-            className="flex items-center p-3 -mr-3 transition-opacity active:opacity-50"
-          >
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="black" strokeWidth="2.5">
-              <path d="M18 6L6 18M6 6l12 12" strokeLinecap="round" strokeLinejoin="round"/>
-            </svg>
-          </button>
+          <div className="flex items-center gap-2">
+            <button 
+              onClick={() => {
+                const current = document.documentElement.classList.contains('grayscale');
+                const next = !current;
+                localStorage.setItem('isMono', next.toString());
+                if (next) {
+                  document.documentElement.classList.add('grayscale');
+                } else {
+                  document.documentElement.classList.remove('grayscale');
+                }
+              }}
+              className="flex items-center p-3 transition-opacity active:opacity-50"
+              title="Modo Minimalista"
+            >
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="black" strokeWidth="2" className="text-black">
+                <circle cx="12" cy="12" r="10" />
+                <path d="M12 2a10 10 0 0 1 0 20" fill="currentColor" />
+              </svg>
+            </button>
+            <button 
+              onClick={() => {
+                window.history.back();
+              }}
+              className="flex items-center p-3 -mr-3 transition-opacity active:opacity-50"
+              title="Voltar"
+            >
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="black" strokeWidth="2.5">
+                <path d="M18 6L6 18M6 6l12 12" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+            </button>
+          </div>
         </div>
-        <p className="text-xs text-gray-500 tracking-wider uppercase">Momentos de conversa com Deus</p>
+        <div className="mt-2">
+          <h1 className="text-base font-light tracking-[0.4em] text-black uppercase">Momentos com Deus</h1>
+        </div>
       </header>
 
       <section className="flex-1 min-h-0 overflow-y-auto no-scrollbar px-6 pb-12 pt-2">
