@@ -182,9 +182,7 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <div className="contents" data-mono={isMono}>
-        <Outlet context={{ isMono, setIsMono }} />
-      </div>
+      <Outlet />
     </QueryClientProvider>
   );
 }
