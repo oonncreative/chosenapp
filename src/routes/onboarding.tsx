@@ -19,16 +19,7 @@ function Onboarding() {
   };
 
   const getStepStyles = () => {
-    switch(step) {
-      case 1:
-        return { btn: "bg-[#2D8C3C] text-white" };
-      case 2:
-        return { btn: "bg-[#007AFF] text-white" };
-      case 3:
-        return { btn: "bg-[#F7C1E1] text-white" };
-      default:
-        return { btn: "bg-black text-white" };
-    }
+    return { btn: "bg-[#f1f26c] text-black" };
   };
 
   const styles = getStepStyles();
