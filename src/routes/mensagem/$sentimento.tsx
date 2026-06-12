@@ -1,7 +1,7 @@
 import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
 import { getMensagemById, type Categoria, type Mensagem } from "@/lib/data";
 import { Button } from "@/components/ui/button";
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import { Share2, ArrowLeft } from "lucide-react";
 import domtoimage from "dom-to-image-more";
 
@@ -28,6 +28,7 @@ function MensagemPage() {
   const navigate = useNavigate();
   const shareRef = useRef<HTMLDivElement>(null);
   const [logoBase64, setLogoBase64] = useState<string>("");
+  const [isExpanded, setIsExpanded] = useState(false);
 
   useEffect(() => {
     // Converter logo para base64 para garantir que seja incluída na imagem
@@ -206,9 +207,19 @@ function MensagemPage() {
           </p>
           
           {mensagem.resumo && (
-            <p className="mt-8 text-sm font-light text-gray-500 max-w-[320px] leading-relaxed">
-              {mensagem.resumo}
-            </p>
+            <div className="mt-8 flex flex-col items-center">
+              <p className={`text-sm font-light text-gray-500 max-w-[320px] leading-relaxed transition-all duration-300 ${isExpanded ? "" : "line-clamp-3"}`}>
+                {mensagem.resumo}
+              </p>
+              {!isExpanded && (
+                <button 
+                  onClick={() => setIsExpanded(true)}
+                  className="mt-2 text-[10px] font-bold tracking-widest uppercase text-gray-400 hover:text-black transition-colors"
+                >
+                  mais...
+                </button>
+              )}
+            </div>
           )}
         </div>
       </main>
@@ -223,7 +234,7 @@ function MensagemPage() {
         <Button
           onClick={handleShare}
           disabled={isSharing}
-          className="h-[56px] w-full sm:flex-1 rounded-[24px] border-none bg-black text-white text-sm font-black tracking-tighter hover:opacity-90 shadow-none flex items-center justify-center gap-2 uppercase italic transition-all active:scale-95 disabled:opacity-50"
+          className="h-[56px] w-full sm:flex-1 rounded-[24px] border-none bg-[#f1f26c] text-black text-sm font-black tracking-tighter hover:opacity-90 shadow-none flex items-center justify-center gap-2 uppercase italic transition-all active:scale-95 disabled:opacity-50"
         >
           <Share2 className="h-5 w-5 shrink-0" />
           <span>{isSharing ? "Gerando..." : "Compartilhar"}</span>
