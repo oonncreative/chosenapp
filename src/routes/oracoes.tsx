@@ -165,7 +165,7 @@ function OracoesPage() {
                   <span className="text-sm font-medium opacity-80 lowercase tracking-wide">
                     {oracao.momento}
                   </span>
-                  <span className="text-xl font-bold tracking-tight uppercase">
+                  <span className="text-xl font-medium tracking-tight uppercase">
                     {oracao.titulo}
                   </span>
                 </div>
