@@ -30,9 +30,9 @@ const MASCOTES: Record<string, string> = {
 
 function HomePage() {
   const navigate = useNavigate();
-  const [viewMode, setViewMode] = useState<"list" | "swipe" | "tinder">(() => {
-    if (typeof window === "undefined") return "list";
-    return (localStorage.getItem("viewMode") as "list" | "swipe" | "tinder") || "list";
+  const [viewMode, setViewMode] = useState<"list" | "swipe">(() => {
+    if (typeof window === "undefined") return "swipe";
+    return (localStorage.getItem("viewMode") as "list" | "swipe") || "swipe";
   });
 
   useEffect(() => {
@@ -109,7 +109,6 @@ function HomePage() {
           {([
             { key: "list", icon: List, label: "Lista" },
             { key: "swipe", icon: GalleryHorizontal, label: "Swipe" },
-            { key: "tinder", icon: Layers, label: "Tinder" },
           ] as const).map(({ key, icon: Icon, label }) => (
             <button
               key={key}
@@ -128,7 +127,6 @@ function HomePage() {
 
       {viewMode === "list" && <ListView navigate={navigate} />}
       {viewMode === "swipe" && <SwipeView navigate={navigate} />}
-      {viewMode === "tinder" && <TinderView navigate={navigate} />}
 
       <footer className="py-4 text-center bg-white border-t border-gray-50 shrink-0">
         <a 
