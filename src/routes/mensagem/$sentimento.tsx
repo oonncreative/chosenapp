@@ -211,20 +211,21 @@ function MensagemPage() {
         </div>
       </main>
 
-      <footer className="flex flex-col sm:flex-row gap-3 pt-4 shrink-0 w-full mb-safe">
+      <footer className="flex flex-row items-center justify-center gap-3 pb-2 pt-2 shrink-0 w-full">
         <Button
           onClick={handleRefresh}
-          className="h-[56px] w-full sm:flex-1 rounded-[24px] bg-transparent border-2 border-black text-black text-sm font-black tracking-tighter hover:bg-black/5 shadow-none uppercase italic transition-all active:scale-95"
+          className="h-12 w-12 rounded-full bg-transparent border-2 border-black text-black hover:bg-black/5 shadow-none transition-all active:scale-95 flex items-center justify-center"
+          aria-label="Novo sentimento"
         >
-          Novo sentimento
+          <ArrowLeft className="h-5 w-5 rotate-[-90deg]" />
         </Button>
         <Button
           onClick={handleShare}
           disabled={isSharing}
-          className="h-[56px] w-full sm:flex-1 rounded-[24px] border-none bg-[#f1f26c] text-black text-sm font-black tracking-tighter hover:opacity-90 shadow-none flex items-center justify-center gap-2 uppercase italic transition-all active:scale-95 disabled:opacity-50"
+          className="h-12 w-12 rounded-full border-none bg-[#f1f26c] text-black hover:opacity-90 shadow-none flex items-center justify-center transition-all active:scale-95 disabled:opacity-50"
+          aria-label={isSharing ? "Gerando..." : "Compartilhar"}
         >
           <Share2 className="h-5 w-5 shrink-0" />
-          <span>{isSharing ? "Gerando..." : "Compartilhar"}</span>
         </Button>
       </footer>
     </div>
