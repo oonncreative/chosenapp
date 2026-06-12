@@ -106,7 +106,7 @@ export function getRandomIdForCategoria(categoria: Categoria): string {
   const selecionada = finalistas[Math.floor(Math.random() * finalistas.length)];
 
   // Atualizar cache (isso acontece no cliente antes de navegar)
-  cache.lastMessages = [...cache.lastMessages, selecionada.id].slice(-5);
+  cache.lastMessages = [...cache.lastMessages, selecionada.id].slice(-25);
   cache.lastType = selecionada.tipo;
 
   return selecionada.id;
