@@ -18,6 +18,21 @@ const ORACOES: Oracao[] = [
     texto: "Senhor, obrigado por mais este fôlego de vida. Entrego meu dia em Tuas mãos. Que a Tua paz guie meus passos e que eu seja luz por onde eu passar. Amém."
   },
   {
+    titulo: "Novo Ciclo",
+    momento: "Algo Novo",
+    texto: "Senhor, coloco este novo começo em Tuas mãos. Que as experiências passadas sirvam de lição e que os novos caminhos sejam iluminados pela Tua presença. Dai-me coragem para abraçar o novo com fé. Amém."
+  },
+  {
+    titulo: "Novo Projeto",
+    momento: "Algo Novo",
+    texto: "Pai, abençoe este novo empreendimento. Que cada passo seja dado com sabedoria e que meu esforço produza frutos que glorifiquem o Teu nome. Que a ansiedade não me domine, mas a confiança em Ti me guie. Amém."
+  },
+  {
+    titulo: "Nova Amizade",
+    momento: "Algo Novo",
+    texto: "Deus, obrigado pelas novas pessoas em minha vida. Que este novo relacionamento seja baseado na verdade, no respeito e no amor cristão. Que possamos ser bênção um para o outro. Amém."
+  },
+  {
     titulo: "Gratidão nas Refeições",
     momento: "Refeição",
     texto: "Obrigado, Senhor, pelo alimento em nossa mesa. Abençoa quem o preparou e que nunca falte o pão aos que têm fome. Nutre também nosso espírito com Tua palavra. Amém."
@@ -26,6 +41,11 @@ const ORACOES: Oracao[] = [
     titulo: "Ao Deitar",
     momento: "Noite",
     texto: "Pai, obrigado por este dia. Perdoa minhas falhas. Entrego meu descanso a Ti e confio que cuidas de tudo enquanto durmo. Renova minhas forças para o amanhã. Amém."
+  },
+  {
+    titulo: "Paz na Casa",
+    momento: "Noite",
+    texto: "Senhor, visita meu lar nesta noite. Que Tua presença afaste toda inquietação e que possamos repousar em segurança sob as Tuas asas. Que o sono seja reparador e a mente se acalme. Amém."
   },
   {
     titulo: "Força no Desafio",
@@ -61,6 +81,11 @@ const ORACOES: Oracao[] = [
     titulo: "Trabalho e Estudo",
     momento: "Sempre",
     texto: "Pai, dai-me sabedoria e paciência. Que meu trabalho seja feito com excelência e que eu encontre graça diante dos desafios. Fortaleça minha mente e meu foco. Amém."
+  },
+  {
+    titulo: "Luz no Caminho",
+    momento: "Sempre",
+    texto: "Senhor, que Tua palavra seja lâmpada para os meus pés e luz para o meu caminho. Que eu não me desvie nem para a direita nem para a esquerda, mas siga firme em Ti. Amém."
   }
 ];
 
@@ -83,18 +108,44 @@ function OracoesPage() {
     <div className="h-screen overflow-hidden bg-white flex flex-col">
       <header className="p-6 pt-12 flex flex-col gap-4 shrink-0 bg-white z-10">
         <div className="flex items-center justify-between">
-          <h1 className="text-base font-bold tracking-[0.4em] text-black uppercase">ORAÇÕES</h1>
+          <h1 className="text-base font-light tracking-[0.4em] text-black uppercase">ORAÇÕES</h1>
           
-          <button 
-            onClick={() => window.history.back()}
-            className="flex items-center p-3 -mr-3 transition-opacity active:opacity-50"
-          >
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="black" strokeWidth="2.5">
-              <path d="M18 6L6 18M6 6l12 12" strokeLinecap="round" strokeLinejoin="round"/>
-            </svg>
-          </button>
+          <div className="flex items-center gap-2">
+            <button 
+              onClick={() => {
+                const current = document.documentElement.classList.contains('grayscale');
+                const next = !current;
+                localStorage.setItem('isMono', next.toString());
+                if (next) {
+                  document.documentElement.classList.add('grayscale');
+                } else {
+                  document.documentElement.classList.remove('grayscale');
+                }
+              }}
+              className="flex items-center p-3 transition-opacity active:opacity-50"
+              title="Modo Minimalista"
+            >
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="black" strokeWidth="2" className="text-black">
+                <circle cx="12" cy="12" r="10" />
+                <path d="M12 2a10 10 0 0 1 0 20" fill="currentColor" />
+              </svg>
+            </button>
+            <button 
+              onClick={() => {
+                window.history.back();
+              }}
+              className="flex items-center p-3 -mr-3 transition-opacity active:opacity-50"
+              title="Voltar"
+            >
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="black" strokeWidth="2.5">
+                <path d="M18 6L6 18M6 6l12 12" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+            </button>
+          </div>
         </div>
-        <p className="text-xs text-gray-500 tracking-wider uppercase">Momentos de conversa com Deus</p>
+        <div className="mt-2">
+          <h1 className="text-base font-light tracking-[0.4em] text-black uppercase">Momentos com Deus</h1>
+        </div>
       </header>
 
       <section className="flex-1 min-h-0 overflow-y-auto no-scrollbar px-6 pb-12 pt-2">
@@ -114,7 +165,7 @@ function OracoesPage() {
                   <span className="text-sm font-medium opacity-80 lowercase tracking-wide">
                     {oracao.momento}
                   </span>
-                  <span className="text-xl font-bold tracking-tight uppercase">
+                  <span className="text-xl font-medium tracking-tight uppercase">
                     {oracao.titulo}
                   </span>
                 </div>
