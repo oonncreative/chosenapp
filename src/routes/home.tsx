@@ -1,5 +1,5 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { Shuffle, List, GalleryHorizontal, Layers } from "lucide-react";
+import { Shuffle, List, GalleryHorizontal } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { CATEGORIAS, getRandomIdForCategoria, getRandomMensagemGlobal } from "@/lib/data";
 import mascote1 from "@/assets/mascotes/mascote-1.png.asset.json";
@@ -30,9 +30,9 @@ const MASCOTES: Record<string, string> = {
 
 function HomePage() {
   const navigate = useNavigate();
-  const [viewMode, setViewMode] = useState<"list" | "swipe" | "tinder">(() => {
-    if (typeof window === "undefined") return "list";
-    return (localStorage.getItem("viewMode") as "list" | "swipe" | "tinder") || "list";
+  const [viewMode, setViewMode] = useState<"list" | "swipe">(() => {
+    if (typeof window === "undefined") return "swipe";
+    return (localStorage.getItem("viewMode") as "list" | "swipe") || "swipe";
   });
 
   useEffect(() => {
@@ -109,7 +109,6 @@ function HomePage() {
           {([
             { key: "list", icon: List, label: "Lista" },
             { key: "swipe", icon: GalleryHorizontal, label: "Swipe" },
-            { key: "tinder", icon: Layers, label: "Tinder" },
           ] as const).map(({ key, icon: Icon, label }) => (
             <button
               key={key}
@@ -128,7 +127,6 @@ function HomePage() {
 
       {viewMode === "list" && <ListView navigate={navigate} />}
       {viewMode === "swipe" && <SwipeView navigate={navigate} />}
-      {viewMode === "tinder" && <TinderView navigate={navigate} />}
 
       <footer className="py-4 text-center bg-white border-t border-gray-50 shrink-0">
         <a 
@@ -254,105 +252,6 @@ function SwipeView({ navigate }: { navigate: NavFn }) {
         </div>
         <button onClick={next} className="p-3 rounded-full border-2 border-black active:scale-95 transition-transform" title="Próximo">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="black" strokeWidth="2.5"><path d="M9 18l6-6-6-6" strokeLinecap="round" strokeLinejoin="round"/></svg>
-        </button>
-      </div>
-    </section>
-  );
-}
-
-function TinderView({ navigate }: { navigate: NavFn }) {
-  const [order, setOrder] = useState<string[]>([...CATEGORIAS]);
-  const startX = useRef<number | null>(null);
-  const startY = useRef(0);
-  const [drag, setDrag] = useState({ x: 0, y: 0 });
-  const [exiting, setExiting] = useState<"left" | "right" | null>(null);
-
-  const top = order[0];
-
-  const completeSwipe = (dir: "left" | "right") => {
-    setExiting(dir);
-    setTimeout(() => {
-      setOrder((o) => [...o.slice(1), o[0]]);
-      setExiting(null);
-      setDrag({ x: 0, y: 0 });
-    }, 260);
-  };
-
-  const onStart = (x: number, y: number) => { startX.current = x; startY.current = y; };
-  const onMove = (x: number, y: number) => {
-    if (startX.current === null) return;
-    setDrag({ x: x - startX.current, y: y - startY.current });
-  };
-  const onEnd = () => {
-    if (Math.abs(drag.x) > 110) {
-      completeSwipe(drag.x > 0 ? "right" : "left");
-    } else {
-      setDrag({ x: 0, y: 0 });
-    }
-    startX.current = null;
-  };
-
-  return (
-    <section className="flex-1 min-h-0 flex flex-col items-center justify-center px-6 pb-6 pt-2 select-none">
-      <div className="relative w-full max-w-sm h-[440px]">
-        {order.slice(0, 3).reverse().map((sentimento, idxFromBottom) => {
-          const stackIndex = 2 - idxFromBottom;
-          const isTop = stackIndex === 0;
-          const baseScale = 1 - stackIndex * 0.05;
-          const baseY = stackIndex * 12;
-
-          let transform = `translate(0px, ${baseY}px) scale(${baseScale})`;
-          let transition = "transform 300ms ease-out, opacity 300ms ease-out";
-          let opacity = 1;
-
-          if (isTop) {
-            if (exiting) {
-              const x = exiting === "right" ? 600 : -600;
-              transform = `translate(${x}px, ${drag.y}px) rotate(${exiting === "right" ? 25 : -25}deg)`;
-              opacity = 0;
-            } else {
-              const rot = drag.x / 20;
-              transform = `translate(${drag.x}px, ${drag.y}px) rotate(${rot}deg)`;
-              transition = startX.current !== null ? "none" : "transform 300ms ease-out";
-            }
-          }
-
-          return (
-            <div
-              key={sentimento + stackIndex}
-              className="absolute inset-0"
-              style={{ transform, transition, opacity, zIndex: 10 - stackIndex }}
-              onTouchStart={isTop ? (e) => onStart(e.touches[0].clientX, e.touches[0].clientY) : undefined}
-              onTouchMove={isTop ? (e) => onMove(e.touches[0].clientX, e.touches[0].clientY) : undefined}
-              onTouchEnd={isTop ? onEnd : undefined}
-              onMouseDown={isTop ? (e) => onStart(e.clientX, e.clientY) : undefined}
-              onMouseMove={isTop ? (e) => startX.current !== null && onMove(e.clientX, e.clientY) : undefined}
-              onMouseUp={isTop ? onEnd : undefined}
-              onMouseLeave={isTop ? () => startX.current !== null && onEnd() : undefined}
-            >
-              <button
-                onClick={() => isTop && Math.abs(drag.x) < 5 && goTo(navigate, sentimento)}
-                className="w-full h-full rounded-[32px] bg-white border-2 border-black flex flex-col items-center justify-center gap-6 p-8 cursor-grab active:cursor-grabbing"
-              >
-                <div className="w-40 h-40 flex items-center justify-center pointer-events-none">
-                  <img src={MASCOTES[sentimento]} alt={sentimento} className="w-full h-full object-contain" draggable={false} />
-                </div>
-                <span className="text-2xl font-medium tracking-tight uppercase text-black text-center pointer-events-none">{sentimento}</span>
-              </button>
-            </div>
-          );
-        })}
-      </div>
-
-      <div className="flex items-center gap-4 mt-6">
-        <button onClick={() => completeSwipe("left")} className="p-4 rounded-full border-2 border-black active:scale-95 transition-transform" title="Pular">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="black" strokeWidth="2.5"><path d="M18 6L6 18M6 6l12 12" strokeLinecap="round" strokeLinejoin="round"/></svg>
-        </button>
-        <button onClick={() => top && goTo(navigate, top)} className="px-6 py-4 rounded-full bg-black text-white text-xs tracking-[0.3em] uppercase active:scale-95 transition-transform">
-          Abrir
-        </button>
-        <button onClick={() => completeSwipe("right")} className="p-4 rounded-full border-2 border-black active:scale-95 transition-transform" title="Próximo">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="black" strokeWidth="2.5"><path d="M5 12h14M13 5l7 7-7 7" strokeLinecap="round" strokeLinejoin="round"/></svg>
         </button>
       </div>
     </section>
