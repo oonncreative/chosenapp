@@ -1,6 +1,6 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { Shuffle } from "lucide-react";
-import { CATEGORIAS, getRandomIdForCategoria } from "@/lib/data";
+import { CATEGORIAS, getRandomIdForCategoria, getRandomMensagemGlobal } from "@/lib/data";
 import mascote1 from "@/assets/mascotes/mascote-1.png.asset.json";
 import mascote2 from "@/assets/mascotes/mascote-2.png.asset.json";
 import mascote3 from "@/assets/mascotes/mascote-3.png.asset.json";
