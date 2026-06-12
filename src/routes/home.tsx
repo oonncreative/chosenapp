@@ -56,11 +56,7 @@ function HomePage() {
               title="Orações Diárias"
             >
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="black" strokeWidth="2" className="text-black">
-                <path d="M7 20c0-1.5 1-3.5 2.5-4.5L12 14l2.5 1.5c1.5 1 2.5 3 2.5 4.5" strokeLinecap="round" strokeLinejoin="round"/>
-                <path d="M10 10c0-1.1.9-2 2-2s2 .9 2 2v4H10v-4z" strokeLinecap="round" strokeLinejoin="round"/>
-                <path d="M12 2v6" strokeLinecap="round" strokeLinejoin="round"/>
-                <path d="M8 6l2 2" strokeLinecap="round" strokeLinejoin="round"/>
-                <path d="M16 6l-2 2" strokeLinecap="round" strokeLinejoin="round"/>
+                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" strokeLinecap="round" strokeLinejoin="round"/>
               </svg>
             </button>
             <button 
