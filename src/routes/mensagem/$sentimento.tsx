@@ -211,14 +211,12 @@ function MensagemPage() {
               <p className={`text-sm font-light text-gray-500 max-w-[320px] leading-relaxed transition-all duration-300 ${isExpanded ? "" : "line-clamp-3"}`}>
                 {mensagem.resumo}
               </p>
-              {!isExpanded && (
-                <button 
-                  onClick={() => setIsExpanded(true)}
-                  className="mt-2 text-[10px] font-bold tracking-widest uppercase text-gray-400 hover:text-black transition-colors"
-                >
-                  mais...
-                </button>
-              )}
+              <button 
+                onClick={() => setIsExpanded(!isExpanded)}
+                className="mt-2 text-[10px] font-bold tracking-widest uppercase text-gray-400 hover:text-black transition-colors"
+              >
+                {isExpanded ? "menos" : "mais..."}
+              </button>
             </div>
           )}
         </div>
