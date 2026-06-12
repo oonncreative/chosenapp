@@ -18,6 +18,21 @@ const ORACOES: Oracao[] = [
     texto: "Senhor, obrigado por mais este fôlego de vida. Entrego meu dia em Tuas mãos. Que a Tua paz guie meus passos e que eu seja luz por onde eu passar. Amém."
   },
   {
+    titulo: "Novo Ciclo",
+    momento: "Algo Novo",
+    texto: "Senhor, coloco este novo começo em Tuas mãos. Que as experiências passadas sirvam de lição e que os novos caminhos sejam iluminados pela Tua presença. Dai-me coragem para abraçar o novo com fé. Amém."
+  },
+  {
+    titulo: "Novo Projeto",
+    momento: "Algo Novo",
+    texto: "Pai, abençoe este novo empreendimento. Que cada passo seja dado com sabedoria e que meu esforço produza frutos que glorifiquem o Teu nome. Que a ansiedade não me domine, mas a confiança em Ti me guie. Amém."
+  },
+  {
+    titulo: "Nova Amizade",
+    momento: "Algo Novo",
+    texto: "Deus, obrigado pelas novas pessoas em minha vida. Que este novo relacionamento seja baseado na verdade, no respeito e no amor cristão. Que possamos ser bênção um para o outro. Amém."
+  },
+  {
     titulo: "Gratidão nas Refeições",
     momento: "Refeição",
     texto: "Obrigado, Senhor, pelo alimento em nossa mesa. Abençoa quem o preparou e que nunca falte o pão aos que têm fome. Nutre também nosso espírito com Tua palavra. Amém."
@@ -26,6 +41,11 @@ const ORACOES: Oracao[] = [
     titulo: "Ao Deitar",
     momento: "Noite",
     texto: "Pai, obrigado por este dia. Perdoa minhas falhas. Entrego meu descanso a Ti e confio que cuidas de tudo enquanto durmo. Renova minhas forças para o amanhã. Amém."
+  },
+  {
+    titulo: "Paz na Casa",
+    momento: "Noite",
+    texto: "Senhor, visita meu lar nesta noite. Que Tua presença afaste toda inquietação e que possamos repousar em segurança sob as Tuas asas. Que o sono seja reparador e a mente se acalme. Amém."
   },
   {
     titulo: "Força no Desafio",
@@ -61,6 +81,11 @@ const ORACOES: Oracao[] = [
     titulo: "Trabalho e Estudo",
     momento: "Sempre",
     texto: "Pai, dai-me sabedoria e paciência. Que meu trabalho seja feito com excelência e que eu encontre graça diante dos desafios. Fortaleça minha mente e meu foco. Amém."
+  },
+  {
+    titulo: "Luz no Caminho",
+    momento: "Sempre",
+    texto: "Senhor, que Tua palavra seja lâmpada para os meus pés e luz para o meu caminho. Que eu não me desvie nem para a direita nem para a esquerda, mas siga firme em Ti. Amém."
   }
 ];
 
