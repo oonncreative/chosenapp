@@ -208,7 +208,7 @@ function MensagemPage() {
           
           {mensagem.resumo && (
             <div className="mt-8 flex flex-col items-center">
-              <p className={`text-sm font-light text-gray-500 max-w-[320px] leading-relaxed transition-all duration-300 ${isExpanded ? "" : "line-clamp-3"}`}>
+              <p className={`text-sm font-light text-gray-500 max-w-[320px] leading-relaxed transition-all duration-300 ${isExpanded ? "" : "line-clamp-4"}`}>
                 {mensagem.resumo}
               </p>
               <button 
