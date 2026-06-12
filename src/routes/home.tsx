@@ -31,6 +31,25 @@ function HomePage() {
           <div className="flex items-center gap-2">
             <button 
               onClick={() => {
+                const current = document.documentElement.classList.contains('grayscale');
+                const next = !current;
+                localStorage.setItem('isMono', next.toString());
+                if (next) {
+                  document.documentElement.classList.add('grayscale');
+                } else {
+                  document.documentElement.classList.remove('grayscale');
+                }
+              }}
+              className="flex items-center p-3 transition-opacity active:opacity-50"
+              title="Modo Minimalista"
+            >
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="black" strokeWidth="2" className="text-black">
+                <circle cx="12" cy="12" r="10" />
+                <path d="M12 2a10 10 0 0 1 0 20" fill="currentColor" />
+              </svg>
+            </button>
+            <button 
+              onClick={() => {
                 navigate({ to: "/oracoes" });
               }}
               className="flex items-center p-3 transition-opacity active:opacity-50"

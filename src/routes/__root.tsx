@@ -136,6 +136,21 @@ function RootShell({ children }: { children: ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+  const [isMono, setIsMono] = useState(() => {
+    if (typeof window !== 'undefined') {
+      return localStorage.getItem('isMono') === 'true';
+    }
+    return false;
+  });
+
+  useEffect(() => {
+    localStorage.setItem('isMono', isMono.toString());
+    if (isMono) {
+      document.documentElement.classList.add('grayscale');
+    } else {
+      document.documentElement.classList.remove('grayscale');
+    }
+  }, [isMono]);
 
   useEffect(() => {
     // Registrar Service Worker
@@ -147,7 +162,7 @@ function RootComponent() {
       });
     }
 
-    // Lógica para notificações agendadas (Simulação via Local Notification se permitido)
+    // Lógica para notificações agendadas
     const setupNotifications = async () => {
       if (!("Notification" in window)) return;
       
@@ -157,8 +172,6 @@ function RootComponent() {
         const sixtyMinutes = 60 * 60 * 1000;
 
         if (!lastNotif || (now - parseInt(lastNotif)) > sixtyMinutes) {
-          // Só envia se o app estiver em background ou após tempo suficiente
-          // Como é uma simulação PWA, vamos apenas garantir que o sistema está pronto
           localStorage.setItem('last_notification_time', now.toString());
         }
       }
