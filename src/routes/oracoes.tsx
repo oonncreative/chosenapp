@@ -18,14 +18,19 @@ const ORACOES: Oracao[] = [
     texto: "Senhor, obrigado por mais este fôlego de vida. Entrego meu dia em Tuas mãos. Que a Tua paz guie meus passos e que eu seja luz por onde eu passar. Amém."
   },
   {
+    titulo: "Gratidão nas Refeições",
+    momento: "Refeição",
+    texto: "Obrigado, Senhor, pelo alimento em nossa mesa. Abençoa quem o preparou e que nunca falte o pão aos que têm fome. Nutre também nosso espírito com Tua palavra. Amém."
+  },
+  {
+    titulo: "Ao Deitar",
+    momento: "Noite",
+    texto: "Pai, obrigado por este dia. Perdoa minhas falhas. Entrego meu descanso a Ti e confio que cuidas de tudo enquanto durmo. Renova minhas forças para o amanhã. Amém."
+  },
+  {
     titulo: "Força no Desafio",
     momento: "Sempre",
     texto: "Senhor, em meio às lutas, renova minhas forças. Que eu não desfaleça, mas persevere com fé, sabendo que Tu és o meu auxílio bem presente na angústia. Amém."
-  },
-  {
-    titulo: "Trabalho e Estudo",
-    momento: "Dia",
-    texto: "Pai, dai-me sabedoria e paciência. Que meu trabalho seja feito com excelência e que eu encontre graça diante dos desafios. Fortaleça minha mente e meu foco. Amém."
   },
   {
     titulo: "Paz na Ansiedade",
@@ -36,11 +41,6 @@ const ORACOES: Oracao[] = [
     titulo: "Pela Sabedoria",
     momento: "Sempre",
     texto: "Espírito Santo, ilumina meu entendimento. Que minhas escolhas hoje sejam guiadas pela Tua vontade e que eu saiba agir com discernimento e amor em cada situação. Amém."
-  },
-  {
-    titulo: "Gratidão nas Refeições",
-    momento: "Refeição",
-    texto: "Obrigado, Senhor, pelo alimento em nossa mesa. Abençoa quem o preparou e que nunca falte o pão aos que têm fome. Nutre também nosso espírito com Tua palavra. Amém."
   },
   {
     titulo: "Saúde e Cura",
@@ -58,9 +58,9 @@ const ORACOES: Oracao[] = [
     texto: "Deus, abre meus olhos para as necessidades dos que me cercam. Que eu possa ser um instrumento de Tua bondade, levando consolo e ajuda a quem precisa hoje. Amém."
   },
   {
-    titulo: "Ao Deitar",
-    momento: "Noite",
-    texto: "Pai, obrigado por este dia. Perdoa minhas falhas. Entrego meu descanso a Ti e confio que cuidas de tudo enquanto durmo. Renova minhas forças para o amanhã. Amém."
+    titulo: "Trabalho e Estudo",
+    momento: "Sempre",
+    texto: "Pai, dai-me sabedoria e paciência. Que meu trabalho seja feito com excelência e que eu encontre graça diante dos desafios. Fortaleça minha mente e meu foco. Amém."
   }
 ];
 
