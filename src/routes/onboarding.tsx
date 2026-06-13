@@ -28,12 +28,12 @@ function Onboarding() {
     <div className="flex h-screen flex-col items-center justify-center bg-white px-8 text-center transition-colors duration-700 overflow-hidden">
       <div className="w-full max-w-sm flex flex-col items-center justify-between h-full py-20">
         <div className="flex-1 flex flex-col items-center justify-center gap-8">
-          <img src="/logo-ressoa.png" alt="Ressoa" className="h-16 w-16 mb-4 object-contain" />
+          <img src="/logo-chosen.png" alt="Chosen" className="h-16 w-16 mb-4 object-contain" />
           
           {step === 1 && (
             <div className="animate-in fade-in slide-in-from-bottom-4 duration-700 flex flex-col items-center gap-4">
-              <h1 className="text-[11px] font-bold tracking-[0.4em] text-black uppercase">Ressoa</h1>
-              <p className="text-lg text-black/60 font-light tracking-tight italic">Inspire-se nas palavras de Deus</p>
+              <h1 className="text-[11px] font-bold tracking-[0.4em] text-black uppercase">Chosen</h1>
+              <p className="text-lg text-black/60 font-light tracking-tight italic">Inspirações - Escolhidas!</p>
             </div>
           )}
 
@@ -60,9 +60,9 @@ function Onboarding() {
                     const permission = await Notification.requestPermission();
                     if (permission === "granted" && "serviceWorker" in navigator) {
                       const registration = await navigator.serviceWorker.ready;
-                      registration.showNotification('Ressoa', {
+                      registration.showNotification('Chosen', {
                         body: 'Notificações ativadas! Enviaremos mensagens de fé para você.',
-                        icon: '/logo-ressoa.png'
+                        icon: '/logo-chosen.png'
                       });
                     }
                   }
