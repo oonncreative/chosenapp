@@ -9,11 +9,9 @@ function Index() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Redireciona para onboarding na primeira visita
-    navigate({ to: "/onboarding" });
+    const done = typeof window !== "undefined" && localStorage.getItem("onboarded") === "true";
+    navigate({ to: done ? "/home" : "/onboarding", replace: true });
   }, [navigate]);
-
-
 
   return null;
 }
