@@ -241,7 +241,7 @@ function SwipeView({ navigate }: { navigate: NavFn }) {
       </div>
 
       <div className="flex items-center gap-6 mt-6">
-        <button onClick={prev} className="p-3 rounded-full border-2 border-black active:scale-95 transition-transform" title="Anterior">
+        <button onClick={prev} className="p-3 rounded-full active:scale-95 transition-transform" title="Anterior">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="black" strokeWidth="2.5"><path d="M15 18l-6-6 6-6" strokeLinecap="round" strokeLinejoin="round"/></svg>
         </button>
         <div className="flex items-center gap-1.5">
