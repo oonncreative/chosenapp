@@ -65,12 +65,12 @@ function MensagemPage() {
         try {
           const response = await fetch(dataUrl);
           const blob = await response.blob();
-          const file = new File([blob], `ressoa-${sentimento}.png`, { type: "image/png" });
+          const file = new File([blob], `chosen-${sentimento}.png`, { type: "image/png" });
           
           if (navigator.canShare && navigator.canShare({ files: [file] })) {
             await navigator.share({
               files: [file],
-              title: "Ressoa",
+              title: "Chosen",
               text: `"${mensagem.texto}" - ${mensagem.referencia}`,
             });
             return;
@@ -81,7 +81,7 @@ function MensagemPage() {
       }
 
       const link = document.createElement("a");
-      link.download = `ressoa-${sentimento}.png`;
+      link.download = `chosen-${sentimento}.png`;
       link.href = dataUrl;
       link.click();
       
@@ -117,8 +117,8 @@ function MensagemPage() {
         {/* Logo no topo */}
         <div style={{ paddingTop: '100px', display: 'flex', justifyContent: 'center' }}>
           <img 
-            src="/logo-ressoa.png" 
-            alt="Ressoa" 
+            src="/logo-chosen.png" 
+            alt="Chosen" 
             style={{ width: '140px', height: '140px', objectFit: 'contain' }} 
           />
         </div>
@@ -185,7 +185,7 @@ function MensagemPage() {
           <ArrowLeft className="h-8 w-8 text-gray-400" />
         </Link>
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-          <img src="/logo-ressoa.png" alt="Ressoa" className="h-10 w-10 object-contain" />
+          <img src="/logo-chosen.png" alt="Chosen" className="h-10 w-10 object-contain" />
         </div>
         <div className="w-14 h-14" /> {/* Spacer */}
       </header>

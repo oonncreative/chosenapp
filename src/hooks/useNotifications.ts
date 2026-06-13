@@ -20,7 +20,7 @@ function sendMomentNotification() {
   if ("Notification" in window && Notification.permission === "granted") {
     const titles = [
       "Um momento para você",
-      "Ressoa",
+      "Chosen",
       "Pausa para a alma",
       "Uma palavra de fé"
     ];

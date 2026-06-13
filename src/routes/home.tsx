@@ -43,7 +43,7 @@ function HomePage() {
     <div className="h-screen overflow-hidden bg-white flex flex-col">
       <header className="p-6 pt-12 flex flex-col gap-4 shrink-0 bg-white z-10">
         <div className="flex items-center justify-between">
-          <h1 className="text-base font-light tracking-[0.4em] text-black uppercase">RESSOA</h1>
+          <h1 className="text-base font-light tracking-[0.4em] text-black uppercase">CHOSEN</h1>
           
           <div className="flex items-center gap-1">
             <button

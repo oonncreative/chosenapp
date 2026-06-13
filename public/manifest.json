@@ -1,6 +1,6 @@
 {
-  "name": "Ressoa",
-  "short_name": "Ressoa",
+  "name": "Chosen",
+  "short_name": "Chosen",
   "description": "Mensagens de fé e esperança para o seu momento.",
   "start_url": "/home",
   "display": "standalone",
@@ -9,18 +9,18 @@
   "theme_color": "#ffffff",
   "icons": [
     {
-      "src": "/logo-ressoa.png",
+      "src": "/logo-chosen.png",
       "sizes": "192x192",
       "type": "image/png"
     },
     {
-      "src": "/logo-ressoa.png",
+      "src": "/logo-chosen.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "/logo-ressoa.png",
+      "src": "/logo-chosen.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "maskable"
