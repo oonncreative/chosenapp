@@ -33,7 +33,7 @@ function Onboarding() {
           {step === 1 && (
             <div className="animate-in fade-in slide-in-from-bottom-4 duration-700 flex flex-col items-center gap-4">
               <h1 className="text-[11px] font-bold tracking-[0.4em] text-black uppercase">Chosen</h1>
-              <p className="text-lg text-black/60 font-light tracking-tight italic">Inspire-se nas palavras de Deus</p>
+              <p className="text-lg text-black/60 font-light tracking-tight italic">Inspirações - Escolhidas!</p>
             </div>
           )}
 

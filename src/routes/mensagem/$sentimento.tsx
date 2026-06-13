@@ -169,10 +169,10 @@ function MensagemPage() {
         {/* Rodapé com link mais visível */}
         <div style={{ paddingBottom: '100px', textAlign: 'center', display: 'flex', flexDirection: 'column', gap: '16px' }}>
           <p style={{ fontSize: '28px', fontWeight: '300', letterSpacing: '0.4em', color: '#9CA3AF', textTransform: 'uppercase', margin: 0 }}>
-            Ressoa
+            Chosen
           </p>
           <p style={{ fontSize: '24px', fontWeight: '500', color: '#6B7280', margin: 0, fontFamily: 'sans-serif' }}>
-            ressoa.oonn.com.br
+            chosen.oonn.com.br
           </p>
         </div>
       </div>
