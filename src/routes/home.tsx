@@ -161,7 +161,7 @@ function ListView({ navigate }: { navigate: NavFn }) {
             to="/mensagem/$sentimento"
             params={{ sentimento }}
             search={{ color: "#f1f26c", id: getRandomIdForCategoria(sentimento) }}
-            className="group relative flex items-center gap-4 min-h-[96px] px-5 py-4 transition-all active:scale-[0.98] rounded-[28px] bg-white border-2 border-black hover:-translate-y-0.5"
+            className="group relative flex items-center gap-4 min-h-[96px] px-5 py-4 transition-all active:scale-[0.98] rounded-[28px] bg-white hover:-translate-y-0.5"
           >
             <div className="shrink-0 w-16 h-16 flex items-center justify-center">
               <img src={MASCOTES[sentimento]} alt={sentimento} className="w-full h-full object-contain" loading="lazy" />
@@ -228,7 +228,7 @@ function SwipeView({ navigate }: { navigate: NavFn }) {
             >
               <button
                 onClick={() => offset === 0 && goTo(navigate, sentimento)}
-                className="w-full h-full rounded-[32px] bg-white border-2 border-black flex flex-col items-center justify-center gap-6 p-8 active:scale-[0.98] transition-transform"
+                className="w-full h-full rounded-[32px] bg-white flex flex-col items-center justify-center gap-6 p-8 active:scale-[0.98] transition-transform"
               >
                 <div className="w-40 h-40 flex items-center justify-center">
                   <img src={MASCOTES[sentimento]} alt={sentimento} className="w-full h-full object-contain" />
@@ -241,7 +241,7 @@ function SwipeView({ navigate }: { navigate: NavFn }) {
       </div>
 
       <div className="flex items-center gap-6 mt-6">
-        <button onClick={prev} className="p-3 rounded-full border-2 border-black active:scale-95 transition-transform" title="Anterior">
+        <button onClick={prev} className="p-3 rounded-full active:scale-95 transition-transform" title="Anterior">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="black" strokeWidth="2.5"><path d="M15 18l-6-6 6-6" strokeLinecap="round" strokeLinejoin="round"/></svg>
         </button>
         <div className="flex items-center gap-1.5">
@@ -249,7 +249,7 @@ function SwipeView({ navigate }: { navigate: NavFn }) {
             <span key={i} className={`h-1.5 rounded-full transition-all ${i === index ? "w-6 bg-black" : "w-1.5 bg-black/20"}`} />
           ))}
         </div>
-        <button onClick={next} className="p-3 rounded-full border-2 border-black active:scale-95 transition-transform" title="Próximo">
+        <button onClick={next} className="p-3 rounded-full active:scale-95 transition-transform" title="Próximo">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="black" strokeWidth="2.5"><path d="M9 18l6-6-6-6" strokeLinecap="round" strokeLinejoin="round"/></svg>
         </button>
       </div>
