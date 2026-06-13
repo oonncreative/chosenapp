@@ -249,7 +249,7 @@ function SwipeView({ navigate }: { navigate: NavFn }) {
             <span key={i} className={`h-1.5 rounded-full transition-all ${i === index ? "w-6 bg-black" : "w-1.5 bg-black/20"}`} />
           ))}
         </div>
-        <button onClick={next} className="p-3 rounded-full border-2 border-black active:scale-95 transition-transform" title="Próximo">
+        <button onClick={next} className="p-3 rounded-full active:scale-95 transition-transform" title="Próximo">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="black" strokeWidth="2.5"><path d="M9 18l6-6-6-6" strokeLinecap="round" strokeLinejoin="round"/></svg>
         </button>
       </div>
