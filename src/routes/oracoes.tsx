@@ -89,12 +89,6 @@ const ORACOES: Oracao[] = [
   }
 ];
 
-const colors = [
-  "bg-[#f1f26c] text-black",
-  "bg-black text-white",
-  "bg-white text-black border-2 border-black",
-];
-
 function OracoesPage() {
   const [expandida, setExpandida] = useState<number | null>(null);
 
@@ -145,14 +139,13 @@ function OracoesPage() {
       <section className="flex-1 min-h-0 overflow-y-auto no-scrollbar px-6 pb-12 pt-2">
         <div className="flex flex-col -space-y-6">
           {ORACOES.map((oracao, index) => {
-            const colorClass = colors[index % colors.length];
             const isExpanded = expandida === index;
             
             return (
               <div 
                 key={index}
                 onClick={() => setExpandida(isExpanded ? null : index)}
-                className={`group relative flex flex-col justify-start min-h-[120px] px-8 py-6 transition-all active:scale-[0.98] rounded-[32px] shadow-sm cursor-pointer ${colorClass} hover:z-20 ${isExpanded ? 'z-30 -translate-y-4 mb-10' : 'hover:-translate-y-1'}`}
+                className={`group relative flex flex-col justify-start min-h-[120px] px-8 py-6 transition-all active:scale-[0.98] rounded-[32px] shadow-sm cursor-pointer bg-white text-black hover:z-20 ${isExpanded ? 'z-30 -translate-y-4 mb-10' : 'hover:-translate-y-1'}`}
                 style={{ zIndex: isExpanded ? 50 : index }}
               >
                 <div className="flex flex-col gap-1">
