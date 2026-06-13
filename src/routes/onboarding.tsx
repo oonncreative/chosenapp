@@ -14,7 +14,8 @@ function Onboarding() {
     if (step < 3) {
       setStep(step + 1);
     } else {
-      navigate({ to: "/home" });
+      try { localStorage.setItem("onboarded", "true"); } catch {}
+      navigate({ to: "/home", replace: true });
     }
   };
 
