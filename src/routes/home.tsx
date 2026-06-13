@@ -161,7 +161,7 @@ function ListView({ navigate }: { navigate: NavFn }) {
             to="/mensagem/$sentimento"
             params={{ sentimento }}
             search={{ color: "#f1f26c", id: getRandomIdForCategoria(sentimento) }}
-            className="group relative flex items-center gap-4 min-h-[96px] px-5 py-4 transition-all active:scale-[0.98] rounded-[28px] bg-white border-2 border-black hover:-translate-y-0.5"
+            className="group relative flex items-center gap-4 min-h-[96px] px-5 py-4 transition-all active:scale-[0.98] rounded-[28px] bg-white hover:-translate-y-0.5"
           >
             <div className="shrink-0 w-16 h-16 flex items-center justify-center">
               <img src={MASCOTES[sentimento]} alt={sentimento} className="w-full h-full object-contain" loading="lazy" />
