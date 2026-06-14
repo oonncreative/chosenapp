@@ -191,7 +191,7 @@ function MensagemPage() {
           <ArrowLeft className="h-7 w-7 text-gray-400" />
         </Link>
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-          <img src="/logo-chosen.png" alt="Chosen" className="h-9 w-9 object-contain" />
+          <img src="/logo-chosen.png" alt="Chosen" className="h-12 w-12 object-contain" />
         </div>
         <div className="w-12 h-12" /> {/* Spacer */}
       </header>
