@@ -70,15 +70,8 @@ export function useHourlyNotifications() {
     const enabled = localStorage.getItem(ENABLED_KEY) !== "false";
     if (!enabled) return;
 
-    // Ao abrir: se há uma hora "perdida" dentro do quiet window, dispara uma vez.
-    const lastStr = localStorage.getItem(LAST_FIRED_KEY);
-    const now = currentHourBucket();
-    const last = lastStr ? parseInt(lastStr, 10) : 0;
-    if (last < now && isWithinQuietHours()) {
-      void fireChosen("missed");
-    }
-
     // Agenda para o próximo topo de hora, depois a cada 1h.
+    // Não dispara nada ao abrir o app — apenas no próximo ciclo de 60 min.
     const next = new Date();
     next.setMinutes(0, 5, 0); // 5s após o topo da hora
     next.setHours(next.getHours() + 1);
