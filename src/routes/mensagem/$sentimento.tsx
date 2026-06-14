@@ -94,7 +94,13 @@ function MensagemPage() {
   };
 
   return (
-    <div className="relative flex h-[100dvh] max-h-[100dvh] w-full max-w-[100vw] flex-col overflow-hidden bg-white px-4 sm:px-6 pb-6 pt-safe">
+    <div
+      className="relative flex h-[100dvh] max-h-[100dvh] w-full max-w-[100vw] flex-col overflow-hidden bg-white px-4 sm:px-6"
+      style={{
+        paddingTop: "max(env(safe-area-inset-top), 0.5rem)",
+        paddingBottom: "max(env(safe-area-inset-bottom), 1rem)",
+      }}
+    >
       {/* Elemento para geração da imagem de compartilhamento - otimizado */}
       <div 
         ref={shareRef}
@@ -177,20 +183,20 @@ function MensagemPage() {
         </div>
       </div>
 
-      <header className="flex h-16 shrink-0 items-center justify-between relative">
+      <header className="sticky top-0 z-20 bg-white flex h-14 shrink-0 items-center justify-between relative">
         <Link 
           to="/home" 
           className="flex h-14 w-14 items-center justify-center rounded-full transition-colors hover:bg-gray-100 z-10"
         >
-          <ArrowLeft className="h-8 w-8 text-gray-400" />
+          <ArrowLeft className="h-7 w-7 text-gray-400" />
         </Link>
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-          <img src="/logo-chosen.png" alt="Chosen" className="h-10 w-10 object-contain" />
+          <img src="/logo-chosen.png" alt="Chosen" className="h-9 w-9 object-contain" />
         </div>
-        <div className="w-14 h-14" /> {/* Spacer */}
+        <div className="w-12 h-12" /> {/* Spacer */}
       </header>
 
-      <main className="flex flex-1 min-h-0 flex-col items-center justify-center overflow-y-auto px-1 py-4 text-center w-full">
+      <main className="flex flex-1 min-h-0 flex-col items-center justify-center overflow-y-auto px-1 py-2 text-center w-full">
         <div key={mensagem.id} className="w-full max-w-md animate-in fade-in duration-700 flex flex-col items-center">
           <p className="text-xl font-light leading-snug text-black sm:text-3xl md:text-4xl tracking-tight break-words">
             "{mensagem.texto}"
