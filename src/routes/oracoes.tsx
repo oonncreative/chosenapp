@@ -1,3 +1,4 @@
+import { AppFooter } from "@/components/AppFooter";
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 
