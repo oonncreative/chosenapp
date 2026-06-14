@@ -1,3 +1,4 @@
+import { AppFooter } from "@/components/AppFooter";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { Shuffle, List, GalleryHorizontal } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
