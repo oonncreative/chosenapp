@@ -1,6 +1,7 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
+import { requestNotificationsPermission } from "@/hooks/useHourlyNotifications";
 
 export const Route = createFileRoute("/onboarding")({
   component: Onboarding,
@@ -57,16 +58,7 @@ function Onboarding() {
                 variant="outline" 
                 className="mt-6 h-[60px] w-full rounded-[24px] border-2 border-black bg-white text-lg font-black tracking-tighter text-black hover:bg-gray-50 uppercase italic transition-all active:scale-95 shadow-none"
                 onClick={async () => {
-                  if ("Notification" in window) {
-                    const permission = await Notification.requestPermission();
-                    if (permission === "granted" && "serviceWorker" in navigator) {
-                      const registration = await navigator.serviceWorker.ready;
-                      registration.showNotification('Chosen', {
-                        body: 'Notificações ativadas! Enviaremos mensagens de fé para você.',
-                        icon: '/logo-chosen.png'
-                      });
-                    }
-                  }
+                  await requestNotificationsPermission();
                 }}
               >
                 Permitir notificações
