@@ -168,6 +168,10 @@
     scrollbar-width: none;
   }
 
+  /* Hide scrollbars globally so headers/footers don't visually shift */
+  *::-webkit-scrollbar { width: 0; height: 0; background: transparent; }
+  * { scrollbar-width: none; -ms-overflow-style: none; }
+
   .pt-safe { padding-top: max(env(safe-area-inset-top), 1rem); }
   .pb-safe { padding-bottom: max(env(safe-area-inset-bottom), 1rem); }
 }

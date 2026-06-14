@@ -30,7 +30,7 @@ function Onboarding() {
     <div className="flex h-screen flex-col items-center justify-center bg-white px-8 text-center transition-colors duration-700 overflow-hidden">
       <div className="w-full max-w-sm flex flex-col items-center justify-between h-full py-20">
         <div className="flex-1 flex flex-col items-center justify-center gap-8">
-          <img src="/logo-chosen.png" alt="Chosen" className="h-16 w-16 mb-4 object-contain" />
+          <img src="/logo-chosen.png" alt="Chosen" className="h-32 w-32 mb-4 object-contain" />
           
           {step === 1 && (
             <div className="animate-in fade-in slide-in-from-bottom-4 duration-700 flex flex-col items-center gap-4">
