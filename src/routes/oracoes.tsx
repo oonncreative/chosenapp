@@ -1,3 +1,4 @@
+import { AppFooter } from "@/components/AppFooter";
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 
@@ -173,16 +174,7 @@ function OracoesPage() {
         </div>
       </section>
 
-      <footer className="py-4 text-center bg-white border-t border-gray-50 shrink-0">
-        <a
-          href="https://oonn.com.br"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="text-[9px] font-light tracking-[0.2em] text-gray-400 uppercase"
-        >
-          OONN Creative — oonn.com.br — v1.0
-        </a>
-      </footer>
+      <AppFooter />
     </div>
   );
 }
