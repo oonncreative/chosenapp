@@ -11,6 +11,8 @@ import { useEffect, useState, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
+import { Toaster } from "@/components/ui/sonner";
+import { useHourlyNotifications } from "@/hooks/useHourlyNotifications";
 
 function NotFoundComponent() {
   return (
@@ -143,6 +145,8 @@ function RootComponent() {
     return false;
   });
 
+  useHourlyNotifications();
+
   useEffect(() => {
     localStorage.setItem('isMono', isMono.toString());
     if (isMono) {
@@ -161,28 +165,12 @@ function RootComponent() {
         });
       });
     }
-
-    // Lógica para notificações agendadas
-    const setupNotifications = async () => {
-      if (!("Notification" in window)) return;
-      
-      if (Notification.permission === "granted") {
-        const lastNotif = localStorage.getItem('last_notification_time');
-        const now = Date.now();
-        const sixtyMinutes = 60 * 60 * 1000;
-
-        if (!lastNotif || (now - parseInt(lastNotif)) > sixtyMinutes) {
-          localStorage.setItem('last_notification_time', now.toString());
-        }
-      }
-    };
-
-    setupNotifications();
   }, []);
 
   return (
     <QueryClientProvider client={queryClient}>
       <Outlet />
+      <Toaster position="top-center" />
     </QueryClientProvider>
   );
 }

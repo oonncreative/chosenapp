@@ -2,6 +2,7 @@ import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { Shuffle, List, GalleryHorizontal } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { CATEGORIAS, getRandomIdForCategoria, getRandomMensagemGlobal } from "@/lib/data";
+import { ChosenNow } from "@/components/ChosenNow";
 import mascote1 from "@/assets/mascotes/mascote-1.png.asset.json";
 import mascote2 from "@/assets/mascotes/mascote-2.png.asset.json";
 import mascote3 from "@/assets/mascotes/mascote-3.png.asset.json";
@@ -123,6 +124,8 @@ function HomePage() {
           ))}
         </div>
       </header>
+
+      <ChosenNow />
 
       {viewMode === "list" && <ListView navigate={navigate} />}
       {viewMode === "swipe" && <SwipeView navigate={navigate} />}
