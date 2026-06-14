@@ -93,12 +93,12 @@ function OracoesPage() {
   const [expandida, setExpandida] = useState<number | null>(null);
 
   return (
-    <div className="h-screen overflow-hidden bg-white flex flex-col">
-      <header className="p-6 pt-12 flex flex-col gap-4 shrink-0 bg-white z-10">
-        <div className="flex items-center justify-between">
-          <h1 className="text-base font-light tracking-[0.4em] text-black uppercase">ORAÇÕES</h1>
+    <div className="h-[100dvh] overflow-hidden bg-white flex flex-col w-full max-w-[100vw]">
+      <header className="px-4 sm:px-6 pt-[max(env(safe-area-inset-top),2rem)] pb-2 flex flex-col gap-3 shrink-0 bg-white z-10">
+        <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-2">
+          <h1 className="truncate text-sm sm:text-base font-light tracking-[0.4em] text-black uppercase">ORAÇÕES</h1>
           
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-0 shrink-0">
             <button 
               onClick={() => {
                 const current = document.documentElement.classList.contains('grayscale');
@@ -110,10 +110,10 @@ function OracoesPage() {
                   document.documentElement.classList.remove('grayscale');
                 }
               }}
-              className="flex items-center p-3 transition-opacity active:opacity-50"
+              className="flex items-center justify-center min-w-11 min-h-11 p-2 transition-opacity active:opacity-50"
               title="Modo Minimalista"
             >
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="black" strokeWidth="2" className="text-black">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="black" strokeWidth="2" className="text-black">
                 <circle cx="12" cy="12" r="10" />
                 <path d="M12 2a10 10 0 0 1 0 20" fill="currentColor" />
               </svg>
@@ -122,21 +122,21 @@ function OracoesPage() {
               onClick={() => {
                 window.history.back();
               }}
-              className="flex items-center p-3 -mr-3 transition-opacity active:opacity-50"
+              className="flex items-center justify-center min-w-11 min-h-11 p-2 -mr-2 transition-opacity active:opacity-50"
               title="Voltar"
             >
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="black" strokeWidth="2.5">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="black" strokeWidth="2.5">
                 <path d="M18 6L6 18M6 6l12 12" strokeLinecap="round" strokeLinejoin="round"/>
               </svg>
             </button>
           </div>
         </div>
-        <div className="mt-2">
-          <h1 className="text-base font-light tracking-[0.4em] text-black uppercase">Momentos com Deus</h1>
+        <div className="mt-1">
+          <h1 className="text-sm sm:text-base font-light tracking-[0.3em] sm:tracking-[0.4em] text-black uppercase">Momentos com Deus</h1>
         </div>
       </header>
 
-      <section className="flex-1 min-h-0 overflow-y-auto no-scrollbar px-6 pb-12 pt-2">
+      <section className="flex-1 min-h-0 overflow-y-auto no-scrollbar px-4 sm:px-6 pb-12 pt-2">
         <div className="flex flex-col -space-y-6">
           {ORACOES.map((oracao, index) => {
             const isExpanded = expandida === index;
@@ -145,23 +145,23 @@ function OracoesPage() {
               <div 
                 key={index}
                 onClick={() => setExpandida(isExpanded ? null : index)}
-                className={`group relative flex flex-col justify-start min-h-[120px] px-8 py-6 transition-all active:scale-[0.98] rounded-[32px] shadow-sm cursor-pointer bg-white text-black hover:z-20 ${isExpanded ? 'z-30 -translate-y-4 mb-10' : 'hover:-translate-y-1'}`}
+                className={`group relative flex flex-col justify-start min-h-[120px] px-6 sm:px-8 py-6 transition-all active:scale-[0.98] rounded-[32px] shadow-sm cursor-pointer bg-white text-black hover:z-20 w-full ${isExpanded ? 'z-30 -translate-y-4 mb-10' : 'hover:-translate-y-1'}`}
                 style={{ zIndex: isExpanded ? 50 : index }}
               >
-                <div className="flex flex-col gap-1">
-                  <span className="text-xl font-medium tracking-tight uppercase">
+                <div className="flex flex-col gap-1 pr-8">
+                  <span className="text-lg sm:text-xl font-medium tracking-tight uppercase break-words">
                     {oracao.titulo}
                   </span>
                 </div>
                 
                 {isExpanded ? (
                   <div className="mt-6 animate-in fade-in slide-in-from-top-2 duration-300">
-                    <p className="text-lg leading-relaxed font-medium border-t border-current/20 pt-4">
+                    <p className="text-base sm:text-lg leading-relaxed font-medium border-t border-current/20 pt-4 break-words">
                       {oracao.texto}
                     </p>
                   </div>
                 ) : (
-                  <div className="absolute right-8 top-12 -translate-y-1/2 opacity-30 group-hover:opacity-100 transition-opacity">
+                  <div className="absolute right-6 sm:right-8 top-12 -translate-y-1/2 opacity-30 group-hover:opacity-100 transition-opacity">
                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
                        <path d="M19 9l-7 7-7-7" strokeLinecap="round" strokeLinejoin="round"/>
                      </svg>
