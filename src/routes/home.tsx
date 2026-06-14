@@ -125,8 +125,6 @@ function HomePage() {
         </div>
       </header>
 
-      <ChosenNow />
-
       {viewMode === "list" && <ListView navigate={navigate} />}
       {viewMode === "swipe" && <SwipeView navigate={navigate} />}
 
