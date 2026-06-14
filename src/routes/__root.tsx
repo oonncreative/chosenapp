@@ -170,7 +170,7 @@ function RootComponent() {
   return (
     <QueryClientProvider client={queryClient}>
       <Outlet />
-      <Toaster position="top-center" />
+      <Toaster position="top-center" offset="max(env(safe-area-inset-top), 80px)" />
     </QueryClientProvider>
   );
 }

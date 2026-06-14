@@ -94,7 +94,7 @@ function OracoesPage() {
 
   return (
     <div className="h-[100dvh] overflow-hidden bg-white flex flex-col w-full max-w-[100vw]">
-      <header className="px-4 sm:px-6 pt-[max(env(safe-area-inset-top),2rem)] pb-2 flex flex-col gap-3 shrink-0 bg-white z-10">
+      <header className="sticky top-0 px-4 sm:px-6 pt-[max(env(safe-area-inset-top),2rem)] pb-2 flex flex-col gap-3 shrink-0 bg-white z-20">
         <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-2">
           <h1 className="truncate text-sm sm:text-base font-light tracking-[0.4em] text-black uppercase">ORAÇÕES</h1>
           
