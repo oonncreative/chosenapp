@@ -40,21 +40,21 @@ function HomePage() {
   }, [viewMode]);
 
   return (
-    <div className="h-screen overflow-hidden bg-white flex flex-col">
-      <header className="p-6 pt-12 flex flex-col gap-4 shrink-0 bg-white z-10">
-        <div className="flex items-center justify-between">
-          <h1 className="text-base font-light tracking-[0.4em] text-black uppercase">CHOSEN</h1>
+    <div className="h-[100dvh] overflow-hidden bg-white flex flex-col w-full max-w-[100vw]">
+      <header className="px-4 sm:px-6 pt-[max(env(safe-area-inset-top),2rem)] pb-2 flex flex-col gap-3 shrink-0 bg-white z-10">
+        <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-2">
+          <h1 className="truncate text-sm sm:text-base font-light tracking-[0.4em] text-black uppercase">CHOSEN</h1>
           
-          <div className="flex items-center gap-1">
+          <div className="flex items-center gap-0 shrink-0">
             <button
               onClick={() => {
                 const { categoria, id } = getRandomMensagemGlobal();
                 navigate({ to: "/mensagem/$sentimento", params: { sentimento: categoria }, search: { color: "#f1f26c", id } });
               }}
-              className="flex items-center p-3 transition-opacity active:opacity-50"
+              className="flex items-center justify-center min-w-11 min-h-11 p-2 transition-opacity active:opacity-50"
               title="Aleatório"
             >
-              <Shuffle className="h-[22px] w-[22px] text-black" strokeWidth={2} />
+              <Shuffle className="h-5 w-5 text-black" strokeWidth={2} />
             </button>
             <button 
               onClick={() => {
@@ -67,10 +67,10 @@ function HomePage() {
                   document.documentElement.classList.remove('grayscale');
                 }
               }}
-              className="flex items-center p-3 transition-opacity active:opacity-50"
+              className="flex items-center justify-center min-w-11 min-h-11 p-2 transition-opacity active:opacity-50"
               title="Modo Minimalista"
             >
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="black" strokeWidth="2" className="text-black">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="black" strokeWidth="2" className="text-black">
                 <circle cx="12" cy="12" r="10" />
                 <path d="M12 2a10 10 0 0 1 0 20" fill="currentColor" />
               </svg>
@@ -79,10 +79,10 @@ function HomePage() {
               onClick={() => {
                 navigate({ to: "/oracoes" });
               }}
-              className="flex items-center p-3 transition-opacity active:opacity-50"
+              className="flex items-center justify-center min-w-11 min-h-11 p-2 transition-opacity active:opacity-50"
               title="Orações Diárias"
             >
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="black" strokeWidth="2" className="text-black">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="black" strokeWidth="2" className="text-black">
                 <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" strokeLinecap="round" strokeLinejoin="round"/>
               </svg>
             </button>
@@ -90,10 +90,10 @@ function HomePage() {
               onClick={() => {
                 navigate({ to: "/onboarding" });
               }}
-              className="flex items-center p-3 -mr-3 transition-opacity active:opacity-50"
+              className="flex items-center justify-center min-w-11 min-h-11 p-2 -mr-2 transition-opacity active:opacity-50"
               title="Voltar ao início"
             >
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="black" strokeWidth="2.5" className="text-black">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="black" strokeWidth="2.5" className="text-black">
                 <path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8" strokeLinecap="round" strokeLinejoin="round"/>
                 <path d="M21 3v5h-5" strokeLinecap="round" strokeLinejoin="round"/>
               </svg>
@@ -101,8 +101,8 @@ function HomePage() {
           </div>
         </div>
 
-        <div className="mt-2">
-          <h1 className="text-base font-light tracking-[0.4em] text-black uppercase">Qual seu sentimento?</h1>
+        <div className="mt-1">
+          <h1 className="text-sm sm:text-base font-light tracking-[0.3em] sm:tracking-[0.4em] text-black uppercase">Qual seu sentimento?</h1>
         </div>
 
         <div className="flex items-center gap-0 self-end -mr-1">
@@ -153,20 +153,20 @@ function goTo(navigate: NavFn, sentimento: string) {
 
 function ListView({ navigate }: { navigate: NavFn }) {
   return (
-    <section className="flex-1 min-h-0 overflow-y-auto no-scrollbar px-6 pb-6 pt-2">
-      <div className="flex flex-col gap-3">
+    <section className="flex-1 min-h-0 overflow-y-auto no-scrollbar px-4 sm:px-6 pb-6 pt-2">
+      <div className="flex flex-col gap-3 w-full">
         {CATEGORIAS.map((sentimento) => (
           <Link
             key={sentimento}
             to="/mensagem/$sentimento"
             params={{ sentimento }}
             search={{ color: "#f1f26c", id: getRandomIdForCategoria(sentimento) }}
-            className="group relative flex items-center gap-4 min-h-[96px] px-5 py-4 transition-all active:scale-[0.98] rounded-[28px] bg-white hover:-translate-y-0.5"
+            className="group relative flex items-center gap-3 sm:gap-4 min-h-[88px] px-4 sm:px-5 py-4 transition-all active:scale-[0.98] rounded-[28px] bg-white hover:-translate-y-0.5 w-full"
           >
-            <div className="shrink-0 w-16 h-16 flex items-center justify-center">
+            <div className="shrink-0 w-14 h-14 sm:w-16 sm:h-16 flex items-center justify-center">
               <img src={MASCOTES[sentimento]} alt={sentimento} className="w-full h-full object-contain" loading="lazy" />
             </div>
-            <span className="flex-1 text-lg font-medium tracking-tight uppercase text-black">{sentimento}</span>
+            <span className="flex-1 min-w-0 text-base sm:text-lg font-medium tracking-tight uppercase text-black truncate">{sentimento}</span>
             <div className="shrink-0 opacity-40 group-hover:opacity-100 transition-opacity text-black">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
                 <path d="M9 18l6-6-6-6" strokeLinecap="round" strokeLinejoin="round" />
@@ -203,9 +203,9 @@ function SwipeView({ navigate }: { navigate: NavFn }) {
   };
 
   return (
-    <section className="flex-1 min-h-0 flex flex-col items-center justify-center px-6 pb-6 pt-2 select-none">
+    <section className="flex-1 min-h-0 flex flex-col items-center justify-center px-4 sm:px-6 pb-6 pt-2 select-none w-full">
       <div
-        className="relative w-full max-w-sm h-[440px]"
+        className="relative w-full max-w-sm h-[clamp(320px,60vh,440px)]"
         onTouchStart={(e) => onStart(e.touches[0].clientX)}
         onTouchMove={(e) => onMove(e.touches[0].clientX)}
         onTouchEnd={onEnd}
@@ -228,12 +228,12 @@ function SwipeView({ navigate }: { navigate: NavFn }) {
             >
               <button
                 onClick={() => offset === 0 && goTo(navigate, sentimento)}
-                className="w-full h-full rounded-[32px] bg-white flex flex-col items-center justify-center gap-6 p-8 active:scale-[0.98] transition-transform"
+                className="w-full h-full rounded-[32px] bg-white flex flex-col items-center justify-center gap-4 sm:gap-6 p-6 sm:p-8 active:scale-[0.98] transition-transform"
               >
-                <div className="w-40 h-40 flex items-center justify-center">
+                <div className="w-[40vw] max-w-40 aspect-square flex items-center justify-center">
                   <img src={MASCOTES[sentimento]} alt={sentimento} className="w-full h-full object-contain" />
                 </div>
-                <span className="text-2xl font-medium tracking-tight uppercase text-black text-center">{sentimento}</span>
+                <span className="text-xl sm:text-2xl font-medium tracking-tight uppercase text-black text-center break-words">{sentimento}</span>
               </button>
             </div>
           );

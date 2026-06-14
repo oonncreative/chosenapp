@@ -94,7 +94,7 @@ function MensagemPage() {
   };
 
   return (
-    <div className="relative flex h-[100dvh] max-h-[100dvh] w-full max-w-[100vw] flex-col overflow-hidden bg-white px-6 pb-6 pt-safe">
+    <div className="relative flex h-[100dvh] max-h-[100dvh] w-full max-w-[100vw] flex-col overflow-hidden bg-white px-4 sm:px-6 pb-6 pt-safe">
       {/* Elemento para geração da imagem de compartilhamento - otimizado */}
       <div 
         ref={shareRef}
@@ -190,9 +190,9 @@ function MensagemPage() {
         <div className="w-14 h-14" /> {/* Spacer */}
       </header>
 
-      <main className="flex flex-1 min-h-0 flex-col items-center justify-center overflow-y-auto px-2 py-4 text-center">
+      <main className="flex flex-1 min-h-0 flex-col items-center justify-center overflow-y-auto px-1 py-4 text-center w-full">
         <div key={mensagem.id} className="w-full max-w-md animate-in fade-in duration-700 flex flex-col items-center">
-          <p className="text-2xl font-light leading-snug text-black sm:text-3xl md:text-4xl tracking-tight">
+          <p className="text-xl font-light leading-snug text-black sm:text-3xl md:text-4xl tracking-tight break-words">
             "{mensagem.texto}"
           </p>
           <p className="mt-6 text-[12px] font-bold tracking-[0.2em] uppercase text-black">
@@ -200,8 +200,8 @@ function MensagemPage() {
           </p>
           
           {mensagem.resumo && (
-            <div className="mt-8 flex flex-col items-center">
-              <p className={`text-sm font-light text-gray-500 max-w-[320px] leading-relaxed transition-all duration-300 ${isExpanded ? "" : "line-clamp-4"}`}>
+            <div className="mt-8 flex flex-col items-center w-full">
+              <p className={`text-sm font-light text-gray-500 w-full max-w-[320px] leading-relaxed transition-all duration-300 break-words ${isExpanded ? "" : "line-clamp-4"}`}>
                 {mensagem.resumo}
               </p>
               <button 
