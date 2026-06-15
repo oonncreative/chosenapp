@@ -1,7 +1,7 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { requestNotificationsPermission } from "@/hooks/useHourlyNotifications";
+import { requestNativeNotificationsPermission } from "@/hooks/useNativeNotifications";
 
 export const Route = createFileRoute("/onboarding")({
   component: Onboarding,
@@ -58,7 +58,7 @@ function Onboarding() {
                 variant="outline" 
                 className="mt-6 h-[60px] w-full rounded-[24px] border-2 border-black bg-white text-lg font-black tracking-tighter text-black hover:bg-gray-50 uppercase italic transition-all active:scale-95 shadow-none"
                 onClick={async () => {
-                  await requestNotificationsPermission();
+                  await requestNativeNotificationsPermission();
                 }}
               >
                 Permitir notificações

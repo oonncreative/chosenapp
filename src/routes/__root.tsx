@@ -12,7 +12,7 @@ import { useEffect, useState, type ReactNode } from "react";
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { Toaster } from "@/components/ui/sonner";
-import { useHourlyNotifications } from "@/hooks/useHourlyNotifications";
+import { useNativeNotifications } from "@/hooks/useNativeNotifications";
 
 function NotFoundComponent() {
   return (
@@ -145,7 +145,7 @@ function RootComponent() {
     return false;
   });
 
-  useHourlyNotifications();
+  useNativeNotifications();
 
   useEffect(() => {
     localStorage.setItem('isMono', isMono.toString());
