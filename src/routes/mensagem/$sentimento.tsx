@@ -184,17 +184,17 @@ function MensagemPage() {
       </div>
 
       {/* Header fixo */}
-      <header className="shrink-0 z-20 bg-white flex h-14 items-center justify-between px-4">
+      <header className="shrink-0 z-20 bg-white grid grid-cols-3 h-14 items-center px-4">
         <Link 
           to="/home" 
-          className="flex h-10 w-10 items-center justify-center rounded-full transition-colors hover:bg-gray-100"
+          className="flex h-10 w-10 items-center justify-center rounded-full transition-colors hover:bg-gray-100 justify-self-start"
         >
           <ArrowLeft className="h-6 w-6 text-gray-400" />
         </Link>
-        <span className="absolute inset-0 flex items-center justify-center pointer-events-none text-sm font-bold tracking-[0.3em] uppercase text-black">
+        <span className="text-sm font-bold tracking-[0.3em] uppercase text-black text-center">
           CHOSEN
         </span>
-        <img src="/logo-chosen.png" alt="Chosen" className="h-9 w-9 object-contain" />
+        <img src="/logo-chosen.png" alt="Chosen" className="h-9 w-9 object-contain justify-self-end" />
       </header>
 
       <main className="flex flex-1 min-h-0 flex-col items-center justify-center overflow-y-auto px-4 sm:px-6 py-2 text-center w-full">
