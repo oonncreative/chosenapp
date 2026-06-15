@@ -95,10 +95,10 @@ function MensagemPage() {
 
   return (
     <div
-      className="relative flex h-[100dvh] max-h-[100dvh] w-full max-w-[100vw] flex-col overflow-hidden bg-white px-4 sm:px-6"
+      className="relative flex h-[100dvh] max-h-[100dvh] w-full max-w-[100vw] flex-col overflow-hidden bg-white"
       style={{
-        paddingTop: "max(env(safe-area-inset-top), 0.5rem)",
-        paddingBottom: "max(env(safe-area-inset-bottom), 1rem)",
+        paddingTop: "max(env(safe-area-inset-top), 0px)",
+        paddingBottom: "max(env(safe-area-inset-bottom), 0px)",
       }}
     >
       {/* Elemento para geração da imagem de compartilhamento - otimizado */}
@@ -183,20 +183,21 @@ function MensagemPage() {
         </div>
       </div>
 
-      <header className="sticky top-0 z-20 bg-white flex h-14 shrink-0 items-center justify-between relative">
+      {/* Header fixo */}
+      <header className="shrink-0 z-20 bg-white grid grid-cols-3 h-14 items-center px-4">
         <Link 
           to="/home" 
-          className="flex h-14 w-14 items-center justify-center rounded-full transition-colors hover:bg-gray-100 z-10"
+          className="flex h-10 w-10 items-center justify-center rounded-full transition-colors hover:bg-gray-100 justify-self-start"
         >
-          <ArrowLeft className="h-7 w-7 text-gray-400" />
+          <ArrowLeft className="h-6 w-6 text-gray-400" />
         </Link>
-        <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-          <img src="/logo-chosen.png" alt="Chosen" className="h-12 w-12 object-contain" />
-        </div>
-        <div className="w-12 h-12" /> {/* Spacer */}
+        <span className="text-sm font-bold tracking-[0.3em] uppercase text-black text-center">
+          CHOSEN
+        </span>
+        <img src="/logo-chosen.png" alt="Chosen" className="h-9 w-9 object-contain justify-self-end" />
       </header>
 
-      <main className="flex flex-1 min-h-0 flex-col items-center justify-center overflow-y-auto px-1 py-2 text-center w-full">
+      <main className="flex flex-1 min-h-0 flex-col items-center justify-center overflow-y-auto px-4 sm:px-6 py-2 text-center w-full">
         <div key={mensagem.id} className="w-full max-w-md animate-in fade-in duration-700 flex flex-col items-center">
           <p className="text-xl font-light leading-snug text-black sm:text-3xl md:text-4xl tracking-tight break-words">
             "{mensagem.texto}"
@@ -221,20 +222,14 @@ function MensagemPage() {
         </div>
       </main>
 
-      <footer className="flex flex-row items-center justify-center gap-3 pb-2 pt-2 shrink-0 w-full">
-        <Button
-          onClick={handleRefresh}
-          className="h-12 w-12 rounded-full bg-transparent border-2 border-black text-black hover:bg-black/5 shadow-none transition-all active:scale-95 flex items-center justify-center"
-          aria-label="Novo sentimento"
-        >
-          <ArrowLeft className="h-5 w-5 rotate-[-90deg]" />
-        </Button>
+      {/* Footer fixo */}
+      <footer className="shrink-0 z-20 w-full px-4 pb-2 pt-2 bg-white flex items-center justify-center">
         <Button
           onClick={handleShare}
           disabled={isSharing}
-          className="h-12 w-12 rounded-full border-none bg-[#f1f26c] text-black hover:opacity-90 shadow-none flex items-center justify-center transition-all active:scale-95 disabled:opacity-50"
-          aria-label={isSharing ? "Gerando..." : "Compartilhar"}
+          className="h-12 rounded-full border-none bg-[#f1f26c] text-black hover:opacity-90 shadow-none flex items-center gap-2 px-6 transition-all active:scale-95 disabled:opacity-50"
         >
+          <span className="text-sm font-semibold tracking-wide">Compartilhar</span>
           <Share2 className="h-5 w-5 shrink-0" />
         </Button>
       </footer>
