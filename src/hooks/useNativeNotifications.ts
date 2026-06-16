@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { toast } from 'sonner';
-import { getChosenForHour, isWithinQuietHours, NOTIFICATION_TITLES, pickNotificationBody } from '@/lib/psalms';
+import { isWithinQuietHours, NOTIFICATION_TITLES, pickNotificationBody } from '@/lib/psalms';
 
 const ENABLED_KEY = 'chosen_notifications_enabled';
 const NATIVE_SCHEDULED_KEY = 'chosen_native_scheduled_date';
