@@ -90,10 +90,29 @@ function HomePage() {
             </button>
             <button 
               onClick={() => {
-                navigate({ to: "/onboarding" });
+                void (async () => {
+                  try {
+                    // Limpa caches do WebView (Service Worker / HTTP caches gerenciados)
+                    if (typeof caches !== "undefined") {
+                      const keys = await caches.keys();
+                      await Promise.all(keys.map((k) => caches.delete(k)));
+                    }
+                    // Remove qualquer Service Worker antigo que possa estar segurando versão velha
+                    if ("serviceWorker" in navigator) {
+                      const regs = await navigator.serviceWorker.getRegistrations();
+                      await Promise.all(regs.map((r) => r.unregister()));
+                    }
+                  } catch {
+                    // segue mesmo se a limpeza falhar
+                  }
+                  // Força buscar a versão mais nova do servidor e volta para a tela inicial
+                  const bust = `?v=${Date.now()}`;
+                  window.location.replace(`/${bust}`);
+                })();
               }}
               className="flex items-center justify-center min-w-11 min-h-11 p-2 -mr-2 transition-opacity active:opacity-50"
-              title="Voltar ao início"
+              title="Buscar atualização"
+              aria-label="Buscar atualização"
             >
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="black" strokeWidth="2.5" className="text-black">
                 <path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8" strokeLinecap="round" strokeLinejoin="round"/>
