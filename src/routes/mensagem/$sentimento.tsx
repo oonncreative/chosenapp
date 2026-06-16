@@ -2,7 +2,7 @@ import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
 import { getMensagemById, type Categoria, type Mensagem } from "@/lib/data";
 import { Button } from "@/components/ui/button";
 import { useState, useRef, useEffect } from "react";
-import { Share2, ArrowLeft } from "lucide-react";
+import { Share2, ArrowLeft, Download } from "lucide-react";
 import * as htmlToImage from 'html-to-image';
 
 export const Route = createFileRoute("/mensagem/$sentimento")({
@@ -28,6 +28,7 @@ function MensagemPage() {
   const shareRef = useRef<HTMLDivElement>(null);
   const [isExpanded, setIsExpanded] = useState(false);
   const [isSharing, setIsSharing] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
 
   const handleRefresh = () => {
     navigate({ to: "/home" });
@@ -90,6 +91,43 @@ function MensagemPage() {
       alert("Não foi possível gerar a imagem para compartilhamento. Tente novamente.");
     } finally {
       setIsSharing(false);
+    }
+  };
+
+  const handleSave = async () => {
+    if (!shareRef.current || isSaving) return;
+    setIsSaving(true);
+
+    try {
+      const element = shareRef.current;
+      const dataUrl = await htmlToImage.toPng(element, {
+        width: 1080,
+        height: 1920,
+        pixelRatio: 1,
+        skipFonts: false,
+        fontEmbedCSS: '',
+        style: {
+          visibility: 'visible',
+          position: 'static',
+          left: '0',
+          top: '0',
+          transform: 'none',
+        }
+      });
+
+      if (!dataUrl || dataUrl === "data:,") {
+        throw new Error("Imagem gerada está vazia");
+      }
+
+      const link = document.createElement("a");
+      link.download = "chosen-mensagem.png";
+      link.href = dataUrl;
+      link.click();
+    } catch (err) {
+      console.error("Erro ao salvar imagem:", err);
+      alert("Não foi possível salvar a imagem. Tente novamente.");
+    } finally {
+      setIsSaving(false);
     }
   };
 
@@ -222,7 +260,15 @@ function MensagemPage() {
       </main>
 
       {/* Footer fixo */}
-      <footer className="shrink-0 z-20 w-full px-4 pt-2 pb-[calc(env(safe-area-inset-bottom)+16px)] bg-white flex items-center justify-center">
+      <footer className="shrink-0 z-20 w-full px-4 pt-2 pb-[calc(env(safe-area-inset-bottom)+16px)] bg-white flex items-center justify-center gap-3">
+        <Button
+          onClick={handleSave}
+          disabled={isSaving}
+          className="h-12 rounded-full border-none bg-[#f1f26c] text-black hover:opacity-90 shadow-none flex items-center gap-2 px-6 transition-all active:scale-95 disabled:opacity-50"
+        >
+          <span className="text-sm font-semibold tracking-wide">Salvar</span>
+          <Download className="h-5 w-5 shrink-0" />
+        </Button>
         <Button
           onClick={handleShare}
           disabled={isSharing}
