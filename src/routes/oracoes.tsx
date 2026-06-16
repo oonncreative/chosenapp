@@ -1,5 +1,5 @@
 import { AppFooter } from "@/components/AppFooter";
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 
 export const Route = createFileRoute("/oracoes")({
@@ -92,6 +92,7 @@ const ORACOES: Oracao[] = [
 
 function OracoesPage() {
   const [expandida, setExpandida] = useState<number | null>(null);
+  const navigate = useNavigate();
 
   return (
     <div className="h-[100dvh] overflow-hidden bg-white flex flex-col w-full max-w-[100vw]">
@@ -121,7 +122,8 @@ function OracoesPage() {
             </button>
             <button 
               onClick={() => {
-                window.history.back();
+                setExpandida(null);
+                navigate({ to: "/home" });
               }}
               className="flex items-center justify-center min-w-11 min-h-11 p-2 -mr-2 transition-opacity active:opacity-50"
               title="Voltar"
@@ -138,40 +140,48 @@ function OracoesPage() {
       </header>
 
       <section className="flex-1 min-h-0 overflow-y-auto no-scrollbar px-4 sm:px-6 pb-12 pt-2">
-        <div className="flex flex-col -space-y-6">
+        <ul className="flex flex-col w-full divide-y divide-black/10">
           {ORACOES.map((oracao, index) => {
             const isExpanded = expandida === index;
-            
             return (
-              <div 
-                key={index}
-                onClick={() => setExpandida(isExpanded ? null : index)}
-                className={`group relative flex flex-col justify-start min-h-[120px] px-6 sm:px-8 py-6 transition-all active:scale-[0.98] rounded-[32px] shadow-sm cursor-pointer bg-white text-black hover:z-20 w-full ${isExpanded ? 'z-30 -translate-y-4 mb-10' : 'hover:-translate-y-1'}`}
-                style={{ zIndex: isExpanded ? 50 : index }}
-              >
-                <div className="flex flex-col gap-1 pr-8">
-                  <span className="text-lg sm:text-xl font-medium tracking-tight uppercase break-words">
+              <li key={index}>
+                <button
+                  type="button"
+                  onClick={() => setExpandida(isExpanded ? null : index)}
+                  aria-expanded={isExpanded}
+                  className="w-full flex items-center gap-3 py-5 text-left active:opacity-60 transition-opacity"
+                >
+                  <span className="flex-1 min-w-0 text-base sm:text-lg font-medium tracking-tight uppercase text-black truncate">
                     {oracao.titulo}
                   </span>
-                </div>
-                
-                {isExpanded ? (
-                  <div className="mt-6 animate-in fade-in slide-in-from-top-2 duration-300">
-                    <p className="text-base sm:text-lg leading-relaxed font-medium border-t border-current/20 pt-4 break-words">
+                  <span className="shrink-0 text-[10px] font-light tracking-[0.25em] uppercase text-black/40">
+                    {oracao.momento}
+                  </span>
+                  <svg
+                    width="18"
+                    height="18"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    className={`shrink-0 text-black/50 transition-transform duration-300 ${isExpanded ? "rotate-180" : ""}`}
+                  >
+                    <path d="M6 9l6 6 6-6" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                </button>
+                <div
+                  className={`grid transition-all duration-300 ease-out ${isExpanded ? "grid-rows-[1fr] opacity-100 pb-6" : "grid-rows-[0fr] opacity-0"}`}
+                >
+                  <div className="overflow-hidden">
+                    <p className="text-[15px] sm:text-base leading-relaxed text-black/80 font-light break-words pr-6">
                       {oracao.texto}
                     </p>
                   </div>
-                ) : (
-                  <div className="absolute right-6 sm:right-8 top-12 -translate-y-1/2 opacity-30 group-hover:opacity-100 transition-opacity">
-                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                       <path d="M19 9l-7 7-7-7" strokeLinecap="round" strokeLinejoin="round"/>
-                     </svg>
-                  </div>
-                )}
-              </div>
+                </div>
+              </li>
             );
           })}
-        </div>
+        </ul>
       </section>
 
       <AppFooter />
