@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { toast } from 'sonner';
-import { getChosenForHour, isWithinQuietHours, NOTIFICATION_TITLES } from '@/lib/psalms';
+import { isWithinQuietHours, NOTIFICATION_TITLES, pickNotificationBody } from '@/lib/psalms';
 
 const ENABLED_KEY = 'chosen_notifications_enabled';
 const NATIVE_SCHEDULED_KEY = 'chosen_native_scheduled_date';
@@ -40,12 +40,13 @@ async function scheduleNativeNotifications() {
         scheduledDate.setHours(hour, 0, 5, 0); // 5 segundos após o topo da hora
 
         if (scheduledDate > now) {
-          const item = getChosenForHour(scheduledDate);
+          const item = pickNotificationBody(scheduledDate);
           const title = pickTitle();
+          const body = item.ref === 'CHOSEN' ? item.text : `${item.ref} — ${item.text}`;
           notifications.push({
             id,
             title,
-            body: `${item.ref} — ${item.text}`,
+            body,
             schedule: { at: scheduledDate },
             smallIcon: 'ic_stat_chosen',
             iconColor: '#f1f26c',
@@ -150,9 +151,9 @@ export function useNativeNotifications() {
 
       let interval: ReturnType<typeof setInterval> | null = null;
       const timeout = setTimeout(async () => {
-        const item = getChosenForHour();
+        const item = pickNotificationBody();
         const title = pickTitle();
-        const body = `${item.ref} — ${item.text}`;
+        const body = item.ref === 'CHOSEN' ? item.text : `${item.ref} — ${item.text}`;
         if (document.visibilityState === 'visible') {
           toast(title, { description: body, duration: 8000 });
         }
@@ -167,9 +168,9 @@ export function useNativeNotifications() {
           });
         }
         interval = setInterval(async () => {
-          const item2 = getChosenForHour();
+          const item2 = pickNotificationBody();
           const title2 = pickTitle();
-          const body2 = `${item2.ref} — ${item2.text}`;
+          const body2 = item2.ref === 'CHOSEN' ? item2.text : `${item2.ref} — ${item2.text}`;
           if (document.visibilityState === 'visible') {
             toast(title2, { description: body2, duration: 8000 });
           }

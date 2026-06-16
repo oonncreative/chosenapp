@@ -43,6 +43,32 @@ export const NOTIFICATION_TITLES = [
   "Recarregue a alma",
 ];
 
+// Mensagens-convite: chamam o usuário a abrir o app para receber a palavra.
+// Usadas intercaladas com os versículos nas notificações.
+export const INVITATION_MESSAGES: ChosenItem[] = [
+  { ref: "CHOSEN", text: "Você está precisando de uma mensagem agora… sinto isso. Abra o app." },
+  { ref: "CHOSEN", text: "Este momento pede uma palavra especial. Vem ver o que foi escolhido para você." },
+  { ref: "CHOSEN", text: "Tem algo separado só para você hoje. Toque para abrir." },
+  { ref: "CHOSEN", text: "Pare por um instante… há uma mensagem te esperando." },
+  { ref: "CHOSEN", text: "Sinto que seu coração precisa ouvir algo agora. Abre o app." },
+  { ref: "CHOSEN", text: "Uma palavra foi escolhida para esse seu momento. Vem ler." },
+  { ref: "CHOSEN", text: "Respira fundo. Tem uma mensagem aqui pra te abraçar." },
+  { ref: "CHOSEN", text: "Hoje é dia de lembrar quem você é. Abra o app." },
+  { ref: "CHOSEN", text: "Algo bom foi reservado pra você. Toque e descubra." },
+  { ref: "CHOSEN", text: "Não é coincidência você ver isso agora. Vem ouvir." },
+  { ref: "CHOSEN", text: "Sua alma pediu uma pausa. Estou aqui com uma palavra." },
+  { ref: "CHOSEN", text: "Esse instante merece uma mensagem especial. Abra o CHOSEN." },
+];
+
+// Sorteia entre versículo (peso 2) e mensagem-convite (peso 1)
+export function pickNotificationBody(date = new Date()): ChosenItem {
+  const useInvite = Math.random() < 0.33;
+  if (useInvite) {
+    return INVITATION_MESSAGES[Math.floor(Math.random() * INVITATION_MESSAGES.length)];
+  }
+  return getChosenForHour(date);
+}
+
 export const QUIET_HOURS = { start: 8, end: 22 } as const;
 
 export function isWithinQuietHours(date = new Date()): boolean {
