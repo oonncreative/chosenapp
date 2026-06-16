@@ -157,13 +157,11 @@ function MensagemPage() {
           pointerEvents: 'none',
         }}
       >
-        {/* Logo no topo */}
-        <div style={{ paddingTop: '100px', display: 'flex', justifyContent: 'center' }}>
-          <img 
-            src="/logo-chosen.png" 
-            alt="Chosen" 
-            style={{ width: '140px', height: '140px', objectFit: 'contain' }} 
-          />
+        {/* Texto CHOSEN no topo */}
+        <div style={{ paddingTop: '140px', display: 'flex', justifyContent: 'center' }}>
+          <p style={{ fontSize: '28px', fontWeight: 300, letterSpacing: '0.4em', color: '#9CA3AF', textTransform: 'uppercase', margin: 0, fontFamily: 'sans-serif' }}>
+            Chosen
+          </p>
         </div>
 
         {/* Conteúdo central */}
@@ -209,12 +207,12 @@ function MensagemPage() {
           )}
         </div>
 
-        {/* Rodapé com link mais visível */}
-        <div style={{ paddingBottom: '100px', textAlign: 'center', display: 'flex', flexDirection: 'column', gap: '16px' }}>
-          <p style={{ fontSize: '28px', fontWeight: '300', letterSpacing: '0.4em', color: '#9CA3AF', textTransform: 'uppercase', margin: 0 }}>
-            Chosen
+        {/* Rodapé: frase + URL */}
+        <div style={{ paddingBottom: '100px', textAlign: 'center', display: 'flex', flexDirection: 'column', gap: '12px' }}>
+          <p style={{ fontSize: '20px', fontWeight: 300, color: '#9CA3AF', margin: 0, fontFamily: 'sans-serif', fontStyle: 'italic' }}>
+            Essa foi escolhida especialmente para mim
           </p>
-          <p style={{ fontSize: '24px', fontWeight: '500', color: '#6B7280', margin: 0, fontFamily: 'sans-serif' }}>
+          <p style={{ fontSize: '24px', fontWeight: 500, color: '#6B7280', margin: 0, fontFamily: 'sans-serif' }}>
             chosen.oonn.com.br
           </p>
         </div>
