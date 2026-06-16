@@ -19,6 +19,7 @@ export const CATEGORIAS = [
   "Preciso de esperança",
   "Preciso de paz",
   "Preciso de força",
+  "Motivação",
 ] as const;
 
 export type Categoria = typeof CATEGORIAS[number];
