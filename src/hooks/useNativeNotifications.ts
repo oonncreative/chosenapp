@@ -13,7 +13,7 @@ function pickTitle(): string {
   return NOTIFICATION_TITLES[Math.floor(Math.random() * NOTIFICATION_TITLES.length)];
 }
 
-// Agenda 24 notificações locais nativas (uma por hora, das 8h às 22h, para hoje e amanhã)
+// Agenda notificações locais nativas (uma por hora, das 8h às 22h, para os próximos 4 dias)
 async function scheduleNativeNotifications() {
   try {
     const { LocalNotifications } = await import('@capacitor/local-notifications');
@@ -31,8 +31,9 @@ async function scheduleNativeNotifications() {
     const now = new Date();
     let id = 1;
 
-    // Agenda para os próximos 2 dias, das 8h às 22h, de hora em hora
-    for (let day = 0; day <= 1; day++) {
+    // Agenda para os próximos 4 dias, das 8h às 22h, de hora em hora
+    // (Capacitor permite até ~64 notificações pendentes; 4 dias x 15h = 60)
+    for (let day = 0; day <= 3; day++) {
       for (let hour = 8; hour <= 22; hour++) {
         const scheduledDate = new Date(now);
         scheduledDate.setDate(now.getDate() + day);
@@ -67,11 +68,13 @@ async function scheduleNativeNotifications() {
 }
 
 // Reagenda se ainda não agendou hoje
-async function scheduleIfNeeded() {
+async function scheduleIfNeeded(force = false) {
   try {
-    const lastScheduled = localStorage.getItem(NATIVE_SCHEDULED_KEY);
-    const today = new Date().toDateString();
-    if (lastScheduled === today) return;
+    if (!force) {
+      const lastScheduled = localStorage.getItem(NATIVE_SCHEDULED_KEY);
+      const today = new Date().toDateString();
+      if (lastScheduled === today) return;
+    }
     await scheduleNativeNotifications();
   } catch {}
 }
@@ -116,19 +119,27 @@ export function useNativeNotifications() {
       // No app nativo: agenda notificações locais via SO
       void scheduleIfNeeded();
 
-      // Listener para quando o usuário toca na notificação
-      let cleanup: (() => void) | null = null;
+      // Listeners: toque na notificação + reagendamento quando o app volta do background
+      const cleanups: Array<() => void> = [];
+
       import('@capacitor/local-notifications').then(({ LocalNotifications }) => {
-        const handle = LocalNotifications.addListener('localNotificationActionPerformed', () => {
+        LocalNotifications.addListener('localNotificationActionPerformed', () => {
           // Já está no app, não precisa navegar
-        });
-        handle.then(h => {
-          cleanup = () => h.remove();
-        });
+        }).then(h => cleanups.push(() => h.remove()));
       });
 
+      // Reagenda sempre que o app volta para o primeiro plano,
+      // garantindo que a janela de 4 dias avance continuamente
+      import('@capacitor/app').then(({ App }) => {
+        App.addListener('appStateChange', (state) => {
+          if (state.isActive) {
+            void scheduleIfNeeded(true);
+          }
+        }).then(h => cleanups.push(() => h.remove()));
+      }).catch(() => {});
+
       return () => {
-        if (cleanup) cleanup();
+        cleanups.forEach(fn => fn());
       };
     } else {
       // No browser/PWA: mantém comportamento atual com setTimeout
