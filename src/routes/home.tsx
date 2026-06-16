@@ -28,6 +28,7 @@ const MASCOTES: Record<string, string> = {
   "Preciso de esperança": mascote5.url,
   "Preciso de paz": mascote2.url,
   "Preciso de força": mascote8.url,
+  "Motivação": mascote1.url,
 };
 
 function HomePage() {
