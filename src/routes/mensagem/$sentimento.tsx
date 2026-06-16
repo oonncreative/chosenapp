@@ -98,7 +98,6 @@ function MensagemPage() {
       className="relative flex h-[100dvh] max-h-[100dvh] w-full max-w-[100vw] flex-col overflow-hidden bg-white"
       style={{
         paddingTop: "max(env(safe-area-inset-top), 0px)",
-        paddingBottom: "max(env(safe-area-inset-bottom), 0px)",
       }}
     >
       {/* Elemento para geração da imagem de compartilhamento - otimizado */}
@@ -223,7 +222,7 @@ function MensagemPage() {
       </main>
 
       {/* Footer fixo */}
-      <footer className="shrink-0 z-20 w-full px-4 pb-2 pt-2 bg-white flex items-center justify-center">
+      <footer className="shrink-0 z-20 w-full px-4 pt-2 pb-[calc(env(safe-area-inset-bottom)+16px)] bg-white flex items-center justify-center">
         <Button
           onClick={handleShare}
           disabled={isSharing}
