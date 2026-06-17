@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { toast } from 'sonner';
-import { isWithinQuietHours, NOTIFICATION_TITLES, pickNotificationBody } from '@/lib/psalms';
+import { getChosenForHour, isWithinQuietHours, NOTIFICATION_TITLES, pickNotificationBody } from '@/lib/psalms';
 
 const ENABLED_KEY = 'chosen_notifications_enabled';
 const NATIVE_SCHEDULED_KEY = 'chosen_native_scheduled_date';
@@ -13,7 +13,6 @@ function pickTitle(): string {
   return NOTIFICATION_TITLES[Math.floor(Math.random() * NOTIFICATION_TITLES.length)];
 }
 
-// Agenda notificações locais nativas (uma por hora, das 8h às 22h, para os próximos 4 dias)
 async function scheduleNativeNotifications() {
   try {
     const { LocalNotifications } = await import('@capacitor/local-notifications');
@@ -21,32 +20,34 @@ async function scheduleNativeNotifications() {
     const permission = await LocalNotifications.checkPermissions();
     if (permission.display !== 'granted') return;
 
-    // Cancela notificações anteriores para evitar duplicatas
     const pending = await LocalNotifications.getPending();
     if (pending.notifications.length > 0) {
       await LocalNotifications.cancel({ notifications: pending.notifications });
     }
 
+    const SCHEDULE = [
+      { hour: 8,  title: 'Bom dia. Começa o dia com isso 👇' },
+      { hour: 12, title: 'Pausa do almoço. Uma palavra pra você 👇' },
+      { hour: 18, title: 'Como foi seu dia? Trouxemos algo especial 👇' },
+      { hour: 21, title: 'Antes de dormir, guarda isso no coração 👇' },
+    ];
+
     const notifications = [];
     const now = new Date();
     let id = 1;
 
-    // Agenda para os próximos 4 dias, das 8h às 22h, de hora em hora
-    // (Capacitor permite até ~64 notificações pendentes; 4 dias x 15h = 60)
-    for (let day = 0; day <= 3; day++) {
-      for (let hour = 8; hour <= 22; hour++) {
+    for (let day = 0; day <= 6; day++) {
+      for (const slot of SCHEDULE) {
         const scheduledDate = new Date(now);
         scheduledDate.setDate(now.getDate() + day);
-        scheduledDate.setHours(hour, 0, 5, 0); // 5 segundos após o topo da hora
+        scheduledDate.setHours(slot.hour, 0, 5, 0);
 
         if (scheduledDate > now) {
-          const item = pickNotificationBody(scheduledDate);
-          const title = pickTitle();
-          const body = item.ref === 'CHOSEN' ? item.text : `${item.ref} — ${item.text}`;
+          const item = getChosenForHour(scheduledDate);
           notifications.push({
             id,
-            title,
-            body,
+            title: slot.title,
+            body: `${item.ref} — ${item.text}`,
             schedule: { at: scheduledDate },
             smallIcon: 'ic_stat_chosen',
             iconColor: '#f1f26c',
