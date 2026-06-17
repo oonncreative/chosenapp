@@ -71,6 +71,7 @@ function MensagemPage() {
   const handleShare = async () => {
     if (!shareRef.current || isSharing) return;
     setIsSharing(true);
+    void triggerHaptic();
 
     try {
       const element = shareRef.current;
@@ -131,6 +132,7 @@ function MensagemPage() {
   const handleSave = async () => {
     if (!shareRef.current || isSaving) return;
     setIsSaving(true);
+    void triggerHaptic();
 
     try {
       const element = shareRef.current;
