@@ -109,6 +109,23 @@ export async function requestNativeNotificationsPermission(): Promise<boolean> {
   }
 }
 
+export async function scheduleTestNotification() {
+  try {
+    const { LocalNotifications } = await import('@capacitor/local-notifications');
+    const testDate = new Date(Date.now() + 10000); // 10 segundos
+    await LocalNotifications.schedule({
+      notifications: [{
+        id: 9999,
+        title: 'Chosen ✨',
+        body: 'As notificações estão funcionando!',
+        schedule: { at: testDate },
+      }]
+    });
+  } catch (err) {
+    console.error('Erro ao agendar notificação de teste:', err);
+  }
+}
+
 // Hook principal — substitui useHourlyNotifications no app nativo
 export function useNativeNotifications() {
   useEffect(() => {
