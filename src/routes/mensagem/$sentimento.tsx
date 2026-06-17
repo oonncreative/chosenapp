@@ -13,7 +13,7 @@ const triggerHaptic = async () => {
 };
 
 export const Route = createFileRoute("/mensagem/$sentimento")({
-  head: ({ params, loaderData }) => ({
+  head: ({ params, loaderData }: { params: { sentimento: string }; loaderData?: { mensagem?: Mensagem } }) => ({
     meta: [
       {
         title: `Versículo para quando você está ${params.sentimento} — Chosen`,
