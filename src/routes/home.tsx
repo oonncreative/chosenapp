@@ -3,6 +3,8 @@ import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { Shuffle, List, GalleryHorizontal } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { CATEGORIAS, getRandomIdForCategoria, getRandomMensagemGlobal } from "@/lib/data";
+import { scheduleTestNotification } from "@/hooks/useNativeNotifications";
+import { toast } from "sonner";
 
 import mascote1 from "@/assets/mascotes/mascote-1.png.asset.json";
 import mascote2 from "@/assets/mascotes/mascote-2.png.asset.json";
@@ -34,6 +36,24 @@ const MASCOTES: Record<string, string> = {
 
 function HomePage() {
   const navigate = useNavigate();
+  const longPressTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const longPressFired = useRef(false);
+
+  const startUpdateLongPress = () => {
+    longPressFired.current = false;
+    longPressTimer.current = setTimeout(() => {
+      longPressFired.current = true;
+      void scheduleTestNotification();
+      toast("Notificação de teste agendada", { description: "Chegará em 10 segundos." });
+    }, 2000);
+  };
+  const cancelUpdateLongPress = () => {
+    if (longPressTimer.current) {
+      clearTimeout(longPressTimer.current);
+      longPressTimer.current = null;
+    }
+  };
+
   const [viewMode, setViewMode] = useState<"list" | "swipe">(() => {
     if (typeof window === "undefined") return "swipe";
     return (localStorage.getItem("viewMode") as "list" | "swipe") || "swipe";
@@ -92,6 +112,10 @@ function HomePage() {
             </button>
             <button 
               onClick={() => {
+                if (longPressFired.current) {
+                  longPressFired.current = false;
+                  return;
+                }
                 void (async () => {
                   try {
                     // Limpa caches do WebView (Service Worker / HTTP caches gerenciados)
@@ -112,6 +136,10 @@ function HomePage() {
                   window.location.replace(`/${bust}`);
                 })();
               }}
+              onPointerDown={startUpdateLongPress}
+              onPointerUp={cancelUpdateLongPress}
+              onPointerLeave={cancelUpdateLongPress}
+              onPointerCancel={cancelUpdateLongPress}
               className="flex items-center justify-center min-w-11 min-h-11 p-2 -mr-2 transition-opacity active:opacity-50"
               title="Buscar atualização"
               aria-label="Buscar atualização"
