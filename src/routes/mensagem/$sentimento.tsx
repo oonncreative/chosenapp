@@ -119,10 +119,23 @@ function MensagemPage() {
         throw new Error("Imagem gerada está vazia");
       }
 
-      const link = document.createElement("a");
-      link.download = "chosen-mensagem.png";
-      link.href = dataUrl;
-      link.click();
+      const base64Data = dataUrl.split(',')[1];
+      const isNative = !!(window as any).Capacitor?.isNativePlatform?.();
+
+      if (isNative) {
+        const { Filesystem, Directory } = await import('@capacitor/filesystem');
+        await Filesystem.writeFile({
+          path: `chosen-${Date.now()}.png`,
+          data: base64Data,
+          directory: Directory.Documents,
+        });
+        alert('Imagem salva com sucesso!');
+      } else {
+        const link = document.createElement('a');
+        link.download = 'chosen-mensagem.png';
+        link.href = dataUrl;
+        link.click();
+      }
     } catch (err) {
       console.error("Erro ao salvar imagem:", err);
       alert("Não foi possível salvar a imagem. Tente novamente.");
