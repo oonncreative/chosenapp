@@ -119,26 +119,23 @@ function MensagemPage() {
         throw new Error("Imagem gerada está vazia");
       }
 
-      const base64Data = dataUrl.split(',')[1];
-      const isNative = !!(window as any).Capacitor?.isNativePlatform?.();
+      const response = await fetch(dataUrl);
+      const blob = await response.blob();
+      const file = new File([blob], `chosen-${sentimento}.png`, { type: 'image/png' });
 
-      if (isNative) {
-        const { Filesystem, Directory } = await import('@capacitor/filesystem');
-        await Filesystem.writeFile({
-          path: `chosen-${Date.now()}.png`,
-          data: base64Data,
-          directory: Directory.Documents,
-        });
-        alert('Imagem salva com sucesso!');
+      if (navigator.canShare && navigator.canShare({ files: [file] })) {
+        await navigator.share({ files: [file] });
       } else {
         const link = document.createElement('a');
-        link.download = 'chosen-mensagem.png';
+        link.download = `chosen-${sentimento}.png`;
         link.href = dataUrl;
         link.click();
       }
-    } catch (err) {
-      console.error("Erro ao salvar imagem:", err);
-      alert("Não foi possível salvar a imagem. Tente novamente.");
+    } catch (err: any) {
+      if (err?.name !== 'AbortError') {
+        console.error('Erro ao salvar imagem:', err);
+        alert('Não foi possível salvar a imagem. Tente novamente.');
+      }
     } finally {
       setIsSaving(false);
     }
