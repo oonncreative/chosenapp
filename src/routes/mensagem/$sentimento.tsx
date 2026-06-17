@@ -28,6 +28,7 @@ function MensagemPage() {
   const shareRef = useRef<HTMLDivElement>(null);
   const [isExpanded, setIsExpanded] = useState(false);
   const [isSharing, setIsSharing] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
 
   const handleRefresh = () => {
     navigate({ to: "/home" });
@@ -90,6 +91,51 @@ function MensagemPage() {
       alert("Não foi possível gerar a imagem para compartilhamento. Tente novamente.");
     } finally {
       setIsSharing(false);
+    }
+  };
+
+  const handleSave = async () => {
+    if (!shareRef.current || isSaving) return;
+    setIsSaving(true);
+
+    try {
+      const element = shareRef.current;
+      const dataUrl = await htmlToImage.toPng(element, {
+        width: 1080,
+        height: 1920,
+        pixelRatio: 1,
+        skipFonts: false,
+        fontEmbedCSS: '',
+        style: {
+          visibility: 'visible',
+          position: 'static',
+          left: '0',
+          top: '0',
+          transform: 'none',
+        }
+      });
+
+      if (!dataUrl || dataUrl === "data:,") {
+        throw new Error("Imagem gerada está vazia");
+      }
+
+      const isNative = !!(window as any).Capacitor?.isNativePlatform?.();
+
+      if (isNative) {
+        const { Media } = await import('@capacitor-community/media');
+        await Media.savePhoto({ path: dataUrl, album: { name: 'Chosen' } });
+        alert('Imagem salva na galeria!');
+      } else {
+        const link = document.createElement('a');
+        link.download = `chosen-${sentimento}.png`;
+        link.href = dataUrl;
+        link.click();
+      }
+    } catch (err: any) {
+      console.error('Erro ao salvar imagem:', err);
+      alert('Não foi possível salvar a imagem. Tente novamente.');
+    } finally {
+      setIsSaving(false);
     }
   };
 
