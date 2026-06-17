@@ -6,6 +6,13 @@ import { CATEGORIAS, getRandomIdForCategoria, getRandomMensagemGlobal } from "@/
 import { scheduleTestNotification } from "@/hooks/useNativeNotifications";
 import { toast } from "sonner";
 
+const triggerHaptic = async () => {
+  try {
+    const { Haptics, ImpactStyle } = await import('@capacitor/haptics');
+    await Haptics.impact({ style: ImpactStyle.Light });
+  } catch {}
+};
+
 import mascote1 from "@/assets/mascotes/mascote-1.png.asset.json";
 import mascote2 from "@/assets/mascotes/mascote-2.png.asset.json";
 import mascote3 from "@/assets/mascotes/mascote-3.png.asset.json";
@@ -203,6 +210,7 @@ function ListView({ navigate }: { navigate: NavFn }) {
             to="/mensagem/$sentimento"
             params={{ sentimento }}
             search={{ color: "#f1f26c", id: getRandomIdForCategoria(sentimento) }}
+            onClick={() => { void triggerHaptic(); }}
             className="group relative flex items-center gap-3 sm:gap-4 min-h-[88px] px-4 sm:px-5 py-4 transition-all active:scale-[0.98] rounded-[28px] bg-white hover:-translate-y-0.5 w-full"
           >
             <div className="shrink-0 w-14 h-14 sm:w-16 sm:h-16 flex items-center justify-center">
@@ -228,8 +236,8 @@ function SwipeView({ navigate }: { navigate: NavFn }) {
   const [drag, setDrag] = useState(0);
 
   const total = CATEGORIAS.length;
-  const prev = () => setIndex((i) => (i - 1 + total) % total);
-  const next = () => setIndex((i) => (i + 1) % total);
+  const prev = () => { void triggerHaptic(); setIndex((i) => (i - 1 + total) % total); };
+  const next = () => { void triggerHaptic(); setIndex((i) => (i + 1) % total); };
 
   const onStart = (x: number) => { startX.current = x; deltaX.current = 0; };
   const onMove = (x: number) => {

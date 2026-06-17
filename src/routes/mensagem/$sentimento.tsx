@@ -5,7 +5,41 @@ import { useState, useRef, useEffect } from "react";
 import { Share2, ArrowLeft } from "lucide-react";
 import * as htmlToImage from 'html-to-image';
 
+const triggerHaptic = async () => {
+  try {
+    const { Haptics, ImpactStyle } = await import('@capacitor/haptics');
+    await Haptics.impact({ style: ImpactStyle.Medium });
+  } catch {}
+};
+
 export const Route = createFileRoute("/mensagem/$sentimento")({
+  head: ({ params, loaderData }: { params: { sentimento: string }; loaderData?: { mensagem?: Mensagem } }) => ({
+    meta: [
+      {
+        title: `Versículo para quando você está ${params.sentimento} — Chosen`,
+      },
+      {
+        name: 'description',
+        content: loaderData?.mensagem
+          ? `"${loaderData.mensagem.texto}" — ${loaderData.mensagem.referencia}`
+          : 'Uma palavra escolhida especialmente para você.',
+      },
+      {
+        property: 'og:title',
+        content: `Versículo para quando você está ${params.sentimento} — Chosen`,
+      },
+      {
+        property: 'og:description',
+        content: loaderData?.mensagem
+          ? `"${loaderData.mensagem.texto}" — ${loaderData.mensagem.referencia}`
+          : 'Uma palavra escolhida especialmente para você.',
+      },
+      {
+        property: 'og:url',
+        content: `https://chosen.oonn.com.br/mensagem/${params.sentimento}`,
+      },
+    ],
+  }),
   validateSearch: (search: Record<string, unknown>) => {
     return {
       color: (search.color as string) || "#2D8C3C",
@@ -37,6 +71,7 @@ function MensagemPage() {
   const handleShare = async () => {
     if (!shareRef.current || isSharing) return;
     setIsSharing(true);
+    void triggerHaptic();
 
     try {
       const element = shareRef.current;
@@ -97,6 +132,7 @@ function MensagemPage() {
   const handleSave = async () => {
     if (!shareRef.current || isSaving) return;
     setIsSaving(true);
+    void triggerHaptic();
 
     try {
       const element = shareRef.current;
