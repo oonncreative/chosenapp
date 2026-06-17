@@ -123,7 +123,7 @@ function MensagemPage() {
 
       if (isNative) {
         const { Media } = await import('@capacitor-community/media');
-        await Media.savePhoto({ path: dataUrl, album: { name: 'Chosen' } });
+        await Media.savePhoto({ path: dataUrl });
         alert('Imagem salva na galeria!');
       } else {
         const link = document.createElement('a');
