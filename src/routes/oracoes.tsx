@@ -3,6 +3,12 @@ import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 
 export const Route = createFileRoute("/oracoes")({
+  head: () => ({
+    meta: [
+      { title: 'Orações Diárias — Chosen' },
+      { name: 'description', content: 'Orações para cada momento do seu dia.' },
+    ],
+  }),
   component: OracoesPage,
 });
 
