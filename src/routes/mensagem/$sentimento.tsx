@@ -92,32 +92,35 @@ function MensagemPage() {
       });
 
       if (!dataUrl || dataUrl === "data:,") {
-        throw new Error("ETAPA 1 FALHOU: Imagem gerada está vazia");
-      }
-
-      if (!navigator.share) {
-        throw new Error("ETAPA 2 FALHOU: navigator.share não existe neste ambiente");
+        throw new Error("Imagem gerada está vazia");
       }
 
       const response = await fetch(dataUrl);
       const blob = await response.blob();
       const file = new File([blob], `chosen-${sentimento}.png`, { type: "image/png" });
 
-      if (!navigator.canShare || !navigator.canShare({ files: [file] })) {
-        throw new Error("ETAPA 3 FALHOU: navigator.canShare retornou false para o arquivo");
+      try {
+        if (navigator.canShare && navigator.canShare({ files: [file] })) {
+          await navigator.share({
+            files: [file],
+            title: "Chosen",
+            text: `"${mensagem.texto}" - ${mensagem.referencia}`,
+          });
+          return;
+        }
+      } catch (shareErr: any) {
+        if (shareErr?.name === 'AbortError') return;
+        console.log('navigator.share falhou, usando fallback de download:', shareErr);
       }
 
-      await navigator.share({
-        files: [file],
-        title: "Chosen",
-        text: `"${mensagem.texto}" - ${mensagem.referencia}`,
-      });
+      const link = document.createElement("a");
+      link.download = `chosen-${sentimento}.png`;
+      link.href = dataUrl;
+      link.click();
 
     } catch (err: any) {
-      if (err?.name !== 'AbortError') {
-        alert(`ERRO NO COMPARTILHAR: ${err?.message || err}`);
-        console.error("Erro detalhado:", err);
-      }
+      console.error("Erro ao gerar imagem:", err);
+      alert("Não foi possível gerar a imagem para compartilhamento. Tente novamente.");
     } finally {
       setIsSharing(false);
     }
