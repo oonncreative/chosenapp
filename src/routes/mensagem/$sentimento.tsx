@@ -75,15 +75,13 @@ function MensagemPage() {
 
     try {
       const element = shareRef.current;
-      
-      // html-to-image é geralmente mais robusto que dom-to-image
-      // Ele lida melhor com fontes e imagens externas
+
       const dataUrl = await htmlToImage.toPng(element, {
         width: 1080,
         height: 1920,
-        pixelRatio: 1, // Fixar ratio para consistência
+        pixelRatio: 1,
         skipFonts: false,
-        fontEmbedCSS: '', // Forçar embed de fontes se necessário
+        fontEmbedCSS: '',
         style: {
           visibility: 'visible',
           position: 'static',
@@ -94,36 +92,32 @@ function MensagemPage() {
       });
 
       if (!dataUrl || dataUrl === "data:,") {
-        throw new Error("Imagem gerada está vazia");
+        throw new Error("ETAPA 1 FALHOU: Imagem gerada está vazia");
       }
 
-      if (navigator.share) {
-        try {
-          const response = await fetch(dataUrl);
-          const blob = await response.blob();
-          const file = new File([blob], `chosen-${sentimento}.png`, { type: "image/png" });
-          
-          if (navigator.canShare && navigator.canShare({ files: [file] })) {
-            await navigator.share({
-              files: [file],
-              title: "Chosen",
-              text: `"${mensagem.texto}" - ${mensagem.referencia}`,
-            });
-            return;
-          }
-        } catch (shareErr) {
-          console.log("Erro no share nativo, tentando fallback de download:", shareErr);
-        }
+      if (!navigator.share) {
+        throw new Error("ETAPA 2 FALHOU: navigator.share não existe neste ambiente");
       }
 
-      const link = document.createElement("a");
-      link.download = `chosen-${sentimento}.png`;
-      link.href = dataUrl;
-      link.click();
-      
-    } catch (err) {
-      console.error("Erro ao gerar imagem:", err);
-      alert("Não foi possível gerar a imagem para compartilhamento. Tente novamente.");
+      const response = await fetch(dataUrl);
+      const blob = await response.blob();
+      const file = new File([blob], `chosen-${sentimento}.png`, { type: "image/png" });
+
+      if (!navigator.canShare || !navigator.canShare({ files: [file] })) {
+        throw new Error("ETAPA 3 FALHOU: navigator.canShare retornou false para o arquivo");
+      }
+
+      await navigator.share({
+        files: [file],
+        title: "Chosen",
+        text: `"${mensagem.texto}" - ${mensagem.referencia}`,
+      });
+
+    } catch (err: any) {
+      if (err?.name !== 'AbortError') {
+        alert(`ERRO NO COMPARTILHAR: ${err?.message || err}`);
+        console.error("Erro detalhado:", err);
+      }
     } finally {
       setIsSharing(false);
     }
