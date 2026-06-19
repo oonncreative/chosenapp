@@ -3,8 +3,6 @@ import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { Shuffle, List, GalleryHorizontal } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { CATEGORIAS, getRandomIdForCategoria, getRandomMensagemGlobal } from "@/lib/data";
-import { scheduleTestNotification } from "@/hooks/useNativeNotifications";
-import { toast } from "sonner";
 
 const triggerHaptic = async () => {
   try {
@@ -43,23 +41,6 @@ const MASCOTES: Record<string, string> = {
 
 function HomePage() {
   const navigate = useNavigate();
-  const longPressTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const longPressFired = useRef(false);
-
-  const startUpdateLongPress = () => {
-    longPressFired.current = false;
-    longPressTimer.current = setTimeout(() => {
-      longPressFired.current = true;
-      void scheduleTestNotification();
-      toast("Notificação de teste agendada", { description: "Chegará em 10 segundos." });
-    }, 2000);
-  };
-  const cancelUpdateLongPress = () => {
-    if (longPressTimer.current) {
-      clearTimeout(longPressTimer.current);
-      longPressTimer.current = null;
-    }
-  };
 
   const [viewMode, setViewMode] = useState<"list" | "swipe">(() => {
     if (typeof window === "undefined") return "swipe";
@@ -104,56 +85,6 @@ function HomePage() {
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="black" strokeWidth="2" className="text-black">
                 <circle cx="12" cy="12" r="10" />
                 <path d="M12 2a10 10 0 0 1 0 20" fill="currentColor" />
-              </svg>
-            </button>
-            <button 
-              onClick={() => {
-                navigate({ to: "/oracoes" });
-              }}
-              className="flex items-center justify-center min-w-11 min-h-11 p-2 transition-opacity active:opacity-50"
-              title="Orações Diárias"
-            >
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="black" strokeWidth="2" className="text-black">
-                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" strokeLinecap="round" strokeLinejoin="round"/>
-              </svg>
-            </button>
-            <button 
-              onClick={() => {
-                if (longPressFired.current) {
-                  longPressFired.current = false;
-                  return;
-                }
-                void (async () => {
-                  try {
-                    // Limpa caches do WebView (Service Worker / HTTP caches gerenciados)
-                    if (typeof caches !== "undefined") {
-                      const keys = await caches.keys();
-                      await Promise.all(keys.map((k) => caches.delete(k)));
-                    }
-                    // Remove qualquer Service Worker antigo que possa estar segurando versão velha
-                    if ("serviceWorker" in navigator) {
-                      const regs = await navigator.serviceWorker.getRegistrations();
-                      await Promise.all(regs.map((r) => r.unregister()));
-                    }
-                  } catch {
-                    // segue mesmo se a limpeza falhar
-                  }
-                  // Força buscar a versão mais nova do servidor e volta para a tela inicial
-                  const bust = `?v=${Date.now()}`;
-                  window.location.replace(`/${bust}`);
-                })();
-              }}
-              onPointerDown={startUpdateLongPress}
-              onPointerUp={cancelUpdateLongPress}
-              onPointerLeave={cancelUpdateLongPress}
-              onPointerCancel={cancelUpdateLongPress}
-              className="flex items-center justify-center min-w-11 min-h-11 p-2 -mr-2 transition-opacity active:opacity-50"
-              title="Buscar atualização"
-              aria-label="Buscar atualização"
-            >
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="black" strokeWidth="2.5" className="text-black">
-                <path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8" strokeLinecap="round" strokeLinejoin="round"/>
-                <path d="M21 3v5h-5" strokeLinecap="round" strokeLinejoin="round"/>
               </svg>
             </button>
           </div>
