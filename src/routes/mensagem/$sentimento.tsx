@@ -73,6 +73,11 @@ function MensagemPage() {
     setIsSharing(true);
     void triggerHaptic();
 
+    // Timeout de segurança: garante que o botão nunca fique travado
+    const safetyTimeout = setTimeout(() => {
+      setIsSharing(false);
+    }, 8000);
+
     try {
       const element = shareRef.current;
 
@@ -106,10 +111,16 @@ function MensagemPage() {
             title: "Chosen",
             text: `"${mensagem.texto}" - ${mensagem.referencia}`,
           });
+          clearTimeout(safetyTimeout);
+          setIsSharing(false);
           return;
         }
       } catch (shareErr: any) {
-        if (shareErr?.name === 'AbortError') return;
+        if (shareErr?.name === 'AbortError') {
+          clearTimeout(safetyTimeout);
+          setIsSharing(false);
+          return;
+        }
         console.log('navigator.share falhou, usando fallback de download:', shareErr);
       }
 
@@ -122,6 +133,7 @@ function MensagemPage() {
       console.error("Erro ao gerar imagem:", err);
       alert("Não foi possível gerar a imagem para compartilhamento. Tente novamente.");
     } finally {
+      clearTimeout(safetyTimeout);
       setIsSharing(false);
     }
   };
