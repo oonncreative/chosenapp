@@ -181,7 +181,7 @@ export function FloatingMenu() {
       <button
         onClick={() => setOpen(true)}
         aria-label="Menu"
-        className="fixed z-40 bottom-[max(env(safe-area-inset-bottom),0.5rem)] right-4 mb-9 w-12 h-12 rounded-full bg-black text-white shadow-lg flex items-center justify-center active:scale-95 transition-transform"
+        className="fixed z-40 bottom-[max(env(safe-area-inset-bottom),0.5rem)] right-4 mb-9 w-12 h-12 rounded-full bg-[#f1f26c] text-black shadow-lg flex items-center justify-center active:scale-95 transition-transform"
       >
         <Menu className="h-5 w-5" strokeWidth={2.25} />
       </button>
