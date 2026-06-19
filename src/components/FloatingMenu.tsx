@@ -156,8 +156,7 @@ export function FloatingMenu() {
     const isNative = isCapacitor();
     if (isNative) {
       try {
-        const { Browser } = await import("@capacitor/browser");
-        await Browser.open({ url: "market://details?id=com.oonn.chosen" });
+        window.location.href = "market://details?id=com.oonn.chosen";
         return;
       } catch {}
     }
