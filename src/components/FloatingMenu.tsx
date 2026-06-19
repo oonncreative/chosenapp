@@ -136,34 +136,16 @@ export function FloatingMenu() {
 
   const handleCompartilhar = async () => {
     setOpen(false);
-    const shareData = {
-      title: "CHOSEN",
-      text: "Inspirações escolhidas pra cada momento do seu dia 💛",
-      url: "https://chosen.oonn.com.br",
-    };
+    const url = "https://chosen.oonn.com.br";
+    const text = `CHOSEN — Inspirações escolhidas pra cada momento do seu dia 💛\nBaixe e use também: ${url}`;
     try {
-      if (navigator.share) {
-        await navigator.share(shareData);
-      } else {
-        await navigator.clipboard.writeText(shareData.url);
-        toast("Link copiado!", { description: shareData.url });
-      }
-    } catch {}
-  };
-
-  const handleAvaliar = async () => {
-    setOpen(false);
-    const isNative = isCapacitor();
-    if (isNative) {
-      try {
-        window.location.href = "market://details?id=com.oonn.chosen";
-        return;
-      } catch {}
+      await navigator.clipboard.writeText(text);
+      toast("Link copiado!", {
+        description: "Cole onde quiser compartilhar 💛",
+      });
+    } catch {
+      toast.error("Não foi possível copiar", { description: url });
     }
-    window.open(
-      "https://play.google.com/store/apps/details?id=com.oonn.chosen",
-      "_blank",
-    );
   };
 
   const handleMono = () => {
@@ -226,11 +208,6 @@ export function FloatingMenu() {
 
             <Divider />
 
-            <MenuItem
-              icon={<StarIcon />}
-              label="Avaliar o app"
-              onClick={handleAvaliar}
-            />
             <MenuItem icon={<HelpCircle className="h-5 w-5" />} label="Ajuda" onClick={handleAjuda} />
           </div>
         </SheetContent>
