@@ -73,7 +73,6 @@ function MensagemPage() {
     setIsSharing(true);
     void triggerHaptic();
 
-    // Timeout de segurança: garante que o botão nunca fique travado
     const safetyTimeout = setTimeout(() => {
       setIsSharing(false);
     }, 8000);
@@ -81,7 +80,6 @@ function MensagemPage() {
     try {
       const element = shareRef.current;
 
-      alert('Etapa 1: gerando imagem...');
       const dataUrl = await htmlToImage.toPng(element, {
         width: 1080,
         height: 1920,
@@ -96,39 +94,9 @@ function MensagemPage() {
           transform: 'none',
         }
       });
-      alert('Etapa 2: imagem gerada com sucesso, tamanho: ' + dataUrl.length);
 
       if (!dataUrl || dataUrl === "data:,") {
         throw new Error("Imagem gerada está vazia");
-      }
-
-      const response = await fetch(dataUrl);
-      const blob = await response.blob();
-      const file = new File([blob], `chosen-${sentimento}.png`, { type: "image/png" });
-      alert('Etapa 3: arquivo criado, tentando compartilhar...');
-
-      try {
-        if (navigator.canShare && navigator.canShare({ files: [file] })) {
-          await navigator.share({
-            files: [file],
-            title: "Chosen",
-            text: `"${mensagem.texto}" - ${mensagem.referencia}`,
-          });
-          alert('Etapa 4: compartilhado com sucesso!');
-          clearTimeout(safetyTimeout);
-          setIsSharing(false);
-          return;
-        } else {
-          alert('Etapa 3b: canShare retornou false');
-        }
-      } catch (shareErr: any) {
-        alert('Erro no share: ' + (shareErr?.message || shareErr));
-        if (shareErr?.name === 'AbortError') {
-          clearTimeout(safetyTimeout);
-          setIsSharing(false);
-          return;
-        }
-        console.log('navigator.share falhou, usando fallback de download:', shareErr);
       }
 
       const link = document.createElement("a");
@@ -138,7 +106,7 @@ function MensagemPage() {
 
     } catch (err: any) {
       console.error("Erro ao gerar imagem:", err);
-      alert('ERRO GERAL: ' + (err?.message || err));
+      alert("Não foi possível gerar a imagem para compartilhamento. Tente novamente.");
     } finally {
       clearTimeout(safetyTimeout);
       setIsSharing(false);
