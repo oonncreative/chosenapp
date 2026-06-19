@@ -3,8 +3,6 @@ import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { Shuffle, List, GalleryHorizontal } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { CATEGORIAS, getRandomIdForCategoria, getRandomMensagemGlobal } from "@/lib/data";
-import { scheduleTestNotification } from "@/hooks/useNativeNotifications";
-import { toast } from "sonner";
 
 const triggerHaptic = async () => {
   try {
@@ -43,23 +41,6 @@ const MASCOTES: Record<string, string> = {
 
 function HomePage() {
   const navigate = useNavigate();
-  const longPressTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const longPressFired = useRef(false);
-
-  const startUpdateLongPress = () => {
-    longPressFired.current = false;
-    longPressTimer.current = setTimeout(() => {
-      longPressFired.current = true;
-      void scheduleTestNotification();
-      toast("Notificação de teste agendada", { description: "Chegará em 10 segundos." });
-    }, 2000);
-  };
-  const cancelUpdateLongPress = () => {
-    if (longPressTimer.current) {
-      clearTimeout(longPressTimer.current);
-      longPressTimer.current = null;
-    }
-  };
 
   const [viewMode, setViewMode] = useState<"list" | "swipe">(() => {
     if (typeof window === "undefined") return "swipe";
