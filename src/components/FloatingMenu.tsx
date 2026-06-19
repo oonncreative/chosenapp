@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate, useRouterState } from "@tanstack/react-router";
-import { Menu, RefreshCw, Sparkles, CalendarClock, Share2, HelpCircle, Trash2, X } from "lucide-react";
+import { Menu, RefreshCw, Sparkles, CalendarClock, Share2, HelpCircle, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import {
   Sheet,
@@ -136,34 +136,16 @@ export function FloatingMenu() {
 
   const handleCompartilhar = async () => {
     setOpen(false);
-    const shareData = {
-      title: "CHOSEN",
-      text: "Inspirações escolhidas pra cada momento do seu dia 💛",
-      url: "https://chosen.oonn.com.br",
-    };
+    const url = "https://chosen.oonn.com.br";
+    const text = `CHOSEN — Inspirações escolhidas pra cada momento do seu dia 💛\nBaixe e use também: ${url}`;
     try {
-      if (navigator.share) {
-        await navigator.share(shareData);
-      } else {
-        await navigator.clipboard.writeText(shareData.url);
-        toast("Link copiado!", { description: shareData.url });
-      }
-    } catch {}
-  };
-
-  const handleAvaliar = async () => {
-    setOpen(false);
-    const isNative = isCapacitor();
-    if (isNative) {
-      try {
-        window.location.href = "market://details?id=com.oonn.chosen";
-        return;
-      } catch {}
+      await navigator.clipboard.writeText(text);
+      toast("Link copiado!", {
+        description: "Cole onde quiser compartilhar 💛",
+      });
+    } catch {
+      toast.error("Não foi possível copiar", { description: url });
     }
-    window.open(
-      "https://play.google.com/store/apps/details?id=com.oonn.chosen",
-      "_blank",
-    );
   };
 
   const handleMono = () => {
@@ -226,11 +208,6 @@ export function FloatingMenu() {
 
             <Divider />
 
-            <MenuItem
-              icon={<StarIcon />}
-              label="Avaliar o app"
-              onClick={handleAvaliar}
-            />
             <MenuItem icon={<HelpCircle className="h-5 w-5" />} label="Ajuda" onClick={handleAjuda} />
           </div>
         </SheetContent>
@@ -271,14 +248,6 @@ function MonoIcon() {
     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
       <circle cx="12" cy="12" r="10" />
       <path d="M12 2a10 10 0 0 1 0 20" fill="currentColor" />
-    </svg>
-  );
-}
-
-function StarIcon() {
-  return (
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-      <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" strokeLinecap="round" strokeLinejoin="round"/>
     </svg>
   );
 }
