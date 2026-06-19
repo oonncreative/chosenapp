@@ -75,7 +75,7 @@ function MensagemPage() {
 
     const safetyTimeout = setTimeout(() => {
       setIsSharing(false);
-    }, 8000);
+    }, 15000);
 
     try {
       const element = shareRef.current;
@@ -99,14 +99,44 @@ function MensagemPage() {
         throw new Error("Imagem gerada está vazia");
       }
 
-      const link = document.createElement("a");
-      link.download = `chosen-${sentimento}.png`;
-      link.href = dataUrl;
-      link.click();
+      const isNative = !!(window as any).Capacitor?.isNativePlatform?.();
+
+      if (isNative) {
+        const { Filesystem, Directory } = await import('@capacitor/filesystem');
+        const { Share } = await import('@capacitor/share');
+
+        const fileName = `chosen-${Date.now()}.png`;
+        const base64Data = dataUrl.split(',')[1];
+
+        await Filesystem.writeFile({
+          path: fileName,
+          data: base64Data,
+          directory: Directory.Cache,
+        });
+
+        const fileResult = await Filesystem.getUri({
+          path: fileName,
+          directory: Directory.Cache,
+        });
+
+        await Share.share({
+          title: 'Chosen',
+          text: `"${mensagem.texto}" - ${mensagem.referencia}`,
+          url: fileResult.uri,
+          dialogTitle: 'Compartilhar versículo',
+        });
+      } else {
+        const link = document.createElement('a');
+        link.download = `chosen-${sentimento}.png`;
+        link.href = dataUrl;
+        link.click();
+      }
 
     } catch (err: any) {
-      console.error("Erro ao gerar imagem:", err);
-      alert("Não foi possível gerar a imagem para compartilhamento. Tente novamente.");
+      if (err?.name !== 'AbortError') {
+        console.error('Erro ao compartilhar:', err);
+        alert('Não foi possível compartilhar. Tente novamente.');
+      }
     } finally {
       clearTimeout(safetyTimeout);
       setIsSharing(false);
