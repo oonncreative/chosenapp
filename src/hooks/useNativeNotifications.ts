@@ -27,10 +27,12 @@ async function scheduleNativeNotifications() {
     }
 
     const SCHEDULE = [
-      { hour: 8,  title: 'Bom dia. Começa o dia com isso 👇' },
-      { hour: 12, title: 'Pausa do almoço. Uma palavra pra você 👇' },
-      { hour: 18, title: 'Como foi seu dia? Trouxemos algo especial 👇' },
-      { hour: 21, title: 'Antes de dormir, guarda isso no coração 👇' },
+      { hour: 8,  minute: 8,  title: 'Bom dia. Começa o dia com isso 👇' },
+      { hour: 10, minute: 10, title: 'Uma pausa pra recarregar 👇' },
+      { hour: 12, minute: 12, title: 'Pausa do almoço. Uma palavra pra você 👇' },
+      { hour: 14, minute: 14, title: 'Respira. Tem algo pra você 👇' },
+      { hour: 18, minute: 18, title: 'Como foi seu dia? Trouxemos algo especial 👇' },
+      { hour: 21, minute: 21, title: 'Antes de dormir, guarda isso no coração 👇' },
     ];
 
     const notifications = [];
@@ -41,7 +43,7 @@ async function scheduleNativeNotifications() {
       for (const slot of SCHEDULE) {
         const scheduledDate = new Date(now);
         scheduledDate.setDate(now.getDate() + day);
-        scheduledDate.setHours(slot.hour, 0, 5, 0);
+        scheduledDate.setHours(slot.hour, slot.minute, 0, 0);
 
         if (scheduledDate > now) {
           const item = getChosenForHour(scheduledDate);
