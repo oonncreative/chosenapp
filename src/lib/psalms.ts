@@ -58,6 +58,19 @@ export const INVITATION_MESSAGES: ChosenItem[] = [
   { ref: "CHOSEN", text: "Não é coincidência você ver isso agora. Vem ouvir." },
   { ref: "CHOSEN", text: "Sua alma pediu uma pausa. Estou aqui com uma palavra." },
   { ref: "CHOSEN", text: "Esse instante merece uma mensagem especial. Abra o CHOSEN." },
+  // Motivacionais
+  { ref: "CHOSEN", text: "Você é mais forte do que imagina. Continue, Deus está com você." },
+  { ref: "CHOSEN", text: "Não desista hoje. O melhor de Deus ainda está por vir." },
+  { ref: "CHOSEN", text: "Cada passo seu é visto e sustentado pelo Pai. Siga em frente." },
+  { ref: "CHOSEN", text: "Levanta a cabeça: você é amado(a), escolhido(a) e cuidado(a)." },
+  { ref: "CHOSEN", text: "Hoje pode ser difícil, mas você não está sozinho(a). Respira e continua." },
+  { ref: "CHOSEN", text: "Confia no processo. Deus está escrevendo algo lindo na sua história." },
+  { ref: "CHOSEN", text: "Coragem! Aquilo que te assusta não é maior do que Aquele que vive em você." },
+  { ref: "CHOSEN", text: "Você foi feito(a) para vencer. Não esqueça quem caminha ao seu lado." },
+  { ref: "CHOSEN", text: "Mesmo no cansaço, há força sendo renovada em você agora." },
+  { ref: "CHOSEN", text: "Acredite: dias melhores estão a caminho. Deus não se esqueceu de você." },
+  { ref: "CHOSEN", text: "Persista. A sua benção tem hora certa para chegar." },
+  { ref: "CHOSEN", text: "Sorri. Você é prova viva de que Deus cuida dos detalhes." },
 ];
 
 // Sorteia entre versículo (peso 2) e mensagem-convite (peso 1)
