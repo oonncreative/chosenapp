@@ -15,6 +15,7 @@ function pickTitle(): string {
 
 async function scheduleNativeNotifications() {
   try {
+    console.log('scheduleNativeNotifications: iniciando');
     const { LocalNotifications } = await import('@capacitor/local-notifications');
 
     const permission = await LocalNotifications.checkPermissions();
@@ -135,31 +136,36 @@ export function useNativeNotifications() {
     if (!enabled) return;
 
     if (isCapacitor()) {
-      // No app nativo: agenda notificações locais via SO
-      void scheduleIfNeeded();
+      try {
+        // No app nativo: agenda notificações locais via SO
+        void scheduleIfNeeded();
 
-      // Listeners: toque na notificação + reagendamento quando o app volta do background
-      const cleanups: Array<() => void> = [];
+        // Listeners: toque na notificação + reagendamento quando o app volta do background
+        const cleanups: Array<() => void> = [];
 
-      import('@capacitor/local-notifications').then(({ LocalNotifications }) => {
-        LocalNotifications.addListener('localNotificationActionPerformed', () => {
-          // Já está no app, não precisa navegar
-        }).then(h => cleanups.push(() => h.remove()));
-      });
+        import('@capacitor/local-notifications').then(({ LocalNotifications }) => {
+          LocalNotifications.addListener('localNotificationActionPerformed', () => {
+            // Já está no app, não precisa navegar
+          }).then(h => cleanups.push(() => h.remove())).catch(() => {});
+        }).catch(() => {});
 
-      // Reagenda sempre que o app volta para o primeiro plano,
-      // garantindo que a janela de 4 dias avance continuamente
-      import('@capacitor/app').then(({ App }) => {
-        App.addListener('appStateChange', (state) => {
-          if (state.isActive) {
-            void scheduleIfNeeded(true);
-          }
-        }).then(h => cleanups.push(() => h.remove()));
-      }).catch(() => {});
+        // Reagenda sempre que o app volta para o primeiro plano,
+        // garantindo que a janela de 4 dias avance continuamente
+        import('@capacitor/app').then(({ App }) => {
+          App.addListener('appStateChange', (state) => {
+            if (state.isActive) {
+              void scheduleIfNeeded(true);
+            }
+          }).then(h => cleanups.push(() => h.remove())).catch(() => {});
+        }).catch(() => {});
 
-      return () => {
-        cleanups.forEach(fn => fn());
-      };
+        return () => {
+          cleanups.forEach(fn => fn());
+        };
+      } catch (err) {
+        console.error('Erro fatal em useNativeNotifications:', err);
+        return () => {};
+      }
     } else {
       // No browser/PWA: mantém comportamento atual com setTimeout
       const next = new Date();
