@@ -13,6 +13,7 @@ import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { Toaster } from "@/components/ui/sonner";
 import { useNativeNotifications } from "@/hooks/useNativeNotifications";
+import { FloatingMenu } from "@/components/FloatingMenu";
 
 function NotFoundComponent() {
   return (
@@ -170,6 +171,7 @@ function RootComponent() {
   return (
     <QueryClientProvider client={queryClient}>
       <Outlet />
+      <FloatingMenu />
       <Toaster position="top-center" offset="max(env(safe-area-inset-top), 80px)" />
     </QueryClientProvider>
   );
