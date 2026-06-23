@@ -11,12 +11,21 @@ self.addEventListener('activate', (event) => {
 
 self.addEventListener('notificationclick', (event) => {
   event.notification.close();
-  const targetUrl = (event.notification.data && event.notification.data.url) || '/home';
+  const MOOD_TO_CATEGORY = {
+    mood_happy: 'Feliz',
+    mood_neutral: 'Preciso de paz',
+    mood_sad: 'Triste',
+    mood_angry: 'Nervoso',
+  };
+  let targetUrl = (event.notification.data && event.notification.data.url) || '/home';
+  if (event.action && MOOD_TO_CATEGORY[event.action]) {
+    targetUrl = '/mensagem/' + encodeURIComponent(MOOD_TO_CATEGORY[event.action]) + '?color=%23f1f26c&id=mood';
+  }
   event.waitUntil(
     clients.matchAll({ type: 'window' }).then((clientList) => {
       for (const client of clientList) {
         if ('focus' in client) {
-          client.navigate(targetUrl).catch(() => {});
+          try { client.navigate(targetUrl); } catch (e) {}
           return client.focus();
         }
       }
