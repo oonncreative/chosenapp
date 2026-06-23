@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate, useRouterState } from "@tanstack/react-router";
-import { Menu, RefreshCw, Sparkles, CalendarClock, Share2, HelpCircle, Trash2, Heart, Smartphone } from "lucide-react";
+import { Menu, RefreshCw, Sparkles, CalendarClock, Share2, HelpCircle, Trash2, Heart, Smartphone, Send } from "lucide-react";
 import { toast } from "sonner";
 import {
   Sheet,
@@ -23,6 +23,8 @@ import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { PSALMS, INVITATION_MESSAGES, NOTIFICATION_TITLES } from "@/lib/psalms";
 import { getFavorites, removeFavorite, type Favorite } from "@/lib/favorites";
+import { getRandomMensagemGlobal, getMensagemById } from "@/lib/data";
+import { buildShareUrl } from "@/lib/share";
 import {
   isShakeEnabled,
   setShakeEnabled,
@@ -103,6 +105,7 @@ export function FloatingMenu() {
   const [scheduleOpen, setScheduleOpen] = useState(false);
   const [helpOpen, setHelpOpen] = useState(false);
   const [favoritesOpen, setFavoritesOpen] = useState(false);
+  const [sendOpen, setSendOpen] = useState(false);
   const [shakeOn, setShakeOn] = useState(false);
   const navigate = useNavigate();
   const pathname = useRouterState({ select: (s) => s.location.pathname });
@@ -163,6 +166,11 @@ export function FloatingMenu() {
   const handleFavoritos = () => {
     setOpen(false);
     setFavoritesOpen(true);
+  };
+
+  const handleEnviarPraAlguem = () => {
+    setOpen(false);
+    setSendOpen(true);
   };
 
   const handleToggleShake = async () => {
@@ -226,6 +234,11 @@ export function FloatingMenu() {
               onClick={handleFavoritos}
             />
             <MenuItem
+              icon={<Send className="h-5 w-5" />}
+              label="Chosen pra alguém"
+              onClick={handleEnviarPraAlguem}
+            />
+            <MenuItem
               icon={<CalendarClock className="h-5 w-5" />}
               label="Agendar uma mensagem"
               onClick={handleAgendar}
@@ -264,6 +277,7 @@ export function FloatingMenu() {
       <ScheduleDialog open={scheduleOpen} onOpenChange={setScheduleOpen} />
       <HelpDialog open={helpOpen} onOpenChange={setHelpOpen} />
       <FavoritesDialog open={favoritesOpen} onOpenChange={setFavoritesOpen} />
+      <SendDialog open={sendOpen} onOpenChange={setSendOpen} />
     </>
   );
 }
@@ -691,6 +705,140 @@ function FavoritesDialog({
             ))}
           </div>
         )}
+      </DialogContent>
+    </Dialog>
+  );
+}
+
+/* ============== Chosen pra alguém ============== */
+
+function SendDialog({
+  open,
+  onOpenChange,
+}: {
+  open: boolean;
+  onOpenChange: (v: boolean) => void;
+}) {
+  const [name, setName] = useState("");
+  const [current, setCurrent] = useState<{ t: string; r: string; c: string } | null>(null);
+
+  const sortear = () => {
+    const { categoria, id } = getRandomMensagemGlobal();
+    const m = getMensagemById(categoria, id);
+    setCurrent({ t: m.texto, r: m.referencia, c: categoria });
+  };
+
+  useEffect(() => {
+    if (open) {
+      sortear();
+      try {
+        const saved = localStorage.getItem("chosen_sender_name");
+        if (saved) setName(saved);
+      } catch {}
+    }
+  }, [open]);
+
+  const handleEnviar = async () => {
+    if (!current) return;
+    try {
+      if (name) localStorage.setItem("chosen_sender_name", name.trim());
+    } catch {}
+    const url = buildShareUrl({
+      t: current.t,
+      r: current.r,
+      c: current.c,
+      n: name.trim() || undefined,
+    });
+    const text = `Escolhi essa palavra pensando em você 💛\n\n"${current.t}"\n— ${current.r}\n\n${url}`;
+
+    const isNative = typeof window !== "undefined" && !!(window as any).Capacitor?.isNativePlatform?.();
+
+    try {
+      if (isNative) {
+        const { Share } = await import("@capacitor/share");
+        await Share.share({
+          title: "CHOSEN — uma palavra pra você",
+          text,
+          url,
+          dialogTitle: "Enviar pra alguém",
+        });
+      } else if (typeof navigator !== "undefined" && (navigator as any).share) {
+        await (navigator as any).share({
+          title: "CHOSEN — uma palavra pra você",
+          text,
+          url,
+        });
+      } else {
+        await navigator.clipboard.writeText(text);
+        toast("Mensagem copiada!", {
+          description: "Cole no WhatsApp, SMS ou onde quiser 💛",
+        });
+      }
+      onOpenChange(false);
+    } catch (err: any) {
+      if (err?.name === "AbortError") return;
+      try {
+        await navigator.clipboard.writeText(text);
+        toast("Mensagem copiada!");
+      } catch {
+        toast.error("Não foi possível enviar");
+      }
+    }
+  };
+
+  return (
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent className="max-w-md max-h-[90vh] overflow-y-auto">
+        <DialogHeader>
+          <DialogTitle className="text-base font-light tracking-[0.2em] uppercase">
+            Chosen pra alguém
+          </DialogTitle>
+          <DialogDescription>
+            Envie uma palavra anônima ou assinada. Quem receber vai abrir um
+            link bonito com a mensagem.
+          </DialogDescription>
+        </DialogHeader>
+
+        {current && (
+          <div className="rounded-2xl bg-black/[0.03] p-4 text-center">
+            <p className="text-[10px] uppercase tracking-widest text-black/40 mb-2">
+              {current.c}
+            </p>
+            <p className="text-base font-light leading-snug text-black">
+              "{current.t}"
+            </p>
+            <p className="mt-2 text-[11px] font-bold tracking-widest uppercase text-black/70">
+              {current.r}
+            </p>
+            <button
+              onClick={sortear}
+              className="mt-3 text-[11px] uppercase tracking-widest text-black/50 hover:text-black"
+            >
+              sortear outra
+            </button>
+          </div>
+        )}
+
+        <div className="flex flex-col gap-1.5">
+          <Label htmlFor="sender-name" className="text-xs">
+            Seu nome <span className="text-black/40">(opcional)</span>
+          </Label>
+          <Input
+            id="sender-name"
+            placeholder="Deixe em branco para enviar anônimo"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            maxLength={40}
+          />
+        </div>
+
+        <Button
+          onClick={handleEnviar}
+          className="w-full bg-[#f1f26c] text-black hover:opacity-90"
+        >
+          <Send className="h-4 w-4 mr-2" />
+          Enviar
+        </Button>
       </DialogContent>
     </Dialog>
   );
