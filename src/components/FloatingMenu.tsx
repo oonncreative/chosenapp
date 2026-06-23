@@ -107,17 +107,14 @@ export function FloatingMenu() {
   const navigate = useNavigate();
   const pathname = useRouterState({ select: (s) => s.location.pathname });
 
+  useEffect(() => {
+    setShakeOn(isShakeEnabled());
+  }, []);
+
   // Esconde o FAB na splash/onboarding
   const hidden = pathname === "/" || pathname.startsWith("/onboarding");
 
   if (hidden) return null;
-
-  // sync inicial do estado shake
-  // (efeito leve sem deps externas)
-  // eslint-disable-next-line react-hooks/rules-of-hooks
-  useEffect(() => {
-    setShakeOn(isShakeEnabled());
-  }, []);
 
   const handleAtualizar = async () => {
     setOpen(false);
@@ -606,6 +603,94 @@ function HelpDialog({
             Fechar
           </Button>
         </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  );
+}
+
+/* ============== Favoritos ============== */
+
+function FavoritesDialog({
+  open,
+  onOpenChange,
+}: {
+  open: boolean;
+  onOpenChange: (v: boolean) => void;
+}) {
+  const navigate = useNavigate();
+  const [list, setList] = useState<Favorite[]>([]);
+
+  useEffect(() => {
+    if (!open) return;
+    setList(getFavorites());
+    const onChange = () => setList(getFavorites());
+    window.addEventListener("chosen:favorites-changed", onChange);
+    return () => window.removeEventListener("chosen:favorites-changed", onChange);
+  }, [open]);
+
+  const handleOpen = (f: Favorite) => {
+    onOpenChange(false);
+    navigate({
+      to: "/mensagem/$sentimento",
+      params: { sentimento: f.categoria },
+      search: { color: "#f1f26c", id: f.id },
+    });
+  };
+
+  const handleRemove = (id: string) => {
+    removeFavorite(id);
+    setList(getFavorites());
+  };
+
+  return (
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent className="max-w-md max-h-[90vh] overflow-y-auto">
+        <DialogHeader>
+          <DialogTitle className="text-base font-light tracking-[0.2em] uppercase">
+            Minhas escolhidas
+          </DialogTitle>
+          <DialogDescription>
+            Suas mensagens favoritas — toque pra abrir de novo.
+          </DialogDescription>
+        </DialogHeader>
+
+        {list.length === 0 ? (
+          <div className="py-8 text-center text-sm text-black/50">
+            Você ainda não favoritou nenhuma mensagem.
+            <div className="mt-1 text-xs">
+              Toque no <Heart className="inline h-3 w-3" /> no topo de uma mensagem.
+            </div>
+          </div>
+        ) : (
+          <div className="flex flex-col gap-2">
+            {list.map((f) => (
+              <div
+                key={f.id}
+                className="flex items-start gap-2 rounded-lg border border-black/10 p-3"
+              >
+                <button
+                  onClick={() => handleOpen(f)}
+                  className="flex-1 min-w-0 text-left"
+                >
+                  <div className="text-[10px] uppercase tracking-widest text-black/40 mb-1">
+                    {f.categoria}
+                  </div>
+                  <div className="text-sm text-black line-clamp-3">"{f.text}"</div>
+                  <div className="text-[11px] font-bold tracking-widest uppercase text-black/60 mt-1">
+                    {f.ref}
+                  </div>
+                </button>
+                <button
+                  onClick={() => handleRemove(f.id)}
+                  className="shrink-0 p-2 text-black/40 hover:text-red-600 transition-colors"
+                  aria-label="Remover"
+                >
+                  <Trash2 className="h-4 w-4" />
+                </button>
+              </div>
+            ))}
+          </div>
+        )}
       </DialogContent>
     </Dialog>
   );
