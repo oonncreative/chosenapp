@@ -6,6 +6,12 @@ export const Route = createFileRoute("/silencio")({
   validateSearch: (s: Record<string, unknown>) => ({
     w: typeof s.w === "string" ? (s.w as string) : undefined,
   }),
+  head: () => ({
+    meta: [
+      { title: "Silêncio — CHOSEN" },
+      { name: "robots", content: "noindex, nofollow" },
+    ],
+  }),
   component: SilencioPage,
 });
 
