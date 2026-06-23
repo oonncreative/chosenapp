@@ -125,22 +125,25 @@ async function scheduleNativeNotifications() {
       }
     }
 
-    // Como você tá agora? — domingos às 18h, próximas 4 semanas.
+    // Como você tá agora? — 4x por semana (seg, qua, sex, dom) às 18h, próximas 4 semanas.
+    const MOOD_DAYS = [1, 3, 5, 0];
     for (let week = 0; week < 4; week++) {
-      const d = nextWeekday(now, 0);
-      d.setDate(d.getDate() + week * 7);
-      d.setHours(18, 0, 0, 0);
-      if (d > now) {
-        notifications.push({
-          id: id++,
-          title: 'Como você tá agora?',
-          body: 'Toca no que você sente que escolho a palavra certa.',
-          schedule: { at: d },
-          actionTypeId: MOOD_ACTION_TYPE,
-          smallIcon: 'ic_stat_chosen',
-          iconColor: '#f1f26c',
-          extra: { url: '/home', type: 'mood' },
-        } as any);
+      for (const wd of MOOD_DAYS) {
+        const d = nextWeekday(now, wd);
+        d.setDate(d.getDate() + week * 7);
+        d.setHours(18, 0, 0, 0);
+        if (d > now) {
+          notifications.push({
+            id: id++,
+            title: 'Como você tá agora?',
+            body: 'Toca no que você sente que escolho a palavra certa.',
+            schedule: { at: d },
+            actionTypeId: MOOD_ACTION_TYPE,
+            smallIcon: 'ic_stat_chosen',
+            iconColor: '#f1f26c',
+            extra: { url: '/home', type: 'mood' },
+          } as any);
+        }
       }
     }
 
