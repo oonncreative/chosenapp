@@ -1,5 +1,5 @@
-// Script do Service Worker para lidar com notificações locais
-const CACHE_NAME = 'ressoa-v1';
+// Service Worker — somente handlers de notificação (sem cache de app shell).
+const CACHE_NAME = 'chosen-v1';
 
 self.addEventListener('install', (event) => {
   self.skipWaiting();
@@ -41,10 +41,10 @@ self.addEventListener('message', (event) => {
     // Para uma experiência real de PWA, usaríamos a Periodic Sync API ou Push API.
     // Aqui mostramos uma notificação imediata como teste se solicitado.
     if (event.data.immediate) {
-      self.registration.showNotification('Ressoa', {
-        body: event.data.message || 'É hora de Ressoar uma nova mensagem de fé.',
-        icon: '/logo-ressoa.png',
-        badge: '/logo-ressoa.png',
+      self.registration.showNotification('Chosen', {
+        body: event.data.message || 'Uma palavra escolhida pra você.',
+        icon: '/icon-192.png',
+        badge: '/icon-192.png',
       });
     }
   }

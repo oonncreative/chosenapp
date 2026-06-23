@@ -93,10 +93,15 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "twitter:site", content: "@Lovable" },
       { name: "twitter:title", content: "CHOSEN" },
       { name: "twitter:description", content: "Inspirações - Escolhidas!" },
-      { property: "og:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/47f8fb9f-c1ac-47f1-8204-d3b435b85226" },
-      { name: "twitter:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/47f8fb9f-c1ac-47f1-8204-d3b435b85226" },
+      { property: "og:url", content: "https://chosen.oonn.com.br/" },
+      { property: "og:site_name", content: "CHOSEN" },
+      { property: "og:image", content: "https://chosen.oonn.com.br/og-chosen.jpg" },
+      { property: "og:image:width", content: "1200" },
+      { property: "og:image:height", content: "630" },
+      { name: "twitter:image", content: "https://chosen.oonn.com.br/og-chosen.jpg" },
+      { name: "theme-color", content: "#ffffff" },
       { name: "apple-mobile-web-app-capable", content: "yes" },
-      { name: "apple-mobile-web-app-status-bar-style", content: "black-translucent" },
+      { name: "apple-mobile-web-app-status-bar-style", content: "default" },
       { name: "apple-mobile-web-app-title", content: "CHOSEN" },
       { name: "mobile-web-app-capable", content: "yes" },
     ],
@@ -104,11 +109,11 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       {
         rel: "icon",
         type: "image/png",
-        href: "/logo-chosen.png",
+        href: "/icon-192.png",
       },
       {
         rel: "apple-touch-icon",
-        href: "/logo-chosen.png",
+        href: "/icon-192.png",
       },
       {
         rel: "manifest",
@@ -165,13 +170,55 @@ function RootComponent() {
 
   useEffect(() => {
     // Registrar Service Worker
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', () => {
-        navigator.serviceWorker.register('/sw.js').catch(err => {
-          console.error('SW registration failed: ', err);
-        });
+    if (typeof window === 'undefined' || !('serviceWorker' in navigator)) return;
+    const host = window.location.hostname;
+    const inIframe = window.self !== window.top;
+    const isPreview =
+      host.startsWith('id-preview--') ||
+      host.startsWith('preview--') ||
+      host.endsWith('.lovableproject.com') ||
+      host.endsWith('.lovableproject-dev.com') ||
+      host.endsWith('.beta.lovable.dev') ||
+      host === 'localhost' ||
+      host === '127.0.0.1';
+    if (inIframe || isPreview) {
+      // Em preview/dev: nunca registra SW e remove qualquer SW antigo presente.
+      navigator.serviceWorker.getRegistrations?.().then((regs) => {
+        regs.forEach((r) => r.unregister().catch(() => {}));
       });
+      return;
     }
+    const onLoad = () => {
+      navigator.serviceWorker.register('/sw.js').catch((err) => {
+        console.error('SW registration failed:', err);
+      });
+    };
+    window.addEventListener('load', onLoad);
+    return () => window.removeEventListener('load', onLoad);
+  }, []);
+
+  // Back button no Android nativo: só sai do app na rota raiz/home.
+  useEffect(() => {
+    let cleanup: (() => void) | undefined;
+    (async () => {
+      const isNative = !!(window as any).Capacitor?.isNativePlatform?.();
+      if (!isNative) return;
+      try {
+        const { App } = await import('@capacitor/app');
+        const handler = await App.addListener('backButton', ({ canGoBack }) => {
+          const path = window.location.pathname;
+          if (path === '/' || path === '/home') {
+            App.exitApp();
+          } else if (canGoBack) {
+            window.history.back();
+          } else {
+            App.exitApp();
+          }
+        });
+        cleanup = () => handler.remove();
+      } catch {}
+    })();
+    return () => cleanup?.();
   }, []);
 
   return (
