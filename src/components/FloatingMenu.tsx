@@ -148,7 +148,7 @@ export function FloatingMenu() {
         await Promise.all(regs.map((r) => r.unregister()));
       }
     } catch {}
-    window.location.replace(`/?v=${Date.now()}`);
+    window.location.replace(`/onboarding?v=${Date.now()}`);
   };
 
   const handleOracoes = () => {
