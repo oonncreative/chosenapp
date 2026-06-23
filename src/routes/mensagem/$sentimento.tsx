@@ -1,4 +1,4 @@
-import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { getMensagemById, type Categoria, type Mensagem } from "@/lib/data";
 import { Button } from "@/components/ui/button";
 import { useState, useEffect } from "react";
@@ -60,7 +60,6 @@ export const Route = createFileRoute("/mensagem/$sentimento")({
 function MensagemPage() {
   const { sentimento } = Route.useParams();
   const { mensagem } = Route.useLoaderData();
-  const navigate = useNavigate();
   const [isExpanded, setIsExpanded] = useState(false);
   const [fav, setFav] = useState(false);
   const [shareOpen, setShareOpen] = useState(false);
