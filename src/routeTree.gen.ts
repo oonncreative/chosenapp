@@ -9,12 +9,19 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as SilencioRouteImport } from './routes/silencio'
 import { Route as OracoesRouteImport } from './routes/oracoes'
 import { Route as OnboardingRouteImport } from './routes/onboarding'
 import { Route as HomeRouteImport } from './routes/home'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as PPayloadRouteImport } from './routes/p.$payload'
 import { Route as MensagemSentimentoRouteImport } from './routes/mensagem/$sentimento'
 
+const SilencioRoute = SilencioRouteImport.update({
+  id: '/silencio',
+  path: '/silencio',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const OracoesRoute = OracoesRouteImport.update({
   id: '/oracoes',
   path: '/oracoes',
@@ -35,6 +42,11 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PPayloadRoute = PPayloadRouteImport.update({
+  id: '/p/$payload',
+  path: '/p/$payload',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const MensagemSentimentoRoute = MensagemSentimentoRouteImport.update({
   id: '/mensagem/$sentimento',
   path: '/mensagem/$sentimento',
@@ -46,14 +58,18 @@ export interface FileRoutesByFullPath {
   '/home': typeof HomeRoute
   '/onboarding': typeof OnboardingRoute
   '/oracoes': typeof OracoesRoute
+  '/silencio': typeof SilencioRoute
   '/mensagem/$sentimento': typeof MensagemSentimentoRoute
+  '/p/$payload': typeof PPayloadRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/home': typeof HomeRoute
   '/onboarding': typeof OnboardingRoute
   '/oracoes': typeof OracoesRoute
+  '/silencio': typeof SilencioRoute
   '/mensagem/$sentimento': typeof MensagemSentimentoRoute
+  '/p/$payload': typeof PPayloadRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -61,7 +77,9 @@ export interface FileRoutesById {
   '/home': typeof HomeRoute
   '/onboarding': typeof OnboardingRoute
   '/oracoes': typeof OracoesRoute
+  '/silencio': typeof SilencioRoute
   '/mensagem/$sentimento': typeof MensagemSentimentoRoute
+  '/p/$payload': typeof PPayloadRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -70,16 +88,27 @@ export interface FileRouteTypes {
     | '/home'
     | '/onboarding'
     | '/oracoes'
+    | '/silencio'
     | '/mensagem/$sentimento'
+    | '/p/$payload'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/home' | '/onboarding' | '/oracoes' | '/mensagem/$sentimento'
+  to:
+    | '/'
+    | '/home'
+    | '/onboarding'
+    | '/oracoes'
+    | '/silencio'
+    | '/mensagem/$sentimento'
+    | '/p/$payload'
   id:
     | '__root__'
     | '/'
     | '/home'
     | '/onboarding'
     | '/oracoes'
+    | '/silencio'
     | '/mensagem/$sentimento'
+    | '/p/$payload'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -87,11 +116,20 @@ export interface RootRouteChildren {
   HomeRoute: typeof HomeRoute
   OnboardingRoute: typeof OnboardingRoute
   OracoesRoute: typeof OracoesRoute
+  SilencioRoute: typeof SilencioRoute
   MensagemSentimentoRoute: typeof MensagemSentimentoRoute
+  PPayloadRoute: typeof PPayloadRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/silencio': {
+      id: '/silencio'
+      path: '/silencio'
+      fullPath: '/silencio'
+      preLoaderRoute: typeof SilencioRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/oracoes': {
       id: '/oracoes'
       path: '/oracoes'
@@ -120,6 +158,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/p/$payload': {
+      id: '/p/$payload'
+      path: '/p/$payload'
+      fullPath: '/p/$payload'
+      preLoaderRoute: typeof PPayloadRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/mensagem/$sentimento': {
       id: '/mensagem/$sentimento'
       path: '/mensagem/$sentimento'
@@ -135,7 +180,9 @@ const rootRouteChildren: RootRouteChildren = {
   HomeRoute: HomeRoute,
   OnboardingRoute: OnboardingRoute,
   OracoesRoute: OracoesRoute,
+  SilencioRoute: SilencioRoute,
   MensagemSentimentoRoute: MensagemSentimentoRoute,
+  PPayloadRoute: PPayloadRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
