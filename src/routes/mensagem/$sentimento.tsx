@@ -1,11 +1,11 @@
 import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
 import { getMensagemById, type Categoria, type Mensagem } from "@/lib/data";
 import { Button } from "@/components/ui/button";
-import { useState, useRef, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Share2, ArrowLeft, Heart } from "lucide-react";
-import * as htmlToImage from 'html-to-image';
 import { isFavorite, toggleFavorite } from "@/lib/favorites";
 import { toast } from "sonner";
+import { ShareSheet } from "@/components/share/ShareSheet";
 
 const triggerHaptic = async () => {
   try {
@@ -61,11 +61,9 @@ function MensagemPage() {
   const { sentimento } = Route.useParams();
   const { mensagem } = Route.useLoaderData();
   const navigate = useNavigate();
-  const shareRef = useRef<HTMLDivElement>(null);
   const [isExpanded, setIsExpanded] = useState(false);
-  const [isSharing, setIsSharing] = useState(false);
-  const [isSaving, setIsSaving] = useState(false);
   const [fav, setFav] = useState(false);
+  const [shareOpen, setShareOpen] = useState(false);
 
   const fullText = `"${mensagem.texto}"`;
 
@@ -86,129 +84,9 @@ function MensagemPage() {
     toast(now ? "Adicionada às suas escolhidas 💛" : "Removida das escolhidas");
   };
 
-  const handleRefresh = () => {
-    navigate({ to: "/home" });
-  };
-
-  const handleShare = async () => {
-    if (!shareRef.current || isSharing) return;
-    setIsSharing(true);
+  const handleOpenShare = () => {
     void triggerHaptic();
-
-    const safetyTimeout = setTimeout(() => {
-      setIsSharing(false);
-    }, 15000);
-
-    try {
-      const element = shareRef.current;
-
-      const dataUrl = await htmlToImage.toPng(element, {
-        width: 1080,
-        height: 1920,
-        pixelRatio: 1,
-        skipFonts: false,
-        fontEmbedCSS: '',
-        style: {
-          visibility: 'visible',
-          position: 'static',
-          left: '0',
-          top: '0',
-          transform: 'none',
-        }
-      });
-
-      if (!dataUrl || dataUrl === "data:,") {
-        throw new Error("Imagem gerada está vazia");
-      }
-
-      const isNative = !!(window as any).Capacitor?.isNativePlatform?.();
-
-      if (isNative) {
-        const { Filesystem, Directory } = await import('@capacitor/filesystem');
-        const { Share } = await import('@capacitor/share');
-
-        const fileName = `chosen-${Date.now()}.png`;
-        const base64Data = dataUrl.split(',')[1];
-
-        await Filesystem.writeFile({
-          path: fileName,
-          data: base64Data,
-          directory: Directory.Cache,
-        });
-
-        const fileResult = await Filesystem.getUri({
-          path: fileName,
-          directory: Directory.Cache,
-        });
-
-        await Share.share({
-          title: 'Chosen',
-          text: `"${mensagem.texto}" - ${mensagem.referencia}`,
-          url: fileResult.uri,
-          dialogTitle: 'Compartilhar versículo',
-        });
-      } else {
-        const link = document.createElement('a');
-        link.download = `chosen-${sentimento}.png`;
-        link.href = dataUrl;
-        link.click();
-      }
-
-    } catch (err: any) {
-      if (err?.name !== 'AbortError') {
-        console.error('Erro ao compartilhar:', err);
-        alert('Não foi possível compartilhar. Tente novamente.');
-      }
-    } finally {
-      clearTimeout(safetyTimeout);
-      setIsSharing(false);
-    }
-  };
-
-  const handleSave = async () => {
-    if (!shareRef.current || isSaving) return;
-    setIsSaving(true);
-    void triggerHaptic();
-
-    try {
-      const element = shareRef.current;
-      const dataUrl = await htmlToImage.toPng(element, {
-        width: 1080,
-        height: 1920,
-        pixelRatio: 1,
-        skipFonts: false,
-        fontEmbedCSS: '',
-        style: {
-          visibility: 'visible',
-          position: 'static',
-          left: '0',
-          top: '0',
-          transform: 'none',
-        }
-      });
-
-      if (!dataUrl || dataUrl === "data:,") {
-        throw new Error("Imagem gerada está vazia");
-      }
-
-      const isNative = !!(window as any).Capacitor?.isNativePlatform?.();
-
-      if (isNative) {
-        const { Media } = await import('@capacitor-community/media');
-        await Media.savePhoto({ path: dataUrl });
-        alert('Imagem salva na galeria!');
-      } else {
-        const link = document.createElement('a');
-        link.download = `chosen-${sentimento}.png`;
-        link.href = dataUrl;
-        link.click();
-      }
-    } catch (err: any) {
-      console.error('Erro ao salvar imagem:', err);
-      alert('Não foi possível salvar a imagem. Tente novamente.');
-    } finally {
-      setIsSaving(false);
-    }
+    setShareOpen(true);
   };
 
   return (
@@ -219,84 +97,12 @@ function MensagemPage() {
       }}
     >
       {/* Elemento para geração da imagem de compartilhamento - otimizado */}
-      <div 
-        ref={shareRef}
-        style={{ 
-          position: 'fixed',
-          left: '-5000px',
-          top: '0',
-          width: '1080px',
-          height: '1920px',
-          backgroundColor: '#ffffff',
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          textAlign: 'center',
-          zIndex: -1,
-          overflow: 'hidden',
-          pointerEvents: 'none',
-        }}
-      >
-        {/* Texto CHOSEN no topo */}
-        <div style={{ paddingTop: '140px', display: 'flex', justifyContent: 'center' }}>
-          <p style={{ fontSize: '28px', fontWeight: 300, letterSpacing: '0.4em', color: '#9CA3AF', textTransform: 'uppercase', margin: 0, fontFamily: 'sans-serif' }}>
-            Chosen
-          </p>
-        </div>
-
-        {/* Conteúdo central */}
-        <div style={{ padding: '0 80px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '60px', width: '100%', flex: 1, justifyContent: 'center' }}>
-          <p style={{ 
-            fontSize: '72px', 
-            fontWeight: '300', 
-            lineHeight: '1.2', 
-            color: '#000000', 
-            margin: '0',
-            fontFamily: 'sans-serif'
-          }}>
-            "{mensagem.texto}"
-          </p>
-          <p style={{ 
-            fontSize: '32px', 
-            fontWeight: '700', 
-            letterSpacing: '0.2em', 
-            color: '#000000', 
-            textTransform: 'uppercase', 
-            margin: '0',
-            fontFamily: 'sans-serif'
-          }}>
-            {mensagem.referencia}
-          </p>
-          {mensagem.resumo && (
-            <p style={{ 
-              marginTop: '40px', 
-              fontSize: mensagem.resumo.length > 600 ? '24px' : mensagem.resumo.length > 400 ? '28px' : mensagem.resumo.length > 250 ? '32px' : '34px', 
-              fontWeight: '300', 
-              color: '#4B5563', 
-              padding: '0 40px',
-              fontFamily: 'sans-serif',
-              lineHeight: '1.5',
-              maxWidth: '900px',
-              overflow: 'hidden',
-              display: '-webkit-box',
-              WebkitBoxOrient: 'vertical',
-              WebkitLineClamp: mensagem.resumo.length > 600 ? 14 : 12,
-            }}>
-              {mensagem.resumo}
-            </p>
-          )}
-        </div>
-
-        {/* Rodapé: frase + URL */}
-        <div style={{ paddingBottom: '100px', textAlign: 'center', display: 'flex', flexDirection: 'column', gap: '12px' }}>
-          <p style={{ fontSize: '20px', fontWeight: 300, color: '#9CA3AF', margin: 0, fontFamily: 'sans-serif', fontStyle: 'italic' }}>
-            Essa foi escolhida especialmente para mim
-          </p>
-          <p style={{ fontSize: '24px', fontWeight: 500, color: '#6B7280', margin: 0, fontFamily: 'sans-serif' }}>
-            chosen.oonn.com.br
-          </p>
-        </div>
-      </div>
+      <ShareSheet
+        open={shareOpen}
+        onOpenChange={setShareOpen}
+        mensagem={mensagem}
+        sentimento={sentimento}
+      />
 
       {/* Header fixo */}
       <header className="shrink-0 z-20 bg-white grid grid-cols-3 h-14 items-center px-4">
@@ -349,8 +155,7 @@ function MensagemPage() {
       {/* Footer fixo */}
       <footer className="shrink-0 z-20 w-full px-4 pt-2 pb-[calc(env(safe-area-inset-bottom)+16px)] bg-white flex items-center justify-center gap-3">
         <Button
-          onClick={handleShare}
-          disabled={isSharing}
+          onClick={handleOpenShare}
           className="h-12 rounded-full border-none bg-[#f1f26c] text-black hover:opacity-90 shadow-none flex items-center gap-2 px-6 transition-all active:scale-95 disabled:opacity-50"
         >
           <span className="text-sm font-semibold tracking-wide">Compartilhar</span>
