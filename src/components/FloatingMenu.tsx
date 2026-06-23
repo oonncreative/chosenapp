@@ -121,6 +121,23 @@ export function FloatingMenu() {
 
   const handleAtualizar = async () => {
     setOpen(false);
+    const isNative = !!(window as any).Capacitor?.isNativePlatform?.();
+    if (isNative) {
+      // No nativo, o JS roda do bundle empacotado — limpar cache não baixa
+      // versão nova. Redireciona pro onboarding (3 telas iniciais) pra dar
+      // a sensação de "recomeço" e mostra a versão atual.
+      try {
+        const { App } = await import("@capacitor/app");
+        const info = await App.getInfo().catch(() => null);
+        if (info?.version) {
+          toast("Você já está na versão " + info.version, {
+            description: "Atualizações novas chegam pela loja de apps.",
+          });
+        }
+      } catch {}
+      window.location.replace("/onboarding");
+      return;
+    }
     try {
       if (typeof caches !== "undefined") {
         const keys = await caches.keys();
