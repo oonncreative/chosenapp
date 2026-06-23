@@ -67,45 +67,23 @@ function MensagemPage() {
   const [isSaving, setIsSaving] = useState(false);
   const [fav, setFav] = useState(false);
 
-  // Tempo certo: "Respira fundo. Lê devagar." + reveal letra-por-letra
+  // Tempo certo: splash de 2s "Respira fundo. Lê devagar." antes da mensagem
   const fullText = `"${mensagem.texto}"`;
-  const [revealed, setRevealed] = useState(fullText);
-  const [showHint, setShowHint] = useState(false);
+  const [showSplash, setShowSplash] = useState(false);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
     const disabled = localStorage.getItem("typewriter_disabled") === "true";
     if (disabled) {
-      setRevealed(fullText);
-      setShowHint(false);
+      setShowSplash(false);
       return;
     }
-    setShowHint(true);
-    setRevealed("");
-    const hintMs = 900;
-    const totalMs = 2500;
-    const chars = fullText.length;
-    const step = Math.max(14, Math.floor(totalMs / Math.max(chars, 1)));
-
-    const hintTimer = setTimeout(() => setShowHint(false), hintMs);
-    let i = 0;
-    const interval = setInterval(() => {
-      i++;
-      setRevealed(fullText.slice(0, i));
-      if (i >= chars) clearInterval(interval);
-    }, step);
-    const startDelay = setTimeout(() => {}, hintMs);
-
-    return () => {
-      clearTimeout(hintTimer);
-      clearTimeout(startDelay);
-      clearInterval(interval);
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    setShowSplash(true);
+    const t = setTimeout(() => setShowSplash(false), 2000);
+    return () => clearTimeout(t);
   }, [mensagem.id]);
 
-  const isRevealing = revealed.length < fullText.length;
-  const handleSkipReveal = () => setRevealed(fullText);
+  const handleSkipSplash = () => setShowSplash(false);
 
   useEffect(() => {
     if (mensagem?.id) setFav(isFavorite(mensagem.id));
@@ -360,20 +338,19 @@ function MensagemPage() {
       </header>
 
       <main className="flex flex-1 min-h-0 flex-col items-center justify-center overflow-y-auto px-4 sm:px-6 py-2 text-center w-full">
-        <div key={mensagem.id} className="w-full max-w-md animate-in fade-in duration-700 flex flex-col items-center">
-          {showHint && (
-            <p className="mb-4 text-[11px] tracking-[0.3em] uppercase text-black/40 animate-in fade-in duration-500">
+        {showSplash ? (
+          <div
+            onClick={handleSkipSplash}
+            className="w-full flex flex-1 items-center justify-center animate-in fade-in duration-500 cursor-default"
+          >
+            <p className="text-[13px] tracking-[0.35em] uppercase text-black/60">
               Respira fundo. Lê devagar.
             </p>
-          )}
-          <p
-            onClick={isRevealing ? handleSkipReveal : undefined}
-            className="text-xl font-light leading-snug text-black sm:text-3xl md:text-4xl tracking-tight break-words min-h-[3em] cursor-default select-text"
-          >
-            {revealed}
-            {isRevealing && (
-              <span className="inline-block w-[0.06em] h-[0.9em] align-middle bg-black/60 ml-0.5 animate-pulse" />
-            )}
+          </div>
+        ) : (
+        <div key={mensagem.id} className="w-full max-w-md animate-in fade-in duration-700 flex flex-col items-center">
+          <p className="text-xl font-light leading-snug text-black sm:text-3xl md:text-4xl tracking-tight break-words cursor-default select-text">
+            {fullText}
           </p>
           <p className="mt-6 text-[12px] font-bold tracking-[0.2em] uppercase text-black">
             {mensagem.referencia}
@@ -393,6 +370,7 @@ function MensagemPage() {
             </div>
           )}
         </div>
+        )}
       </main>
 
       {/* Footer fixo */}
