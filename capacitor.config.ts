@@ -5,17 +5,20 @@ const config: CapacitorConfig = {
   appName: 'Chosen',
   webDir: 'dist/client',
   server: {
-    url: 'https://chosen.oonn.com.br',
+    androidScheme: 'https',
+    iosScheme: 'https',
     cleartext: false,
   },
   plugins: {
     SplashScreen: {
-      launchShowDuration: 0,
+      launchShowDuration: 1500,
+      launchAutoHide: true,
+      launchFadeOutDuration: 300,
       backgroundColor: '#ffffff',
       showSpinner: false,
     },
     StatusBar: {
-      style: 'Dark',
+      style: 'Light',
       backgroundColor: '#ffffff',
     },
     LocalNotifications: {
