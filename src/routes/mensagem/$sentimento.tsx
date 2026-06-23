@@ -67,23 +67,7 @@ function MensagemPage() {
   const [isSaving, setIsSaving] = useState(false);
   const [fav, setFav] = useState(false);
 
-  // Tempo certo: splash de 2s "Respira fundo. Lê devagar." antes da mensagem
   const fullText = `"${mensagem.texto}"`;
-  const [showSplash, setShowSplash] = useState(false);
-
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-    const disabled = localStorage.getItem("typewriter_disabled") === "true";
-    if (disabled) {
-      setShowSplash(false);
-      return;
-    }
-    setShowSplash(true);
-    const t = setTimeout(() => setShowSplash(false), 2000);
-    return () => clearTimeout(t);
-  }, [mensagem.id]);
-
-  const handleSkipSplash = () => setShowSplash(false);
 
   useEffect(() => {
     if (mensagem?.id) setFav(isFavorite(mensagem.id));
@@ -338,16 +322,6 @@ function MensagemPage() {
       </header>
 
       <main className="flex flex-1 min-h-0 flex-col items-center justify-center overflow-y-auto px-4 sm:px-6 py-2 text-center w-full">
-        {showSplash ? (
-          <div
-            onClick={handleSkipSplash}
-            className="w-full flex flex-1 items-center justify-center animate-in fade-in duration-500 cursor-default"
-          >
-            <p className="text-[13px] tracking-[0.35em] uppercase text-black/60">
-              Respira fundo. Lê devagar.
-            </p>
-          </div>
-        ) : (
         <div key={mensagem.id} className="w-full max-w-md animate-in fade-in duration-700 flex flex-col items-center">
           <p className="text-xl font-light leading-snug text-black sm:text-3xl md:text-4xl tracking-tight break-words cursor-default select-text">
             {fullText}
@@ -370,7 +344,6 @@ function MensagemPage() {
             </div>
           )}
         </div>
-        )}
       </main>
 
       {/* Footer fixo */}
