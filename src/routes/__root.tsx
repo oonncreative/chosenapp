@@ -14,6 +14,9 @@ import { reportLovableError } from "../lib/lovable-error-reporting";
 import { Toaster } from "@/components/ui/sonner";
 import { useNativeNotifications } from "@/hooks/useNativeNotifications";
 import { FloatingMenu } from "@/components/FloatingMenu";
+import { useShakeToChosen } from "@/hooks/useShakeToChosen";
+import { useTimeOfDayTheme } from "@/hooks/useTimeOfDayTheme";
+import { useUsageTracker } from "@/hooks/useUsageTracker";
 
 function NotFoundComponent() {
   return (
@@ -147,6 +150,9 @@ function RootComponent() {
   });
 
   useNativeNotifications();
+  useShakeToChosen();
+  useTimeOfDayTheme();
+  useUsageTracker();
 
   useEffect(() => {
     localStorage.setItem('isMono', isMono.toString());

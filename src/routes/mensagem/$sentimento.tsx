@@ -2,8 +2,10 @@ import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
 import { getMensagemById, type Categoria, type Mensagem } from "@/lib/data";
 import { Button } from "@/components/ui/button";
 import { useState, useRef, useEffect } from "react";
-import { Share2, ArrowLeft } from "lucide-react";
+import { Share2, ArrowLeft, Heart } from "lucide-react";
 import * as htmlToImage from 'html-to-image';
+import { isFavorite, toggleFavorite } from "@/lib/favorites";
+import { toast } from "sonner";
 
 const triggerHaptic = async () => {
   try {
@@ -63,6 +65,24 @@ function MensagemPage() {
   const [isExpanded, setIsExpanded] = useState(false);
   const [isSharing, setIsSharing] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
+  const [fav, setFav] = useState(false);
+
+  useEffect(() => {
+    if (mensagem?.id) setFav(isFavorite(mensagem.id));
+  }, [mensagem?.id]);
+
+  const handleToggleFav = () => {
+    if (!mensagem) return;
+    void triggerHaptic();
+    const now = toggleFavorite({
+      id: mensagem.id,
+      categoria: sentimento,
+      ref: mensagem.referencia,
+      text: mensagem.texto,
+    });
+    setFav(now);
+    toast(now ? "Adicionada às suas escolhidas 💛" : "Removida das escolhidas");
+  };
 
   const handleRefresh = () => {
     navigate({ to: "/home" });
@@ -287,7 +307,16 @@ function MensagemPage() {
         <span className="text-sm font-bold tracking-[0.3em] uppercase text-black text-center">
           CHOSEN
         </span>
-        <img src="/logo-chosen.png" alt="Chosen" className="h-9 w-9 object-contain justify-self-end" />
+        <button
+          onClick={handleToggleFav}
+          aria-label={fav ? "Remover dos favoritos" : "Adicionar aos favoritos"}
+          className="flex h-10 w-10 items-center justify-center rounded-full transition-colors hover:bg-gray-100 justify-self-end active:scale-90"
+        >
+          <Heart
+            className={`h-6 w-6 transition-colors ${fav ? "fill-red-500 text-red-500" : "text-gray-400"}`}
+            strokeWidth={2}
+          />
+        </button>
       </header>
 
       <main className="flex flex-1 min-h-0 flex-col items-center justify-center overflow-y-auto px-4 sm:px-6 py-2 text-center w-full">

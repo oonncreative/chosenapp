@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { toast } from 'sonner';
 import { getChosenForHour, isWithinQuietHours, NOTIFICATION_TITLES, pickNotificationBody } from '@/lib/psalms';
+import { getPreferredHours } from '@/lib/usagePattern';
 
 const ENABLED_KEY = 'chosen_notifications_enabled';
 const NATIVE_SCHEDULED_KEY = 'chosen_native_scheduled_date';
@@ -26,7 +27,7 @@ async function scheduleNativeNotifications() {
       await LocalNotifications.cancel({ notifications: pending.notifications });
     }
 
-    const SCHEDULE = [
+    const DEFAULT_SCHEDULE = [
       { hour: 8,  minute: 8,  title: 'Bom dia. Começa o dia com isso 👇' },
       { hour: 10, minute: 10, title: 'Uma pausa pra recarregar 👇' },
       { hour: 12, minute: 12, title: 'Pausa do almoço. Uma palavra pra você 👇' },
@@ -34,6 +35,16 @@ async function scheduleNativeNotifications() {
       { hour: 18, minute: 18, title: 'Como foi seu dia? Trouxemos algo especial 👇' },
       { hour: 21, minute: 21, title: 'Antes de dormir, guarda isso no coração 👇' },
     ];
+
+    // Se já temos amostras suficientes, usa as top horas do usuário.
+    const learned = getPreferredHours(6);
+    const SCHEDULE = learned
+      ? learned.map((h) => ({
+          hour: h,
+          minute: h, // mantém variação tipo 8h08, 14h14
+          title: 'Uma palavra escolhida pra você 👇',
+        }))
+      : DEFAULT_SCHEDULE;
 
     const notifications = [];
     const now = new Date();
