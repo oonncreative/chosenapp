@@ -2,9 +2,25 @@ import { useEffect } from 'react';
 import { toast } from 'sonner';
 import { getChosenForHour, isWithinQuietHours, NOTIFICATION_TITLES, pickNotificationBody } from '@/lib/psalms';
 import { getPreferredHours } from '@/lib/usagePattern';
+import { pickSilenceWord } from '@/lib/silenceWords';
 
 const ENABLED_KEY = 'chosen_notifications_enabled';
 const NATIVE_SCHEDULED_KEY = 'chosen_native_scheduled_date';
+
+const MOOD_ACTION_TYPE = 'MOOD_CHECK';
+const MOOD_TO_CATEGORY: Record<string, string> = {
+  mood_happy: 'Feliz',
+  mood_neutral: 'Preciso de paz',
+  mood_sad: 'Triste',
+  mood_angry: 'Nervoso',
+};
+
+function nextWeekday(from: Date, weekday: number): Date {
+  const d = new Date(from);
+  const diff = (weekday - d.getDay() + 7) % 7 || 7;
+  d.setDate(d.getDate() + diff);
+  return d;
+}
 
 function isCapacitor(): boolean {
   return typeof window !== 'undefined' && !!(window as any).Capacitor?.isNativePlatform?.();
@@ -21,6 +37,23 @@ async function scheduleNativeNotifications() {
 
     const permission = await LocalNotifications.checkPermissions();
     if (permission.display !== 'granted') return;
+
+    // Registra ações do mood check-in (idempotente)
+    try {
+      await LocalNotifications.registerActionTypes({
+        types: [
+          {
+            id: MOOD_ACTION_TYPE,
+            actions: [
+              { id: 'mood_happy', title: '😊 Bem' },
+              { id: 'mood_neutral', title: '😐 Mais ou menos' },
+              { id: 'mood_sad', title: '😢 Triste' },
+              { id: 'mood_angry', title: '😤 Irritado' },
+            ],
+          },
+        ],
+      });
+    } catch {}
 
     const pending = await LocalNotifications.getPending();
     if (pending.notifications.length > 0) {
@@ -69,6 +102,45 @@ async function scheduleNativeNotifications() {
           });
           id++;
         }
+      }
+    }
+
+    // Palavra do silêncio — sábados às 9h, próximas 4 semanas.
+    for (let week = 0; week < 4; week++) {
+      const d = nextWeekday(now, 6);
+      d.setDate(d.getDate() + week * 7);
+      d.setHours(9, 0, 0, 0);
+      if (d > now) {
+        const seed = d.getFullYear() * 1000 + Math.floor(d.getTime() / (24 * 3600 * 1000));
+        const word = pickSilenceWord(seed);
+        notifications.push({
+          id: id++,
+          title: 'Palavra do silêncio',
+          body: word,
+          schedule: { at: d },
+          smallIcon: 'ic_stat_chosen',
+          iconColor: '#f1f26c',
+          extra: { url: `/silencio?w=${encodeURIComponent(word)}` },
+        });
+      }
+    }
+
+    // Como você tá agora? — domingos às 18h, próximas 4 semanas.
+    for (let week = 0; week < 4; week++) {
+      const d = nextWeekday(now, 0);
+      d.setDate(d.getDate() + week * 7);
+      d.setHours(18, 0, 0, 0);
+      if (d > now) {
+        notifications.push({
+          id: id++,
+          title: 'Como você tá agora?',
+          body: 'Toca no que você sente que escolho a palavra certa.',
+          schedule: { at: d },
+          actionTypeId: MOOD_ACTION_TYPE,
+          smallIcon: 'ic_stat_chosen',
+          iconColor: '#f1f26c',
+          extra: { url: '/home', type: 'mood' },
+        } as any);
       }
     }
 
@@ -157,8 +229,19 @@ export function useNativeNotifications() {
         const cleanups: Array<() => void> = [];
 
         import('@capacitor/local-notifications').then(({ LocalNotifications }) => {
-          LocalNotifications.addListener('localNotificationActionPerformed', () => {
-            // Já está no app, não precisa navegar
+          LocalNotifications.addListener('localNotificationActionPerformed', (notif: any) => {
+            try {
+              const actionId = notif?.actionId as string | undefined;
+              const extraUrl = notif?.notification?.extra?.url as string | undefined;
+              const cat = actionId ? MOOD_TO_CATEGORY[actionId] : undefined;
+              if (cat) {
+                window.location.href = `/mensagem/${encodeURIComponent(cat)}?color=%23f1f26c&id=mood`;
+                return;
+              }
+              if (extraUrl && extraUrl !== window.location.pathname) {
+                window.location.href = extraUrl;
+              }
+            } catch {}
           }).then(h => cleanups.push(() => h.remove())).catch(() => {});
         }).catch(() => {});
 
