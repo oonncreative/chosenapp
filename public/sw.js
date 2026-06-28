@@ -1,12 +1,83 @@
-// Service Worker — somente handlers de notificação (sem cache de app shell).
-const CACHE_NAME = 'chosen-v1';
+// Service Worker — Workbox precache (offline) + handlers de notificação.
+// Processado por vite-plugin-pwa (injectManifest).
+import { precacheAndRoute, cleanupOutdatedCaches } from 'workbox-precaching';
+import { registerRoute, setCatchHandler } from 'workbox-routing';
+import { NetworkFirst, CacheFirst, StaleWhileRevalidate } from 'workbox-strategies';
+import { CacheableResponsePlugin } from 'workbox-cacheable-response';
+import { ExpirationPlugin } from 'workbox-expiration';
 
-self.addEventListener('install', (event) => {
+// Precache de todo o app shell (HTML, JS, CSS, imagens, fontes)
+precacheAndRoute(self.__WB_MANIFEST || []);
+cleanupOutdatedCaches();
+
+self.addEventListener('install', () => {
   self.skipWaiting();
 });
 
 self.addEventListener('activate', (event) => {
-  event.waitUntil(clients.claim());
+  event.waitUntil(self.clients.claim());
+});
+
+// HTML/navegação: NetworkFirst (fallback para cache offline)
+registerRoute(
+  ({ request }) => request.mode === 'navigate',
+  new NetworkFirst({
+    cacheName: 'chosen-html',
+    networkTimeoutSeconds: 3,
+    plugins: [
+      new CacheableResponsePlugin({ statuses: [0, 200] }),
+    ],
+  })
+);
+
+// Assets com hash (JS/CSS) — CacheFirst
+registerRoute(
+  ({ request, url }) =>
+    url.origin === self.location.origin &&
+    (request.destination === 'script' || request.destination === 'style'),
+  new CacheFirst({
+    cacheName: 'chosen-assets',
+    plugins: [
+      new CacheableResponsePlugin({ statuses: [0, 200] }),
+      new ExpirationPlugin({ maxEntries: 100, maxAgeSeconds: 60 * 60 * 24 * 30 }),
+    ],
+  })
+);
+
+// Imagens (mascotes, ícones) — CacheFirst
+registerRoute(
+  ({ request }) => request.destination === 'image',
+  new CacheFirst({
+    cacheName: 'chosen-images',
+    plugins: [
+      new CacheableResponsePlugin({ statuses: [0, 200] }),
+      new ExpirationPlugin({ maxEntries: 100, maxAgeSeconds: 60 * 60 * 24 * 60 }),
+    ],
+  })
+);
+
+// Fontes do Google Fonts — StaleWhileRevalidate
+registerRoute(
+  ({ url }) =>
+    url.origin === 'https://fonts.googleapis.com' ||
+    url.origin === 'https://fonts.gstatic.com',
+  new StaleWhileRevalidate({
+    cacheName: 'chosen-fonts',
+    plugins: [
+      new CacheableResponsePlugin({ statuses: [0, 200] }),
+      new ExpirationPlugin({ maxEntries: 30, maxAgeSeconds: 60 * 60 * 24 * 365 }),
+    ],
+  })
+);
+
+// Fallback offline: se uma navegação falhar e não houver cache, serve o app shell ("/")
+setCatchHandler(async ({ request }) => {
+  if (request.destination === 'document' || request.mode === 'navigate') {
+    const cache = await caches.open('chosen-html');
+    const cached = (await cache.match('/')) || (await caches.match('/'));
+    if (cached) return cached;
+  }
+  return Response.error();
 });
 
 self.addEventListener('notificationclick', (event) => {
@@ -36,6 +107,10 @@ self.addEventListener('notificationclick', (event) => {
 
 // Listener para mensagens do app (para agendar notificações simuladas se necessário)
 self.addEventListener('message', (event) => {
+  if (event.data && event.data.type === 'SKIP_WAITING') {
+    self.skipWaiting();
+    return;
+  }
   if (event.data && event.data.type === 'SCHEDULE_NOTIFICATION') {
     // Nota: Service Workers não podem usar setTimeout por longos períodos confiavelmente.
     // Para uma experiência real de PWA, usaríamos a Periodic Sync API ou Push API.
