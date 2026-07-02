@@ -11,6 +11,17 @@ export const PSALMS: ChosenItem[] = Object.values(MENSAGENS)
   .flat()
   .map((m) => ({ ref: m.referencia, text: m.texto }));
 
+// Pool exclusivo de salmos / versículos (para alternância nas notificações).
+export const SALMOS_POOL: ChosenItem[] = Object.values(MENSAGENS)
+  .flat()
+  .filter((m) => m.tipo === "salmo" || m.tipo === "versiculo")
+  .map((m) => ({ ref: m.referencia, text: m.texto }));
+
+// Pool motivacional: categoria Motivação + mensagens-convite.
+const MOTIVACAO_MENSAGENS: ChosenItem[] = (MENSAGENS["Motivação"] || []).map(
+  (m) => ({ ref: m.referencia, text: m.texto })
+);
+
 // Seleção determinística por hora — todos veem a "mesma escolhida" naquela hora.
 export function getChosenForHour(date = new Date()): ChosenItem {
   const key = Math.floor(date.getTime() / (60 * 60 * 1000));
@@ -19,6 +30,20 @@ export function getChosenForHour(date = new Date()): ChosenItem {
 
 export function getChosenRandom(): ChosenItem {
   return PSALMS[Math.floor(Math.random() * PSALMS.length)];
+}
+
+// Sorteia deterministicamente um salmo/versículo para a hora dada.
+export function getSalmoForHour(date = new Date()): ChosenItem {
+  const key = Math.floor(date.getTime() / (60 * 60 * 1000));
+  return SALMOS_POOL[key % SALMOS_POOL.length];
+}
+
+// Sorteia deterministicamente uma mensagem motivacional para a hora dada
+// (categoria Motivação + mensagens-convite).
+export function getMotivacionalForHour(date = new Date()): ChosenItem {
+  const pool = [...MOTIVACAO_MENSAGENS, ...INVITATION_MESSAGES];
+  const key = Math.floor(date.getTime() / (60 * 60 * 1000));
+  return pool[key % pool.length];
 }
 
 export const NOTIFICATION_TITLES = [

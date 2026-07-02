@@ -1,6 +1,12 @@
 import { useEffect } from 'react';
 import { toast } from 'sonner';
-import { getChosenForHour, isWithinQuietHours, NOTIFICATION_TITLES, pickNotificationBody } from '@/lib/psalms';
+import {
+  getSalmoForHour,
+  getMotivacionalForHour,
+  isWithinQuietHours,
+  NOTIFICATION_TITLES,
+} from '@/lib/psalms';
+import { getRandomSalmo, getRandomMotivacional } from '@/lib/data';
 import { getPreferredHours } from '@/lib/usagePattern';
 import { pickSilenceWord } from '@/lib/silenceWords';
 
@@ -8,6 +14,7 @@ const ENABLED_KEY = 'chosen_notifications_enabled';
 const NATIVE_SCHEDULED_KEY = 'chosen_native_scheduled_date';
 
 const MOOD_ACTION_TYPE = 'MOOD_CHECK';
+const MSG_TYPE_ACTION_TYPE = 'MSG_TYPE_CHECK';
 const MOOD_TO_CATEGORY: Record<string, string> = {
   mood_happy: 'Feliz',
   mood_neutral: 'Preciso de paz',
@@ -51,6 +58,13 @@ async function scheduleNativeNotifications() {
               { id: 'mood_angry', title: '😤 Irritado' },
             ],
           },
+          {
+            id: MSG_TYPE_ACTION_TYPE,
+            actions: [
+              { id: 'msg_salmo', title: '📖 Salmo' },
+              { id: 'msg_moti', title: '✨ Motivação' },
+            ],
+          },
         ],
       });
     } catch {}
@@ -84,17 +98,23 @@ async function scheduleNativeNotifications() {
     let id = 1;
 
     for (let day = 0; day <= 6; day++) {
-      for (const slot of SCHEDULE) {
+      SCHEDULE.forEach((slot, slotIndex) => {
         const scheduledDate = new Date(now);
         scheduledDate.setDate(now.getDate() + day);
         scheduledDate.setHours(slot.hour, slot.minute, 0, 0);
 
         if (scheduledDate > now) {
-          const item = getChosenForHour(scheduledDate);
+          // Alterna a cada notificação: pares → salmo, ímpares → motivacional.
+          const useSalmo = (day * SCHEDULE.length + slotIndex) % 2 === 0;
+          const item = useSalmo
+            ? getSalmoForHour(scheduledDate)
+            : getMotivacionalForHour(scheduledDate);
+          const body =
+            item.ref === 'CHOSEN' ? item.text : `${item.ref} — ${item.text}`;
           notifications.push({
             id,
             title: slot.title,
-            body: `${item.ref} — ${item.text}`,
+            body,
             schedule: { at: scheduledDate },
             smallIcon: 'ic_stat_chosen',
             iconColor: '#f1f26c',
@@ -102,14 +122,14 @@ async function scheduleNativeNotifications() {
           });
           id++;
         }
-      }
+      });
     }
 
-    // Palavra do silêncio — sábados às 9h, próximas 4 semanas.
+    // Palavra do silêncio — sábados às 09:09, próximas 4 semanas.
     for (let week = 0; week < 4; week++) {
       const d = nextWeekday(now, 6);
       d.setDate(d.getDate() + week * 7);
-      d.setHours(9, 0, 0, 0);
+      d.setHours(9, 9, 0, 0);
       if (d > now) {
         const seed = d.getFullYear() * 1000 + Math.floor(d.getTime() / (24 * 3600 * 1000));
         const word = pickSilenceWord(seed);
@@ -125,14 +145,33 @@ async function scheduleNativeNotifications() {
       }
     }
 
-    // Como você tá agora? — 4x por semana (seg, qua, sex, dom) às 18h, próximas 4 semanas.
-    const MOOD_DAYS = [1, 3, 5, 0];
-    for (let week = 0; week < 4; week++) {
-      for (const wd of MOOD_DAYS) {
-        const d = nextWeekday(now, wd);
-        d.setDate(d.getDate() + week * 7);
-        d.setHours(18, 0, 0, 0);
-        if (d > now) {
+    // Palavra do silêncio — dias alternados às 19:19 (próximas 2 semanas).
+    for (let day = 1; day <= 14; day += 2) {
+      const d = new Date(now);
+      d.setDate(now.getDate() + day);
+      d.setHours(19, 19, 0, 0);
+      if (d > now && d.getDay() !== 6) {
+        // evita duplicar com o slot de sábado 09:09
+        const seed = d.getFullYear() * 1000 + Math.floor(d.getTime() / (24 * 3600 * 1000));
+        const word = pickSilenceWord(seed + 1);
+        notifications.push({
+          id: id++,
+          title: 'Palavra do silêncio',
+          body: word,
+          schedule: { at: d },
+          smallIcon: 'ic_stat_chosen',
+          iconColor: '#f1f26c',
+          extra: { url: `/silencio?w=${encodeURIComponent(word)}` },
+        });
+      }
+    }
+
+    // Como você tá agora? — todos os dias às 18h, próximas 2 semanas.
+    for (let day = 0; day < 14; day++) {
+      const d = new Date(now);
+      d.setDate(now.getDate() + day);
+      d.setHours(18, 0, 0, 0);
+      if (d > now) {
           notifications.push({
             id: id++,
             title: 'Como você tá agora?',
@@ -143,7 +182,25 @@ async function scheduleNativeNotifications() {
             iconColor: '#f1f26c',
             extra: { url: '/home', type: 'mood' },
           } as any);
-        }
+      }
+    }
+
+    // Check-in de mensagem — todos os dias às 11h, próximas 2 semanas.
+    for (let day = 0; day < 14; day++) {
+      const d = new Date(now);
+      d.setDate(now.getDate() + day);
+      d.setHours(11, 0, 0, 0);
+      if (d > now) {
+        notifications.push({
+          id: id++,
+          title: 'Se fosse pra receber uma mensagem agora…',
+          body: 'Você gostaria de um salmo ou uma motivação?',
+          schedule: { at: d },
+          actionTypeId: MSG_TYPE_ACTION_TYPE,
+          smallIcon: 'ic_stat_chosen',
+          iconColor: '#f1f26c',
+          extra: { url: '/home', type: 'msg_type' },
+        } as any);
       }
     }
 
@@ -236,6 +293,17 @@ export function useNativeNotifications() {
             try {
               const actionId = notif?.actionId as string | undefined;
               const extraUrl = notif?.notification?.extra?.url as string | undefined;
+              // Check-in de tipo de mensagem
+              if (actionId === 'msg_salmo') {
+                const { categoria, id } = getRandomSalmo();
+                window.location.href = `/mensagem/${encodeURIComponent(categoria)}?color=%23f1f26c&id=${encodeURIComponent(id)}`;
+                return;
+              }
+              if (actionId === 'msg_moti') {
+                const { categoria, id } = getRandomMotivacional();
+                window.location.href = `/mensagem/${encodeURIComponent(categoria)}?color=%23f1f26c&id=${encodeURIComponent(id)}`;
+                return;
+              }
               const cat = actionId ? MOOD_TO_CATEGORY[actionId] : undefined;
               if (cat) {
                 window.location.href = `/mensagem/${encodeURIComponent(cat)}?color=%23f1f26c&id=mood`;
@@ -271,10 +339,13 @@ export function useNativeNotifications() {
       next.setMinutes(0, 5, 0);
       next.setHours(next.getHours() + 1);
       const msUntilNext = next.getTime() - Date.now();
+      let slot = 0;
+      const alternated = (d: Date) =>
+        slot++ % 2 === 0 ? getSalmoForHour(d) : getMotivacionalForHour(d);
 
       let interval: ReturnType<typeof setInterval> | null = null;
       const timeout = setTimeout(async () => {
-        const item = pickNotificationBody();
+        const item = alternated(new Date());
         const title = pickTitle();
         const body = item.ref === 'CHOSEN' ? item.text : `${item.ref} — ${item.text}`;
         if (document.visibilityState === 'visible') {
@@ -291,7 +362,7 @@ export function useNativeNotifications() {
           });
         }
         interval = setInterval(async () => {
-          const item2 = pickNotificationBody();
+          const item2 = alternated(new Date());
           const title2 = pickTitle();
           const body2 = item2.ref === 'CHOSEN' ? item2.text : `${item2.ref} — ${item2.text}`;
           if (document.visibilityState === 'visible') {
