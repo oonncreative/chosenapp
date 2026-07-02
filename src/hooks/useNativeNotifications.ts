@@ -134,7 +134,7 @@ async function scheduleNativeNotifications() {
               // Contexto pra ações rápidas (Amém / Salvar / Próxima)
               msg: {
                 id: `notif-${scheduledDate.getTime()}`,
-                categoria: useSalmo ? 'Motivação' : 'Motivação',
+                categoria: 'Motivação',
                 ref: item.ref,
                 text: item.text,
               },
