@@ -172,7 +172,7 @@ export function FloatingMenu() {
 
   const handleFavoritos = () => {
     setOpen(false);
-    setFavoritesOpen(true);
+    navigate({ to: "/escolhidas" });
   };
 
   const handleEnviarPraAlguem = () => {
@@ -455,6 +455,8 @@ function ScheduleDialog({
               value={date}
               onChange={(e) => setDate(e.target.value)}
               min={new Date().toISOString().slice(0, 10)}
+              inputMode="numeric"
+              pattern="[0-9]*"
             />
           </div>
           <div className="flex flex-col gap-1.5">
@@ -464,6 +466,9 @@ function ScheduleDialog({
               type="time"
               value={time}
               onChange={(e) => setTime(e.target.value)}
+              inputMode="numeric"
+              pattern="[0-9]*"
+              step={60}
             />
           </div>
         </div>
