@@ -225,7 +225,11 @@ function RootComponent() {
     <QueryClientProvider client={queryClient}>
       <Outlet />
       <FloatingMenu />
-      <Toaster position="top-center" offset="max(env(safe-area-inset-top), 80px)" />
+      <Toaster
+        position="top-center"
+        offset="calc(env(safe-area-inset-top, 0px) + 24px)"
+        mobileOffset="calc(env(safe-area-inset-top, 0px) + 32px)"
+      />
     </QueryClientProvider>
   );
 }
