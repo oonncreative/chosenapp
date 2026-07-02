@@ -7,7 +7,7 @@ export function AppFooter() {
         rel="noopener noreferrer"
         className="text-[8px] font-light tracking-[0.2em] text-gray-400 uppercase transition-colors hover:text-black"
       >
-        OONN Creative — oonn.com.br — v1.0
+        OONN Creative — oonn.com.br
       </a>
     </footer>
   );
