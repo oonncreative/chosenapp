@@ -1202,3 +1202,24 @@ export function getRandomMensagemGlobal(): { categoria: Categoria; id: string } 
   const id = getRandomIdForCategoria(categoria);
   return { categoria, id };
 }
+
+// Sorteia um salmo/versículo (tipo bíblico) em qualquer categoria.
+export function getRandomSalmo(): { categoria: Categoria; id: string } {
+  const pool: Array<{ categoria: Categoria; id: string }> = [];
+  (Object.keys(MENSAGENS) as Categoria[]).forEach((cat) => {
+    MENSAGENS[cat].forEach((m) => {
+      if (m.tipo === "salmo" || m.tipo === "versiculo") {
+        pool.push({ categoria: cat, id: m.id });
+      }
+    });
+  });
+  return pool[Math.floor(Math.random() * pool.length)];
+}
+
+// Sorteia uma mensagem da categoria Motivação.
+export function getRandomMotivacional(): { categoria: Categoria; id: string } {
+  const cat: Categoria = "Motivação";
+  const msgs = MENSAGENS[cat];
+  const m = msgs[Math.floor(Math.random() * msgs.length)];
+  return { categoria: cat, id: m.id };
+}
