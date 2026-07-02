@@ -9,12 +9,14 @@ import {
 import { getRandomSalmo, getRandomMotivacional } from '@/lib/data';
 import { getPreferredHours } from '@/lib/usagePattern';
 import { pickSilenceWord } from '@/lib/silenceWords';
+import { toggleFavorite, isFavorite } from '@/lib/favorites';
 
 const ENABLED_KEY = 'chosen_notifications_enabled';
 const NATIVE_SCHEDULED_KEY = 'chosen_native_scheduled_date';
 
 const MOOD_ACTION_TYPE = 'MOOD_CHECK';
 const MSG_TYPE_ACTION_TYPE = 'MSG_TYPE_CHECK';
+const MSG_QUICK_ACTION_TYPE = 'MSG_QUICK';
 const MOOD_TO_CATEGORY: Record<string, string> = {
   mood_happy: 'Feliz',
   mood_neutral: 'Preciso de paz',
@@ -63,6 +65,14 @@ async function scheduleNativeNotifications() {
             actions: [
               { id: 'msg_salmo', title: '📖 Salmo' },
               { id: 'msg_moti', title: '✨ Motivação' },
+            ],
+          },
+          {
+            id: MSG_QUICK_ACTION_TYPE,
+            actions: [
+              { id: 'msg_amem', title: '🙏 Amém' },
+              { id: 'msg_save', title: '💛 Salvar' },
+              { id: 'msg_next', title: '⏭️ Próxima' },
             ],
           },
         ],
@@ -116,10 +126,20 @@ async function scheduleNativeNotifications() {
             title: slot.title,
             body,
             schedule: { at: scheduledDate },
+            actionTypeId: MSG_QUICK_ACTION_TYPE,
             smallIcon: 'ic_stat_chosen',
             iconColor: '#f1f26c',
-            extra: { url: '/home' },
-          });
+            extra: {
+              url: '/home',
+              // Contexto pra ações rápidas (Amém / Salvar / Próxima)
+              msg: {
+                id: `notif-${scheduledDate.getTime()}`,
+                categoria: useSalmo ? 'Motivação' : 'Motivação',
+                ref: item.ref,
+                text: item.text,
+              },
+            },
+          } as any);
           id++;
         }
       });
@@ -293,6 +313,34 @@ export function useNativeNotifications() {
             try {
               const actionId = notif?.actionId as string | undefined;
               const extraUrl = notif?.notification?.extra?.url as string | undefined;
+              const extraMsg = notif?.notification?.extra?.msg as
+                | { id: string; categoria: string; ref: string; text: string }
+                | undefined;
+
+              // Ações rápidas em cima da mensagem enviada no push
+              if (actionId === 'msg_amem') {
+                // Só abre o app na tela inicial — nenhuma ação destrutiva.
+                window.location.href = '/home';
+                return;
+              }
+              if (actionId === 'msg_save' && extraMsg) {
+                if (!isFavorite(extraMsg.id)) {
+                  toggleFavorite({
+                    id: extraMsg.id,
+                    categoria: extraMsg.categoria,
+                    ref: extraMsg.ref,
+                    text: extraMsg.text,
+                  });
+                }
+                window.location.href = '/escolhidas';
+                return;
+              }
+              if (actionId === 'msg_next') {
+                const { categoria, id } = getRandomSalmo();
+                window.location.href = `/mensagem/${encodeURIComponent(categoria)}?color=%23f1f26c&id=${encodeURIComponent(id)}`;
+                return;
+              }
+
               // Check-in de tipo de mensagem
               if (actionId === 'msg_salmo') {
                 const { categoria, id } = getRandomSalmo();
