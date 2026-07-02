@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate, useRouterState } from "@tanstack/react-router";
-import { Menu, RefreshCw, Sparkles, CalendarClock, Share2, HelpCircle, Trash2, Heart, Send } from "lucide-react";
+import { Menu, RefreshCw, Sparkles, CalendarClock, Share2, HelpCircle, Trash2, Heart, Send, Smile, Shuffle, BellRing, Wind, Copy, Check } from "lucide-react";
 import { toast } from "sonner";
 import {
   Sheet,
@@ -550,59 +550,100 @@ function HelpDialog({
   open: boolean;
   onOpenChange: (v: boolean) => void;
 }) {
+  const [copied, setCopied] = useState(false);
+  const pix = "61.117.435/0001-05";
+
+  const copyPix = async () => {
+    try {
+      await navigator.clipboard.writeText(pix);
+      setCopied(true);
+      toast("Chave Pix copiada 💛");
+      setTimeout(() => setCopied(false), 2000);
+    } catch {
+      toast.error("Não foi possível copiar");
+    }
+  };
+
+  const features = [
+    { icon: <Smile className="h-4 w-4" />, title: "Check-in de humor", desc: "Escolha como você está e receba a palavra certa." },
+    { icon: <Shuffle className="h-4 w-4" />, title: "Aleatório", desc: "Um salmo ou uma motivação a qualquer hora." },
+    { icon: <Sparkles className="h-4 w-4" />, title: "Orações", desc: "Guia ACTS + orações para cada momento do dia." },
+    { icon: <Wind className="h-4 w-4" />, title: "Palavra de silêncio", desc: "Um instante calmo para respirar e ouvir." },
+    { icon: <Heart className="h-4 w-4" />, title: "Minhas escolhidas", desc: "Suas favoritas e histórico, disponíveis offline." },
+    { icon: <Send className="h-4 w-4" />, title: "Chosen pra alguém", desc: "Envie uma palavra assinada ou anônima." },
+    { icon: <CalendarClock className="h-4 w-4" />, title: "Agendar mensagem", desc: "Marque o dia e a hora do seu lembrete." },
+    { icon: <BellRing className="h-4 w-4" />, title: "Lembretes diários", desc: "Notificações silenciosas em horários pensados pra você." },
+    { icon: <Share2 className="h-4 w-4" />, title: "Compartilhar", desc: "Gere uma imagem bonita com o versículo em segundos." },
+  ];
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-md max-h-[90vh] overflow-y-auto">
-        <DialogHeader>
-          <DialogTitle className="text-base font-light tracking-[0.2em] uppercase">
-            Sobre o Chosen
-          </DialogTitle>
-          <DialogDescription className="sr-only">Informações do app</DialogDescription>
-        </DialogHeader>
-
-        <div className="flex flex-col gap-4 text-sm text-black/80 leading-relaxed">
-          <p>
-            <strong>Chosen</strong> é um app de inspirações escolhidas — uma palavra
-            certa pra cada momento do seu dia: alegria, ansiedade, tristeza,
-            gratidão, força, esperança ou paz.
+      <DialogContent className="max-w-md p-0 overflow-hidden gap-0 border-0 rounded-2xl">
+        <div className="px-6 pt-6 pb-4">
+          <DialogHeader className="space-y-1">
+            <DialogTitle className="text-[11px] font-light tracking-[0.35em] uppercase text-black/50">
+              Sobre
+            </DialogTitle>
+            <DialogDescription className="sr-only">O que é o Chosen</DialogDescription>
+          </DialogHeader>
+          <p className="mt-2 text-xl font-light leading-snug text-black tracking-tight">
+            Uma palavra escolhida pra cada momento do seu dia.
           </p>
-
-          <div>
-            <div className="text-xs uppercase tracking-widest text-black/50 mb-1">
-              Como funciona
-            </div>
-            <ul className="list-disc list-inside space-y-1">
-              <li>Escolha um sentimento e receba uma mensagem.</li>
-              <li>Toque em <em>aleatório</em> 🔀 pra receber algo do nada.</li>
-              <li>Compartilhe mensagens em imagem com quem você ama.</li>
-              <li>Receba lembretes em horários do dia (8h, 10h, 12h, 14h, 18h, 21h).</li>
-              <li>Agende mensagens pessoais pelo menu flutuante.</li>
-              <li>Orações para cada momento — botão ⭐ no topo.</li>
-            </ul>
-          </div>
-
-          <div>
-            <div className="text-xs uppercase tracking-widest text-black/50 mb-1">
-              Desenvolvido por
-            </div>
-            <a
-              href="https://oonn.com.br"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 font-medium underline"
-            >
-              OONN Creative — oonn.com.br
-            </a>
-          </div>
-
-          <div className="text-xs text-black/40">Versão 1.0</div>
+          <p className="mt-2 text-[13px] text-black/60 leading-relaxed">
+            Salmos, motivações, orações e um instante de silêncio — pensados
+            pra caber na sua rotina sem barulho.
+          </p>
         </div>
 
-        <DialogFooter>
-          <Button variant="outline" onClick={() => onOpenChange(false)}>
+        <div className="px-6 pb-4">
+          <div className="grid grid-cols-2 gap-x-3 gap-y-2.5">
+            {features.map((f) => (
+              <div key={f.title} className="flex gap-2 items-start">
+                <span className="mt-0.5 shrink-0 text-black">{f.icon}</span>
+                <div className="min-w-0">
+                  <div className="text-[12px] font-semibold text-black leading-tight">{f.title}</div>
+                  <div className="text-[11px] text-black/55 leading-snug">{f.desc}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className="px-6 py-4 bg-[#f8f8f5] border-t border-black/5">
+          <div className="flex items-center justify-between gap-3">
+            <div className="min-w-0">
+              <div className="text-[10px] font-light tracking-[0.3em] uppercase text-black/50">
+                Apoie com um Pix
+              </div>
+              <div className="text-[13px] font-medium text-black truncate">{pix}</div>
+              <div className="text-[10px] text-black/45">OONN Creative · CNPJ</div>
+            </div>
+            <button
+              onClick={copyPix}
+              className="shrink-0 inline-flex items-center gap-1.5 rounded-full bg-black text-white px-3.5 py-2 text-[11px] font-semibold tracking-wide active:scale-95 transition"
+            >
+              {copied ? <Check className="h-3.5 w-3.5" /> : <Copy className="h-3.5 w-3.5" />}
+              {copied ? "Copiado" : "Copiar"}
+            </button>
+          </div>
+        </div>
+
+        <div className="px-6 py-3 flex items-center justify-between text-[10px] tracking-[0.2em] uppercase text-black/40 border-t border-black/5">
+          <a
+            href="https://oonn.com.br"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hover:text-black transition-colors"
+          >
+            OONN Creative
+          </a>
+          <button
+            onClick={() => onOpenChange(false)}
+            className="hover:text-black transition-colors"
+          >
             Fechar
-          </Button>
-        </DialogFooter>
+          </button>
+        </div>
       </DialogContent>
     </Dialog>
   );
