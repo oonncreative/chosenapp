@@ -3,7 +3,7 @@ import { getMensagemById, type Categoria, type Mensagem } from "@/lib/data";
 import { Button } from "@/components/ui/button";
 import { useState, useEffect } from "react";
 import { Share2, ArrowLeft, Heart } from "lucide-react";
-import { isFavorite, toggleFavorite } from "@/lib/favorites";
+import { isFavorite, toggleFavorite, addToHistory } from "@/lib/favorites";
 import { toast } from "sonner";
 import { ShareSheet } from "@/components/share/ShareSheet";
 
@@ -69,6 +69,17 @@ function MensagemPage() {
   useEffect(() => {
     if (mensagem?.id) setFav(isFavorite(mensagem.id));
   }, [mensagem?.id]);
+
+  // Registra no histórico offline sempre que a mensagem for aberta.
+  useEffect(() => {
+    if (!mensagem?.id) return;
+    addToHistory({
+      id: mensagem.id,
+      categoria: sentimento,
+      ref: mensagem.referencia,
+      text: mensagem.texto,
+    });
+  }, [mensagem?.id, sentimento]);
 
   const handleToggleFav = () => {
     if (!mensagem) return;

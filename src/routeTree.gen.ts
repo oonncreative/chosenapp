@@ -13,6 +13,7 @@ import { Route as SilencioRouteImport } from './routes/silencio'
 import { Route as OracoesRouteImport } from './routes/oracoes'
 import { Route as OnboardingRouteImport } from './routes/onboarding'
 import { Route as HomeRouteImport } from './routes/home'
+import { Route as EscolhidasRouteImport } from './routes/escolhidas'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as PPayloadRouteImport } from './routes/p.$payload'
 import { Route as MensagemSentimentoRouteImport } from './routes/mensagem/$sentimento'
@@ -37,6 +38,11 @@ const HomeRoute = HomeRouteImport.update({
   path: '/home',
   getParentRoute: () => rootRouteImport,
 } as any)
+const EscolhidasRoute = EscolhidasRouteImport.update({
+  id: '/escolhidas',
+  path: '/escolhidas',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -55,6 +61,7 @@ const MensagemSentimentoRoute = MensagemSentimentoRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/escolhidas': typeof EscolhidasRoute
   '/home': typeof HomeRoute
   '/onboarding': typeof OnboardingRoute
   '/oracoes': typeof OracoesRoute
@@ -64,6 +71,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/escolhidas': typeof EscolhidasRoute
   '/home': typeof HomeRoute
   '/onboarding': typeof OnboardingRoute
   '/oracoes': typeof OracoesRoute
@@ -74,6 +82,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/escolhidas': typeof EscolhidasRoute
   '/home': typeof HomeRoute
   '/onboarding': typeof OnboardingRoute
   '/oracoes': typeof OracoesRoute
@@ -85,6 +94,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/escolhidas'
     | '/home'
     | '/onboarding'
     | '/oracoes'
@@ -94,6 +104,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/escolhidas'
     | '/home'
     | '/onboarding'
     | '/oracoes'
@@ -103,6 +114,7 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/escolhidas'
     | '/home'
     | '/onboarding'
     | '/oracoes'
@@ -113,6 +125,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  EscolhidasRoute: typeof EscolhidasRoute
   HomeRoute: typeof HomeRoute
   OnboardingRoute: typeof OnboardingRoute
   OracoesRoute: typeof OracoesRoute
@@ -151,6 +164,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof HomeRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/escolhidas': {
+      id: '/escolhidas'
+      path: '/escolhidas'
+      fullPath: '/escolhidas'
+      preLoaderRoute: typeof EscolhidasRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -177,6 +197,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  EscolhidasRoute: EscolhidasRoute,
   HomeRoute: HomeRoute,
   OnboardingRoute: OnboardingRoute,
   OracoesRoute: OracoesRoute,

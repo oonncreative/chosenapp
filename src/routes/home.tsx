@@ -1,6 +1,6 @@
 import { AppFooter } from "@/components/AppFooter";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { Shuffle, List, GalleryHorizontal, Vibrate, VibrateOff } from "lucide-react";
+import { Shuffle, List, GalleryHorizontal, Vibrate, VibrateOff, Heart } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { CATEGORIAS, getRandomIdForCategoria, getRandomMensagemGlobal } from "@/lib/data";
 import { isShakeEnabled, setShakeEnabled, requestShakePermission } from "@/hooks/useShakeToChosen";
@@ -110,6 +110,13 @@ function HomePage() {
             >
               <Shuffle className="h-5 w-5 text-black" strokeWidth={2} />
             </button>
+            <Link
+              to="/escolhidas"
+              className="flex items-center justify-center min-w-11 min-h-11 p-2 transition-opacity active:opacity-50"
+              title="Minhas escolhidas"
+            >
+              <Heart className="h-5 w-5 text-black" strokeWidth={2} />
+            </Link>
             <button 
               onClick={() => {
                 const current = document.documentElement.classList.contains('grayscale');

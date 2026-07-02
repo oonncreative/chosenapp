@@ -1,4 +1,6 @@
 const KEY = "chosen_favorites";
+const HISTORY_KEY = "chosen_history";
+const HISTORY_MAX = 100;
 
 export interface Favorite {
   id: string;
@@ -46,4 +48,42 @@ export function toggleFavorite(fav: Omit<Favorite, "addedAt">): boolean {
 
 export function removeFavorite(id: string) {
   save(getFavorites().filter((f) => f.id !== id));
+}
+
+// -------- Histórico --------
+export interface HistoryEntry {
+  id: string;
+  categoria: string;
+  ref: string;
+  text: string;
+  viewedAt: number;
+}
+
+export function getHistory(): HistoryEntry[] {
+  if (typeof window === "undefined") return [];
+  try {
+    const raw = localStorage.getItem(HISTORY_KEY);
+    if (!raw) return [];
+    const list = JSON.parse(raw);
+    return Array.isArray(list) ? list : [];
+  } catch {
+    return [];
+  }
+}
+
+export function addToHistory(entry: Omit<HistoryEntry, "viewedAt">) {
+  try {
+    const list = getHistory().filter((h) => h.id !== entry.id);
+    list.unshift({ ...entry, viewedAt: Date.now() });
+    const trimmed = list.slice(0, HISTORY_MAX);
+    localStorage.setItem(HISTORY_KEY, JSON.stringify(trimmed));
+    window.dispatchEvent(new CustomEvent("chosen:history-changed"));
+  } catch {}
+}
+
+export function clearHistory() {
+  try {
+    localStorage.removeItem(HISTORY_KEY);
+    window.dispatchEvent(new CustomEvent("chosen:history-changed"));
+  } catch {}
 }
