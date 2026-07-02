@@ -9,7 +9,8 @@ const ENABLED_KEY = "chosen_shake_enabled";
 
 export function isShakeEnabled(): boolean {
   if (typeof window === "undefined") return false;
-  return localStorage.getItem(ENABLED_KEY) === "true";
+  // Padrão: ativado. Só desliga se o usuário explicitamente desativar.
+  return localStorage.getItem(ENABLED_KEY) !== "false";
 }
 
 export function setShakeEnabled(v: boolean) {

@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate, useRouterState } from "@tanstack/react-router";
-import { Menu, RefreshCw, Sparkles, CalendarClock, Share2, HelpCircle, Trash2, Heart, Smartphone, Send } from "lucide-react";
+import { Menu, RefreshCw, Sparkles, CalendarClock, Share2, HelpCircle, Trash2, Heart, Send } from "lucide-react";
 import { toast } from "sonner";
 import {
   Sheet,
@@ -25,11 +25,6 @@ import { PSALMS, INVITATION_MESSAGES, NOTIFICATION_TITLES } from "@/lib/psalms";
 import { getFavorites, removeFavorite, type Favorite } from "@/lib/favorites";
 import { getRandomMensagemGlobal, getMensagemById } from "@/lib/data";
 import { buildShareUrl } from "@/lib/share";
-import {
-  isShakeEnabled,
-  setShakeEnabled,
-  requestShakePermission,
-} from "@/hooks/useShakeToChosen";
 
 const SCHEDULED_KEY = "chosen_user_schedules";
 const PWA_SCHEDULE_BASE_ID = 50000;
@@ -106,13 +101,8 @@ export function FloatingMenu() {
   const [helpOpen, setHelpOpen] = useState(false);
   const [favoritesOpen, setFavoritesOpen] = useState(false);
   const [sendOpen, setSendOpen] = useState(false);
-  const [shakeOn, setShakeOn] = useState(false);
   const navigate = useNavigate();
   const pathname = useRouterState({ select: (s) => s.location.pathname });
-
-  useEffect(() => {
-    setShakeOn(isShakeEnabled());
-  }, []);
 
   // Esconde o FAB na splash/onboarding
   const hidden = pathname === "/" || pathname.startsWith("/onboarding");
@@ -190,27 +180,6 @@ export function FloatingMenu() {
     setSendOpen(true);
   };
 
-  const handleToggleShake = async () => {
-    if (shakeOn) {
-      setShakeEnabled(false);
-      setShakeOn(false);
-      toast("Chacoalhar desativado");
-      return;
-    }
-    const ok = await requestShakePermission();
-    if (!ok) {
-      toast.error("Permissão negada", {
-        description: "Não foi possível acessar o sensor de movimento.",
-      });
-      return;
-    }
-    setShakeEnabled(true);
-    setShakeOn(true);
-    toast("Chacoalhar ativado ✨", {
-      description: "Chacoalhe o celular pra receber uma palavra.",
-    });
-  };
-
   const handleMono = () => {
     setOpen(false);
     const current = document.documentElement.classList.contains("grayscale");
@@ -263,11 +232,6 @@ export function FloatingMenu() {
 
             <Divider />
 
-            <MenuItem
-              icon={<Smartphone className="h-5 w-5" />}
-              label={shakeOn ? "Chacoalhar: ativado" : "Chacoalhar pra sortear"}
-              onClick={handleToggleShake}
-            />
             <MenuItem
               icon={<Share2 className="h-5 w-5" />}
               label="Compartilhar o app"

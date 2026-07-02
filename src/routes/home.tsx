@@ -1,8 +1,10 @@
 import { AppFooter } from "@/components/AppFooter";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { Shuffle, List, GalleryHorizontal } from "lucide-react";
+import { Shuffle, List, GalleryHorizontal, Vibrate, VibrateOff } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { CATEGORIAS, getRandomIdForCategoria, getRandomMensagemGlobal } from "@/lib/data";
+import { isShakeEnabled, setShakeEnabled, requestShakePermission } from "@/hooks/useShakeToChosen";
+import { toast } from "sonner";
 
 const triggerHaptic = async () => {
   try {
@@ -51,6 +53,34 @@ function HomePage() {
     if (typeof window !== "undefined") localStorage.setItem("viewMode", viewMode);
   }, [viewMode]);
 
+  const [shakeOn, setShakeOn] = useState(false);
+  useEffect(() => {
+    setShakeOn(isShakeEnabled());
+  }, []);
+
+  const handleToggleShake = async () => {
+    if (shakeOn) {
+      setShakeEnabled(false);
+      setShakeOn(false);
+      toast("Chacoalhar desativado", {
+        description: "Você não vai mais receber uma mensagem ao chacoalhar o celular.",
+      });
+      return;
+    }
+    const ok = await requestShakePermission();
+    if (!ok) {
+      toast.error("Permissão negada", {
+        description: "Não foi possível acessar o sensor de movimento.",
+      });
+      return;
+    }
+    setShakeEnabled(true);
+    setShakeOn(true);
+    toast("Chacoalhar ativado ✨", {
+      description: "Chacoalhe o celular pra receber uma mensagem pra este momento.",
+    });
+  };
+
   return (
     <div className="h-[100dvh] overflow-hidden bg-white flex flex-col w-full max-w-[100vw]">
       <header className="px-4 sm:px-6 pt-[max(env(safe-area-inset-top),2rem)] pb-2 flex flex-col gap-3 shrink-0 bg-white z-20">
@@ -58,6 +88,18 @@ function HomePage() {
           <h1 className="truncate text-sm sm:text-base font-light tracking-[0.4em] text-black uppercase">CHOSEN</h1>
           
           <div className="flex items-center gap-0 shrink-0">
+            <button
+              onClick={handleToggleShake}
+              className="flex items-center justify-center min-w-11 min-h-11 p-2 transition-opacity active:opacity-50"
+              title={shakeOn ? "Chacoalhar ativado" : "Chacoalhar desativado"}
+              aria-pressed={shakeOn}
+            >
+              {shakeOn ? (
+                <Vibrate className="h-5 w-5 text-black" strokeWidth={2} />
+              ) : (
+                <VibrateOff className="h-5 w-5 text-black/40" strokeWidth={2} />
+              )}
+            </button>
             <button
               onClick={() => {
                 const { categoria, id } = getRandomMensagemGlobal();
