@@ -1197,6 +1197,18 @@ export function getProximaMensagem(categoria: Categoria): Mensagem {
   return getMensagemById(categoria, id);
 }
 
+// Escolhe a próxima mensagem de uma categoria evitando ids já exibidos.
+// Usado no feed de leitura contínua (`/mensagem/:sentimento`).
+export function getProximaMensagemFeed(
+  categoria: Categoria,
+  excludeIds: string[],
+): Mensagem {
+  const todas = MENSAGENS[categoria];
+  const restantes = todas.filter((m) => !excludeIds.includes(m.id));
+  const pool = restantes.length > 0 ? restantes : todas;
+  return pool[Math.floor(Math.random() * pool.length)];
+}
+
 export function getRandomMensagemGlobal(): { categoria: Categoria; id: string } {
   const categoria = CATEGORIAS[Math.floor(Math.random() * CATEGORIAS.length)];
   const id = getRandomIdForCategoria(categoria);
