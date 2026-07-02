@@ -7,6 +7,50 @@ import { isFavorite, toggleFavorite, addToHistory } from "@/lib/favorites";
 import { toast } from "sonner";
 import { ShareSheet } from "@/components/share/ShareSheet";
 
+function ResumoBlock({ text }: { text: string }) {
+  const pRef = useRef<HTMLParagraphElement | null>(null);
+  const [isExpanded, setIsExpanded] = useState(false);
+  const [overflows, setOverflows] = useState(false);
+
+  useEffect(() => {
+    const el = pRef.current;
+    if (!el) return;
+    const check = () => {
+      // Só há necessidade do botão se, colapsado, o texto realmente estoura o clamp.
+      const prevExpanded = el.classList.contains("chosen-resumo-expanded");
+      el.classList.remove("chosen-resumo-expanded");
+      const doesOverflow = el.scrollHeight - el.clientHeight > 1;
+      if (prevExpanded) el.classList.add("chosen-resumo-expanded");
+      setOverflows(doesOverflow);
+    };
+    check();
+    const ro = new ResizeObserver(check);
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, [text]);
+
+  return (
+    <div className="mt-8 flex flex-col items-center w-full">
+      <p
+        ref={pRef}
+        className={`chosen-resumo text-sm font-light text-gray-500 w-full max-w-[320px] leading-relaxed transition-all duration-300 break-words ${
+          isExpanded ? "chosen-resumo-expanded" : "line-clamp-4"
+        }`}
+      >
+        {text}
+      </p>
+      {overflows && (
+        <button
+          onClick={() => setIsExpanded((v) => !v)}
+          className="mt-2 text-[10px] font-bold tracking-widest uppercase text-gray-400 hover:text-black transition-colors"
+        >
+          {isExpanded ? "menos" : "mais..."}
+        </button>
+      )}
+    </div>
+  );
+}
+
 const triggerHaptic = async () => {
   try {
     const { Haptics, ImpactStyle } = await import('@capacitor/haptics');
@@ -62,7 +106,6 @@ function MensagemPage() {
   const { mensagem: mensagemInicial } = Route.useLoaderData();
   const [feed, setFeed] = useState<Mensagem[]>([mensagemInicial]);
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [expandedMap, setExpandedMap] = useState<Record<string, boolean>>({});
   const [favMap, setFavMap] = useState<Record<string, boolean>>({});
   const [shareOpen, setShareOpen] = useState(false);
   const [showHint, setShowHint] = useState(false);
@@ -231,9 +274,7 @@ function MensagemPage() {
         className="flex-1 min-h-0 w-full overflow-y-auto snap-y snap-mandatory no-scrollbar overscroll-contain"
         style={{ scrollBehavior: "smooth" }}
       >
-        {feed.map((m, idx) => {
-          const isExpanded = !!expandedMap[m.id];
-          return (
+        {feed.map((m, idx) => (
             <section
               key={`${m.id}-${idx}`}
               data-idx={idx}
@@ -250,29 +291,10 @@ function MensagemPage() {
                   {m.referencia}
                 </p>
 
-                {m.resumo && (
-                  <div className="mt-8 flex flex-col items-center w-full">
-                    <p
-                      className={`text-sm font-light text-gray-500 w-full max-w-[320px] leading-relaxed transition-all duration-300 break-words ${
-                        isExpanded ? "" : "line-clamp-4"
-                      }`}
-                    >
-                      {m.resumo}
-                    </p>
-                    <button
-                      onClick={() =>
-                        setExpandedMap((prev) => ({ ...prev, [m.id]: !prev[m.id] }))
-                      }
-                      className="mt-2 text-[10px] font-bold tracking-widest uppercase text-gray-400 hover:text-black transition-colors"
-                    >
-                      {isExpanded ? "menos" : "mais..."}
-                    </button>
-                  </div>
-                )}
+                {m.resumo && <ResumoBlock text={m.resumo} />}
               </div>
             </section>
-          );
-        })}
+          ))}
       </main>
 
       {showHint && (
