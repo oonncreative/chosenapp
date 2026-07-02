@@ -1,12 +1,10 @@
 import { useEffect } from 'react';
 import { toast } from 'sonner';
 import {
-  getChosenForHour,
   getSalmoForHour,
   getMotivacionalForHour,
   isWithinQuietHours,
   NOTIFICATION_TITLES,
-  pickNotificationBody,
 } from '@/lib/psalms';
 import { getRandomSalmo, getRandomMotivacional } from '@/lib/data';
 import { getPreferredHours } from '@/lib/usagePattern';
