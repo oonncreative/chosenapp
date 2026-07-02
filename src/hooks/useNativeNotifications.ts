@@ -341,10 +341,13 @@ export function useNativeNotifications() {
       next.setMinutes(0, 5, 0);
       next.setHours(next.getHours() + 1);
       const msUntilNext = next.getTime() - Date.now();
+      let slot = 0;
+      const alternated = (d: Date) =>
+        slot++ % 2 === 0 ? getSalmoForHour(d) : getMotivacionalForHour(d);
 
       let interval: ReturnType<typeof setInterval> | null = null;
       const timeout = setTimeout(async () => {
-        const item = pickNotificationBody();
+        const item = alternated(new Date());
         const title = pickTitle();
         const body = item.ref === 'CHOSEN' ? item.text : `${item.ref} — ${item.text}`;
         if (document.visibilityState === 'visible') {
@@ -361,7 +364,7 @@ export function useNativeNotifications() {
           });
         }
         interval = setInterval(async () => {
-          const item2 = pickNotificationBody();
+          const item2 = alternated(new Date());
           const title2 = pickTitle();
           const body2 = item2.ref === 'CHOSEN' ? item2.text : `${item2.ref} — ${item2.text}`;
           if (document.visibilityState === 'visible') {
