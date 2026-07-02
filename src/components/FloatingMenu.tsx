@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate, useRouterState } from "@tanstack/react-router";
-import { Menu, RefreshCw, Sparkles, CalendarClock, Share2, HelpCircle, Trash2, Heart, Send, Smile, Shuffle, BellRing, Wind, Copy, Check } from "lucide-react";
+import { Menu, RefreshCw, Sparkles, CalendarClock, Share2, HelpCircle, Trash2, Heart, Send, Smile, Shuffle, BellRing, Wind, Copy, Check, PlayCircle } from "lucide-react";
 import { toast } from "sonner";
 import {
   Sheet,
@@ -156,6 +156,11 @@ export function FloatingMenu() {
     setHelpOpen(true);
   };
 
+  const handleVerApresentacao = () => {
+    setOpen(false);
+    navigate({ to: "/onboarding" });
+  };
+
   const handleCompartilhar = async () => {
     setOpen(false);
     const url = "https://chosen.oonn.com.br";
@@ -250,6 +255,11 @@ export function FloatingMenu() {
 
             <Divider />
 
+            <MenuItem
+              icon={<PlayCircle className="h-5 w-5" />}
+              label="Ver apresentação"
+              onClick={handleVerApresentacao}
+            />
             <MenuItem icon={<HelpCircle className="h-5 w-5" />} label="Ajuda" onClick={handleAjuda} />
           </div>
         </SheetContent>
