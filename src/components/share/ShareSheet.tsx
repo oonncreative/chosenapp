@@ -213,6 +213,28 @@ export function ShareSheet({ open, onOpenChange, mensagem, sentimento }: Props) 
             />
           </Section>
 
+          {/* Tamanho do texto */}
+          <Section title="Tamanho do texto">
+            <div className="flex gap-2 flex-wrap">
+              {([
+                { v: 0, label: "Padrão" },
+                { v: 1, label: "Menor" },
+                { v: 2, label: "Bem menor" },
+                { v: 3, label: "Mínimo" },
+              ] as const).map(({ v, label }) => (
+                <button
+                  key={v}
+                  onClick={() => update("textScale", v)}
+                  className={`rounded-full border px-3 py-1.5 text-xs transition ${
+                    options.textScale === v ? "border-black bg-black text-white" : "border-gray-200"
+                  }`}
+                >
+                  {label}
+                </button>
+              ))}
+            </div>
+          </Section>
+
           {/* Mascote */}
           <Section title="Mascote">
             <div className="flex gap-2 overflow-x-auto pb-1">

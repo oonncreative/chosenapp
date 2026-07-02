@@ -30,6 +30,8 @@ export interface ShareOptions {
   showFooter: boolean;
   mascoteUrl: string | null;
   signature: string;
+  // 0 = padrão, 1..3 = frase principal reduzida (cada nível ~12% menor).
+  textScale: 0 | 1 | 2 | 3;
 }
 
 export const DEFAULT_SHARE_OPTIONS: ShareOptions = {
@@ -40,6 +42,7 @@ export const DEFAULT_SHARE_OPTIONS: ShareOptions = {
   showFooter: true,
   mascoteUrl: null,
   signature: "",
+  textScale: 0,
 };
 
 import m1 from "@/assets/mascotes/mascote-1.png.asset.json";

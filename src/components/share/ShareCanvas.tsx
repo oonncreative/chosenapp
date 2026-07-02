@@ -26,7 +26,8 @@ export const ShareCanvas = forwardRef<HTMLDivElement, Props>(function ShareCanva
   const bottomPad = isHorizontal ? 70 : isSquare ? 70 : 100;
   const sidePad = isHorizontal ? 140 : 80;
 
-  const textSize = Math.round(72 * scale);
+  const textScaleFactor = 1 - (options.textScale ?? 0) * 0.12;
+  const textSize = Math.round(72 * scale * textScaleFactor);
   const refSize = Math.round(32 * scale);
   const resumoSize = Math.round(
     (mensagem.resumo && mensagem.resumo.length > 600
