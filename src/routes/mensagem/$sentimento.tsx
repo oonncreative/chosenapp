@@ -92,7 +92,7 @@ function MensagemPage() {
     <div
       className="relative flex h-[100dvh] max-h-[100dvh] w-full max-w-[100vw] flex-col overflow-hidden bg-white"
       style={{
-        paddingTop: "max(env(safe-area-inset-top), 0px)",
+        paddingTop: "max(env(safe-area-inset-top), 2rem)",
       }}
     >
       {/* Elemento para geração da imagem de compartilhamento - otimizado */}
