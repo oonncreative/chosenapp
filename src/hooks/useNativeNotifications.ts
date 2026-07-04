@@ -11,6 +11,13 @@ import { getPreferredHours } from '@/lib/usagePattern';
 import { pickSilenceWord } from '@/lib/silenceWords';
 import { toggleFavorite, isFavorite } from '@/lib/favorites';
 import { getNotificationIntensity } from '@/lib/notificationPrefs';
+import { COPY } from '@/lib/notificationCopy';
+import {
+  recordAnswer,
+  getDominantMood,
+  hasStreak,
+} from '@/lib/moodMemory';
+import { addMoment } from '@/lib/gratitudeLog';
 
 const ENABLED_KEY = 'chosen_notifications_enabled';
 const NATIVE_SCHEDULED_KEY = 'chosen_native_scheduled_date';
@@ -24,6 +31,21 @@ const NEED_CHECK_ACTION_TYPE = 'NEED_CHECK';
 const MICRO_CHECK_ACTION_TYPE = 'MICRO_CHECK';
 const NIGHT_WORD_ACTION_TYPE = 'NIGHT_WORD';
 const GRATITUDE_ACTION_TYPE = 'GRATITUDE';
+const FOLLOW_TIRED = 'FOLLOW_TIRED';
+const FOLLOW_ANXIOUS = 'FOLLOW_ANXIOUS';
+const FOLLOW_GRATEFUL = 'FOLLOW_GRATEFUL';
+const FOLLOW_FORCE = 'FOLLOW_FORCE';
+const FOLLOW_PEACE = 'FOLLOW_PEACE';
+const FOLLOW_GRAT_BLESS = 'FOLLOW_GRAT_BLESS';
+const PERSONAL_ANXIETY = 'PERSONAL_ANXIETY';
+const PERSONAL_GRATEFUL = 'PERSONAL_GRATEFUL';
+const REACTIVE_MISSED = 'REACTIVE_MISSED';
+const GRATITUDE_INPUT = 'GRATITUDE_INPUT';
+const NIGHT_WORD_INPUT = 'NIGHT_WORD_INPUT';
+const NEED_INPUT = 'NEED_INPUT';
+
+const LAST_ACTIVE_KEY = 'chosen_last_active_at';
+const REACTIVE_LAST_KEY = 'chosen_reactive_last_fired';
 
 const MOOD_TO_CATEGORY: Record<string, string> = {
   mood_happy: 'Feliz',
@@ -60,6 +82,45 @@ const MICRO_TO_CATEGORY: Record<string, string> = {
   micro_ok: 'Feliz',
   micro_not_ok: 'Preciso de paz',
 };
+
+// Chave usada pra IDs de follow-up (não colidem com o range fixo)
+let FOLLOW_ID = 900000;
+function nextFollowId() {
+  FOLLOW_ID = (FOLLOW_ID + 1) % 999999;
+  return FOLLOW_ID;
+}
+
+async function scheduleFollowUp(
+  minutesFromNow: number,
+  title: string,
+  body: string,
+  actionTypeId: string,
+  extra: Record<string, any> = {},
+  input?: { placeholder?: string }
+) {
+  try {
+    const { LocalNotifications } = await import('@capacitor/local-notifications');
+    const at = new Date(Date.now() + minutesFromNow * 60 * 1000);
+    const notif: any = {
+      id: nextFollowId(),
+      title,
+      body,
+      schedule: { at },
+      actionTypeId,
+      smallIcon: 'ic_stat_chosen',
+      iconColor: '#f1f26c',
+      extra: { url: '/home', chain: actionTypeId, ...extra },
+    };
+    if (input) {
+      notif.attachments = undefined;
+      notif.inputText = true;
+      notif.inputPlaceholder = input.placeholder || 'Escreve aqui…';
+    }
+    await LocalNotifications.schedule({ notifications: [notif] });
+  } catch (err) {
+    console.error('scheduleFollowUp error', err);
+  }
+}
 
 function nextWeekday(from: Date, weekday: number): Date {
   const d = new Date(from);
@@ -115,49 +176,117 @@ async function scheduleNativeNotifications() {
           {
             id: MORNING_MOOD_ACTION_TYPE,
             actions: [
-              { id: 'morning_tired', title: '😴 Cansado' },
-              { id: 'morning_grateful', title: '🙏 Grato' },
-              { id: 'morning_anxious', title: '😟 Ansioso' },
-              { id: 'morning_calm', title: '🌤️ Tranquilo' },
+              { id: 'morning_tired', title: COPY.morningMood.actions.tired },
+              { id: 'morning_grateful', title: COPY.morningMood.actions.grateful },
+              { id: 'morning_anxious', title: COPY.morningMood.actions.anxious },
+              { id: 'morning_calm', title: COPY.morningMood.actions.calm },
             ],
           },
           {
             id: TALK_INVITE_ACTION_TYPE,
             actions: [
-              { id: 'talk_yes', title: '💛 Sim, quero' },
-              { id: 'talk_word', title: '📖 Só uma palavra' },
-              { id: 'talk_later', title: '⏭️ Depois' },
+              { id: 'talk_yes', title: COPY.talkInvite.actions.yes },
+              { id: 'talk_word', title: COPY.talkInvite.actions.word },
+              { id: 'talk_later', title: COPY.talkInvite.actions.later },
             ],
           },
           {
             id: NEED_CHECK_ACTION_TYPE,
             actions: [
-              { id: 'need_force', title: '🙏 Força' },
-              { id: 'need_peace', title: '🕊️ Paz' },
-              { id: 'need_joy', title: '✨ Ânimo' },
-              { id: 'need_love', title: '❤️ Carinho' },
+              { id: 'need_force', title: COPY.need.actions.force },
+              { id: 'need_peace', title: COPY.need.actions.peace },
+              { id: 'need_joy', title: COPY.need.actions.joy },
+              { id: 'need_love', title: COPY.need.actions.love },
+              { id: 'need_talk', title: COPY.need.actions.talk, input: true, inputPlaceholder: 'Conta o que sente…' } as any,
             ],
           },
           {
             id: MICRO_CHECK_ACTION_TYPE,
             actions: [
-              { id: 'micro_ok', title: '👍 Tô' },
-              { id: 'micro_not_ok', title: '😔 Nem tanto' },
+              { id: 'micro_ok', title: COPY.micro.actions.ok },
+              { id: 'micro_not_ok', title: COPY.micro.actions.notOk },
             ],
           },
           {
             id: NIGHT_WORD_ACTION_TYPE,
             actions: [
-              { id: 'night_peace', title: '🕊️ Paz' },
-              { id: 'night_gratitude', title: '🙏 Gratidão' },
-              { id: 'night_hope', title: '💛 Esperança' },
+              { id: 'night_write', title: COPY.nightWord.actions.write, input: true, inputPlaceholder: 'Uma palavra…' } as any,
+              { id: 'night_peace', title: COPY.nightWord.actions.peace },
+              { id: 'night_gratitude', title: COPY.nightWord.actions.gratitude },
+              { id: 'night_hope', title: COPY.nightWord.actions.hope },
             ],
           },
           {
             id: GRATITUDE_ACTION_TYPE,
             actions: [
-              { id: 'grat_save', title: '💛 Salvar momento' },
-              { id: 'grat_later', title: '⏭️ Amanhã' },
+              { id: 'grat_write', title: COPY.gratitude.actions.write, input: true, inputPlaceholder: 'Uma bênção de hoje…' } as any,
+              { id: 'grat_save', title: COPY.gratitude.actions.save },
+              { id: 'grat_later', title: COPY.gratitude.actions.later },
+            ],
+          },
+          // ==== Follow-ups (mini-conversa) ====
+          {
+            id: FOLLOW_TIRED,
+            actions: [
+              { id: 'ft_yes', title: COPY.follow.tiredSoft.actions.yes },
+              { id: 'ft_later', title: COPY.follow.tiredSoft.actions.later },
+            ],
+          },
+          {
+            id: FOLLOW_ANXIOUS,
+            actions: [
+              { id: 'fa_breathe', title: COPY.follow.anxiousBreath.actions.breathe },
+              { id: 'fa_word', title: COPY.follow.anxiousBreath.actions.word },
+            ],
+          },
+          {
+            id: FOLLOW_GRATEFUL,
+            actions: [
+              { id: 'fg_amem', title: COPY.follow.gratefulKeep.actions.amem },
+              { id: 'fg_share', title: COPY.follow.gratefulKeep.actions.share },
+            ],
+          },
+          {
+            id: FOLLOW_FORCE,
+            actions: [
+              { id: 'ff_pray', title: COPY.follow.forcePray.actions.pray },
+              { id: 'ff_word', title: COPY.follow.forcePray.actions.word },
+            ],
+          },
+          {
+            id: FOLLOW_PEACE,
+            actions: [
+              { id: 'fp_yes', title: COPY.follow.peaceSilence.actions.yes },
+              { id: 'fp_later', title: COPY.follow.peaceSilence.actions.later },
+            ],
+          },
+          {
+            id: FOLLOW_GRAT_BLESS,
+            actions: [
+              { id: 'fgb_amem', title: COPY.follow.gratitudeBless.actions.amem },
+              { id: 'fgb_sleep', title: COPY.follow.gratitudeBless.actions.sleep },
+            ],
+          },
+          {
+            id: PERSONAL_ANXIETY,
+            actions: [
+              { id: 'pa_peace', title: COPY.personalized.anxietyStreak.actions.peace },
+              { id: 'pa_force', title: COPY.personalized.anxietyStreak.actions.force },
+            ],
+          },
+          {
+            id: PERSONAL_GRATEFUL,
+            actions: [
+              { id: 'pg_write', title: COPY.personalized.gratefulStreak.actions.write, input: true, inputPlaceholder: 'Escreve sua gratidão…' } as any,
+              { id: 'pg_save', title: COPY.personalized.gratefulStreak.actions.save },
+            ],
+          },
+          {
+            id: REACTIVE_MISSED,
+            actions: [
+              { id: 'rm_ok', title: COPY.reactive.missed.actions.ok },
+              { id: 'rm_need', title: COPY.reactive.missed.actions.need },
+              { id: 'rm_pray', title: COPY.reactive.missed.actions.pray },
             ],
           },
         ],
@@ -170,22 +299,25 @@ async function scheduleNativeNotifications() {
     }
 
     const intensity = getNotificationIntensity();
+    const dominantMood = getDominantMood(3);
+    const anxietyStreak = hasStreak('Ansiedade', 3);
+    const gratefulStreak = hasStreak('Feliz', 3);
 
     // Slots de "palavra pronta" (salmo/motivação alternado) por intensidade.
     const WORD_SCHEDULE_PRESENT = [
-      { hour: 8,  minute: 8,  title: 'Bom dia. Começa o dia com isso 👇' },
-      { hour: 10, minute: 10, title: 'Uma pausa pra recarregar 👇' },
-      { hour: 12, minute: 12, title: 'Pausa do almoço. Uma palavra pra você 👇' },
-      { hour: 14, minute: 14, title: 'Respira. Tem algo pra você 👇' },
-      { hour: 18, minute: 18, title: 'Fim de tarde — uma palavra pra você 👇' },
-      { hour: 21, minute: 21, title: 'Antes de dormir, guarda isso no coração 👇' },
+      { hour: 8,  minute: 8,  title: COPY.wordSlots.morning },
+      { hour: 10, minute: 10, title: COPY.wordSlots.midMorning },
+      { hour: 12, minute: 12, title: COPY.wordSlots.lunch },
+      { hour: 14, minute: 14, title: COPY.wordSlots.afternoon },
+      { hour: 18, minute: 18, title: COPY.wordSlots.lateAfternoon },
+      { hour: 21, minute: 21, title: COPY.wordSlots.night },
     ];
     const WORD_SCHEDULE_NORMAL = WORD_SCHEDULE_PRESENT;
     const WORD_SCHEDULE_LIGHT = [
-      { hour: 8,  minute: 8,  title: 'Bom dia. Começa o dia com isso 👇' },
-      { hour: 12, minute: 12, title: 'Pausa do almoço. Uma palavra pra você 👇' },
-      { hour: 18, minute: 18, title: 'Fim de tarde — uma palavra pra você 👇' },
-      { hour: 21, minute: 21, title: 'Antes de dormir, guarda isso no coração 👇' },
+      { hour: 8,  minute: 8,  title: COPY.wordSlots.morning },
+      { hour: 12, minute: 12, title: COPY.wordSlots.lunch },
+      { hour: 18, minute: 18, title: COPY.wordSlots.lateAfternoon },
+      { hour: 21, minute: 21, title: COPY.wordSlots.night },
     ];
     const DEFAULT_SCHEDULE =
       intensity === 'light'
@@ -197,11 +329,12 @@ async function scheduleNativeNotifications() {
     // Se já temos amostras suficientes, usa as top horas do usuário.
     // No modo "leve" mantemos os 4 slots fixos pra não estourar o volume.
     const learned = intensity === 'light' ? null : getPreferredHours(6);
+    const learnedTitle = COPY.wordByMood(dominantMood);
     const SCHEDULE = learned
       ? learned.map((h) => ({
           hour: h,
           minute: h, // mantém variação tipo 8h08, 14h14
-          title: 'Uma palavra escolhida pra você 👇',
+          title: learnedTitle,
         }))
       : DEFAULT_SCHEDULE;
 
@@ -346,12 +479,20 @@ async function scheduleNativeNotifications() {
         d.setDate(now.getDate() + day);
         d.setHours(7, 0, 0, 0);
         if (d > now) {
+          // Streak de ansiedade sobrescreve a pergunta padrão
+          const useAnxietyStreak = anxietyStreak && day < 2;
           notifications.push({
             id: id++,
-            title: 'Bom dia. Como você acordou hoje?',
-            body: 'Toca em como tá o seu coração agora.',
+            title: useAnxietyStreak
+              ? COPY.personalized.anxietyStreak.title
+              : COPY.morningMood.title,
+            body: useAnxietyStreak
+              ? COPY.personalized.anxietyStreak.body
+              : COPY.morningMood.body,
             schedule: { at: d },
-            actionTypeId: MORNING_MOOD_ACTION_TYPE,
+            actionTypeId: useAnxietyStreak
+              ? PERSONAL_ANXIETY
+              : MORNING_MOOD_ACTION_TYPE,
             smallIcon: 'ic_stat_chosen',
             iconColor: '#f1f26c',
             extra: { url: '/home', type: 'morning_mood' },
@@ -367,8 +508,8 @@ async function scheduleNativeNotifications() {
         if (d > now) {
           notifications.push({
             id: id++,
-            title: 'Quer conversar com o Chosen agora?',
-            body: 'Toca aqui — tem uma palavra te esperando.',
+            title: COPY.talkInvite.title,
+            body: COPY.talkInvite.body,
             schedule: { at: d },
             actionTypeId: TALK_INVITE_ACTION_TYPE,
             smallIcon: 'ic_stat_chosen',
@@ -386,8 +527,8 @@ async function scheduleNativeNotifications() {
         if (d > now) {
           notifications.push({
             id: id++,
-            title: 'Tá precisando de quê agora?',
-            body: 'Escolhe o que fala com você nesse momento.',
+            title: COPY.need.title,
+            body: COPY.need.body,
             schedule: { at: d },
             actionTypeId: NEED_CHECK_ACTION_TYPE,
             smallIcon: 'ic_stat_chosen',
@@ -405,8 +546,8 @@ async function scheduleNativeNotifications() {
         if (d > now) {
           notifications.push({
             id: id++,
-            title: 'Respira fundo. Tá tudo bem aí?',
-            body: 'Só um segundo pra você.',
+            title: COPY.micro.title,
+            body: COPY.micro.body,
             schedule: { at: d },
             actionTypeId: MICRO_CHECK_ACTION_TYPE,
             smallIcon: 'ic_stat_chosen',
@@ -424,8 +565,8 @@ async function scheduleNativeNotifications() {
         if (d > now) {
           notifications.push({
             id: id++,
-            title: 'Quer levar uma palavra pra dormir?',
-            body: 'Toca no que você quer sentir agora.',
+            title: COPY.nightWord.title,
+            body: COPY.nightWord.body,
             schedule: { at: d },
             actionTypeId: NIGHT_WORD_ACTION_TYPE,
             smallIcon: 'ic_stat_chosen',
@@ -441,18 +582,51 @@ async function scheduleNativeNotifications() {
         d.setDate(now.getDate() + day);
         d.setHours(22, 0, 0, 0);
         if (d > now) {
+          const useGratefulStreak = gratefulStreak && day < 2;
           notifications.push({
             id: id++,
-            title: 'Uma coisa boa de hoje pra guardar no coração?',
-            body: 'Fecha o dia com gratidão 💛',
+            title: useGratefulStreak
+              ? COPY.personalized.gratefulStreak.title
+              : COPY.gratitude.title,
+            body: useGratefulStreak
+              ? COPY.personalized.gratefulStreak.body
+              : COPY.gratitude.body,
             schedule: { at: d },
-            actionTypeId: GRATITUDE_ACTION_TYPE,
+            actionTypeId: useGratefulStreak
+              ? PERSONAL_GRATEFUL
+              : GRATITUDE_ACTION_TYPE,
             smallIcon: 'ic_stat_chosen',
             iconColor: '#f1f26c',
             extra: { url: '/home', type: 'gratitude' },
           } as any);
         }
       }
+
+      // ===== Gatilho reativo: sumiço curto =====
+      try {
+        const lastActive = Number(localStorage.getItem(LAST_ACTIVE_KEY) || Date.now());
+        const lastReactive = Number(localStorage.getItem(REACTIVE_LAST_KEY) || 0);
+        const missed = Date.now() - lastActive > 24 * 60 * 60 * 1000;
+        const notFiredToday =
+          new Date(lastReactive).toDateString() !== new Date().toDateString();
+        if (missed && notFiredToday) {
+          const at = new Date(Date.now() + 5 * 60 * 1000);
+          const hour = at.getHours();
+          if (hour >= 9 && hour <= 21) {
+            notifications.push({
+              id: id++,
+              title: COPY.reactive.missed.title,
+              body: COPY.reactive.missed.body,
+              schedule: { at },
+              actionTypeId: REACTIVE_MISSED,
+              smallIcon: 'ic_stat_chosen',
+              iconColor: '#f1f26c',
+              extra: { url: '/home', type: 'reactive_missed' },
+            } as any);
+            localStorage.setItem(REACTIVE_LAST_KEY, String(Date.now()));
+          }
+        }
+      } catch {}
     }
 
     if (notifications.length > 0) {
