@@ -17,6 +17,7 @@ import { Route as EscolhidasRouteImport } from './routes/escolhidas'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as PPayloadRouteImport } from './routes/p.$payload'
 import { Route as MensagemSentimentoRouteImport } from './routes/mensagem/$sentimento'
+import { Route as AtalhoAcaoRouteImport } from './routes/atalho.$acao'
 
 const SilencioRoute = SilencioRouteImport.update({
   id: '/silencio',
@@ -58,6 +59,11 @@ const MensagemSentimentoRoute = MensagemSentimentoRouteImport.update({
   path: '/mensagem/$sentimento',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AtalhoAcaoRoute = AtalhoAcaoRouteImport.update({
+  id: '/atalho/$acao',
+  path: '/atalho/$acao',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -66,6 +72,7 @@ export interface FileRoutesByFullPath {
   '/onboarding': typeof OnboardingRoute
   '/oracoes': typeof OracoesRoute
   '/silencio': typeof SilencioRoute
+  '/atalho/$acao': typeof AtalhoAcaoRoute
   '/mensagem/$sentimento': typeof MensagemSentimentoRoute
   '/p/$payload': typeof PPayloadRoute
 }
@@ -76,6 +83,7 @@ export interface FileRoutesByTo {
   '/onboarding': typeof OnboardingRoute
   '/oracoes': typeof OracoesRoute
   '/silencio': typeof SilencioRoute
+  '/atalho/$acao': typeof AtalhoAcaoRoute
   '/mensagem/$sentimento': typeof MensagemSentimentoRoute
   '/p/$payload': typeof PPayloadRoute
 }
@@ -87,6 +95,7 @@ export interface FileRoutesById {
   '/onboarding': typeof OnboardingRoute
   '/oracoes': typeof OracoesRoute
   '/silencio': typeof SilencioRoute
+  '/atalho/$acao': typeof AtalhoAcaoRoute
   '/mensagem/$sentimento': typeof MensagemSentimentoRoute
   '/p/$payload': typeof PPayloadRoute
 }
@@ -99,6 +108,7 @@ export interface FileRouteTypes {
     | '/onboarding'
     | '/oracoes'
     | '/silencio'
+    | '/atalho/$acao'
     | '/mensagem/$sentimento'
     | '/p/$payload'
   fileRoutesByTo: FileRoutesByTo
@@ -109,6 +119,7 @@ export interface FileRouteTypes {
     | '/onboarding'
     | '/oracoes'
     | '/silencio'
+    | '/atalho/$acao'
     | '/mensagem/$sentimento'
     | '/p/$payload'
   id:
@@ -119,6 +130,7 @@ export interface FileRouteTypes {
     | '/onboarding'
     | '/oracoes'
     | '/silencio'
+    | '/atalho/$acao'
     | '/mensagem/$sentimento'
     | '/p/$payload'
   fileRoutesById: FileRoutesById
@@ -130,6 +142,7 @@ export interface RootRouteChildren {
   OnboardingRoute: typeof OnboardingRoute
   OracoesRoute: typeof OracoesRoute
   SilencioRoute: typeof SilencioRoute
+  AtalhoAcaoRoute: typeof AtalhoAcaoRoute
   MensagemSentimentoRoute: typeof MensagemSentimentoRoute
   PPayloadRoute: typeof PPayloadRoute
 }
@@ -192,6 +205,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MensagemSentimentoRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/atalho/$acao': {
+      id: '/atalho/$acao'
+      path: '/atalho/$acao'
+      fullPath: '/atalho/$acao'
+      preLoaderRoute: typeof AtalhoAcaoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -202,6 +222,7 @@ const rootRouteChildren: RootRouteChildren = {
   OnboardingRoute: OnboardingRoute,
   OracoesRoute: OracoesRoute,
   SilencioRoute: SilencioRoute,
+  AtalhoAcaoRoute: AtalhoAcaoRoute,
   MensagemSentimentoRoute: MensagemSentimentoRoute,
   PPayloadRoute: PPayloadRoute,
 }
