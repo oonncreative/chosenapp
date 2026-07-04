@@ -567,6 +567,89 @@ function ScheduleDialog({
 
 /* ============== Ajuda ============== */
 
+function IntensityDialog({
+  open,
+  onOpenChange,
+}: {
+  open: boolean;
+  onOpenChange: (v: boolean) => void;
+}) {
+  const [intensity, setIntensity] = useState<NotificationIntensity>("present");
+
+  useEffect(() => {
+    if (open) setIntensity(getNotificationIntensity());
+  }, [open]);
+
+  const handleIntensity = async (v: NotificationIntensity) => {
+    setIntensity(v);
+    setNotificationIntensity(v);
+    toast(`Intensidade: ${INTENSITY_LABELS[v].label}`, {
+      description: INTENSITY_LABELS[v].desc,
+    });
+    try {
+      await rescheduleNotifications();
+    } catch {}
+  };
+
+  return (
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent className="max-w-md p-0 overflow-hidden gap-0 border-0 rounded-2xl">
+        <div className="px-6 pt-6 pb-2">
+          <DialogHeader className="space-y-1">
+            <DialogTitle className="text-[11px] font-light tracking-[0.35em] uppercase text-black/50">
+              Notificações
+            </DialogTitle>
+            <DialogDescription className="sr-only">
+              Escolha a intensidade das notificações
+            </DialogDescription>
+          </DialogHeader>
+          <p className="mt-2 text-xl font-light leading-snug text-black tracking-tight">
+            Quantas mensagens você quer receber por dia?
+          </p>
+          <p className="mt-2 text-[13px] text-black/60 leading-relaxed">
+            Você pode mudar quando quiser. O padrão é <strong>Presente</strong>.
+          </p>
+        </div>
+
+        <div className="px-6 py-5">
+          <div className="grid grid-cols-3 gap-1.5">
+            {(["light", "normal", "present"] as NotificationIntensity[]).map((v) => {
+              const meta = INTENSITY_LABELS[v];
+              const active = intensity === v;
+              return (
+                <button
+                  key={v}
+                  onClick={() => handleIntensity(v)}
+                  className={`rounded-xl border px-2 py-3 text-center transition ${
+                    active
+                      ? "bg-black text-white border-black"
+                      : "bg-white text-black border-black/10 active:scale-95"
+                  }`}
+                >
+                  <div className="text-lg leading-none">{meta.emoji}</div>
+                  <div className="text-[12px] font-semibold mt-1.5">{meta.label}</div>
+                  <div className={`text-[10px] mt-0.5 ${active ? "text-white/70" : "text-black/45"}`}>
+                    {meta.desc}
+                  </div>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
+        <div className="px-6 py-3 flex items-center justify-end text-[10px] tracking-[0.2em] uppercase text-black/40 border-t border-black/5">
+          <button
+            onClick={() => onOpenChange(false)}
+            className="hover:text-black transition-colors"
+          >
+            Fechar
+          </button>
+        </div>
+      </DialogContent>
+    </Dialog>
+  );
+}
+
 function HelpDialog({
   open,
   onOpenChange,
