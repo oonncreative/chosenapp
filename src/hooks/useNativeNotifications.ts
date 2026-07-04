@@ -10,6 +10,7 @@ import { getRandomSalmo, getRandomMotivacional } from '@/lib/data';
 import { getPreferredHours } from '@/lib/usagePattern';
 import { pickSilenceWord } from '@/lib/silenceWords';
 import { toggleFavorite, isFavorite } from '@/lib/favorites';
+import { getNotificationIntensity } from '@/lib/notificationPrefs';
 
 const ENABLED_KEY = 'chosen_notifications_enabled';
 const NATIVE_SCHEDULED_KEY = 'chosen_native_scheduled_date';
@@ -17,11 +18,47 @@ const NATIVE_SCHEDULED_KEY = 'chosen_native_scheduled_date';
 const MOOD_ACTION_TYPE = 'MOOD_CHECK';
 const MSG_TYPE_ACTION_TYPE = 'MSG_TYPE_CHECK';
 const MSG_QUICK_ACTION_TYPE = 'MSG_QUICK';
+const MORNING_MOOD_ACTION_TYPE = 'MORNING_MOOD';
+const TALK_INVITE_ACTION_TYPE = 'TALK_INVITE';
+const NEED_CHECK_ACTION_TYPE = 'NEED_CHECK';
+const MICRO_CHECK_ACTION_TYPE = 'MICRO_CHECK';
+const NIGHT_WORD_ACTION_TYPE = 'NIGHT_WORD';
+const GRATITUDE_ACTION_TYPE = 'GRATITUDE';
+
 const MOOD_TO_CATEGORY: Record<string, string> = {
   mood_happy: 'Feliz',
   mood_neutral: 'Preciso de paz',
   mood_sad: 'Triste',
   mood_angry: 'Nervoso',
+};
+
+// Mapeamento das novas ações interativas para categorias existentes.
+const MORNING_MOOD_TO_CATEGORY: Record<string, string> = {
+  morning_tired: 'Preciso de paz',
+  morning_grateful: 'Feliz',
+  morning_anxious: 'Ansiedade',
+  morning_calm: 'Feliz',
+};
+const NEED_TO_CATEGORY: Record<string, string> = {
+  need_force: 'Força',
+  need_peace: 'Preciso de paz',
+  need_joy: 'Feliz',
+  need_love: 'Feliz',
+};
+const DAY_MOOD_TO_CATEGORY: Record<string, string> = {
+  day_good: 'Feliz',
+  day_normal: 'Preciso de paz',
+  day_hard: 'Triste',
+  day_stress: 'Nervoso',
+};
+const NIGHT_WORD_TO_CATEGORY: Record<string, string> = {
+  night_peace: 'Preciso de paz',
+  night_gratitude: 'Feliz',
+  night_hope: 'Esperança',
+};
+const MICRO_TO_CATEGORY: Record<string, string> = {
+  micro_ok: 'Feliz',
+  micro_not_ok: 'Preciso de paz',
 };
 
 function nextWeekday(from: Date, weekday: number): Date {
@@ -75,6 +112,54 @@ async function scheduleNativeNotifications() {
               { id: 'msg_next', title: '⏭️ Próxima' },
             ],
           },
+          {
+            id: MORNING_MOOD_ACTION_TYPE,
+            actions: [
+              { id: 'morning_tired', title: '😴 Cansado' },
+              { id: 'morning_grateful', title: '🙏 Grato' },
+              { id: 'morning_anxious', title: '😟 Ansioso' },
+              { id: 'morning_calm', title: '🌤️ Tranquilo' },
+            ],
+          },
+          {
+            id: TALK_INVITE_ACTION_TYPE,
+            actions: [
+              { id: 'talk_yes', title: '💛 Sim, quero' },
+              { id: 'talk_word', title: '📖 Só uma palavra' },
+              { id: 'talk_later', title: '⏭️ Depois' },
+            ],
+          },
+          {
+            id: NEED_CHECK_ACTION_TYPE,
+            actions: [
+              { id: 'need_force', title: '🙏 Força' },
+              { id: 'need_peace', title: '🕊️ Paz' },
+              { id: 'need_joy', title: '✨ Ânimo' },
+              { id: 'need_love', title: '❤️ Carinho' },
+            ],
+          },
+          {
+            id: MICRO_CHECK_ACTION_TYPE,
+            actions: [
+              { id: 'micro_ok', title: '👍 Tô' },
+              { id: 'micro_not_ok', title: '😔 Nem tanto' },
+            ],
+          },
+          {
+            id: NIGHT_WORD_ACTION_TYPE,
+            actions: [
+              { id: 'night_peace', title: '🕊️ Paz' },
+              { id: 'night_gratitude', title: '🙏 Gratidão' },
+              { id: 'night_hope', title: '💛 Esperança' },
+            ],
+          },
+          {
+            id: GRATITUDE_ACTION_TYPE,
+            actions: [
+              { id: 'grat_save', title: '💛 Salvar momento' },
+              { id: 'grat_later', title: '⏭️ Amanhã' },
+            ],
+          },
         ],
       });
     } catch {}
@@ -84,17 +169,34 @@ async function scheduleNativeNotifications() {
       await LocalNotifications.cancel({ notifications: pending.notifications });
     }
 
-    const DEFAULT_SCHEDULE = [
+    const intensity = getNotificationIntensity();
+
+    // Slots de "palavra pronta" (salmo/motivação alternado) por intensidade.
+    const WORD_SCHEDULE_PRESENT = [
       { hour: 8,  minute: 8,  title: 'Bom dia. Começa o dia com isso 👇' },
       { hour: 10, minute: 10, title: 'Uma pausa pra recarregar 👇' },
       { hour: 12, minute: 12, title: 'Pausa do almoço. Uma palavra pra você 👇' },
       { hour: 14, minute: 14, title: 'Respira. Tem algo pra você 👇' },
-      { hour: 18, minute: 18, title: 'Como foi seu dia? Trouxemos algo especial 👇' },
+      { hour: 18, minute: 18, title: 'Fim de tarde — uma palavra pra você 👇' },
       { hour: 21, minute: 21, title: 'Antes de dormir, guarda isso no coração 👇' },
     ];
+    const WORD_SCHEDULE_NORMAL = WORD_SCHEDULE_PRESENT;
+    const WORD_SCHEDULE_LIGHT = [
+      { hour: 8,  minute: 8,  title: 'Bom dia. Começa o dia com isso 👇' },
+      { hour: 12, minute: 12, title: 'Pausa do almoço. Uma palavra pra você 👇' },
+      { hour: 18, minute: 18, title: 'Fim de tarde — uma palavra pra você 👇' },
+      { hour: 21, minute: 21, title: 'Antes de dormir, guarda isso no coração 👇' },
+    ];
+    const DEFAULT_SCHEDULE =
+      intensity === 'light'
+        ? WORD_SCHEDULE_LIGHT
+        : intensity === 'normal'
+        ? WORD_SCHEDULE_NORMAL
+        : WORD_SCHEDULE_PRESENT;
 
     // Se já temos amostras suficientes, usa as top horas do usuário.
-    const learned = getPreferredHours(6);
+    // No modo "leve" mantemos os 4 slots fixos pra não estourar o volume.
+    const learned = intensity === 'light' ? null : getPreferredHours(6);
     const SCHEDULE = learned
       ? learned.map((h) => ({
           hour: h,
@@ -103,7 +205,7 @@ async function scheduleNativeNotifications() {
         }))
       : DEFAULT_SCHEDULE;
 
-    const notifications = [];
+    const notifications: any[] = [];
     const now = new Date();
     let id = 1;
 
@@ -143,6 +245,16 @@ async function scheduleNativeNotifications() {
           id++;
         }
       });
+    }
+
+    // ===== Extras por intensidade =====
+    // "light" = apenas as palavras acima. Sai daqui.
+    if (intensity === 'light') {
+      if (notifications.length > 0) {
+        await LocalNotifications.schedule({ notifications });
+        try { localStorage.setItem(NATIVE_SCHEDULED_KEY, new Date().toDateString()); } catch {}
+      }
+      return;
     }
 
     // Palavra do silêncio — sábados às 09:09, próximas 4 semanas.
@@ -186,18 +298,18 @@ async function scheduleNativeNotifications() {
       }
     }
 
-    // Como você tá agora? — todos os dias às 18h, próximas 2 semanas.
+    // Como foi seu dia até agora? — todos os dias às 17h, próximas 2 semanas.
     for (let day = 0; day < 14; day++) {
       const d = new Date(now);
       d.setDate(now.getDate() + day);
-      d.setHours(18, 0, 0, 0);
+      d.setHours(17, 0, 0, 0);
       if (d > now) {
           notifications.push({
             id: id++,
-            title: 'Como você tá agora?',
-            body: 'Toca no que você sente que escolho a palavra certa.',
+            title: 'Como foi seu dia até agora?',
+            body: 'Toca no que você sentiu — escolho uma palavra pro momento.',
             schedule: { at: d },
-            actionTypeId: MOOD_ACTION_TYPE,
+            actionTypeId: intensity === 'present' ? 'DAY_MOOD' : MOOD_ACTION_TYPE,
             smallIcon: 'ic_stat_chosen',
             iconColor: '#f1f26c',
             extra: { url: '/home', type: 'mood' },
@@ -205,12 +317,15 @@ async function scheduleNativeNotifications() {
       }
     }
 
-    // Check-in de mensagem — todos os dias às 11h, próximas 2 semanas.
+    // ===== Modo "normal" pára por aqui (mood 17h + tipo 11h abaixo). =====
+    // No modo "present" adicionamos os 5 check-ins interativos extras.
+
+    // Check-in de tipo de mensagem — 11h (normal) ou substituído por TALK_INVITE (present).
     for (let day = 0; day < 14; day++) {
       const d = new Date(now);
       d.setDate(now.getDate() + day);
       d.setHours(11, 0, 0, 0);
-      if (d > now) {
+      if (d > now && intensity === 'normal') {
         notifications.push({
           id: id++,
           title: 'Se fosse pra receber uma mensagem agora…',
@@ -221,6 +336,122 @@ async function scheduleNativeNotifications() {
           iconColor: '#f1f26c',
           extra: { url: '/home', type: 'msg_type' },
         } as any);
+      }
+    }
+
+    if (intensity === 'present') {
+      // 07:00 — Bom dia. Como você acordou hoje?
+      for (let day = 0; day < 14; day++) {
+        const d = new Date(now);
+        d.setDate(now.getDate() + day);
+        d.setHours(7, 0, 0, 0);
+        if (d > now) {
+          notifications.push({
+            id: id++,
+            title: 'Bom dia. Como você acordou hoje?',
+            body: 'Toca em como tá o seu coração agora.',
+            schedule: { at: d },
+            actionTypeId: MORNING_MOOD_ACTION_TYPE,
+            smallIcon: 'ic_stat_chosen',
+            iconColor: '#f1f26c',
+            extra: { url: '/home', type: 'morning_mood' },
+          } as any);
+        }
+      }
+
+      // 11:00 — Quer conversar com o Chosen agora?
+      for (let day = 0; day < 14; day++) {
+        const d = new Date(now);
+        d.setDate(now.getDate() + day);
+        d.setHours(11, 0, 0, 0);
+        if (d > now) {
+          notifications.push({
+            id: id++,
+            title: 'Quer conversar com o Chosen agora?',
+            body: 'Toca aqui — tem uma palavra te esperando.',
+            schedule: { at: d },
+            actionTypeId: TALK_INVITE_ACTION_TYPE,
+            smallIcon: 'ic_stat_chosen',
+            iconColor: '#f1f26c',
+            extra: { url: '/home', type: 'talk_invite' },
+          } as any);
+        }
+      }
+
+      // 13:30 — Tá precisando de quê agora?
+      for (let day = 0; day < 14; day++) {
+        const d = new Date(now);
+        d.setDate(now.getDate() + day);
+        d.setHours(13, 30, 0, 0);
+        if (d > now) {
+          notifications.push({
+            id: id++,
+            title: 'Tá precisando de quê agora?',
+            body: 'Escolhe o que fala com você nesse momento.',
+            schedule: { at: d },
+            actionTypeId: NEED_CHECK_ACTION_TYPE,
+            smallIcon: 'ic_stat_chosen',
+            iconColor: '#f1f26c',
+            extra: { url: '/home', type: 'need_check' },
+          } as any);
+        }
+      }
+
+      // 15:30 — Micro-check da tarde
+      for (let day = 0; day < 14; day++) {
+        const d = new Date(now);
+        d.setDate(now.getDate() + day);
+        d.setHours(15, 30, 0, 0);
+        if (d > now) {
+          notifications.push({
+            id: id++,
+            title: 'Respira fundo. Tá tudo bem aí?',
+            body: 'Só um segundo pra você.',
+            schedule: { at: d },
+            actionTypeId: MICRO_CHECK_ACTION_TYPE,
+            smallIcon: 'ic_stat_chosen',
+            iconColor: '#f1f26c',
+            extra: { url: '/home', type: 'micro_check' },
+          } as any);
+        }
+      }
+
+      // 20:30 — Quer levar uma palavra pra dormir?
+      for (let day = 0; day < 14; day++) {
+        const d = new Date(now);
+        d.setDate(now.getDate() + day);
+        d.setHours(20, 30, 0, 0);
+        if (d > now) {
+          notifications.push({
+            id: id++,
+            title: 'Quer levar uma palavra pra dormir?',
+            body: 'Toca no que você quer sentir agora.',
+            schedule: { at: d },
+            actionTypeId: NIGHT_WORD_ACTION_TYPE,
+            smallIcon: 'ic_stat_chosen',
+            iconColor: '#f1f26c',
+            extra: { url: '/home', type: 'night_word' },
+          } as any);
+        }
+      }
+
+      // 22:00 — Gratidão do dia
+      for (let day = 0; day < 14; day++) {
+        const d = new Date(now);
+        d.setDate(now.getDate() + day);
+        d.setHours(22, 0, 0, 0);
+        if (d > now) {
+          notifications.push({
+            id: id++,
+            title: 'Uma coisa boa de hoje pra guardar no coração?',
+            body: 'Fecha o dia com gratidão 💛',
+            schedule: { at: d },
+            actionTypeId: GRATITUDE_ACTION_TYPE,
+            smallIcon: 'ic_stat_chosen',
+            iconColor: '#f1f26c',
+            extra: { url: '/home', type: 'gratitude' },
+          } as any);
+        }
       }
     }
 
@@ -293,6 +524,14 @@ export async function scheduleTestNotification() {
   }
 }
 
+// Força reagendamento imediato (usado quando o usuário muda a intensidade).
+export async function rescheduleNotifications() {
+  try {
+    localStorage.removeItem(NATIVE_SCHEDULED_KEY);
+  } catch {}
+  await scheduleNativeNotifications();
+}
+
 // Hook principal — substitui useHourlyNotifications no app nativo
 export function useNativeNotifications() {
   useEffect(() => {
@@ -352,9 +591,34 @@ export function useNativeNotifications() {
                 window.location.href = `/mensagem/${encodeURIComponent(categoria)}?color=%23f1f26c&id=${encodeURIComponent(id)}`;
                 return;
               }
-              const cat = actionId ? MOOD_TO_CATEGORY[actionId] : undefined;
+              // Novas ações: mapeia actionId → categoria
+              const cat =
+                (actionId && (
+                  MOOD_TO_CATEGORY[actionId] ||
+                  MORNING_MOOD_TO_CATEGORY[actionId] ||
+                  NEED_TO_CATEGORY[actionId] ||
+                  DAY_MOOD_TO_CATEGORY[actionId] ||
+                  NIGHT_WORD_TO_CATEGORY[actionId] ||
+                  MICRO_TO_CATEGORY[actionId]
+                )) || undefined;
               if (cat) {
                 window.location.href = `/mensagem/${encodeURIComponent(cat)}?color=%23f1f26c&id=mood`;
+                return;
+              }
+
+              // Talk invite
+              if (actionId === 'talk_yes' || actionId === 'talk_word') {
+                const { categoria, id } = getRandomMotivacional();
+                window.location.href = `/mensagem/${encodeURIComponent(categoria)}?color=%23f1f26c&id=${encodeURIComponent(id)}`;
+                return;
+              }
+              if (actionId === 'talk_later' || actionId === 'grat_later') {
+                return; // usuário optou por deixar pra depois
+              }
+
+              // Gratidão — abre escolhidas pra "salvar momento"
+              if (actionId === 'grat_save') {
+                window.location.href = '/escolhidas';
                 return;
               }
               if (extraUrl && extraUrl !== window.location.pathname) {
