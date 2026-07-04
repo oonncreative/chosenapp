@@ -729,6 +729,33 @@ export function useNativeNotifications() {
               const extraMsg = notif?.notification?.extra?.msg as
                 | { id: string; categoria: string; ref: string; text: string }
                 | undefined;
+              const inputValue = (notif?.inputValue || '').toString();
+
+              // ===== Respostas livres (input inline) =====
+              if (actionId === 'grat_write' && inputValue) {
+                addMoment(inputValue, 'gratitude');
+                recordAnswer(actionId, 'Feliz');
+                window.location.href = '/escolhidas?tab=momentos';
+                return;
+              }
+              if (actionId === 'night_write' && inputValue) {
+                addMoment(inputValue, 'night_word');
+                recordAnswer(actionId, 'Esperança');
+                window.location.href = '/escolhidas?tab=momentos';
+                return;
+              }
+              if (actionId === 'need_talk' && inputValue) {
+                addMoment(inputValue, 'need');
+                recordAnswer(actionId, 'Preciso de paz');
+                window.location.href = '/escolhidas?tab=momentos';
+                return;
+              }
+              if (actionId === 'pg_write' && inputValue) {
+                addMoment(inputValue, 'gratitude');
+                recordAnswer(actionId, 'Feliz');
+                window.location.href = '/escolhidas?tab=momentos';
+                return;
+              }
 
               // Ações rápidas em cima da mensagem enviada no push
               if (actionId === 'msg_amem') {
@@ -765,6 +792,82 @@ export function useNativeNotifications() {
                 window.location.href = `/mensagem/${encodeURIComponent(categoria)}?color=%23f1f26c&id=${encodeURIComponent(id)}`;
                 return;
               }
+
+              // ===== Follow-ups específicos =====
+              if (actionId === 'ft_yes') {
+                window.location.href = `/mensagem/${encodeURIComponent('Preciso de paz')}?color=%23f1f26c&id=mood`;
+                return;
+              }
+              if (actionId === 'fa_breathe') {
+                window.location.href = `/silencio?w=${encodeURIComponent('respira')}`;
+                return;
+              }
+              if (actionId === 'fa_word') {
+                window.location.href = `/mensagem/${encodeURIComponent('Preciso de paz')}?color=%23f1f26c&id=mood`;
+                return;
+              }
+              if (actionId === 'fg_amem') {
+                addMoment('Amém — momento de gratidão', 'gratitude');
+                window.location.href = '/escolhidas?tab=momentos';
+                return;
+              }
+              if (actionId === 'fg_share') {
+                window.location.href = '/home';
+                return;
+              }
+              if (actionId === 'ff_pray') {
+                window.location.href = '/oracoes';
+                return;
+              }
+              if (actionId === 'ff_word') {
+                window.location.href = `/mensagem/${encodeURIComponent('Força')}?color=%23f1f26c&id=mood`;
+                return;
+              }
+              if (actionId === 'fp_yes') {
+                window.location.href = `/silencio?w=${encodeURIComponent('paz')}`;
+                return;
+              }
+              if (actionId === 'fgb_amem') {
+                addMoment('Amém — bênção da noite', 'gratitude');
+                window.location.href = '/escolhidas?tab=momentos';
+                return;
+              }
+              if (actionId === 'fgb_sleep') {
+                window.location.href = '/home';
+                return;
+              }
+              if (actionId === 'ft_later' || actionId === 'fp_later') {
+                return;
+              }
+
+              // Personalizadas por streak
+              if (actionId === 'pa_peace') {
+                recordAnswer(actionId, 'Preciso de paz');
+                window.location.href = `/mensagem/${encodeURIComponent('Preciso de paz')}?color=%23f1f26c&id=mood`;
+                return;
+              }
+              if (actionId === 'pa_force') {
+                recordAnswer(actionId, 'Força');
+                window.location.href = `/mensagem/${encodeURIComponent('Força')}?color=%23f1f26c&id=mood`;
+                return;
+              }
+              if (actionId === 'pg_save') {
+                recordAnswer(actionId, 'Feliz');
+                window.location.href = '/escolhidas?tab=momentos';
+                return;
+              }
+
+              // Reativa (sumiço)
+              if (actionId === 'rm_ok') return;
+              if (actionId === 'rm_need') {
+                window.location.href = `/mensagem/${encodeURIComponent('Preciso de paz')}?color=%23f1f26c&id=mood`;
+                return;
+              }
+              if (actionId === 'rm_pray') {
+                window.location.href = '/oracoes';
+                return;
+              }
+
               // Novas ações: mapeia actionId → categoria
               const cat =
                 (actionId && (
@@ -776,6 +879,53 @@ export function useNativeNotifications() {
                   MICRO_TO_CATEGORY[actionId]
                 )) || undefined;
               if (cat) {
+                // Registra + agenda follow-ups quando fizer sentido
+                if (actionId) recordAnswer(actionId, cat);
+
+                // Manhã: encadeamento por humor
+                if (actionId === 'morning_tired') {
+                  void scheduleFollowUp(
+                    5,
+                    COPY.follow.tiredSoft.title,
+                    COPY.follow.tiredSoft.body,
+                    FOLLOW_TIRED,
+                  );
+                }
+                if (actionId === 'morning_anxious') {
+                  void scheduleFollowUp(
+                    3,
+                    COPY.follow.anxiousBreath.title,
+                    COPY.follow.anxiousBreath.body,
+                    FOLLOW_ANXIOUS,
+                  );
+                }
+                if (actionId === 'morning_grateful' || actionId === 'morning_calm') {
+                  void scheduleFollowUp(
+                    5,
+                    COPY.follow.gratefulKeep.title,
+                    COPY.follow.gratefulKeep.body,
+                    FOLLOW_GRATEFUL,
+                  );
+                }
+
+                // Necessidade
+                if (actionId === 'need_force') {
+                  void scheduleFollowUp(
+                    4,
+                    COPY.follow.forcePray.title,
+                    COPY.follow.forcePray.body,
+                    FOLLOW_FORCE,
+                  );
+                }
+                if (actionId === 'need_peace') {
+                  void scheduleFollowUp(
+                    4,
+                    COPY.follow.peaceSilence.title,
+                    COPY.follow.peaceSilence.body,
+                    FOLLOW_PEACE,
+                  );
+                }
+
                 window.location.href = `/mensagem/${encodeURIComponent(cat)}?color=%23f1f26c&id=mood`;
                 return;
               }
@@ -783,6 +933,7 @@ export function useNativeNotifications() {
               // Talk invite
               if (actionId === 'talk_yes' || actionId === 'talk_word') {
                 const { categoria, id } = getRandomMotivacional();
+                recordAnswer(actionId, categoria);
                 window.location.href = `/mensagem/${encodeURIComponent(categoria)}?color=%23f1f26c&id=${encodeURIComponent(id)}`;
                 return;
               }
@@ -792,6 +943,13 @@ export function useNativeNotifications() {
 
               // Gratidão — abre escolhidas pra "salvar momento"
               if (actionId === 'grat_save') {
+                recordAnswer(actionId, 'Feliz');
+                void scheduleFollowUp(
+                  3,
+                  COPY.follow.gratitudeBless.title,
+                  COPY.follow.gratitudeBless.body,
+                  FOLLOW_GRAT_BLESS,
+                );
                 window.location.href = '/escolhidas';
                 return;
               }
@@ -807,10 +965,14 @@ export function useNativeNotifications() {
         import('@capacitor/app').then(({ App }) => {
           App.addListener('appStateChange', (state) => {
             if (state.isActive) {
+              try { localStorage.setItem(LAST_ACTIVE_KEY, String(Date.now())); } catch {}
               void scheduleIfNeeded(true);
             }
           }).then(h => cleanups.push(() => h.remove())).catch(() => {});
         }).catch(() => {});
+
+        // Marca "última vez ativo" ao montar
+        try { localStorage.setItem(LAST_ACTIVE_KEY, String(Date.now())); } catch {}
 
         return () => {
           cleanups.forEach(fn => fn());
