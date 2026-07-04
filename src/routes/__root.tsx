@@ -17,6 +17,7 @@ import { FloatingMenu } from "@/components/FloatingMenu";
 import { useShakeToChosen } from "@/hooks/useShakeToChosen";
 import { useTimeOfDayTheme } from "@/hooks/useTimeOfDayTheme";
 import { useUsageTracker } from "@/hooks/useUsageTracker";
+import { useAppShortcuts } from "@/hooks/useAppShortcuts";
 
 function NotFoundComponent() {
   return (
@@ -158,6 +159,7 @@ function RootComponent() {
   useShakeToChosen();
   useTimeOfDayTheme();
   useUsageTracker();
+  useAppShortcuts();
 
   useEffect(() => {
     localStorage.setItem('isMono', isMono.toString());
