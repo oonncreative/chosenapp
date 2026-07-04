@@ -31,5 +31,35 @@
       "type": "image/png",
       "purpose": "maskable"
     }
+  ],
+  "shortcuts": [
+    {
+      "name": "Preciso de mensagem",
+      "short_name": "Mensagem",
+      "description": "Uma palavra aleatória pra você agora",
+      "url": "/atalho/mensagem?src=shortcut",
+      "icons": [{ "src": "/icon-192.png", "sizes": "192x192", "type": "image/png" }]
+    },
+    {
+      "name": "Uma motivação",
+      "short_name": "Motivação",
+      "description": "Uma motivação pra recarregar agora",
+      "url": "/atalho/motivacao?src=shortcut",
+      "icons": [{ "src": "/icon-192.png", "sizes": "192x192", "type": "image/png" }]
+    },
+    {
+      "name": "Um salmo",
+      "short_name": "Salmo",
+      "description": "Um salmo escolhido pra esse momento",
+      "url": "/atalho/salmo?src=shortcut",
+      "icons": [{ "src": "/icon-192.png", "sizes": "192x192", "type": "image/png" }]
+    },
+    {
+      "name": "Orações",
+      "short_name": "Orações",
+      "description": "Guia ACTS e orações pra cada momento",
+      "url": "/oracoes?src=shortcut",
+      "icons": [{ "src": "/icon-192.png", "sizes": "192x192", "type": "image/png" }]
+    }
   ]
 }
