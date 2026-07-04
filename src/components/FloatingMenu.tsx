@@ -576,22 +576,6 @@ function HelpDialog({
 }) {
   const [copied, setCopied] = useState(false);
   const pix = "61.117.435/0001-05";
-  const [intensity, setIntensity] = useState<NotificationIntensity>("present");
-
-  useEffect(() => {
-    if (open) setIntensity(getNotificationIntensity());
-  }, [open]);
-
-  const handleIntensity = async (v: NotificationIntensity) => {
-    setIntensity(v);
-    setNotificationIntensity(v);
-    toast(`Intensidade: ${INTENSITY_LABELS[v].label}`, {
-      description: INTENSITY_LABELS[v].desc,
-    });
-    try {
-      await rescheduleNotifications();
-    } catch {}
-  };
 
   const copyPix = async () => {
     try {
@@ -646,35 +630,6 @@ function HelpDialog({
                 </div>
               </div>
             ))}
-          </div>
-        </div>
-
-        <div className="px-6 pb-4">
-          <div className="text-[10px] font-light tracking-[0.3em] uppercase text-black/50 mb-2">
-            Intensidade das notificações
-          </div>
-          <div className="grid grid-cols-3 gap-1.5">
-            {(["light", "normal", "present"] as NotificationIntensity[]).map((v) => {
-              const meta = INTENSITY_LABELS[v];
-              const active = intensity === v;
-              return (
-                <button
-                  key={v}
-                  onClick={() => handleIntensity(v)}
-                  className={`rounded-xl border px-2 py-2 text-center transition ${
-                    active
-                      ? "bg-black text-white border-black"
-                      : "bg-white text-black border-black/10 active:scale-95"
-                  }`}
-                >
-                  <div className="text-base leading-none">{meta.emoji}</div>
-                  <div className="text-[11px] font-semibold mt-1">{meta.label}</div>
-                  <div className={`text-[10px] ${active ? "text-white/70" : "text-black/45"}`}>
-                    {meta.desc}
-                  </div>
-                </button>
-              );
-            })}
           </div>
         </div>
 
