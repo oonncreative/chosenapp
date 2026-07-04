@@ -29,25 +29,25 @@ export function useAppShortcuts() {
           shortcuts: [
             {
               id: "mensagem",
-              shortLabel: "Preciso de mensagem",
+              
               title: "Preciso de mensagem",
               description: "Uma palavra pra agora",
             },
             {
               id: "motivacao",
-              shortLabel: "Uma motivação",
+              
               title: "Uma motivação",
               description: "Um empurrão pro seu dia",
             },
             {
               id: "salmo",
-              shortLabel: "Um salmo",
+              
               title: "Um salmo",
               description: "Palavra do Senhor",
             },
             {
               id: "oracoes",
-              shortLabel: "Orações",
+              
               title: "Orações",
               description: "Fale com Deus",
             },
