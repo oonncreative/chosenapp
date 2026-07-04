@@ -524,6 +524,14 @@ export async function scheduleTestNotification() {
   }
 }
 
+// Força reagendamento imediato (usado quando o usuário muda a intensidade).
+export async function rescheduleNotifications() {
+  try {
+    localStorage.removeItem(NATIVE_SCHEDULED_KEY);
+  } catch {}
+  await scheduleNativeNotifications();
+}
+
 // Hook principal — substitui useHourlyNotifications no app nativo
 export function useNativeNotifications() {
   useEffect(() => {
