@@ -205,7 +205,7 @@ async function scheduleNativeNotifications() {
         }))
       : DEFAULT_SCHEDULE;
 
-    const notifications = [];
+    const notifications: any[] = [];
     const now = new Date();
     let id = 1;
 
