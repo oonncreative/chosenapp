@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate, useRouterState } from "@tanstack/react-router";
-import { Menu, RefreshCw, Sparkles, CalendarClock, Share2, HelpCircle, Trash2, Heart, Send, Smile, Shuffle, BellRing, Wind, Copy, Check, PlayCircle } from "lucide-react";
+import { Menu, RefreshCw, Sparkles, CalendarClock, Share2, HelpCircle, Trash2, Heart, Send, Smile, Shuffle, BellRing, Wind, Copy, Check, PlayCircle, Bell } from "lucide-react";
 import { toast } from "sonner";
 import {
   Sheet,
@@ -106,6 +106,7 @@ export function FloatingMenu() {
   const [open, setOpen] = useState(false);
   const [scheduleOpen, setScheduleOpen] = useState(false);
   const [helpOpen, setHelpOpen] = useState(false);
+  const [intensityOpen, setIntensityOpen] = useState(false);
   const [favoritesOpen, setFavoritesOpen] = useState(false);
   const [sendOpen, setSendOpen] = useState(false);
   const navigate = useNavigate();
@@ -241,6 +242,11 @@ export function FloatingMenu() {
               label="Agendar uma mensagem"
               onClick={handleAgendar}
             />
+            <MenuItem
+              icon={<Bell className="h-5 w-5" />}
+              label="Intensidade notificação"
+              onClick={() => { setOpen(false); setIntensityOpen(true); }}
+            />
 
             <Divider />
 
@@ -267,13 +273,14 @@ export function FloatingMenu() {
               label="Ver apresentação"
               onClick={handleVerApresentacao}
             />
-            <MenuItem icon={<HelpCircle className="h-5 w-5" />} label="Ajuda" onClick={handleAjuda} />
+            <MenuItem icon={<HelpCircle className="h-5 w-5" />} label="Sobre o App" onClick={handleAjuda} />
           </div>
         </SheetContent>
       </Sheet>
 
       <ScheduleDialog open={scheduleOpen} onOpenChange={setScheduleOpen} />
       <HelpDialog open={helpOpen} onOpenChange={setHelpOpen} />
+      <IntensityDialog open={intensityOpen} onOpenChange={setIntensityOpen} />
       <FavoritesDialog open={favoritesOpen} onOpenChange={setFavoritesOpen} />
       <SendDialog open={sendOpen} onOpenChange={setSendOpen} />
     </>
