@@ -23,7 +23,7 @@ import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { PSALMS, INVITATION_MESSAGES, NOTIFICATION_TITLES } from "@/lib/psalms";
 import { getFavorites, removeFavorite, type Favorite } from "@/lib/favorites";
-import { getRandomMensagemGlobal, getMensagemById } from "@/lib/data";
+import { getRandomMensagemGlobal, getMensagemById, getProximaMensagem, CATEGORIAS, type Categoria } from "@/lib/data";
 import { buildShareUrl } from "@/lib/share";
 import {
   getNotificationIntensity,
@@ -855,22 +855,35 @@ function SendDialog({
 }) {
   const [name, setName] = useState("");
   const [current, setCurrent] = useState<{ t: string; r: string; c: string } | null>(null);
+  const [mood, setMood] = useState<Categoria | "surpresa">("surpresa");
 
-  const sortear = () => {
-    const { categoria, id } = getRandomMensagemGlobal();
-    const m = getMensagemById(categoria, id);
-    setCurrent({ t: m.texto, r: m.referencia, c: categoria });
+  const sortear = (moodOverride?: Categoria | "surpresa") => {
+    const target = moodOverride ?? mood;
+    if (target === "surpresa") {
+      const { categoria, id } = getRandomMensagemGlobal();
+      const m = getMensagemById(categoria, id);
+      setCurrent({ t: m.texto, r: m.referencia, c: categoria });
+    } else {
+      const m = getProximaMensagem(target);
+      setCurrent({ t: m.texto, r: m.referencia, c: target });
+    }
   };
 
   useEffect(() => {
     if (open) {
-      sortear();
+      setMood("surpresa");
+      sortear("surpresa");
       try {
         const saved = localStorage.getItem("chosen_sender_name");
         if (saved) setName(saved);
       } catch {}
     }
   }, [open]);
+
+  const handleMoodChange = (v: Categoria | "surpresa") => {
+    setMood(v);
+    sortear(v);
+  };
 
   const handleEnviar = async () => {
     if (!current) return;
@@ -928,10 +941,34 @@ function SendDialog({
             Chosen pra alguém
           </DialogTitle>
           <DialogDescription>
-            Envie uma palavra anônima ou assinada. Quem receber vai abrir um
-            link bonito com a mensagem.
+            Escolha um sentimento (ou deixe surpresa), envie anônimo ou
+            assinado. Quem receber abre um link bonito com a mensagem.
           </DialogDescription>
         </DialogHeader>
+
+        <div className="flex flex-col gap-2">
+          <Label className="text-xs">Sentimento pra quem vai receber</Label>
+          <div className="flex flex-wrap gap-1.5">
+            {(["surpresa", ...CATEGORIAS] as Array<Categoria | "surpresa">).map((c) => {
+              const active = mood === c;
+              const label = c === "surpresa" ? "✨ Surpresa" : c;
+              return (
+                <button
+                  key={c}
+                  type="button"
+                  onClick={() => handleMoodChange(c)}
+                  className={`rounded-full border px-3 py-1 text-[11px] transition ${
+                    active
+                      ? "bg-black text-white border-black"
+                      : "bg-white text-black/70 border-black/10 active:scale-95"
+                  }`}
+                >
+                  {label}
+                </button>
+              );
+            })}
+          </div>
+        </div>
 
         {current && (
           <div className="rounded-2xl bg-black/[0.03] p-4 text-center">
@@ -945,7 +982,7 @@ function SendDialog({
               {current.r}
             </p>
             <button
-              onClick={sortear}
+              onClick={() => sortear()}
               className="mt-3 text-[11px] uppercase tracking-widest text-black/50 hover:text-black"
             >
               sortear outra
