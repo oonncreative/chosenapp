@@ -2,7 +2,7 @@ import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { requestNativeNotificationsPermission } from "@/hooks/useNativeNotifications";
-import { Bell, Check, X, Loader2 } from "lucide-react";
+import { Bell, Check, Loader2 } from "lucide-react";
 
 export const Route = createFileRoute("/onboarding")({
   component: Onboarding,
@@ -145,7 +145,7 @@ function Onboarding() {
             className={`w-full h-[60px] rounded-[24px] ${styles.btn} hover:opacity-90 text-lg font-black tracking-tighter uppercase italic transition-all active:scale-95 border-none shadow-none`}
             onClick={nextStep}
           >
-            {step === 3 ? (notifStatus === "granted" ? "Começar" : "Continuar mesmo assim") : "Continuar"}
+            {step === 3 ? "Começar" : "Continuar"}
           </Button>
         </div>
       </div>
