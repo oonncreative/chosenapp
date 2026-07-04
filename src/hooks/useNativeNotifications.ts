@@ -583,9 +583,34 @@ export function useNativeNotifications() {
                 window.location.href = `/mensagem/${encodeURIComponent(categoria)}?color=%23f1f26c&id=${encodeURIComponent(id)}`;
                 return;
               }
-              const cat = actionId ? MOOD_TO_CATEGORY[actionId] : undefined;
+              // Novas ações: mapeia actionId → categoria
+              const cat =
+                (actionId && (
+                  MOOD_TO_CATEGORY[actionId] ||
+                  MORNING_MOOD_TO_CATEGORY[actionId] ||
+                  NEED_TO_CATEGORY[actionId] ||
+                  DAY_MOOD_TO_CATEGORY[actionId] ||
+                  NIGHT_WORD_TO_CATEGORY[actionId] ||
+                  MICRO_TO_CATEGORY[actionId]
+                )) || undefined;
               if (cat) {
                 window.location.href = `/mensagem/${encodeURIComponent(cat)}?color=%23f1f26c&id=mood`;
+                return;
+              }
+
+              // Talk invite
+              if (actionId === 'talk_yes' || actionId === 'talk_word') {
+                const { categoria, id } = getRandomMotivacional();
+                window.location.href = `/mensagem/${encodeURIComponent(categoria)}?color=%23f1f26c&id=${encodeURIComponent(id)}`;
+                return;
+              }
+              if (actionId === 'talk_later' || actionId === 'grat_later') {
+                return; // usuário optou por deixar pra depois
+              }
+
+              // Gratidão — abre escolhidas pra "salvar momento"
+              if (actionId === 'grat_save') {
+                window.location.href = '/escolhidas';
                 return;
               }
               if (extraUrl && extraUrl !== window.location.pathname) {
