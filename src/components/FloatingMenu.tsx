@@ -893,7 +893,6 @@ function SendDialog({
     const url = buildShareUrl({
       t: current.t,
       r: current.r,
-      c: current.c,
       n: name.trim() || undefined,
     });
     const text = `Escolhi essa palavra pensando em você 💛\n\n"${current.t}"\n— ${current.r}\n\n${url}`;
@@ -972,9 +971,6 @@ function SendDialog({
 
         {current && (
           <div className="rounded-2xl bg-black/[0.03] p-4 text-center">
-            <p className="text-[10px] uppercase tracking-widest text-black/40 mb-2">
-              {current.c}
-            </p>
             <p className="text-base font-light leading-snug text-black">
               "{current.t}"
             </p>
