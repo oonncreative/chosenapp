@@ -2,7 +2,7 @@ import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { requestNativeNotificationsPermission } from "@/hooks/useNativeNotifications";
-import { Bell, Check, X, Loader2 } from "lucide-react";
+import { Bell, Check, Loader2 } from "lucide-react";
 
 export const Route = createFileRoute("/onboarding")({
   component: Onboarding,
@@ -94,25 +94,45 @@ function Onboarding() {
               <p className="text-xs text-black/40 font-light leading-relaxed">
                 Para isso funcionar, precisamos da sua autorização para enviar notificações.
               </p>
-              <Button
-                variant="outline"
-                disabled={notifStatus === "asking" || notifStatus === "granted"}
-                className={`mt-6 h-[60px] w-full rounded-[24px] border-2 text-lg font-black tracking-tighter uppercase italic transition-all active:scale-95 shadow-none flex items-center justify-center gap-2 ${
-                  notifStatus === "granted"
-                    ? "border-green-600 bg-green-50 text-green-700"
-                    : notifStatus === "denied"
-                    ? "border-red-500 bg-red-50 text-red-600"
-                    : "border-black bg-white text-black hover:bg-gray-50"
-                }`}
-                onClick={handleAskNotifications}
-              >
-                {notifStatus === "asking" && <><Loader2 className="h-5 w-5 animate-spin" /> Aguardando…</>}
-                {notifStatus === "granted" && <><Check className="h-5 w-5" /> Notificações ativas</>}
-                {notifStatus === "denied" && <><X className="h-5 w-5" /> Permissão negada</>}
-                {notifStatus === "idle" && <><Bell className="h-5 w-5" /> Permitir notificações</>}
-              </Button>
+              <div className="mt-4 w-full flex items-center justify-between gap-3 rounded-2xl border border-black/10 bg-white px-4 py-3">
+                <div className="flex items-center gap-2 text-black">
+                  <Bell className="h-4 w-4" />
+                  <span className="text-sm font-medium">Permitir notificações</span>
+                </div>
+                <button
+                  type="button"
+                  role="switch"
+                  aria-checked={notifStatus === "granted"}
+                  disabled={notifStatus === "asking" || notifStatus === "granted"}
+                  onClick={handleAskNotifications}
+                  className={`relative inline-flex h-7 w-14 shrink-0 items-center rounded-full transition-colors ${
+                    notifStatus === "granted" ? "bg-black" : "bg-black/15"
+                  }`}
+                >
+                  <span
+                    className={`inline-flex h-6 w-6 items-center justify-center rounded-full bg-white shadow transition-transform ${
+                      notifStatus === "granted" ? "translate-x-7" : "translate-x-0.5"
+                    }`}
+                  >
+                    {notifStatus === "asking" ? (
+                      <Loader2 className="h-3 w-3 animate-spin text-black/60" />
+                    ) : notifStatus === "granted" ? (
+                      <Check className="h-3 w-3 text-black" />
+                    ) : (
+                      <span className="text-[8px] font-bold tracking-tight text-black/50">OFF</span>
+                    )}
+                  </span>
+                  <span
+                    className={`absolute text-[9px] font-bold tracking-widest ${
+                      notifStatus === "granted" ? "left-2 text-white" : "right-2 text-black/40 opacity-0"
+                    }`}
+                  >
+                    ON
+                  </span>
+                </button>
+              </div>
               {notifStatus === "denied" && (
-                <p className="text-[11px] text-red-600/80 leading-snug">
+                <p className="text-[11px] text-black/50 leading-snug mt-1">
                   Você pode liberar depois nas configurações do seu celular.
                 </p>
               )}
@@ -125,7 +145,7 @@ function Onboarding() {
             className={`w-full h-[60px] rounded-[24px] ${styles.btn} hover:opacity-90 text-lg font-black tracking-tighter uppercase italic transition-all active:scale-95 border-none shadow-none`}
             onClick={nextStep}
           >
-            {step === 3 ? (notifStatus === "granted" ? "Começar" : "Continuar mesmo assim") : "Continuar"}
+            {step === 3 ? "Começar" : "Continuar"}
           </Button>
         </div>
       </div>
