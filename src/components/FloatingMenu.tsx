@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate, useRouterState } from "@tanstack/react-router";
-import { Menu, RefreshCw, Sparkles, CalendarClock, Share2, HelpCircle, Trash2, Heart, Send, Smile, Shuffle, BellRing, Wind, Copy, Check, PlayCircle } from "lucide-react";
+import { Menu, RefreshCw, Sparkles, CalendarClock, Share2, HelpCircle, Trash2, Heart, Send, Smile, Shuffle, BellRing, Wind, Copy, Check, PlayCircle, Bell } from "lucide-react";
 import { toast } from "sonner";
 import {
   Sheet,
@@ -106,6 +106,7 @@ export function FloatingMenu() {
   const [open, setOpen] = useState(false);
   const [scheduleOpen, setScheduleOpen] = useState(false);
   const [helpOpen, setHelpOpen] = useState(false);
+  const [intensityOpen, setIntensityOpen] = useState(false);
   const [favoritesOpen, setFavoritesOpen] = useState(false);
   const [sendOpen, setSendOpen] = useState(false);
   const navigate = useNavigate();
@@ -241,6 +242,11 @@ export function FloatingMenu() {
               label="Agendar uma mensagem"
               onClick={handleAgendar}
             />
+            <MenuItem
+              icon={<Bell className="h-5 w-5" />}
+              label="Intensidade notificação"
+              onClick={() => { setOpen(false); setIntensityOpen(true); }}
+            />
 
             <Divider />
 
@@ -267,13 +273,14 @@ export function FloatingMenu() {
               label="Ver apresentação"
               onClick={handleVerApresentacao}
             />
-            <MenuItem icon={<HelpCircle className="h-5 w-5" />} label="Ajuda" onClick={handleAjuda} />
+            <MenuItem icon={<HelpCircle className="h-5 w-5" />} label="Sobre o App" onClick={handleAjuda} />
           </div>
         </SheetContent>
       </Sheet>
 
       <ScheduleDialog open={scheduleOpen} onOpenChange={setScheduleOpen} />
       <HelpDialog open={helpOpen} onOpenChange={setHelpOpen} />
+      <IntensityDialog open={intensityOpen} onOpenChange={setIntensityOpen} />
       <FavoritesDialog open={favoritesOpen} onOpenChange={setFavoritesOpen} />
       <SendDialog open={sendOpen} onOpenChange={setSendOpen} />
     </>
@@ -560,15 +567,13 @@ function ScheduleDialog({
 
 /* ============== Ajuda ============== */
 
-function HelpDialog({
+function IntensityDialog({
   open,
   onOpenChange,
 }: {
   open: boolean;
   onOpenChange: (v: boolean) => void;
 }) {
-  const [copied, setCopied] = useState(false);
-  const pix = "61.117.435/0001-05";
   const [intensity, setIntensity] = useState<NotificationIntensity>("present");
 
   useEffect(() => {
@@ -585,6 +590,75 @@ function HelpDialog({
       await rescheduleNotifications();
     } catch {}
   };
+
+  return (
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent className="max-w-md p-0 overflow-hidden gap-0 border-0 rounded-2xl">
+        <div className="px-6 pt-6 pb-2">
+          <DialogHeader className="space-y-1">
+            <DialogTitle className="text-[11px] font-light tracking-[0.35em] uppercase text-black/50">
+              Notificações
+            </DialogTitle>
+            <DialogDescription className="sr-only">
+              Escolha a intensidade das notificações
+            </DialogDescription>
+          </DialogHeader>
+          <p className="mt-2 text-xl font-light leading-snug text-black tracking-tight">
+            Quantas mensagens você quer receber por dia?
+          </p>
+          <p className="mt-2 text-[13px] text-black/60 leading-relaxed">
+            Você pode mudar quando quiser. O padrão é <strong>Presente</strong>.
+          </p>
+        </div>
+
+        <div className="px-6 py-5">
+          <div className="grid grid-cols-3 gap-1.5">
+            {(["light", "normal", "present"] as NotificationIntensity[]).map((v) => {
+              const meta = INTENSITY_LABELS[v];
+              const active = intensity === v;
+              return (
+                <button
+                  key={v}
+                  onClick={() => handleIntensity(v)}
+                  className={`rounded-xl border px-2 py-3 text-center transition ${
+                    active
+                      ? "bg-black text-white border-black"
+                      : "bg-white text-black border-black/10 active:scale-95"
+                  }`}
+                >
+                  <div className="text-lg leading-none">{meta.emoji}</div>
+                  <div className="text-[12px] font-semibold mt-1.5">{meta.label}</div>
+                  <div className={`text-[10px] mt-0.5 ${active ? "text-white/70" : "text-black/45"}`}>
+                    {meta.desc}
+                  </div>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
+        <div className="px-6 py-3 flex items-center justify-end text-[10px] tracking-[0.2em] uppercase text-black/40 border-t border-black/5">
+          <button
+            onClick={() => onOpenChange(false)}
+            className="hover:text-black transition-colors"
+          >
+            Fechar
+          </button>
+        </div>
+      </DialogContent>
+    </Dialog>
+  );
+}
+
+function HelpDialog({
+  open,
+  onOpenChange,
+}: {
+  open: boolean;
+  onOpenChange: (v: boolean) => void;
+}) {
+  const [copied, setCopied] = useState(false);
+  const pix = "61.117.435/0001-05";
 
   const copyPix = async () => {
     try {
@@ -639,35 +713,6 @@ function HelpDialog({
                 </div>
               </div>
             ))}
-          </div>
-        </div>
-
-        <div className="px-6 pb-4">
-          <div className="text-[10px] font-light tracking-[0.3em] uppercase text-black/50 mb-2">
-            Intensidade das notificações
-          </div>
-          <div className="grid grid-cols-3 gap-1.5">
-            {(["light", "normal", "present"] as NotificationIntensity[]).map((v) => {
-              const meta = INTENSITY_LABELS[v];
-              const active = intensity === v;
-              return (
-                <button
-                  key={v}
-                  onClick={() => handleIntensity(v)}
-                  className={`rounded-xl border px-2 py-2 text-center transition ${
-                    active
-                      ? "bg-black text-white border-black"
-                      : "bg-white text-black border-black/10 active:scale-95"
-                  }`}
-                >
-                  <div className="text-base leading-none">{meta.emoji}</div>
-                  <div className="text-[11px] font-semibold mt-1">{meta.label}</div>
-                  <div className={`text-[10px] ${active ? "text-white/70" : "text-black/45"}`}>
-                    {meta.desc}
-                  </div>
-                </button>
-              );
-            })}
           </div>
         </div>
 
