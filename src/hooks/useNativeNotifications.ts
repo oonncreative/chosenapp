@@ -715,12 +715,12 @@ export function useNativeNotifications() {
 
     if (isCapacitor()) {
       try {
-        // No app nativo: agenda notificações locais via SO
-        void scheduleIfNeeded();
-
-        // Listeners: toque na notificação + reagendamento quando o app volta do background
         const cleanups: Array<() => void> = [];
 
+        // IMPORTANTE: registra o listener ANTES de qualquer outra coisa assíncrona.
+        // Em cold start via tap na notificação, o Capacitor faz buffer do evento
+        // só até o primeiro addListener chegar — se demorar demais o tap se perde
+        // e o app parece "não abrir".
         import('@capacitor/local-notifications').then(({ LocalNotifications }) => {
           LocalNotifications.addListener('localNotificationActionPerformed', (notif: any) => {
             try {
@@ -731,11 +731,18 @@ export function useNativeNotifications() {
                 | undefined;
               const inputValue = (notif?.inputValue || '').toString();
 
+              // Helper: navega para uma rota interna garantindo foreground.
+              const goTo = (path: string) => {
+                // Usa replace() para não empilhar histórico na webview do Capacitor.
+                try { window.location.replace(path); }
+                catch { window.location.href = path; }
+              };
+
               // ===== Respostas livres (input inline) =====
               if (actionId === 'grat_write' && inputValue) {
                 addMoment(inputValue, 'gratitude');
                 recordAnswer(actionId, 'Feliz');
-                window.location.href = '/escolhidas?tab=momentos';
+                goTo('/escolhidas?tab=momentos');
                 return;
               }
               if (actionId === 'night_write' && inputValue) {
@@ -953,12 +960,17 @@ export function useNativeNotifications() {
                 window.location.href = '/escolhidas';
                 return;
               }
-              if (extraUrl && extraUrl !== window.location.pathname) {
-                window.location.href = extraUrl;
-              }
+              // ===== Tap padrão no corpo da notificação (sem botão) =====
+              // No Capacitor, actionId === "tap" quando o usuário só toca a notificação.
+              // Sempre navegar para a URL do extra, ou para /home como fallback,
+              // garantindo que o app SEMPRE abra em algum lugar visível.
+              goTo(extraUrl || '/home');
             } catch {}
           }).then(h => cleanups.push(() => h.remove())).catch(() => {});
         }).catch(() => {});
+
+        // Agenda as notificações DEPOIS que o listener já está registrado.
+        void scheduleIfNeeded();
 
         // Reagenda sempre que o app volta para o primeiro plano,
         // garantindo que a janela de 4 dias avance continuamente
