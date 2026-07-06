@@ -945,9 +945,8 @@ function SendDialog({
           </DialogDescription>
         </DialogHeader>
 
-        <div className="flex flex-col gap-2">
-          <Label className="text-xs">Sentimento pra quem vai receber</Label>
-          <div className="flex flex-wrap gap-1.5">
+        <div className="flex flex-wrap items-center gap-x-2 gap-y-1.5">
+          <Label className="text-xs shrink-0">Qual seu sentimento?</Label>
             {(["surpresa", ...CATEGORIAS] as Array<Categoria | "surpresa">).map((c) => {
               const active = mood === c;
               const label = c === "surpresa" ? "✨ Surpresa" : c;
@@ -966,7 +965,6 @@ function SendDialog({
                 </button>
               );
             })}
-          </div>
         </div>
 
         {current && (
