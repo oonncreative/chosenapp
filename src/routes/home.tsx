@@ -139,9 +139,11 @@ function HomePage() {
           </div>
         </div>
 
-        <div className="mt-1 flex items-center justify-between gap-2 -mr-1">
-          <h1 className="min-w-0 truncate text-sm sm:text-base font-light tracking-[0.3em] sm:tracking-[0.4em] text-black uppercase">Qual seu sentimento?</h1>
-          <div className="flex items-center gap-0 shrink-0">
+        <div className="mt-1">
+          <h1 className="text-sm sm:text-base font-light tracking-[0.3em] sm:tracking-[0.4em] text-black uppercase">Qual seu sentimento?</h1>
+        </div>
+
+        <div className="flex items-center gap-0 self-end -mr-1">
           {([
             { key: "list" as const, icon: List, label: "Lista" },
             { key: "swipe" as const, icon: GalleryHorizontal, label: "Swipe" },
@@ -157,7 +159,6 @@ function HomePage() {
               <Icon className="h-[18px] w-[18px]" strokeWidth={2} />
             </button>
           ))}
-          </div>
         </div>
       </header>
 
