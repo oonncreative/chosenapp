@@ -5,6 +5,7 @@ const config: CapacitorConfig = {
   appName: 'Chosen',
   webDir: '.output/public',
   server: {
+    url: 'https://chosen.oonn.com.br',
     androidScheme: 'https',
     iosScheme: 'https',
     cleartext: false,
