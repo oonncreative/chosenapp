@@ -62,7 +62,7 @@ const ORACOES: Oracao[] = [
   {
     titulo: "Força no Desafio",
     momento: "Sempre",
-    texto: "Deus forte, Tu és a minha rocha e o meu socorro bem presente na angústia. Obrigado porque, mesmo no meio da luta, Tu não me abandonas. Perdoa o desânimo e a falta de fé que às vezes tomam conta de mim. Peço que renoves as minhas forças, me dês coragem para não desistir e sabedoria para vencer este desafio com integridade. Entrego esta batalha ao Senhor: pelejas por mim e cumpre em mim a Tua vontade. Em nome de Jesus, amém."
+    texto: "Deus forte, Tu és a minha rocha e o meu socorro bem presente na angústia. Obrigado porque, mesmo no meio da luta, Tu não me abandonas. Perdoa o desânimo e a falta de fé que às vezes tomam conta de mim. Peço que renoves as minhas forças, me dês coragem para não desistir e sabedoria para vencer este desafio com integridade. Entrego esta batalha ao Senhor: peleja por mim e cumpre em mim a Tua vontade. Em nome de Jesus, amém."
   },
   {
     titulo: "Paz na Ansiedade",
@@ -107,7 +107,17 @@ const ORACOES: Oracao[] = [
   {
     titulo: "Provisão e Finanças",
     momento: "Sempre",
-    texto: "Pai provedor, Tu és o dono do ouro e da prata e sabes exatamente daquilo que preciso. Obrigado por cada pão que colocaste na minha mesa até hoje. Perdoa a ganância, a ansiedade com o amanhã e a falta de gratidão pelo que já tenho. Peço sabedoria para administrar o que me confias, portas abertas para o trabalho honesto e um coração generoso com quem tem menos. Entrego minhas finanças em Tuas mãos: seja feita a Tua vontade. Em nome de Jesus, amém."
+    texto: "Pai provedor, Tu és o dono do ouro e da prata e sabes exatamente do que preciso. Obrigado por cada pão que colocaste na minha mesa até hoje. Perdoa a ganância, a ansiedade com o amanhã e a falta de gratidão pelo que já tenho. Peço sabedoria para administrar o que me confias, portas abertas para o trabalho honesto e um coração generoso com quem tem menos. Entrego minhas finanças em Tuas mãos: seja feita a Tua vontade. Em nome de Jesus, amém."
+  },
+  {
+    titulo: "Preciso de Ajuda",
+    momento: "Sempre",
+    texto: "Pai misericordioso, Tu és o Deus que ouve o clamor do aflito e nunca despreza um coração quebrantado. Obrigado por eu poder chegar a Ti do jeito que estou, sem precisar fingir força que não tenho. Perdoa o orgulho que me impediu de pedir ajuda antes e a autossuficiência que só me cansou. Peço socorro agora: envia pessoas certas, abre portas, traz sabedoria e sustenta o meu coração enquanto a resposta não vem. Entrego esta necessidade em Tuas mãos: age segundo a Tua vontade e o Teu tempo. Em nome de Jesus, amém."
+  },
+  {
+    titulo: "Agradecer o Momento",
+    momento: "Sempre",
+    texto: "Pai bondoso, Tu és a fonte de todo bem e de toda dádiva perfeita. Obrigado por este momento, pelo fôlego que tenho agora e por cada bênção que enche a minha vida — as grandes e as pequenas, as visíveis e as que só Tu conheces. Perdoa quando deixei a pressa e as queixas roubarem a minha gratidão. Peço um coração sensível para reconhecer a Tua bondade todos os dias e uma boca pronta para louvar. Entrego este instante em Tuas mãos: recebe a minha gratidão como oferta. Em nome de Jesus, amém."
   }
 ];
 
