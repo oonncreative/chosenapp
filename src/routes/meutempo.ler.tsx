@@ -84,7 +84,7 @@ function LerPage() {
   const progresso = 1 - remaining / total;
 
   return (
-    <div className="flex flex-col min-h-[100dvh] bg-white">
+    <div className="flex flex-col h-[100dvh] bg-white">
       <header className="grid grid-cols-3 items-center px-4 pt-[max(env(safe-area-inset-top),2rem)] pb-2 shrink-0">
         <Link
           to="/meutempo"
@@ -137,7 +137,7 @@ function LerPage() {
         </div>
       </div>
 
-      <main className="flex-1 px-6 pb-24 flex flex-col items-center">
+      <main className="flex-1 overflow-y-auto px-6 pb-40 flex flex-col items-center [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
         <div className="w-full max-w-md">
           <h1 className="text-xl font-medium tracking-tight text-black mb-4">
             {leitura.titulo}
