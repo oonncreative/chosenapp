@@ -5,7 +5,8 @@ import { ArrowLeft, Heart, ArrowUp, RefreshCw, Share2 } from "lucide-react";
 import { toast } from "sonner";
 import { converseChosen, type RespostaConversa } from "@/lib/converse.functions";
 import { toggleFavorite } from "@/lib/favorites";
-import chosenLogo from "@/assets/chosen-logo.png";
+import chosenLogoAsset from "@/assets/chosen-logo.png.asset.json";
+const chosenLogo = chosenLogoAsset.url;
 
 const DAILY_LIMIT = 2;
 const USAGE_KEY = "chosen_converse_usage_v2";
