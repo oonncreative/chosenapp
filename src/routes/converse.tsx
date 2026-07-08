@@ -1,7 +1,7 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { useEffect, useRef, useState } from "react";
-import { ArrowLeft, Heart, Sparkles, RefreshCw, ChevronDown, Trash2, Clock } from "lucide-react";
+import { ArrowLeft, Heart, Sparkles, RefreshCw, ChevronDown, Trash2, Clock, MoreHorizontal, X, Eraser } from "lucide-react";
 import { toast } from "sonner";
 import { converseChosen, type RespostaConversa } from "@/lib/converse.functions";
 import { toggleFavorite } from "@/lib/favorites";
@@ -131,6 +131,7 @@ function ConversePage() {
   const [usadoHoje, setUsadoHoje] = useState(() => getUsageToday());
   const [historico, setHistorico] = useState<HistoryItem[]>([]);
   const [expandedId, setExpandedId] = useState<string | null>(null);
+  const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
     setHistorico(loadHistory());
@@ -235,6 +236,24 @@ function ConversePage() {
     if (expandedId === id) setExpandedId(null);
   };
 
+  const limparTudo = () => {
+    if (historico.length === 0) {
+      toast("Nada pra limpar");
+      return;
+    }
+    localStorage.setItem(HISTORY_KEY, JSON.stringify([]));
+    setHistorico([]);
+    setExpandedId(null);
+    toast("Histórico apagado");
+  };
+
+  const novaConversa = () => {
+    setResposta(null);
+    setSaved(false);
+    setTexto("");
+    setMenuOpen(false);
+  };
+
   const podeEnviar = !loading && !semSaldo && texto.trim().length >= 3;
 
   return (
@@ -242,20 +261,56 @@ function ConversePage() {
       className="relative flex h-[100dvh] w-full flex-col bg-white"
       style={{ paddingTop: "max(env(safe-area-inset-top), 1rem)" }}
     >
-      <header className="shrink-0 grid grid-cols-3 h-14 items-center px-4">
-        <Link
-          to="/home"
-          aria-label="Voltar"
-          className="flex h-10 w-10 items-center justify-center rounded-full hover:bg-gray-100 justify-self-start"
-        >
-          <ArrowLeft className="h-6 w-6 text-gray-400" />
-        </Link>
-        <div className="flex items-center justify-center">
-          <span className="text-sm font-bold tracking-[0.3em] uppercase text-black">
-            CHOSEN <span className="text-black/40">IA</span>
-          </span>
+      <header className="shrink-0 relative h-14 flex items-center justify-center px-4">
+        <span className="text-sm font-bold tracking-[0.3em] uppercase text-black">
+          CHOSEN <span className="text-black/40">IA</span>
+        </span>
+
+        <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-1">
+          <div
+            className={`flex items-center gap-1 overflow-hidden transition-all duration-300 ease-out ${
+              menuOpen ? "max-w-[200px] opacity-100 mr-1" : "max-w-0 opacity-0 mr-0"
+            }`}
+          >
+            <Link
+              to="/home"
+              aria-label="Voltar para a home"
+              onClick={() => setMenuOpen(false)}
+              className="flex h-9 w-9 items-center justify-center rounded-full bg-gray-100 hover:bg-gray-200 shrink-0"
+            >
+              <ArrowLeft className="h-4 w-4 text-black" />
+            </Link>
+            <button
+              onClick={novaConversa}
+              aria-label="Nova conversa"
+              className="flex h-9 w-9 items-center justify-center rounded-full bg-gray-100 hover:bg-gray-200 shrink-0"
+            >
+              <RefreshCw className="h-4 w-4 text-black" />
+            </button>
+            <button
+              onClick={() => {
+                limparTudo();
+                setMenuOpen(false);
+              }}
+              aria-label="Limpar histórico"
+              className="flex h-9 w-9 items-center justify-center rounded-full bg-gray-100 hover:bg-gray-200 shrink-0"
+            >
+              <Eraser className="h-4 w-4 text-black" />
+            </button>
+          </div>
+          <button
+            onClick={() => setMenuOpen((v) => !v)}
+            aria-label={menuOpen ? "Fechar menu" : "Abrir menu"}
+            aria-expanded={menuOpen}
+            className="flex h-9 w-9 items-center justify-center rounded-full bg-gray-100 hover:bg-gray-200 transition"
+          >
+            {menuOpen ? (
+              <X className="h-4 w-4 text-black" />
+            ) : (
+              <MoreHorizontal className="h-4 w-4 text-black" />
+            )}
+          </button>
         </div>
-        <span />
       </header>
 
       <main className="flex-1 min-h-0 overflow-y-auto no-scrollbar px-5">
