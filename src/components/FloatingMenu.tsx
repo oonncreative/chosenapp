@@ -945,8 +945,8 @@ function SendDialog({
           </DialogDescription>
         </DialogHeader>
 
-        <div className="flex flex-wrap items-center gap-x-2 gap-y-1.5">
-          <Label className="text-xs shrink-0">Qual seu sentimento?</Label>
+        <div className="flex items-center gap-2 overflow-x-auto -mx-1 px-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+          <Label className="text-xs shrink-0 whitespace-nowrap">Qual seu sentimento?</Label>
             {(["surpresa", ...CATEGORIAS] as Array<Categoria | "surpresa">).map((c) => {
               const active = mood === c;
               const label = c === "surpresa" ? "✨ Surpresa" : c;
@@ -955,7 +955,7 @@ function SendDialog({
                   key={c}
                   type="button"
                   onClick={() => handleMoodChange(c)}
-                  className={`rounded-full border px-3 py-1 text-[11px] transition ${
+                  className={`shrink-0 whitespace-nowrap rounded-full border px-3 py-1 text-[11px] transition ${
                     active
                       ? "bg-black text-white border-black"
                       : "bg-white text-black/70 border-black/10 active:scale-95"
