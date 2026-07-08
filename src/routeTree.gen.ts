@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as SilencioRouteImport } from './routes/silencio'
 import { Route as OracoesRouteImport } from './routes/oracoes'
+import { Route as OraComigoRouteImport } from './routes/ora-comigo'
 import { Route as OnboardingRouteImport } from './routes/onboarding'
 import { Route as MeutempoRouteImport } from './routes/meutempo'
 import { Route as HomeRouteImport } from './routes/home'
@@ -30,6 +31,11 @@ const SilencioRoute = SilencioRouteImport.update({
 const OracoesRoute = OracoesRouteImport.update({
   id: '/oracoes',
   path: '/oracoes',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const OraComigoRoute = OraComigoRouteImport.update({
+  id: '/ora-comigo',
+  path: '/ora-comigo',
   getParentRoute: () => rootRouteImport,
 } as any)
 const OnboardingRoute = OnboardingRouteImport.update({
@@ -91,6 +97,7 @@ export interface FileRoutesByFullPath {
   '/home': typeof HomeRoute
   '/meutempo': typeof MeutempoRoute
   '/onboarding': typeof OnboardingRoute
+  '/ora-comigo': typeof OraComigoRoute
   '/oracoes': typeof OracoesRoute
   '/silencio': typeof SilencioRoute
   '/atalho/$acao': typeof AtalhoAcaoRoute
@@ -105,6 +112,7 @@ export interface FileRoutesByTo {
   '/home': typeof HomeRoute
   '/meutempo': typeof MeutempoRoute
   '/onboarding': typeof OnboardingRoute
+  '/ora-comigo': typeof OraComigoRoute
   '/oracoes': typeof OracoesRoute
   '/silencio': typeof SilencioRoute
   '/atalho/$acao': typeof AtalhoAcaoRoute
@@ -120,6 +128,7 @@ export interface FileRoutesById {
   '/home': typeof HomeRoute
   '/meutempo': typeof MeutempoRoute
   '/onboarding': typeof OnboardingRoute
+  '/ora-comigo': typeof OraComigoRoute
   '/oracoes': typeof OracoesRoute
   '/silencio': typeof SilencioRoute
   '/atalho/$acao': typeof AtalhoAcaoRoute
@@ -136,6 +145,7 @@ export interface FileRouteTypes {
     | '/home'
     | '/meutempo'
     | '/onboarding'
+    | '/ora-comigo'
     | '/oracoes'
     | '/silencio'
     | '/atalho/$acao'
@@ -150,6 +160,7 @@ export interface FileRouteTypes {
     | '/home'
     | '/meutempo'
     | '/onboarding'
+    | '/ora-comigo'
     | '/oracoes'
     | '/silencio'
     | '/atalho/$acao'
@@ -164,6 +175,7 @@ export interface FileRouteTypes {
     | '/home'
     | '/meutempo'
     | '/onboarding'
+    | '/ora-comigo'
     | '/oracoes'
     | '/silencio'
     | '/atalho/$acao'
@@ -179,6 +191,7 @@ export interface RootRouteChildren {
   HomeRoute: typeof HomeRoute
   MeutempoRoute: typeof MeutempoRoute
   OnboardingRoute: typeof OnboardingRoute
+  OraComigoRoute: typeof OraComigoRoute
   OracoesRoute: typeof OracoesRoute
   SilencioRoute: typeof SilencioRoute
   AtalhoAcaoRoute: typeof AtalhoAcaoRoute
@@ -200,6 +213,13 @@ declare module '@tanstack/react-router' {
       path: '/oracoes'
       fullPath: '/oracoes'
       preLoaderRoute: typeof OracoesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/ora-comigo': {
+      id: '/ora-comigo'
+      path: '/ora-comigo'
+      fullPath: '/ora-comigo'
+      preLoaderRoute: typeof OraComigoRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/onboarding': {
@@ -283,6 +303,7 @@ const rootRouteChildren: RootRouteChildren = {
   HomeRoute: HomeRoute,
   MeutempoRoute: MeutempoRoute,
   OnboardingRoute: OnboardingRoute,
+  OraComigoRoute: OraComigoRoute,
   OracoesRoute: OracoesRoute,
   SilencioRoute: SilencioRoute,
   AtalhoAcaoRoute: AtalhoAcaoRoute,

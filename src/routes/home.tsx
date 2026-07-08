@@ -1,9 +1,10 @@
 import { AppFooter } from "@/components/AppFooter";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { Shuffle, List, GalleryHorizontal, Vibrate, VibrateOff, Heart, MoreHorizontal, X } from "lucide-react";
+import { Shuffle, List, GalleryHorizontal, Vibrate, VibrateOff, Heart, MoreHorizontal, X, Search } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { CATEGORIAS, getRandomIdForCategoria, getRandomMensagemGlobal } from "@/lib/data";
 import { isShakeEnabled, setShakeEnabled, requestShakePermission } from "@/hooks/useShakeToChosen";
+import { searchMensagens, type SearchHit } from "@/lib/searchMensagens";
 import { toast } from "sonner";
 
 const triggerHaptic = async () => {
