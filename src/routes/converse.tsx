@@ -112,6 +112,12 @@ function ConversePage() {
   const [resposta, setResposta] = useState<RespostaConversa | null>(null);
   const [saved, setSaved] = useState(false);
   const [usadoHoje, setUsadoHoje] = useState(() => getUsageToday());
+  const [historico, setHistorico] = useState<HistoryItem[]>([]);
+  const [expandedId, setExpandedId] = useState<string | null>(null);
+
+  useEffect(() => {
+    setHistorico(loadHistory());
+  }, []);
 
   const restantes = Math.max(0, DAILY_LIMIT - usadoHoje);
   const semSaldo = restantes === 0;
@@ -157,6 +163,15 @@ function ConversePage() {
       setResposta(r);
       bumpUsage();
       setUsadoHoje(getUsageToday());
+      const item: HistoryItem = {
+        id: `h-${Date.now()}`,
+        at: Date.now(),
+        pergunta: t,
+        resposta: r,
+      };
+      pushHistory(item);
+      setHistorico(loadHistory());
+      setTexto("");
     } catch (err) {
       console.error(err);
       toast.error("Não deu para responder agora", {
@@ -185,17 +200,10 @@ function ConversePage() {
     toast("Salvo em Minhas escolhidas 💛");
   };
 
-  const compartilhar = async () => {
-    if (!resposta) return;
-    const texto = `"${resposta.versiculo}" — ${resposta.referencia}\n\n${resposta.acolhimento}\n\n${resposta.oracao}\n\nvia CHOSEN — https://chosen.oonn.com.br`;
-    try {
-      if (navigator.share) {
-        await navigator.share({ text: texto });
-      } else {
-        await navigator.clipboard.writeText(texto);
-        toast("Mensagem copiada 💛");
-      }
-    } catch {}
+  const apagarHistorico = (id: string) => {
+    removeHistory(id);
+    setHistorico(loadHistory());
+    if (expandedId === id) setExpandedId(null);
   };
 
   const podeEnviar = !loading && !semSaldo && texto.trim().length >= 3;
