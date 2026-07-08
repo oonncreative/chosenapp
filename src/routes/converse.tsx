@@ -287,9 +287,14 @@ function ConversePage() {
 
               <div className="flex items-center justify-between mt-2 px-1 text-[11px] text-gray-400">
                 <span>
-                  {semSaldo
-                    ? "Sem conversas hoje — volte amanhã"
-                    : `${restantes} de ${DAILY_LIMIT} conversas por dia`}
+                  {semSaldo ? (
+                    <span className="inline-flex items-center gap-1 text-black/70 font-medium tabular-nums">
+                      <Clock className="h-3 w-3" />
+                      Libera em {formatCountdown(msRestantes)}
+                    </span>
+                  ) : (
+                    `${restantes} de ${DAILY_LIMIT} conversas por dia`
+                  )}
                 </span>
                 <span>{texto.length}/1000</span>
               </div>
