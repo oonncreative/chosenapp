@@ -347,10 +347,10 @@ function MenuItem({
   return (
     <button
       onClick={onClick}
-      className="flex items-center gap-4 w-full px-2 py-4 text-left rounded-xl active:bg-black/5 transition-colors"
+      className="flex items-center gap-3 w-full px-2 py-2.5 text-left rounded-lg active:bg-black/5 transition-colors"
     >
-      <span className="shrink-0 text-black">{icon}</span>
-      <span className="text-[15px] text-black">{label}</span>
+      <span className="shrink-0 text-black [&>svg]:h-[18px] [&>svg]:w-[18px]">{icon}</span>
+      <span className="text-[13px] text-black">{label}</span>
     </button>
   );
 }
