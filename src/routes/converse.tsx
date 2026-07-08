@@ -1,15 +1,59 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { useEffect, useRef, useState } from "react";
-import { ArrowLeft, Heart, Sparkles, RefreshCw, Share2 } from "lucide-react";
+import { ArrowLeft, Heart, Sparkles, RefreshCw, ChevronDown, Trash2, Clock } from "lucide-react";
 import { toast } from "sonner";
 import { converseChosen, type RespostaConversa } from "@/lib/converse.functions";
 import { toggleFavorite } from "@/lib/favorites";
-import chosenLogoAsset from "@/assets/chosen-logo.png.asset.json";
-const chosenLogo = chosenLogoAsset.url;
 
 const DAILY_LIMIT = 2;
 const USAGE_KEY = "chosen_converse_usage_v2";
+const HISTORY_KEY = "chosen_converse_history_v1";
+const HISTORY_TTL_MS = 24 * 60 * 60 * 1000;
+
+type HistoryItem = {
+  id: string;
+  at: number;
+  pergunta: string;
+  resposta: RespostaConversa;
+};
+
+function loadHistory(): HistoryItem[] {
+  if (typeof window === "undefined") return [];
+  try {
+    const raw = localStorage.getItem(HISTORY_KEY);
+    if (!raw) return [];
+    const list: HistoryItem[] = JSON.parse(raw);
+    const now = Date.now();
+    const fresh = list.filter((h) => now - h.at < HISTORY_TTL_MS);
+    if (fresh.length !== list.length) {
+      localStorage.setItem(HISTORY_KEY, JSON.stringify(fresh));
+    }
+    return fresh.sort((a, b) => b.at - a.at);
+  } catch {
+    return [];
+  }
+}
+
+function pushHistory(item: HistoryItem) {
+  const list = loadHistory();
+  const next = [item, ...list].slice(0, 20);
+  localStorage.setItem(HISTORY_KEY, JSON.stringify(next));
+}
+
+function removeHistory(id: string) {
+  const next = loadHistory().filter((h) => h.id !== id);
+  localStorage.setItem(HISTORY_KEY, JSON.stringify(next));
+}
+
+function formatRestante(at: number): string {
+  const restante = HISTORY_TTL_MS - (Date.now() - at);
+  if (restante <= 0) return "expirando";
+  const h = Math.floor(restante / (60 * 60 * 1000));
+  const m = Math.floor((restante % (60 * 60 * 1000)) / (60 * 1000));
+  if (h > 0) return `expira em ${h}h`;
+  return `expira em ${m}min`;
+}
 
 const EXEMPLOS = [
   "briguei com minha mãe e me sinto culpado, ela não fala comigo há dias...",
