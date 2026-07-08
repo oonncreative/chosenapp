@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useNavigate, useRouterState } from "@tanstack/react-router";
 import { Menu, RefreshCw, Sparkles, CalendarClock, Share2, HelpCircle, Trash2, Heart, Send, Smile, Shuffle, BellRing, Wind, Copy, Check, PlayCircle, Bell } from "lucide-react";
 import { toast } from "sonner";
+import chosenLogo from "@/assets/chosen-logo.png";
 import {
   Sheet,
   SheetContent,
