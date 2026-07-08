@@ -307,7 +307,7 @@ function MensagemPage() {
       )}
 
       {/* Footer fixo */}
-      <footer className="shrink-0 z-20 w-full px-4 pt-2 pb-[calc(env(safe-area-inset-bottom)+16px)] bg-white flex items-center justify-center gap-3">
+      <footer className="shrink-0 z-20 w-full px-4 pt-2 pb-[calc(env(safe-area-inset-bottom)+36px)] bg-white flex items-center justify-center gap-3">
         <Button
           onClick={handleOpenShare}
           className="h-12 rounded-full border-none bg-[#f1f26c] text-black hover:opacity-90 shadow-none flex items-center gap-2 px-6 transition-all active:scale-95 disabled:opacity-50"
