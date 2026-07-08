@@ -71,6 +71,27 @@ function ConversePage() {
   const restantes = Math.max(0, DAILY_LIMIT - usadoHoje);
   const semSaldo = restantes === 0;
 
+  // Placeholder cycling
+  const [placeholderIdx, setPlaceholderIdx] = useState(() =>
+    Math.floor(Math.random() * EXEMPLOS.length),
+  );
+  useEffect(() => {
+    if (texto.length > 0 || resposta) return;
+    const id = window.setInterval(() => {
+      setPlaceholderIdx((i) => (i + 1) % EXEMPLOS.length);
+    }, 3200);
+    return () => window.clearInterval(id);
+  }, [texto, resposta]);
+
+  const textareaRef = useRef<HTMLTextAreaElement | null>(null);
+  // Auto-grow
+  useEffect(() => {
+    const el = textareaRef.current;
+    if (!el) return;
+    el.style.height = "auto";
+    el.style.height = Math.min(el.scrollHeight, 200) + "px";
+  }, [texto]);
+
   const enviar = async () => {
     const t = texto.trim();
     if (t.length < 3) {
