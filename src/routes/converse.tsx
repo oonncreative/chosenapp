@@ -1,15 +1,59 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { useEffect, useRef, useState } from "react";
-import { ArrowLeft, Heart, Sparkles, RefreshCw, Share2 } from "lucide-react";
+import { ArrowLeft, Heart, Sparkles, RefreshCw, ChevronDown, Trash2, Clock } from "lucide-react";
 import { toast } from "sonner";
 import { converseChosen, type RespostaConversa } from "@/lib/converse.functions";
 import { toggleFavorite } from "@/lib/favorites";
-import chosenLogoAsset from "@/assets/chosen-logo.png.asset.json";
-const chosenLogo = chosenLogoAsset.url;
 
 const DAILY_LIMIT = 2;
 const USAGE_KEY = "chosen_converse_usage_v2";
+const HISTORY_KEY = "chosen_converse_history_v1";
+const HISTORY_TTL_MS = 24 * 60 * 60 * 1000;
+
+type HistoryItem = {
+  id: string;
+  at: number;
+  pergunta: string;
+  resposta: RespostaConversa;
+};
+
+function loadHistory(): HistoryItem[] {
+  if (typeof window === "undefined") return [];
+  try {
+    const raw = localStorage.getItem(HISTORY_KEY);
+    if (!raw) return [];
+    const list: HistoryItem[] = JSON.parse(raw);
+    const now = Date.now();
+    const fresh = list.filter((h) => now - h.at < HISTORY_TTL_MS);
+    if (fresh.length !== list.length) {
+      localStorage.setItem(HISTORY_KEY, JSON.stringify(fresh));
+    }
+    return fresh.sort((a, b) => b.at - a.at);
+  } catch {
+    return [];
+  }
+}
+
+function pushHistory(item: HistoryItem) {
+  const list = loadHistory();
+  const next = [item, ...list].slice(0, 20);
+  localStorage.setItem(HISTORY_KEY, JSON.stringify(next));
+}
+
+function removeHistory(id: string) {
+  const next = loadHistory().filter((h) => h.id !== id);
+  localStorage.setItem(HISTORY_KEY, JSON.stringify(next));
+}
+
+function formatRestante(at: number): string {
+  const restante = HISTORY_TTL_MS - (Date.now() - at);
+  if (restante <= 0) return "expirando";
+  const h = Math.floor(restante / (60 * 60 * 1000));
+  const m = Math.floor((restante % (60 * 60 * 1000)) / (60 * 1000));
+  if (h > 0) return `expira em ${h}h`;
+  return `expira em ${m}min`;
+}
 
 const EXEMPLOS = [
   "briguei com minha mãe e me sinto culpado, ela não fala comigo há dias...",
@@ -68,6 +112,12 @@ function ConversePage() {
   const [resposta, setResposta] = useState<RespostaConversa | null>(null);
   const [saved, setSaved] = useState(false);
   const [usadoHoje, setUsadoHoje] = useState(() => getUsageToday());
+  const [historico, setHistorico] = useState<HistoryItem[]>([]);
+  const [expandedId, setExpandedId] = useState<string | null>(null);
+
+  useEffect(() => {
+    setHistorico(loadHistory());
+  }, []);
 
   const restantes = Math.max(0, DAILY_LIMIT - usadoHoje);
   const semSaldo = restantes === 0;
@@ -113,6 +163,15 @@ function ConversePage() {
       setResposta(r);
       bumpUsage();
       setUsadoHoje(getUsageToday());
+      const item: HistoryItem = {
+        id: `h-${Date.now()}`,
+        at: Date.now(),
+        pergunta: t,
+        resposta: r,
+      };
+      pushHistory(item);
+      setHistorico(loadHistory());
+      setTexto("");
     } catch (err) {
       console.error(err);
       toast.error("Não deu para responder agora", {
@@ -141,17 +200,10 @@ function ConversePage() {
     toast("Salvo em Minhas escolhidas 💛");
   };
 
-  const compartilhar = async () => {
-    if (!resposta) return;
-    const texto = `"${resposta.versiculo}" — ${resposta.referencia}\n\n${resposta.acolhimento}\n\n${resposta.oracao}\n\nvia CHOSEN — https://chosen.oonn.com.br`;
-    try {
-      if (navigator.share) {
-        await navigator.share({ text: texto });
-      } else {
-        await navigator.clipboard.writeText(texto);
-        toast("Mensagem copiada 💛");
-      }
-    } catch {}
+  const apagarHistorico = (id: string) => {
+    removeHistory(id);
+    setHistorico(loadHistory());
+    if (expandedId === id) setExpandedId(null);
   };
 
   const podeEnviar = !loading && !semSaldo && texto.trim().length >= 3;
@@ -169,10 +221,9 @@ function ConversePage() {
         >
           <ArrowLeft className="h-6 w-6 text-gray-400" />
         </Link>
-        <div className="flex items-center justify-center gap-1.5">
-          <img src={chosenLogo} alt="" className="h-5 w-5 object-contain" />
-          <span className="text-[10px] font-bold tracking-[0.25em] uppercase text-black/60">
-            IA
+        <div className="flex items-center justify-center">
+          <span className="text-sm font-bold tracking-[0.3em] uppercase text-black">
+            CHOSEN <span className="text-black/40">IA</span>
           </span>
         </div>
         <span />
@@ -226,12 +277,84 @@ function ConversePage() {
               <p className="mt-3 text-center text-[10px] text-gray-400 leading-relaxed">
                 Limite de 2 conversas por dia · até 1000 caracteres por mensagem
               </p>
+
+              {historico.length > 0 && (
+                <section className="mt-10">
+                  <div className="flex items-center justify-between mb-3">
+                    <h2 className="text-[10px] font-bold tracking-[0.3em] uppercase text-black/60">
+                      Últimas conversas
+                    </h2>
+                    <span className="inline-flex items-center gap-1 text-[10px] text-gray-400">
+                      <Clock className="h-3 w-3" />
+                      ficam 24h
+                    </span>
+                  </div>
+                  <p className="text-[11px] text-gray-400 mb-3 leading-relaxed">
+                    Suas conversas somem automaticamente após 24h. Salve as que quiser guardar.
+                  </p>
+                  <ul className="flex flex-col gap-2">
+                    {historico.map((h) => {
+                      const aberto = expandedId === h.id;
+                      return (
+                        <li
+                          key={h.id}
+                          className="rounded-2xl border border-black/5 bg-gray-50/60 overflow-hidden"
+                        >
+                          <button
+                            onClick={() => setExpandedId(aberto ? null : h.id)}
+                            className="w-full text-left px-4 py-3 flex items-start gap-3"
+                          >
+                            <div className="flex-1 min-w-0">
+                              <p className="text-[13px] text-black leading-snug line-clamp-2">
+                                {h.pergunta}
+                              </p>
+                              <p className="mt-1 text-[10px] text-gray-400 tracking-wide">
+                                {h.resposta.referencia} · {formatRestante(h.at)}
+                              </p>
+                            </div>
+                            <ChevronDown
+                              className={`h-4 w-4 mt-0.5 text-gray-400 shrink-0 transition-transform ${
+                                aberto ? "rotate-180" : ""
+                              }`}
+                            />
+                          </button>
+                          {aberto && (
+                            <div className="px-4 pb-4 pt-1 flex flex-col gap-4 animate-in fade-in duration-300">
+                              <div className="rounded-xl bg-white px-4 py-3">
+                                <p className="text-[14px] font-light leading-snug text-black break-words">
+                                  “{h.resposta.versiculo}”
+                                </p>
+                                <p className="mt-2 text-[9px] font-bold tracking-[0.3em] uppercase text-black/50">
+                                  {h.resposta.referencia}
+                                </p>
+                              </div>
+                              <p className="text-[13px] leading-relaxed text-black whitespace-pre-line">
+                                {h.resposta.acolhimento}
+                              </p>
+                              <p className="text-[13px] leading-relaxed text-black/80 italic whitespace-pre-line">
+                                {h.resposta.oracao}
+                              </p>
+                              <button
+                                onClick={() => apagarHistorico(h.id)}
+                                className="self-start inline-flex items-center gap-1.5 text-[11px] text-gray-400 hover:text-black transition"
+                              >
+                                <Trash2 className="h-3 w-3" />
+                                Apagar
+                              </button>
+                            </div>
+                          )}
+                        </li>
+                      );
+                    })}
+                  </ul>
+                </section>
+              )}
             </div>
           )}
 
           {loading && (
             <div className="flex flex-col items-center justify-center py-24 gap-4 text-gray-400">
-              <img src={chosenLogo} alt="" className="h-10 w-10 object-contain animate-pulse" />
+              <Sparkles className="h-8 w-8 text-black/30 animate-pulse" strokeWidth={1.5} />
               <div className="flex items-center gap-1.5">
                 <span className="h-1.5 w-1.5 rounded-full bg-gray-400 animate-bounce [animation-delay:-0.3s]" />
                 <span className="h-1.5 w-1.5 rounded-full bg-gray-400 animate-bounce [animation-delay:-0.15s]" />
@@ -272,31 +395,24 @@ function ConversePage() {
                 </p>
               </div>
 
-              <div className="flex flex-wrap items-center justify-center gap-2 pt-2">
+              <div className="flex flex-col gap-2 pt-2">
                 <button
                   onClick={salvar}
-                  className={`inline-flex items-center gap-1.5 rounded-full border px-4 py-2 text-xs transition ${
+                  className={`inline-flex items-center justify-center gap-1.5 rounded-full border h-11 w-full text-sm font-medium transition ${
                     saved
                       ? "bg-black text-white border-black"
-                      : "bg-white text-black border-black/10 active:scale-95"
+                      : "bg-white text-black border-black/10 active:scale-[0.98]"
                   }`}
                 >
-                  <Heart className={`h-3.5 w-3.5 ${saved ? "fill-current" : ""}`} />
-                  {saved ? "Salvo" : "Salvar"}
-                </button>
-                <button
-                  onClick={compartilhar}
-                  className="inline-flex items-center gap-1.5 rounded-full border border-black/10 bg-white px-4 py-2 text-xs text-black active:scale-95"
-                >
-                  <Share2 className="h-3.5 w-3.5" />
-                  Compartilhar
+                  <Heart className={`h-4 w-4 ${saved ? "fill-current" : ""}`} />
+                  {saved ? "Salvo em escolhidas" : "Salvar"}
                 </button>
                 <button
                   onClick={outraPalavra}
-                  className="inline-flex items-center gap-1.5 rounded-full border border-black/10 bg-white px-4 py-2 text-xs text-black active:scale-95"
+                  className="inline-flex items-center justify-center gap-1.5 rounded-full h-11 w-full text-sm font-medium bg-[#f1f26c] text-black active:scale-[0.98] transition"
                 >
-                  <RefreshCw className="h-3.5 w-3.5" />
-                  Nova
+                  <RefreshCw className="h-4 w-4" />
+                  Nova conversa
                 </button>
               </div>
             </div>
