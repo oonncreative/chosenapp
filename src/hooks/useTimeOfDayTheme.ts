@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { isTimeThemeEnabled } from "@/lib/timeThemePrefs";
 
 // Períodos do dia → cor de fundo aplicada ao <html> (peek no safe-area).
 // Pages mantêm bg-white para legibilidade; o tint aparece sutilmente nas bordas.
@@ -17,6 +18,11 @@ function periodFor(hour: number): { name: string; bg: string; meta: string } {
 
 function apply() {
   if (typeof document === "undefined") return;
+  if (!isTimeThemeEnabled()) {
+    document.documentElement.style.removeProperty("--period-bg");
+    delete document.documentElement.dataset.period;
+    return;
+  }
   const p = periodFor(new Date().getHours());
   document.documentElement.style.setProperty("--period-bg", p.bg);
   document.documentElement.dataset.period = p.name;
@@ -42,11 +48,13 @@ export function useTimeOfDayTheme() {
       if (document.visibilityState === "visible") apply();
     };
     document.addEventListener("visibilitychange", onVis);
+    window.addEventListener("chosen:timetheme-changed", apply);
     return () => {
       clearTimeout(t);
       const i = (window as any).__chosenThemeInterval;
       if (i) clearInterval(i);
       document.removeEventListener("visibilitychange", onVis);
+      window.removeEventListener("chosen:timetheme-changed", apply);
     };
   }, []);
 }
