@@ -13,6 +13,7 @@ import { Route as SilencioRouteImport } from './routes/silencio'
 import { Route as OracoesRouteImport } from './routes/oracoes'
 import { Route as OraComigoRouteImport } from './routes/ora-comigo'
 import { Route as OnboardingRouteImport } from './routes/onboarding'
+import { Route as MeutempoRouteImport } from './routes/meutempo'
 import { Route as HomeRouteImport } from './routes/home'
 import { Route as EscolhidasRouteImport } from './routes/escolhidas'
 import { Route as DevocionalRouteImport } from './routes/devocional'
@@ -44,6 +45,11 @@ const OnboardingRoute = OnboardingRouteImport.update({
   path: '/onboarding',
   getParentRoute: () => rootRouteImport,
 } as any)
+const MeutempoRoute = MeutempoRouteImport.update({
+  id: '/meutempo',
+  path: '/meutempo',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const HomeRoute = HomeRouteImport.update({
   id: '/home',
   path: '/home',
@@ -70,9 +76,9 @@ const IndexRoute = IndexRouteImport.update({
   getParentRoute: () => rootRouteImport,
 } as any)
 const MeutempoIndexRoute = MeutempoIndexRouteImport.update({
-  id: '/meutempo/',
-  path: '/meutempo/',
-  getParentRoute: () => rootRouteImport,
+  id: '/',
+  path: '/',
+  getParentRoute: () => MeutempoRoute,
 } as any)
 const PPayloadRoute = PPayloadRouteImport.update({
   id: '/p/$payload',
@@ -80,9 +86,9 @@ const PPayloadRoute = PPayloadRouteImport.update({
   getParentRoute: () => rootRouteImport,
 } as any)
 const MeutempoLerRoute = MeutempoLerRouteImport.update({
-  id: '/meutempo/ler',
-  path: '/meutempo/ler',
-  getParentRoute: () => rootRouteImport,
+  id: '/ler',
+  path: '/ler',
+  getParentRoute: () => MeutempoRoute,
 } as any)
 const MensagemSentimentoRoute = MensagemSentimentoRouteImport.update({
   id: '/mensagem/$sentimento',
@@ -101,6 +107,7 @@ export interface FileRoutesByFullPath {
   '/devocional': typeof DevocionalRoute
   '/escolhidas': typeof EscolhidasRoute
   '/home': typeof HomeRoute
+  '/meutempo': typeof MeutempoRouteWithChildren
   '/onboarding': typeof OnboardingRoute
   '/ora-comigo': typeof OraComigoRoute
   '/oracoes': typeof OracoesRoute
@@ -134,6 +141,7 @@ export interface FileRoutesById {
   '/devocional': typeof DevocionalRoute
   '/escolhidas': typeof EscolhidasRoute
   '/home': typeof HomeRoute
+  '/meutempo': typeof MeutempoRouteWithChildren
   '/onboarding': typeof OnboardingRoute
   '/ora-comigo': typeof OraComigoRoute
   '/oracoes': typeof OracoesRoute
@@ -152,6 +160,7 @@ export interface FileRouteTypes {
     | '/devocional'
     | '/escolhidas'
     | '/home'
+    | '/meutempo'
     | '/onboarding'
     | '/ora-comigo'
     | '/oracoes'
@@ -184,6 +193,7 @@ export interface FileRouteTypes {
     | '/devocional'
     | '/escolhidas'
     | '/home'
+    | '/meutempo'
     | '/onboarding'
     | '/ora-comigo'
     | '/oracoes'
@@ -201,15 +211,14 @@ export interface RootRouteChildren {
   DevocionalRoute: typeof DevocionalRoute
   EscolhidasRoute: typeof EscolhidasRoute
   HomeRoute: typeof HomeRoute
+  MeutempoRoute: typeof MeutempoRouteWithChildren
   OnboardingRoute: typeof OnboardingRoute
   OraComigoRoute: typeof OraComigoRoute
   OracoesRoute: typeof OracoesRoute
   SilencioRoute: typeof SilencioRoute
   AtalhoAcaoRoute: typeof AtalhoAcaoRoute
   MensagemSentimentoRoute: typeof MensagemSentimentoRoute
-  MeutempoLerRoute: typeof MeutempoLerRoute
   PPayloadRoute: typeof PPayloadRoute
-  MeutempoIndexRoute: typeof MeutempoIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -240,6 +249,13 @@ declare module '@tanstack/react-router' {
       path: '/onboarding'
       fullPath: '/onboarding'
       preLoaderRoute: typeof OnboardingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/meutempo': {
+      id: '/meutempo'
+      path: '/meutempo'
+      fullPath: '/meutempo'
+      preLoaderRoute: typeof MeutempoRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/home': {
@@ -279,10 +295,10 @@ declare module '@tanstack/react-router' {
     }
     '/meutempo/': {
       id: '/meutempo/'
-      path: '/meutempo'
+      path: '/'
       fullPath: '/meutempo/'
       preLoaderRoute: typeof MeutempoIndexRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof MeutempoRoute
     }
     '/p/$payload': {
       id: '/p/$payload'
@@ -293,10 +309,10 @@ declare module '@tanstack/react-router' {
     }
     '/meutempo/ler': {
       id: '/meutempo/ler'
-      path: '/meutempo/ler'
+      path: '/ler'
       fullPath: '/meutempo/ler'
       preLoaderRoute: typeof MeutempoLerRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof MeutempoRoute
     }
     '/mensagem/$sentimento': {
       id: '/mensagem/$sentimento'
@@ -315,21 +331,34 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface MeutempoRouteChildren {
+  MeutempoLerRoute: typeof MeutempoLerRoute
+  MeutempoIndexRoute: typeof MeutempoIndexRoute
+}
+
+const MeutempoRouteChildren: MeutempoRouteChildren = {
+  MeutempoLerRoute: MeutempoLerRoute,
+  MeutempoIndexRoute: MeutempoIndexRoute,
+}
+
+const MeutempoRouteWithChildren = MeutempoRoute._addFileChildren(
+  MeutempoRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   ConverseRoute: ConverseRoute,
   DevocionalRoute: DevocionalRoute,
   EscolhidasRoute: EscolhidasRoute,
   HomeRoute: HomeRoute,
+  MeutempoRoute: MeutempoRouteWithChildren,
   OnboardingRoute: OnboardingRoute,
   OraComigoRoute: OraComigoRoute,
   OracoesRoute: OracoesRoute,
   SilencioRoute: SilencioRoute,
   AtalhoAcaoRoute: AtalhoAcaoRoute,
   MensagemSentimentoRoute: MensagemSentimentoRoute,
-  MeutempoLerRoute: MeutempoLerRoute,
   PPayloadRoute: PPayloadRoute,
-  MeutempoIndexRoute: MeutempoIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
