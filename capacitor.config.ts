@@ -3,8 +3,9 @@ import type { CapacitorConfig } from '@capacitor/cli';
 const config: CapacitorConfig = {
   appId: 'com.oonn.chosen',
   appName: 'Chosen',
-  webDir: 'dist/client',
+  webDir: '.output/public',
   server: {
+    url: 'https://chosen.oonn.com.br',
     androidScheme: 'https',
     iosScheme: 'https',
     cleartext: false,
