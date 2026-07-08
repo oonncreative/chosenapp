@@ -243,6 +243,42 @@ function HomePage() {
 
 type NavFn = ReturnType<typeof useNavigate>;
 
+function SearchResults({ hits, navigate, query }: { hits: SearchHit[]; navigate: NavFn; query: string }) {
+  if (hits.length === 0) {
+    return (
+      <section className="flex-1 min-h-0 overflow-y-auto no-scrollbar px-6 pb-6 pt-4 text-center">
+        <p className="text-sm text-black/50">
+          Nada encontrado para <span className="font-semibold text-black">"{query}"</span>.
+        </p>
+        <p className="mt-2 text-xs text-black/40">Tente outra palavra como "paz", "medo" ou "gratidão".</p>
+      </section>
+    );
+  }
+  return (
+    <section className="flex-1 min-h-0 overflow-y-auto no-scrollbar px-4 sm:px-6 pb-6 pt-2">
+      <div className="flex flex-col gap-2 w-full">
+        {hits.map((h) => (
+          <button
+            key={`${h.categoria}-${h.id}`}
+            onClick={() =>
+              navigate({
+                to: "/mensagem/$sentimento",
+                params: { sentimento: h.categoria },
+                search: { color: "#f1f26c", id: h.id },
+              })
+            }
+            className="w-full text-left px-4 py-3 rounded-2xl bg-black/[0.03] hover:bg-black/[0.06] active:scale-[0.99] transition-all"
+          >
+            <p className="text-[10px] font-bold tracking-[0.25em] uppercase text-black/50">{h.categoria}</p>
+            <p className="mt-1 text-sm text-black leading-snug line-clamp-3">"{h.texto}"</p>
+            <p className="mt-1 text-[11px] font-semibold tracking-wider uppercase text-black/60">{h.referencia}</p>
+          </button>
+        ))}
+      </div>
+    </section>
+  );
+}
+
 function goTo(navigate: NavFn, sentimento: string) {
   navigate({
     to: "/mensagem/$sentimento",
