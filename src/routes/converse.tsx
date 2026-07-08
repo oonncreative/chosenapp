@@ -277,6 +277,78 @@ function ConversePage() {
               <p className="mt-3 text-center text-[10px] text-gray-400 leading-relaxed">
                 Limite de 2 conversas por dia · até 1000 caracteres por mensagem
               </p>
+
+              {historico.length > 0 && (
+                <section className="mt-10">
+                  <div className="flex items-center justify-between mb-3">
+                    <h2 className="text-[10px] font-bold tracking-[0.3em] uppercase text-black/60">
+                      Últimas conversas
+                    </h2>
+                    <span className="inline-flex items-center gap-1 text-[10px] text-gray-400">
+                      <Clock className="h-3 w-3" />
+                      ficam 24h
+                    </span>
+                  </div>
+                  <p className="text-[11px] text-gray-400 mb-3 leading-relaxed">
+                    Suas conversas somem automaticamente após 24h. Salve as que quiser guardar.
+                  </p>
+                  <ul className="flex flex-col gap-2">
+                    {historico.map((h) => {
+                      const aberto = expandedId === h.id;
+                      return (
+                        <li
+                          key={h.id}
+                          className="rounded-2xl border border-black/5 bg-gray-50/60 overflow-hidden"
+                        >
+                          <button
+                            onClick={() => setExpandedId(aberto ? null : h.id)}
+                            className="w-full text-left px-4 py-3 flex items-start gap-3"
+                          >
+                            <div className="flex-1 min-w-0">
+                              <p className="text-[13px] text-black leading-snug line-clamp-2">
+                                {h.pergunta}
+                              </p>
+                              <p className="mt-1 text-[10px] text-gray-400 tracking-wide">
+                                {h.resposta.referencia} · {formatRestante(h.at)}
+                              </p>
+                            </div>
+                            <ChevronDown
+                              className={`h-4 w-4 mt-0.5 text-gray-400 shrink-0 transition-transform ${
+                                aberto ? "rotate-180" : ""
+                              }`}
+                            />
+                          </button>
+                          {aberto && (
+                            <div className="px-4 pb-4 pt-1 flex flex-col gap-4 animate-in fade-in duration-300">
+                              <div className="rounded-xl bg-white px-4 py-3">
+                                <p className="text-[14px] font-light leading-snug text-black break-words">
+                                  “{h.resposta.versiculo}”
+                                </p>
+                                <p className="mt-2 text-[9px] font-bold tracking-[0.3em] uppercase text-black/50">
+                                  {h.resposta.referencia}
+                                </p>
+                              </div>
+                              <p className="text-[13px] leading-relaxed text-black whitespace-pre-line">
+                                {h.resposta.acolhimento}
+                              </p>
+                              <p className="text-[13px] leading-relaxed text-black/80 italic whitespace-pre-line">
+                                {h.resposta.oracao}
+                              </p>
+                              <button
+                                onClick={() => apagarHistorico(h.id)}
+                                className="self-start inline-flex items-center gap-1.5 text-[11px] text-gray-400 hover:text-black transition"
+                              >
+                                <Trash2 className="h-3 w-3" />
+                                Apagar
+                              </button>
+                            </div>
+                          )}
+                        </li>
+                      );
+                    })}
+                  </ul>
+                </section>
+              )}
             </div>
           )}
 
