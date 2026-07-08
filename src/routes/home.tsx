@@ -61,6 +61,21 @@ function HomePage() {
 
   const [menuOpen, setMenuOpen] = useState(false);
 
+  const [searchOpen, setSearchOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const searchInputRef = useRef<HTMLInputElement | null>(null);
+  const searchHits: SearchHit[] = searchQuery.trim() ? searchMensagens(searchQuery, 15) : [];
+
+  const openSearch = () => {
+    setSearchOpen(true);
+    setTimeout(() => searchInputRef.current?.focus(), 30);
+  };
+  const closeSearchIfEmpty = () => {
+    if (!searchQuery.trim()) {
+      setSearchOpen(false);
+    }
+  };
+
   const handleToggleShake = async () => {
     if (shakeOn) {
       setShakeEnabled(false);
