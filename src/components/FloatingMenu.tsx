@@ -110,6 +110,12 @@ export function FloatingMenu() {
   const [intensityOpen, setIntensityOpen] = useState(false);
   const [favoritesOpen, setFavoritesOpen] = useState(false);
   const [sendOpen, setSendOpen] = useState(false);
+  const [timeThemeOn, setTimeThemeOn] = useState(false);
+
+  useEffect(() => {
+    setTimeThemeOn(isTimeThemeEnabled());
+  }, []);
+
   const navigate = useNavigate();
   const pathname = useRouterState({ select: (s) => s.location.pathname });
 
