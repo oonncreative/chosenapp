@@ -70,12 +70,14 @@ registerRoute(
   })
 );
 
-// Fallback offline: se uma navegação falhar e não houver cache, serve o app shell ("/")
+// Fallback offline: se uma navegação falhar e não houver cache da rota pedida,
+// serve uma página dedicada "Sem conexão" (offline.html) precacheada pelo Workbox.
 setCatchHandler(async ({ request }) => {
   if (request.destination === 'document' || request.mode === 'navigate') {
-    const cache = await caches.open('chosen-html');
-    const cached = (await cache.match('/')) || (await caches.match('/'));
-    if (cached) return cached;
+    const offline =
+      (await caches.match('/offline.html')) ||
+      (await caches.match(new Request('/offline.html', { cache: 'reload' })));
+    if (offline) return offline;
   }
   return Response.error();
 });
