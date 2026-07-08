@@ -21,7 +21,7 @@ function DevocionalPage() {
   const dev = getDevocionalDoDia();
 
   return (
-    <div className="flex flex-col min-h-[100dvh] bg-white">
+    <div className="flex flex-col h-[100dvh] bg-white">
       <header className="grid grid-cols-3 h-14 items-center px-4 pt-[max(env(safe-area-inset-top),2rem)] shrink-0">
         <Link to="/home" className="flex h-10 w-10 items-center justify-center rounded-full hover:bg-gray-100 justify-self-start">
           <ArrowLeft className="h-6 w-6 text-gray-400" />
@@ -30,7 +30,7 @@ function DevocionalPage() {
         <span />
       </header>
 
-      <main className="flex-1 px-6 pb-32 pt-4 flex flex-col items-center">
+      <main className="flex-1 overflow-y-auto px-6 pb-40 pt-4 flex flex-col items-center [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
         <div className="w-full max-w-md">
           <p className="text-[10px] font-bold tracking-[0.3em] uppercase text-black/50 mb-6 text-center">
             Devocional de hoje
