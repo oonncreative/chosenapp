@@ -1,5 +1,5 @@
 export type ShareTheme = "branco" | "preto" | "creme" | "coral";
-export type ShareFormat = "story" | "quadrado" | "horizontal";
+export type ShareFormat = "story" | "post" | "quadrado" | "horizontal";
 
 export interface ThemeColors {
   bg: string;
@@ -18,6 +18,7 @@ export const THEMES: Record<ShareTheme, ThemeColors> = {
 
 export const FORMATS: Record<ShareFormat, { width: number; height: number; label: string }> = {
   story:      { width: 1080, height: 1920, label: "Story 9:16" },
+  post:       { width: 1080, height: 1440, label: "Post 3:4" },
   quadrado:   { width: 1080, height: 1080, label: "Quadrado 1:1" },
   horizontal: { width: 1920, height: 1080, label: "Horizontal 16:9" },
 };
