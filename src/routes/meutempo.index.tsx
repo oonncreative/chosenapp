@@ -3,7 +3,7 @@ import { ArrowLeft, Clock } from "lucide-react";
 import { AppFooter } from "@/components/AppFooter";
 import { getLeituraPorTempo, type TempoLeitura } from "@/lib/leituras";
 
-export const Route = createFileRoute("/meutempo")({
+export const Route = createFileRoute("/meutempo/")({
   head: () => ({
     meta: [
       { title: "Quanto tempo você tem? — Chosen" },
