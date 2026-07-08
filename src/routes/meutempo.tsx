@@ -1,7 +1,7 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { ArrowLeft, Clock } from "lucide-react";
-import { CATEGORIAS, MENSAGENS, type Categoria } from "@/lib/data";
 import { AppFooter } from "@/components/AppFooter";
+import { getLeituraPorTempo, type TempoLeitura } from "@/lib/leituras";
 
 export const Route = createFileRoute("/meutempo")({
   head: () => ({
@@ -17,64 +17,23 @@ export const Route = createFileRoute("/meutempo")({
   component: MeuTempoPage,
 });
 
-type Modo = "curto" | "medio" | "longo";
-
-function pickByTime(modo: Modo): { categoria: Categoria; id: string } | null {
-  const pool: { categoria: Categoria; id: string; textLen: number; hasResumo: boolean }[] = [];
-  for (const categoria of CATEGORIAS) {
-    for (const m of MENSAGENS[categoria]) {
-      pool.push({
-        categoria,
-        id: m.id,
-        textLen: m.texto.length,
-        hasResumo: !!m.resumo,
-      });
-    }
-  }
-
-  let filtered = pool;
-  if (modo === "curto") {
-    filtered = pool.filter((p) => p.textLen <= 120);
-  } else if (modo === "medio") {
-    filtered = pool.filter((p) => p.hasResumo && p.textLen > 60);
-  } else {
-    filtered = pool.filter((p) => p.hasResumo && (p.textLen > 120 || p.textLen > 80));
-  }
-  if (filtered.length === 0) filtered = pool;
-  const x = filtered[Math.floor(Math.random() * filtered.length)];
-  return { categoria: x.categoria, id: x.id };
-}
-
 function MeuTempoPage() {
   const navigate = useNavigate();
 
-  const go = (modo: Modo) => {
-    const picked = pickByTime(modo);
-    if (!picked) return;
-    if (modo === "longo") {
-      navigate({
-        to: "/mensagem/$sentimento",
-        params: { sentimento: picked.categoria },
-        search: { color: "#f1f26c", id: picked.id },
-      });
-      return;
-    }
-    navigate({
-      to: "/mensagem/$sentimento",
-      params: { sentimento: picked.categoria },
-      search: { color: "#f1f26c", id: picked.id },
-    });
+  const go = (tempo: TempoLeitura) => {
+    const l = getLeituraPorTempo(tempo);
+    navigate({ to: "/meutempo/ler", search: { tempo, id: l.id } });
   };
 
-  const opcoes: { modo: Modo; titulo: string; sub: string }[] = [
-    { modo: "curto", titulo: "Tenho 30 segundos", sub: "Uma palavra curta pra levar comigo" },
-    { modo: "medio", titulo: "Tenho 2 minutos", sub: "Um versículo com uma reflexão" },
-    { modo: "longo", titulo: "Tenho 5 minutos", sub: "Versículo, reflexão e um convite pra orar" },
+  const opcoes: { modo: TempoLeitura; titulo: string; sub: string }[] = [
+    { modo: "curto", titulo: "Tenho 30 segundos", sub: "Uma passagem curta com interpretação" },
+    { modo: "medio", titulo: "Tenho 2 minutos", sub: "Uma passagem média pra refletir" },
+    { modo: "longo", titulo: "Tenho 5 minutos", sub: "Uma passagem longa com interpretação completa" },
   ];
 
   return (
     <div className="flex flex-col min-h-[100dvh] bg-white">
-      <header className="grid grid-cols-3 h-14 items-center px-4 pt-[max(env(safe-area-inset-top),1rem)] shrink-0">
+      <header className="grid grid-cols-3 h-14 items-center px-4 pt-[max(env(safe-area-inset-top),2rem)] shrink-0">
         <Link to="/home" className="flex h-10 w-10 items-center justify-center rounded-full hover:bg-gray-100 justify-self-start">
           <ArrowLeft className="h-6 w-6 text-gray-400" />
         </Link>
@@ -89,7 +48,7 @@ function MeuTempoPage() {
             <h1 className="text-sm font-light tracking-[0.3em] uppercase text-black">Quanto tempo você tem?</h1>
           </div>
           <p className="text-sm text-black/60 mb-6">
-            Escolha e a gente separa uma mensagem no tamanho certo pra agora.
+            Escolha e a gente separa uma passagem da Bíblia com interpretação no tempo certo pra agora.
           </p>
 
           <div className="flex flex-col gap-3">
