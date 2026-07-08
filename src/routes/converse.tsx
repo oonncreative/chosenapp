@@ -1,16 +1,22 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
-import { useMemo, useState } from "react";
-import { ArrowLeft, Sparkles, Heart, Send, RefreshCw, Share2 } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import { ArrowLeft, Heart, ArrowUp, RefreshCw, Share2 } from "lucide-react";
 import { toast } from "sonner";
-import { AppFooter } from "@/components/AppFooter";
-import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
 import { converseChosen, type RespostaConversa } from "@/lib/converse.functions";
 import { toggleFavorite } from "@/lib/favorites";
+import chosenLogo from "@/assets/chosen-logo.png";
 
-const DAILY_LIMIT = 5;
-const USAGE_KEY = "chosen_converse_usage_v1";
+const DAILY_LIMIT = 2;
+const USAGE_KEY = "chosen_converse_usage_v2";
+
+const EXEMPLOS = [
+  "briguei com minha mãe e me sinto culpado, ela não fala comigo há dias...",
+  "tô ansioso com o trabalho, sinto que não vou dar conta de tudo esta semana",
+  "tô me sentindo sozinho, faz tempo que não converso de verdade com ninguém",
+  "perdi alguém que eu amo e não sei como seguir daqui pra frente",
+  "tô com medo do futuro, não sei que decisão tomar agora",
+];
 
 function todayKey() {
   const d = new Date();
