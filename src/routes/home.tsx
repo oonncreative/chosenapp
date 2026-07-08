@@ -1,6 +1,6 @@
 import { AppFooter } from "@/components/AppFooter";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { Shuffle, List, GalleryHorizontal, Vibrate, VibrateOff, Heart } from "lucide-react";
+import { Shuffle, List, GalleryHorizontal, Vibrate, VibrateOff, Heart, MoreHorizontal, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { CATEGORIAS, getRandomIdForCategoria, getRandomMensagemGlobal } from "@/lib/data";
 import { isShakeEnabled, setShakeEnabled, requestShakePermission } from "@/hooks/useShakeToChosen";
@@ -58,6 +58,8 @@ function HomePage() {
     setShakeOn(isShakeEnabled());
   }, []);
 
+  const [menuOpen, setMenuOpen] = useState(false);
+
   const handleToggleShake = async () => {
     if (shakeOn) {
       setShakeEnabled(false);
@@ -88,6 +90,11 @@ function HomePage() {
           <h1 className="truncate text-sm sm:text-base font-light tracking-[0.4em] text-black uppercase">CHOSEN</h1>
           
           <div className="flex items-center gap-0 shrink-0">
+            <div
+              className={`flex items-center gap-0 overflow-hidden transition-all duration-300 ease-out ${
+                menuOpen ? "max-w-[240px] opacity-100" : "max-w-0 opacity-0"
+              }`}
+            >
             <button
               onClick={handleToggleShake}
               className="flex items-center justify-center min-w-11 min-h-11 p-2 transition-opacity active:opacity-50"
@@ -135,6 +142,20 @@ function HomePage() {
                 <circle cx="12" cy="12" r="10" />
                 <path d="M12 2a10 10 0 0 1 0 20" fill="currentColor" />
               </svg>
+            </button>
+            </div>
+            <button
+              onClick={() => setMenuOpen((v) => !v)}
+              aria-label={menuOpen ? "Fechar menu" : "Abrir menu"}
+              aria-expanded={menuOpen}
+              className="flex items-center justify-center min-w-11 min-h-11 p-2 transition-opacity active:opacity-50"
+              title="Menu"
+            >
+              {menuOpen ? (
+                <X className="h-5 w-5 text-black" strokeWidth={2} />
+              ) : (
+                <MoreHorizontal className="h-5 w-5 text-black" strokeWidth={2} />
+              )}
             </button>
           </div>
         </div>
