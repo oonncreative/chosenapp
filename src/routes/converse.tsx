@@ -90,6 +90,23 @@ function bumpUsage() {
   );
 }
 
+function msAteMeiaNoite(): number {
+  const now = new Date();
+  const next = new Date(now);
+  next.setHours(24, 0, 0, 0);
+  return next.getTime() - now.getTime();
+}
+
+function formatCountdown(ms: number): string {
+  if (ms <= 0) return "liberando…";
+  const total = Math.floor(ms / 1000);
+  const h = Math.floor(total / 3600);
+  const m = Math.floor((total % 3600) / 60);
+  const s = total % 60;
+  const pad = (n: number) => n.toString().padStart(2, "0");
+  return `${pad(h)}:${pad(m)}:${pad(s)}`;
+}
+
 export const Route = createFileRoute("/converse")({
   head: () => ({
     meta: [
