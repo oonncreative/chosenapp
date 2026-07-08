@@ -1,7 +1,7 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { useEffect, useRef, useState } from "react";
-import { ArrowLeft, Heart, ArrowUp, RefreshCw, Share2 } from "lucide-react";
+import { ArrowLeft, Heart, Sparkles, RefreshCw, Share2 } from "lucide-react";
 import { toast } from "sonner";
 import { converseChosen, type RespostaConversa } from "@/lib/converse.functions";
 import { toggleFavorite } from "@/lib/favorites";
