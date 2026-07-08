@@ -247,6 +247,21 @@ export function FloatingMenu() {
           <div className="mt-2 flex flex-col">
             <MenuItem icon={<Sparkles className="h-5 w-5" />} label="Orações" onClick={handleOracoes} />
             <MenuItem
+              icon={<HandHeart className="h-5 w-5" />}
+              label="Ora comigo (guiado)"
+              onClick={() => { setOpen(false); navigate({ to: "/ora-comigo" }); }}
+            />
+            <MenuItem
+              icon={<BookOpen className="h-5 w-5" />}
+              label="Devocional de 3 min"
+              onClick={() => { setOpen(false); navigate({ to: "/devocional" }); }}
+            />
+            <MenuItem
+              icon={<Clock className="h-5 w-5" />}
+              label="Quanto tempo você tem?"
+              onClick={() => { setOpen(false); navigate({ to: "/meutempo" }); }}
+            />
+            <MenuItem
               icon={<Heart className="h-5 w-5" />}
               label="Minhas escolhidas"
               onClick={handleFavoritos}
@@ -278,6 +293,20 @@ export function FloatingMenu() {
               icon={<MonoIcon />}
               label="Modo preto e branco"
               onClick={handleMono}
+            />
+            <MenuItem
+              icon={<Sun className="h-5 w-5" />}
+              label={timeThemeOn ? "Tema por horário: ativado" : "Tema por horário: desativado"}
+              onClick={() => {
+                const next = !timeThemeOn;
+                setTimeThemeEnabled(next);
+                setTimeThemeOn(next);
+                toast(next ? "Tema por horário ativado 🌅" : "Tema por horário desativado", {
+                  description: next
+                    ? "As cores mudam suave conforme a hora do dia."
+                    : "Voltando ao visual padrão.",
+                });
+              }}
             />
             <MenuItem
               icon={<RefreshCw className="h-5 w-5" />}
