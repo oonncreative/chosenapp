@@ -177,8 +177,37 @@ function HomePage() {
         </div>
 
         <div className="mt-1 flex items-center justify-between gap-3">
-          <h1 className="text-sm sm:text-base font-light tracking-[0.3em] sm:tracking-[0.4em] text-black uppercase">Qual seu sentimento?</h1>
-          <div className="flex items-center gap-0 -mr-1 shrink-0">
+          {searchOpen ? (
+            <div className="flex items-center gap-2 flex-1 min-w-0 border-b border-black/20 focus-within:border-black transition-colors">
+              <Search className="h-4 w-4 text-black/50 shrink-0" strokeWidth={2} />
+              <input
+                ref={searchInputRef}
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                onBlur={closeSearchIfEmpty}
+                placeholder="ansiedade, gratidão, medo..."
+                className="flex-1 min-w-0 bg-transparent py-1.5 text-sm text-black placeholder:text-black/30 outline-none"
+              />
+              {searchQuery && (
+                <button
+                  onClick={() => { setSearchQuery(""); setSearchOpen(false); }}
+                  aria-label="Limpar busca"
+                  className="shrink-0 p-1 text-black/40 hover:text-black"
+                >
+                  <X className="h-4 w-4" />
+                </button>
+              )}
+            </div>
+          ) : (
+            <button
+              onClick={openSearch}
+              aria-label="Buscar por palavra-chave"
+              className="text-sm sm:text-base font-light tracking-[0.3em] sm:tracking-[0.4em] text-black uppercase text-left cursor-pointer active:opacity-60 transition-opacity"
+            >
+              Qual seu sentimento?
+            </button>
+          )}
+          <div className={`flex items-center gap-0 -mr-1 shrink-0 ${searchOpen ? "hidden" : ""}`}>
           {([
             { key: "list" as const, icon: List, label: "Lista" },
             { key: "swipe" as const, icon: GalleryHorizontal, label: "Swipe" },
@@ -198,8 +227,14 @@ function HomePage() {
         </div>
       </header>
 
-      {viewMode === "list" && <ListView navigate={navigate} />}
-      {viewMode === "swipe" && <SwipeView navigate={navigate} />}
+      {searchOpen && searchQuery.trim() ? (
+        <SearchResults hits={searchHits} navigate={navigate} query={searchQuery} />
+      ) : (
+        <>
+          {viewMode === "list" && <ListView navigate={navigate} />}
+          {viewMode === "swipe" && <SwipeView navigate={navigate} />}
+        </>
+      )}
 
       <AppFooter />
     </div>
