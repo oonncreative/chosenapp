@@ -18,12 +18,13 @@ export const ShareCanvas = forwardRef<HTMLDivElement, Props>(function ShareCanva
   const c = THEMES[options.theme];
   const isHorizontal = options.format === "horizontal";
   const isSquare = options.format === "quadrado";
+  const isPost = options.format === "post";
 
   // Escala de fonte por formato (story = base)
-  const scale = isHorizontal ? 0.85 : isSquare ? 0.78 : 1;
+  const scale = isHorizontal ? 0.85 : isSquare ? 0.78 : isPost ? 0.9 : 1;
 
-  const topPad = isHorizontal ? 80 : isSquare ? 80 : 140;
-  const bottomPad = isHorizontal ? 70 : isSquare ? 70 : 100;
+  const topPad = isHorizontal ? 80 : isSquare ? 80 : isPost ? 100 : 140;
+  const bottomPad = isHorizontal ? 70 : isSquare ? 70 : isPost ? 80 : 100;
   const sidePad = isHorizontal ? 140 : 80;
 
   const textScaleFactor = 1 - (options.textScale ?? 0) * 0.12;
