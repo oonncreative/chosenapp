@@ -1,9 +1,10 @@
 import { AppFooter } from "@/components/AppFooter";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { Shuffle, List, GalleryHorizontal, Vibrate, VibrateOff, Heart, MoreHorizontal, X } from "lucide-react";
+import { Shuffle, List, GalleryHorizontal, Vibrate, VibrateOff, Heart, MoreHorizontal, X, Search } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { CATEGORIAS, getRandomIdForCategoria, getRandomMensagemGlobal } from "@/lib/data";
 import { isShakeEnabled, setShakeEnabled, requestShakePermission } from "@/hooks/useShakeToChosen";
+import { searchMensagens, type SearchHit } from "@/lib/searchMensagens";
 import { toast } from "sonner";
 
 const triggerHaptic = async () => {
@@ -59,6 +60,21 @@ function HomePage() {
   }, []);
 
   const [menuOpen, setMenuOpen] = useState(false);
+
+  const [searchOpen, setSearchOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const searchInputRef = useRef<HTMLInputElement | null>(null);
+  const searchHits: SearchHit[] = searchQuery.trim() ? searchMensagens(searchQuery, 15) : [];
+
+  const openSearch = () => {
+    setSearchOpen(true);
+    setTimeout(() => searchInputRef.current?.focus(), 30);
+  };
+  const closeSearchIfEmpty = () => {
+    if (!searchQuery.trim()) {
+      setSearchOpen(false);
+    }
+  };
 
   const handleToggleShake = async () => {
     if (shakeOn) {
@@ -161,8 +177,37 @@ function HomePage() {
         </div>
 
         <div className="mt-1 flex items-center justify-between gap-3">
-          <h1 className="text-sm sm:text-base font-light tracking-[0.3em] sm:tracking-[0.4em] text-black uppercase">Qual seu sentimento?</h1>
-          <div className="flex items-center gap-0 -mr-1 shrink-0">
+          {searchOpen ? (
+            <div className="flex items-center gap-2 flex-1 min-w-0 border-b border-black/20 focus-within:border-black transition-colors">
+              <Search className="h-4 w-4 text-black/50 shrink-0" strokeWidth={2} />
+              <input
+                ref={searchInputRef}
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                onBlur={closeSearchIfEmpty}
+                placeholder="ansiedade, gratidão, medo..."
+                className="flex-1 min-w-0 bg-transparent py-1.5 text-sm text-black placeholder:text-black/30 outline-none"
+              />
+              {searchQuery && (
+                <button
+                  onClick={() => { setSearchQuery(""); setSearchOpen(false); }}
+                  aria-label="Limpar busca"
+                  className="shrink-0 p-1 text-black/40 hover:text-black"
+                >
+                  <X className="h-4 w-4" />
+                </button>
+              )}
+            </div>
+          ) : (
+            <button
+              onClick={openSearch}
+              aria-label="Buscar por palavra-chave"
+              className="text-sm sm:text-base font-light tracking-[0.3em] sm:tracking-[0.4em] text-black uppercase text-left cursor-pointer active:opacity-60 transition-opacity"
+            >
+              Qual seu sentimento?
+            </button>
+          )}
+          <div className={`flex items-center gap-0 -mr-1 shrink-0 ${searchOpen ? "hidden" : ""}`}>
           {([
             { key: "list" as const, icon: List, label: "Lista" },
             { key: "swipe" as const, icon: GalleryHorizontal, label: "Swipe" },
@@ -182,8 +227,14 @@ function HomePage() {
         </div>
       </header>
 
-      {viewMode === "list" && <ListView navigate={navigate} />}
-      {viewMode === "swipe" && <SwipeView navigate={navigate} />}
+      {searchOpen && searchQuery.trim() ? (
+        <SearchResults hits={searchHits} navigate={navigate} query={searchQuery} />
+      ) : (
+        <>
+          {viewMode === "list" && <ListView navigate={navigate} />}
+          {viewMode === "swipe" && <SwipeView navigate={navigate} />}
+        </>
+      )}
 
       <AppFooter />
     </div>
@@ -191,6 +242,42 @@ function HomePage() {
 }
 
 type NavFn = ReturnType<typeof useNavigate>;
+
+function SearchResults({ hits, navigate, query }: { hits: SearchHit[]; navigate: NavFn; query: string }) {
+  if (hits.length === 0) {
+    return (
+      <section className="flex-1 min-h-0 overflow-y-auto no-scrollbar px-6 pb-6 pt-4 text-center">
+        <p className="text-sm text-black/50">
+          Nada encontrado para <span className="font-semibold text-black">"{query}"</span>.
+        </p>
+        <p className="mt-2 text-xs text-black/40">Tente outra palavra como "paz", "medo" ou "gratidão".</p>
+      </section>
+    );
+  }
+  return (
+    <section className="flex-1 min-h-0 overflow-y-auto no-scrollbar px-4 sm:px-6 pb-6 pt-2">
+      <div className="flex flex-col gap-2 w-full">
+        {hits.map((h) => (
+          <button
+            key={`${h.categoria}-${h.id}`}
+            onClick={() =>
+              navigate({
+                to: "/mensagem/$sentimento",
+                params: { sentimento: h.categoria },
+                search: { color: "#f1f26c", id: h.id },
+              })
+            }
+            className="w-full text-left px-4 py-3 rounded-2xl bg-black/[0.03] hover:bg-black/[0.06] active:scale-[0.99] transition-all"
+          >
+            <p className="text-[10px] font-bold tracking-[0.25em] uppercase text-black/50">{h.categoria}</p>
+            <p className="mt-1 text-sm text-black leading-snug line-clamp-3">"{h.texto}"</p>
+            <p className="mt-1 text-[11px] font-semibold tracking-wider uppercase text-black/60">{h.referencia}</p>
+          </button>
+        ))}
+      </div>
+    </section>
+  );
+}
 
 function goTo(navigate: NavFn, sentimento: string) {
   navigate({

@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate, useRouterState } from "@tanstack/react-router";
-import { Menu, RefreshCw, Sparkles, CalendarClock, Share2, HelpCircle, Trash2, Heart, Send, Smile, Shuffle, BellRing, Wind, Copy, Check, PlayCircle, Bell } from "lucide-react";
+import { Menu, RefreshCw, Sparkles, CalendarClock, Share2, HelpCircle, Trash2, Heart, Send, Smile, Shuffle, BellRing, Wind, Copy, Check, PlayCircle, Bell, Clock, BookOpen, HandHeart, Sun } from "lucide-react";
 import { toast } from "sonner";
 import {
   Sheet,
@@ -32,6 +32,7 @@ import {
   type NotificationIntensity,
 } from "@/lib/notificationPrefs";
 import { rescheduleNotifications } from "@/hooks/useNativeNotifications";
+import { isTimeThemeEnabled, setTimeThemeEnabled } from "@/lib/timeThemePrefs";
 
 const SCHEDULED_KEY = "chosen_user_schedules";
 const PWA_SCHEDULE_BASE_ID = 50000;
@@ -109,6 +110,12 @@ export function FloatingMenu() {
   const [intensityOpen, setIntensityOpen] = useState(false);
   const [favoritesOpen, setFavoritesOpen] = useState(false);
   const [sendOpen, setSendOpen] = useState(false);
+  const [timeThemeOn, setTimeThemeOn] = useState(false);
+
+  useEffect(() => {
+    setTimeThemeOn(isTimeThemeEnabled());
+  }, []);
+
   const navigate = useNavigate();
   const pathname = useRouterState({ select: (s) => s.location.pathname });
 
@@ -240,6 +247,21 @@ export function FloatingMenu() {
           <div className="mt-2 flex flex-col">
             <MenuItem icon={<Sparkles className="h-5 w-5" />} label="Orações" onClick={handleOracoes} />
             <MenuItem
+              icon={<HandHeart className="h-5 w-5" />}
+              label="Ora comigo (guiado)"
+              onClick={() => { setOpen(false); navigate({ to: "/ora-comigo" }); }}
+            />
+            <MenuItem
+              icon={<BookOpen className="h-5 w-5" />}
+              label="Devocional de 3 min"
+              onClick={() => { setOpen(false); navigate({ to: "/devocional" }); }}
+            />
+            <MenuItem
+              icon={<Clock className="h-5 w-5" />}
+              label="Quanto tempo você tem?"
+              onClick={() => { setOpen(false); navigate({ to: "/meutempo" }); }}
+            />
+            <MenuItem
               icon={<Heart className="h-5 w-5" />}
               label="Minhas escolhidas"
               onClick={handleFavoritos}
@@ -271,6 +293,20 @@ export function FloatingMenu() {
               icon={<MonoIcon />}
               label="Modo preto e branco"
               onClick={handleMono}
+            />
+            <MenuItem
+              icon={<Sun className="h-5 w-5" />}
+              label={timeThemeOn ? "Tema por horário: ativado" : "Tema por horário: desativado"}
+              onClick={() => {
+                const next = !timeThemeOn;
+                setTimeThemeEnabled(next);
+                setTimeThemeOn(next);
+                toast(next ? "Tema por horário ativado 🌅" : "Tema por horário desativado", {
+                  description: next
+                    ? "As cores mudam suave conforme a hora do dia."
+                    : "Voltando ao visual padrão.",
+                });
+              }}
             />
             <MenuItem
               icon={<RefreshCw className="h-5 w-5" />}

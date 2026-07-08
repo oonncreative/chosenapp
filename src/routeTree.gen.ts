@@ -11,9 +11,12 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as SilencioRouteImport } from './routes/silencio'
 import { Route as OracoesRouteImport } from './routes/oracoes'
+import { Route as OraComigoRouteImport } from './routes/ora-comigo'
 import { Route as OnboardingRouteImport } from './routes/onboarding'
+import { Route as MeutempoRouteImport } from './routes/meutempo'
 import { Route as HomeRouteImport } from './routes/home'
 import { Route as EscolhidasRouteImport } from './routes/escolhidas'
+import { Route as DevocionalRouteImport } from './routes/devocional'
 import { Route as ConverseRouteImport } from './routes/converse'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as PPayloadRouteImport } from './routes/p.$payload'
@@ -30,9 +33,19 @@ const OracoesRoute = OracoesRouteImport.update({
   path: '/oracoes',
   getParentRoute: () => rootRouteImport,
 } as any)
+const OraComigoRoute = OraComigoRouteImport.update({
+  id: '/ora-comigo',
+  path: '/ora-comigo',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const OnboardingRoute = OnboardingRouteImport.update({
   id: '/onboarding',
   path: '/onboarding',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MeutempoRoute = MeutempoRouteImport.update({
+  id: '/meutempo',
+  path: '/meutempo',
   getParentRoute: () => rootRouteImport,
 } as any)
 const HomeRoute = HomeRouteImport.update({
@@ -43,6 +56,11 @@ const HomeRoute = HomeRouteImport.update({
 const EscolhidasRoute = EscolhidasRouteImport.update({
   id: '/escolhidas',
   path: '/escolhidas',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DevocionalRoute = DevocionalRouteImport.update({
+  id: '/devocional',
+  path: '/devocional',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ConverseRoute = ConverseRouteImport.update({
@@ -74,9 +92,12 @@ const AtalhoAcaoRoute = AtalhoAcaoRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/converse': typeof ConverseRoute
+  '/devocional': typeof DevocionalRoute
   '/escolhidas': typeof EscolhidasRoute
   '/home': typeof HomeRoute
+  '/meutempo': typeof MeutempoRoute
   '/onboarding': typeof OnboardingRoute
+  '/ora-comigo': typeof OraComigoRoute
   '/oracoes': typeof OracoesRoute
   '/silencio': typeof SilencioRoute
   '/atalho/$acao': typeof AtalhoAcaoRoute
@@ -86,9 +107,12 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/converse': typeof ConverseRoute
+  '/devocional': typeof DevocionalRoute
   '/escolhidas': typeof EscolhidasRoute
   '/home': typeof HomeRoute
+  '/meutempo': typeof MeutempoRoute
   '/onboarding': typeof OnboardingRoute
+  '/ora-comigo': typeof OraComigoRoute
   '/oracoes': typeof OracoesRoute
   '/silencio': typeof SilencioRoute
   '/atalho/$acao': typeof AtalhoAcaoRoute
@@ -99,9 +123,12 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/converse': typeof ConverseRoute
+  '/devocional': typeof DevocionalRoute
   '/escolhidas': typeof EscolhidasRoute
   '/home': typeof HomeRoute
+  '/meutempo': typeof MeutempoRoute
   '/onboarding': typeof OnboardingRoute
+  '/ora-comigo': typeof OraComigoRoute
   '/oracoes': typeof OracoesRoute
   '/silencio': typeof SilencioRoute
   '/atalho/$acao': typeof AtalhoAcaoRoute
@@ -113,9 +140,12 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/converse'
+    | '/devocional'
     | '/escolhidas'
     | '/home'
+    | '/meutempo'
     | '/onboarding'
+    | '/ora-comigo'
     | '/oracoes'
     | '/silencio'
     | '/atalho/$acao'
@@ -125,9 +155,12 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/converse'
+    | '/devocional'
     | '/escolhidas'
     | '/home'
+    | '/meutempo'
     | '/onboarding'
+    | '/ora-comigo'
     | '/oracoes'
     | '/silencio'
     | '/atalho/$acao'
@@ -137,9 +170,12 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/converse'
+    | '/devocional'
     | '/escolhidas'
     | '/home'
+    | '/meutempo'
     | '/onboarding'
+    | '/ora-comigo'
     | '/oracoes'
     | '/silencio'
     | '/atalho/$acao'
@@ -150,9 +186,12 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   ConverseRoute: typeof ConverseRoute
+  DevocionalRoute: typeof DevocionalRoute
   EscolhidasRoute: typeof EscolhidasRoute
   HomeRoute: typeof HomeRoute
+  MeutempoRoute: typeof MeutempoRoute
   OnboardingRoute: typeof OnboardingRoute
+  OraComigoRoute: typeof OraComigoRoute
   OracoesRoute: typeof OracoesRoute
   SilencioRoute: typeof SilencioRoute
   AtalhoAcaoRoute: typeof AtalhoAcaoRoute
@@ -176,11 +215,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof OracoesRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/ora-comigo': {
+      id: '/ora-comigo'
+      path: '/ora-comigo'
+      fullPath: '/ora-comigo'
+      preLoaderRoute: typeof OraComigoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/onboarding': {
       id: '/onboarding'
       path: '/onboarding'
       fullPath: '/onboarding'
       preLoaderRoute: typeof OnboardingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/meutempo': {
+      id: '/meutempo'
+      path: '/meutempo'
+      fullPath: '/meutempo'
+      preLoaderRoute: typeof MeutempoRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/home': {
@@ -195,6 +248,13 @@ declare module '@tanstack/react-router' {
       path: '/escolhidas'
       fullPath: '/escolhidas'
       preLoaderRoute: typeof EscolhidasRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/devocional': {
+      id: '/devocional'
+      path: '/devocional'
+      fullPath: '/devocional'
+      preLoaderRoute: typeof DevocionalRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/converse': {
@@ -238,9 +298,12 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   ConverseRoute: ConverseRoute,
+  DevocionalRoute: DevocionalRoute,
   EscolhidasRoute: EscolhidasRoute,
   HomeRoute: HomeRoute,
+  MeutempoRoute: MeutempoRoute,
   OnboardingRoute: OnboardingRoute,
+  OraComigoRoute: OraComigoRoute,
   OracoesRoute: OracoesRoute,
   SilencioRoute: SilencioRoute,
   AtalhoAcaoRoute: AtalhoAcaoRoute,
@@ -250,13 +313,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
