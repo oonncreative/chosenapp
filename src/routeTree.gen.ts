@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as SilencioRouteImport } from './routes/silencio'
 import { Route as OracoesRouteImport } from './routes/oracoes'
 import { Route as OnboardingRouteImport } from './routes/onboarding'
+import { Route as MeutempoRouteImport } from './routes/meutempo'
 import { Route as HomeRouteImport } from './routes/home'
 import { Route as EscolhidasRouteImport } from './routes/escolhidas'
 import { Route as ConverseRouteImport } from './routes/converse'
@@ -33,6 +34,11 @@ const OracoesRoute = OracoesRouteImport.update({
 const OnboardingRoute = OnboardingRouteImport.update({
   id: '/onboarding',
   path: '/onboarding',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MeutempoRoute = MeutempoRouteImport.update({
+  id: '/meutempo',
+  path: '/meutempo',
   getParentRoute: () => rootRouteImport,
 } as any)
 const HomeRoute = HomeRouteImport.update({
@@ -76,6 +82,7 @@ export interface FileRoutesByFullPath {
   '/converse': typeof ConverseRoute
   '/escolhidas': typeof EscolhidasRoute
   '/home': typeof HomeRoute
+  '/meutempo': typeof MeutempoRoute
   '/onboarding': typeof OnboardingRoute
   '/oracoes': typeof OracoesRoute
   '/silencio': typeof SilencioRoute
@@ -88,6 +95,7 @@ export interface FileRoutesByTo {
   '/converse': typeof ConverseRoute
   '/escolhidas': typeof EscolhidasRoute
   '/home': typeof HomeRoute
+  '/meutempo': typeof MeutempoRoute
   '/onboarding': typeof OnboardingRoute
   '/oracoes': typeof OracoesRoute
   '/silencio': typeof SilencioRoute
@@ -101,6 +109,7 @@ export interface FileRoutesById {
   '/converse': typeof ConverseRoute
   '/escolhidas': typeof EscolhidasRoute
   '/home': typeof HomeRoute
+  '/meutempo': typeof MeutempoRoute
   '/onboarding': typeof OnboardingRoute
   '/oracoes': typeof OracoesRoute
   '/silencio': typeof SilencioRoute
@@ -115,6 +124,7 @@ export interface FileRouteTypes {
     | '/converse'
     | '/escolhidas'
     | '/home'
+    | '/meutempo'
     | '/onboarding'
     | '/oracoes'
     | '/silencio'
@@ -127,6 +137,7 @@ export interface FileRouteTypes {
     | '/converse'
     | '/escolhidas'
     | '/home'
+    | '/meutempo'
     | '/onboarding'
     | '/oracoes'
     | '/silencio'
@@ -139,6 +150,7 @@ export interface FileRouteTypes {
     | '/converse'
     | '/escolhidas'
     | '/home'
+    | '/meutempo'
     | '/onboarding'
     | '/oracoes'
     | '/silencio'
@@ -152,6 +164,7 @@ export interface RootRouteChildren {
   ConverseRoute: typeof ConverseRoute
   EscolhidasRoute: typeof EscolhidasRoute
   HomeRoute: typeof HomeRoute
+  MeutempoRoute: typeof MeutempoRoute
   OnboardingRoute: typeof OnboardingRoute
   OracoesRoute: typeof OracoesRoute
   SilencioRoute: typeof SilencioRoute
@@ -181,6 +194,13 @@ declare module '@tanstack/react-router' {
       path: '/onboarding'
       fullPath: '/onboarding'
       preLoaderRoute: typeof OnboardingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/meutempo': {
+      id: '/meutempo'
+      path: '/meutempo'
+      fullPath: '/meutempo'
+      preLoaderRoute: typeof MeutempoRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/home': {
@@ -240,6 +260,7 @@ const rootRouteChildren: RootRouteChildren = {
   ConverseRoute: ConverseRoute,
   EscolhidasRoute: EscolhidasRoute,
   HomeRoute: HomeRoute,
+  MeutempoRoute: MeutempoRoute,
   OnboardingRoute: OnboardingRoute,
   OracoesRoute: OracoesRoute,
   SilencioRoute: SilencioRoute,
