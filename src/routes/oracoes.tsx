@@ -171,7 +171,7 @@ function OracoesPage() {
         </div>
       </header>
 
-      <section className="flex-1 min-h-0 overflow-y-auto no-scrollbar px-4 sm:px-6 pb-12 pt-2">
+      <section className="flex-1 min-h-0 overflow-y-auto no-scrollbar px-4 sm:px-6 pb-40 pt-2">
         <div className="mb-4 border border-black/10 rounded-sm bg-black/[0.02]">
           <button
             type="button"
