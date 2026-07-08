@@ -85,7 +85,7 @@ function LerPage() {
 
   return (
     <div className="flex flex-col min-h-[100dvh] bg-white">
-      <header className="grid grid-cols-3 h-14 items-center px-4 pt-[max(env(safe-area-inset-top),2rem)] shrink-0">
+      <header className="grid grid-cols-3 items-center px-4 pt-[max(env(safe-area-inset-top),2rem)] pb-2 shrink-0">
         <Link
           to="/meutempo"
           className="flex h-10 w-10 items-center justify-center rounded-full hover:bg-gray-100 justify-self-start"
