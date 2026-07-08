@@ -33,6 +33,7 @@ const config: CapacitorConfig = {
         { id: 'motivacao', title: 'Uma motivação', description: 'Um empurrão pro seu dia' },
         { id: 'salmo', title: 'Um salmo', description: 'Palavra do Senhor' },
         { id: 'oracoes', title: 'Orações', description: 'Fale com Deus' },
+        { id: 'ia', title: 'Chosen IA', description: 'Converse e receba uma palavra' },
       ],
     },
   },

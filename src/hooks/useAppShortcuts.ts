@@ -51,6 +51,11 @@ export function useAppShortcuts() {
               title: "Orações",
               description: "Fale com Deus",
             },
+            {
+              id: "ia",
+              title: "Chosen IA",
+              description: "Converse e receba uma palavra",
+            },
           ],
         });
 
@@ -60,7 +65,9 @@ export function useAppShortcuts() {
           const target =
             shortcutId === "oracoes"
               ? "/oracoes?src=shortcut"
-              : `/atalho/${shortcutId}?src=shortcut`;
+              : shortcutId === "ia"
+                ? "/converse?src=shortcut"
+                : `/atalho/${shortcutId}?src=shortcut`;
           router.navigate({ to: target }).catch(() => {
             // fallback caso a rota tipada rejeite
             window.location.href = target;
