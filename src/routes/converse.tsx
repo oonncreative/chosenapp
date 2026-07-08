@@ -153,96 +153,71 @@ function ConversePage() {
     } catch {}
   };
 
+  const podeEnviar = !loading && !semSaldo && texto.trim().length >= 3;
+
   return (
     <div
-      className="relative flex h-[100dvh] max-h-[100dvh] w-full max-w-[100vw] flex-col overflow-hidden bg-white"
-      style={{ paddingTop: "max(env(safe-area-inset-top), 2rem)" }}
+      className="relative flex h-[100dvh] w-full flex-col bg-white"
+      style={{ paddingTop: "max(env(safe-area-inset-top), 1rem)" }}
     >
-      <header className="shrink-0 z-20 bg-white grid grid-cols-3 h-14 items-center px-4">
+      <header className="shrink-0 grid grid-cols-3 h-14 items-center px-4">
         <Link
           to="/home"
-          className="flex h-10 w-10 items-center justify-center rounded-full transition-colors hover:bg-gray-100 justify-self-start"
+          aria-label="Voltar"
+          className="flex h-10 w-10 items-center justify-center rounded-full hover:bg-gray-100 justify-self-start"
         >
           <ArrowLeft className="h-6 w-6 text-gray-400" />
         </Link>
-        <span className="text-sm font-bold tracking-[0.3em] uppercase text-black text-center">
-          CHOSEN
-        </span>
+        <div className="flex items-center justify-center gap-1.5">
+          <img src={chosenLogo} alt="" className="h-5 w-5 object-contain" />
+          <span className="text-[10px] font-bold tracking-[0.25em] uppercase text-black/60">
+            IA
+          </span>
+        </div>
         <span />
       </header>
 
-      <main className="flex-1 min-h-0 overflow-y-auto no-scrollbar px-5 sm:px-6 pt-2 pb-32">
-        <div className="mx-auto w-full max-w-md">
-          <div className="flex items-center gap-2 mb-2">
-            <Sparkles className="h-4 w-4 text-black" />
-            <h1 className="text-sm font-light tracking-[0.3em] uppercase text-black">
-              Chosen com IA
-            </h1>
-          </div>
-          <p className="text-sm text-gray-500 leading-relaxed">
-            Escreva o que você está sentindo agora, com suas palavras. O Chosen escolhe um versículo pra você, com uma palavra de acolhimento e uma oração pra este momento.
-          </p>
-
-          {!resposta && (
-            <div className="mt-6 flex flex-col gap-3">
-              <Textarea
-                value={texto}
-                onChange={(e) => setTexto(e.target.value)}
-                placeholder="Ex.: briguei com minha mãe e me sinto culpado, ela não fala comigo há dias..."
-                rows={6}
-                maxLength={1000}
-                disabled={loading}
-                className="resize-none rounded-2xl border-gray-200 text-base"
-              />
-              <div className="flex items-center justify-between text-[11px] text-gray-400">
-                <span>
-                  {restantes} de {DAILY_LIMIT} conversas hoje
-                </span>
-                <span>{texto.length}/1000</span>
-              </div>
-              <Button
-                onClick={enviar}
-                disabled={loading || semSaldo || texto.trim().length < 3}
-                className="h-12 rounded-full bg-[#f1f26c] text-black hover:opacity-90 shadow-none flex items-center gap-2 transition-all active:scale-95 disabled:opacity-50"
-              >
-                <Send className="h-4 w-4" />
-                <span className="text-sm font-semibold tracking-wide">
-                  {loading ? "Escutando você..." : "Receber uma palavra"}
-                </span>
-              </Button>
-              {semSaldo && (
-                <p className="text-[11px] text-center text-gray-400 mt-1">
-                  Volte amanhã pra 5 novas conversas. Enquanto isso, escolha um sentimento na home.
-                </p>
-              )}
+      <main className="flex-1 min-h-0 overflow-y-auto no-scrollbar px-5">
+        <div className="mx-auto w-full max-w-md pb-6">
+          {!resposta && !loading && (
+            <div className="flex flex-col items-center text-center pt-6 pb-2">
+              <h1 className="text-[26px] leading-tight font-light text-black tracking-tight">
+                Como você está<br />se sentindo agora?
+              </h1>
+              <p className="mt-3 text-[13px] text-gray-400 leading-relaxed max-w-[280px]">
+                Escreva com suas palavras. Uma palavra escolhida pra você.
+              </p>
             </div>
           )}
 
           {loading && (
-            <div className="mt-8 flex flex-col items-center gap-3 text-gray-400">
+            <div className="flex flex-col items-center justify-center py-24 gap-4 text-gray-400">
+              <img src={chosenLogo} alt="" className="h-10 w-10 object-contain animate-pulse" />
               <div className="flex items-center gap-1.5">
-                <span className="h-2 w-2 rounded-full bg-gray-400 animate-bounce [animation-delay:-0.3s]" />
-                <span className="h-2 w-2 rounded-full bg-gray-400 animate-bounce [animation-delay:-0.15s]" />
-                <span className="h-2 w-2 rounded-full bg-gray-400 animate-bounce" />
+                <span className="h-1.5 w-1.5 rounded-full bg-gray-400 animate-bounce [animation-delay:-0.3s]" />
+                <span className="h-1.5 w-1.5 rounded-full bg-gray-400 animate-bounce [animation-delay:-0.15s]" />
+                <span className="h-1.5 w-1.5 rounded-full bg-gray-400 animate-bounce" />
               </div>
-              <p className="text-xs tracking-widest uppercase">Escolhendo uma palavra pra você</p>
+              <p className="text-[10px] tracking-[0.3em] uppercase">Escolhendo pra você</p>
             </div>
           )}
 
           {resposta && (
-            <div className="mt-6 flex flex-col gap-6 animate-in fade-in duration-500">
-              <div className="rounded-2xl bg-[#f1f26c]/40 px-5 py-6 text-center">
-                <p className="text-lg font-light leading-snug text-black break-words">
+            <div className="flex flex-col gap-8 pt-4 animate-in fade-in duration-500">
+              <div className="text-center">
+                <p className="text-[22px] font-light leading-snug text-black break-words">
                   “{resposta.versiculo}”
                 </p>
-                <p className="mt-3 text-[11px] font-bold tracking-[0.25em] uppercase text-black/70">
+                <p className="mt-4 text-[10px] font-bold tracking-[0.3em] uppercase text-black/50">
                   {resposta.referencia}
                 </p>
               </div>
 
+              <div className="h-px bg-black/5" />
+
               <div>
-                <p className="text-[10px] font-bold tracking-[0.25em] uppercase text-gray-400 mb-2">
-                  Uma palavra pra você
+                <p className="text-[9px] font-bold tracking-[0.3em] uppercase text-gray-400 mb-3">
+                  Pra você
                 </p>
                 <p className="text-[15px] leading-relaxed text-black whitespace-pre-line">
                   {resposta.acolhimento}
@@ -250,10 +225,10 @@ function ConversePage() {
               </div>
 
               <div>
-                <p className="text-[10px] font-bold tracking-[0.25em] uppercase text-gray-400 mb-2">
-                  Uma oração pra este momento
+                <p className="text-[9px] font-bold tracking-[0.3em] uppercase text-gray-400 mb-3">
+                  Oração
                 </p>
-                <p className="text-[15px] leading-relaxed text-black italic whitespace-pre-line">
+                <p className="text-[15px] leading-relaxed text-black/80 italic whitespace-pre-line">
                   {resposta.oracao}
                 </p>
               </div>
@@ -282,7 +257,7 @@ function ConversePage() {
                   className="inline-flex items-center gap-1.5 rounded-full border border-black/10 bg-white px-4 py-2 text-xs text-black active:scale-95"
                 >
                   <RefreshCw className="h-3.5 w-3.5" />
-                  Nova conversa
+                  Nova
                 </button>
               </div>
             </div>
@@ -290,7 +265,49 @@ function ConversePage() {
         </div>
       </main>
 
-      <AppFooter />
+      {!resposta && (
+        <div
+          className="shrink-0 bg-white border-t border-black/5 px-4 pt-3"
+          style={{ paddingBottom: "max(env(safe-area-inset-bottom), 0.75rem)" }}
+        >
+          <div className="mx-auto w-full max-w-md">
+            <div className="relative flex items-end gap-2 rounded-3xl bg-gray-50 border border-black/5 px-3 py-2.5 focus-within:border-black/20 transition">
+              <textarea
+                ref={textareaRef}
+                value={texto}
+                onChange={(e) => setTexto(e.target.value)}
+                onFocus={() => {
+                  setTimeout(() => {
+                    textareaRef.current?.scrollIntoView({ block: "center", behavior: "smooth" });
+                  }, 250);
+                }}
+                placeholder={`Ex.: ${EXEMPLOS[placeholderIdx]}`}
+                rows={1}
+                maxLength={1000}
+                disabled={loading || semSaldo}
+                className="flex-1 resize-none bg-transparent outline-none text-[15px] text-black placeholder:text-gray-400 leading-snug max-h-[200px] py-1.5"
+                style={{ minHeight: "24px" }}
+              />
+              <button
+                onClick={enviar}
+                disabled={!podeEnviar}
+                aria-label="Enviar"
+                className="shrink-0 h-9 w-9 rounded-full bg-black text-white flex items-center justify-center disabled:bg-gray-200 disabled:text-gray-400 active:scale-95 transition"
+              >
+                <ArrowUp className="h-5 w-5" strokeWidth={2.5} />
+              </button>
+            </div>
+            <div className="flex items-center justify-between mt-2 px-1 text-[10px] text-gray-400">
+              <span>
+                {semSaldo
+                  ? "Volte amanhã pra novas conversas"
+                  : `${restantes} de ${DAILY_LIMIT} conversas hoje`}
+              </span>
+              <span>{texto.length}/1000</span>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
