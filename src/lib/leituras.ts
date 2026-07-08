@@ -1,0 +1,417 @@
+export type TempoLeitura = "curto" | "medio" | "longo";
+
+export interface Leitura {
+  id: string;
+  tempo: TempoLeitura;
+  titulo: string;
+  passagem: string;
+  referencia: string;
+  interpretacao: string;
+}
+
+// Durações em segundos usadas pelo timer.
+export const DURACAO_SEGUNDOS: Record<TempoLeitura, number> = {
+  curto: 30,
+  medio: 120,
+  longo: 300,
+};
+
+export const LABEL_TEMPO: Record<TempoLeitura, string> = {
+  curto: "30 segundos",
+  medio: "2 minutos",
+  longo: "5 minutos",
+};
+
+export const LEITURAS: Leitura[] = [
+  // ================= CURTO (~30s) =================
+  {
+    id: "c-sl23-1",
+    tempo: "curto",
+    titulo: "O Senhor é meu pastor",
+    passagem: "O Senhor é o meu pastor; nada me faltará. Ele me faz repousar em pastos verdes e me leva a águas tranquilas.",
+    referencia: "Salmos 23:1-2",
+    interpretacao: "Um pastor conhece cada ovelha, sabe onde tem pasto e onde tem risco. Dizer 'nada me faltará' não é ingenuidade — é confiar em Quem já cuida. Neste minuto, largue o que Ele já está resolvendo por você.",
+  },
+  {
+    id: "c-fp47",
+    tempo: "curto",
+    titulo: "A paz que guarda o coração",
+    passagem: "Não estejais inquietos por coisa alguma; antes, em tudo, sejam apresentados os vossos pedidos a Deus. E a paz de Deus guardará o vosso coração.",
+    referencia: "Filipenses 4:6-7",
+    interpretacao: "A paz aqui é ativa: ela guarda, como um vigia. Deus troca a inquietação por essa paz quando eu oro em vez de ruminar. Antes de continuar o dia, entregue um pedido específico.",
+  },
+  {
+    id: "c-is4110",
+    tempo: "curto",
+    titulo: "Não temas",
+    passagem: "Não temas, porque eu sou contigo; não te assombres, porque eu sou o teu Deus; eu te fortaleço, eu te ajudo, eu te sustento com a destra da minha justiça.",
+    referencia: "Isaías 41:10",
+    interpretacao: "Deus não diz 'sinta menos'. Ele diz: 'estou aqui'. A promessa é presença. O medo perde peso quando lembro que não vou enfrentar sozinho o que vier.",
+  },
+  {
+    id: "c-mt1128",
+    tempo: "curto",
+    titulo: "Convite aos cansados",
+    passagem: "Vinde a mim, todos os que estais cansados e sobrecarregados, e eu vos aliviarei.",
+    referencia: "Mateus 11:28",
+    interpretacao: "Jesus chama justamente quem já não consegue mais. O cansaço, longe de te afastar dEle, é o convite mais direto pra chegar perto. Vá como está, agora.",
+  },
+  {
+    id: "c-pv35",
+    tempo: "curto",
+    titulo: "Confia de coração",
+    passagem: "Confia no Senhor de todo o teu coração e não te estribes no teu próprio entendimento. Reconhece-o em todos os teus caminhos, e ele endireitará as tuas veredas.",
+    referencia: "Provérbios 3:5-6",
+    interpretacao: "Confiar 'de todo o coração' é não guardar um plano B pra si. Difícil, mas é aí que a paz mora. Reconheça Deus na decisão pequena de hoje.",
+  },
+  {
+    id: "c-sl4610",
+    tempo: "curto",
+    titulo: "Aquietai-vos",
+    passagem: "Aquietai-vos e sabei que eu sou Deus.",
+    referencia: "Salmos 46:10",
+    interpretacao: "Aquietar é rebelião contra o barulho. Só quem para consegue lembrar quem é Deus. E quem lembra, deixa de ter tanto medo. Fique quieto trinta segundos aqui.",
+  },
+  {
+    id: "c-jo316",
+    tempo: "curto",
+    titulo: "Deus amou o mundo",
+    passagem: "Porque Deus amou o mundo de tal maneira que deu o seu Filho unigênito, para que todo aquele que nele crê não pereça, mas tenha a vida eterna.",
+    referencia: "João 3:16",
+    interpretacao: "Amor que se prova em entrega, não em palavras. Antes de ser cobrado a fazer algo por Deus, saiba: Ele já fez por você o que ninguém mais poderia.",
+  },
+  {
+    id: "c-sl1191",
+    tempo: "curto",
+    titulo: "Refúgio no Altíssimo",
+    passagem: "Aquele que habita no esconderijo do Altíssimo, à sombra do Onipotente descansará.",
+    referencia: "Salmos 91:1",
+    interpretacao: "Existe um lugar acessível de graça. Não é geografia; é intimidade. Voltar ali, mesmo por trinta segundos, muda a temperatura do coração.",
+  },
+  {
+    id: "c-jr2911",
+    tempo: "curto",
+    titulo: "Planos de bem",
+    passagem: "Porque sou eu que conheço os planos que tenho para vós, diz o Senhor; planos de paz, e não de mal, para vos dar um futuro e uma esperança.",
+    referencia: "Jeremias 29:11",
+    interpretacao: "Deus tem plano, mesmo quando eu não vejo mapa. E o plano é de paz, não de castigo. Isso muda como leio o meu presente.",
+  },
+  {
+    id: "c-1co1013",
+    tempo: "curto",
+    titulo: "Nenhuma tentação",
+    passagem: "Não vos sobreveio tentação que não fosse humana; Deus é fiel e não permitirá que sejais tentados além do que podeis suportar; antes, com a tentação vos proverá saída.",
+    referencia: "1 Coríntios 10:13",
+    interpretacao: "O que estou passando não é único, e não é além do que aguento com Deus. Sempre há saída. A pergunta é: eu vou olhar pra ela?",
+  },
+  {
+    id: "c-sl3418",
+    tempo: "curto",
+    titulo: "Perto dos quebrantados",
+    passagem: "Perto está o Senhor dos que têm o coração quebrantado, e salva os contritos de espírito.",
+    referencia: "Salmos 34:18",
+    interpretacao: "Coração quebrantado não é coração fracassado; é coração honesto. Deus se aproxima justamente aí. Não tente parecer inteiro pra Ele.",
+  },
+  {
+    id: "c-mt633",
+    tempo: "curto",
+    titulo: "Primeiro o Reino",
+    passagem: "Buscai primeiro o reino de Deus, e a sua justiça, e todas estas coisas vos serão acrescentadas.",
+    referencia: "Mateus 6:33",
+    interpretacao: "Não é buscar só, é buscar primeiro. Ordem importa. Quando Deus ocupa o topo, o resto encontra o lugar certo. Reorganize um item da sua semana.",
+  },
+  {
+    id: "c-jo1427",
+    tempo: "curto",
+    titulo: "A paz de Cristo",
+    passagem: "Deixo-vos a paz, a minha paz vos dou; não vo-la dou como o mundo a dá.",
+    referencia: "João 14:27",
+    interpretacao: "Paz do mundo depende de tudo dar certo. Paz de Cristo mora no meio da tempestade. É presença dEle, não ausência de problema.",
+  },
+  {
+    id: "c-2co1230",
+    tempo: "curto",
+    titulo: "Poder na fraqueza",
+    passagem: "A minha graça te basta, porque o poder se aperfeiçoa na fraqueza.",
+    referencia: "2 Coríntios 12:9",
+    interpretacao: "Não preciso mostrar força que não tenho. Deus faz mais na minha fraqueza do que faria na minha performance. Entregue a fragilidade de hoje.",
+  },
+  {
+    id: "c-lm322",
+    tempo: "curto",
+    titulo: "Misericórdias novas",
+    passagem: "As misericórdias do Senhor são a causa de não sermos consumidos; renovam-se cada manhã. Grande é a sua fidelidade.",
+    referencia: "Lamentações 3:22-23",
+    interpretacao: "Não preciso carregar o ontem pra dentro do hoje. Deus não guarda escândalo. A cada manhã, Ele me olha novo.",
+  },
+  {
+    id: "c-hb1131",
+    tempo: "curto",
+    titulo: "A fé é",
+    passagem: "Ora, a fé é o firme fundamento das coisas que se esperam, e a prova das coisas que se não veem.",
+    referencia: "Hebreus 11:1",
+    interpretacao: "Fé não é sentir; é sustentar. É o chão em que piso quando não vejo o degrau seguinte. Escolha um passo pequeno pra hoje, e dê.",
+  },
+  {
+    id: "c-sl139",
+    tempo: "curto",
+    titulo: "Deus me conhece",
+    passagem: "Senhor, tu me sondaste e me conheces. Tu conheces o meu sentar e o meu levantar; de longe entendes o meu pensar.",
+    referencia: "Salmos 139:1-2",
+    interpretacao: "Sou conhecido de dentro pra fora, e mesmo assim amado. Isso é liberdade: não preciso me esconder de Quem me conhece de verdade.",
+  },
+  {
+    id: "c-1pe57",
+    tempo: "curto",
+    titulo: "Ele cuida",
+    passagem: "Lançando sobre ele toda a vossa ansiedade, porque ele tem cuidado de vós.",
+    referencia: "1 Pedro 5:7",
+    interpretacao: "Lançar tem gesto: é solto, não é passar em cima da mesa. Escolha uma ansiedade e diga em voz baixa: 'essa aqui, Senhor, é Tua'.",
+  },
+
+  // ================= MEDIO (~2min) =================
+  {
+    id: "m-sl23-full",
+    tempo: "medio",
+    titulo: "Salmo 23 inteiro",
+    passagem: "O Senhor é o meu pastor; nada me faltará. Ele me faz repousar em pastos verdes e me leva a águas tranquilas. Refrigera-me a alma; guia-me pelas veredas da justiça, por amor do seu nome. Ainda que eu ande pelo vale da sombra da morte, não temerei mal algum, porque tu estás comigo; a tua vara e o teu cajado me consolam.",
+    referencia: "Salmos 23:1-4",
+    interpretacao: "Davi escreve como quem viveu. 'Nada me faltará' vem de quem já viu Deus prover. E note: no vale escuro ele muda o pronome, passa a falar com Deus — 'tu estás comigo'. Dor não afasta Deus, aproxima. Vara e cajado são ferramentas de pastor: uma corrige, o outro guia. Deus não usa só uma. Onde você está hoje: pasto verde ou vale escuro? Em qualquer lugar, Ele está.",
+  },
+  {
+    id: "m-fp4",
+    tempo: "medio",
+    titulo: "Alegria e paz",
+    passagem: "Alegrai-vos sempre no Senhor; outra vez digo, alegrai-vos. Seja a vossa moderação conhecida de todos os homens. Perto está o Senhor. Não estejais inquietos por coisa alguma; antes as vossas petições sejam em tudo conhecidas diante de Deus pela oração e pela súplica, com ações de graças. E a paz de Deus, que excede todo o entendimento, guardará os vossos corações e os vossos pensamentos em Cristo Jesus.",
+    referencia: "Filipenses 4:4-7",
+    interpretacao: "Paulo escreveu isso preso, com pouca liberdade. Ainda assim, insiste: alegrai-vos. A alegria dele não dependia de circunstância; era ancorada em Cristo. Ele dá o antídoto da ansiedade: oração + súplica + gratidão. Repare que gratidão entra junto — reconhecer o que Deus já fez desarma o medo do que vem. O resultado é uma paz que 'excede todo entendimento': ou seja, você sente sem saber explicar. Ela vem 'guardar' o coração como um soldado na porta.",
+  },
+  {
+    id: "m-mt5-8",
+    tempo: "medio",
+    titulo: "Bem-aventurados",
+    passagem: "Bem-aventurados os pobres de espírito, porque deles é o reino dos céus. Bem-aventurados os que choram, porque serão consolados. Bem-aventurados os mansos, porque herdarão a terra. Bem-aventurados os que têm fome e sede de justiça, porque serão fartos. Bem-aventurados os misericordiosos, porque alcançarão misericórdia. Bem-aventurados os limpos de coração, porque verão a Deus.",
+    referencia: "Mateus 5:3-8",
+    interpretacao: "Jesus abre o Sermão do Monte virando o mundo do avesso. Feliz não é quem tem tudo, é quem sabe que precisa. Feliz é quem chora, quem é manso, quem tem sede de justiça. Não é resignação; é uma nova ordem, o Reino de Deus onde os últimos são vistos. Se você se identificou com algum desses versos hoje, Jesus está dizendo: exatamente aí eu quero te encontrar.",
+  },
+  {
+    id: "m-rm828",
+    tempo: "medio",
+    titulo: "Tudo coopera",
+    passagem: "E sabemos que todas as coisas cooperam para o bem daqueles que amam a Deus, daqueles que são chamados segundo o seu propósito. Porque os que dantes conheceu, também os predestinou para serem conformes à imagem de seu Filho. E aos que predestinou, a estes também chamou; e aos que chamou, a estes também justificou; e aos que justificou, a estes também glorificou.",
+    referencia: "Romanos 8:28-30",
+    interpretacao: "'Todas' inclui o que dói. Paulo não diz que tudo é bom, diz que tudo coopera pra bem. Como um fio que sozinho não parece nada, mas no tecido faz desenho. Deus tece. E o alvo do desenho é me tornar parecido com Cristo. Nem sempre o processo é bonito, mas o desfecho é. Confie no tecelão mesmo quando o pano ainda está do avesso.",
+  },
+  {
+    id: "m-sl1",
+    tempo: "medio",
+    titulo: "Duas árvores",
+    passagem: "Bem-aventurado o homem que não anda no conselho dos ímpios, nem se detém no caminho dos pecadores, nem se assenta na roda dos escarnecedores. Antes, o seu prazer está na lei do Senhor, e na sua lei medita de dia e de noite. Será como a árvore plantada junto a ribeiros de águas, a qual dá o seu fruto no seu tempo; as suas folhas não cairão, e tudo quanto fizer prosperará.",
+    referencia: "Salmos 1:1-3",
+    interpretacao: "O Salmo 1 começa a Bíblia hebraica de louvores mostrando dois caminhos: o das más companhias e o do prazer na Palavra. Repare a progressão do errado — anda, detém, assenta. Cada passo compromete mais. Já o justo vira árvore, com raiz. Fruto no tempo certo, folha que não seca. Não porque tenta forte, mas porque está plantado onde tem água. Onde você está plantado?",
+  },
+  {
+    id: "m-jo15",
+    tempo: "medio",
+    titulo: "Videira e ramos",
+    passagem: "Eu sou a videira verdadeira, e meu Pai é o agricultor. Toda vara em mim que não dá fruto, ele a corta; e toda vara que dá fruto, limpa-a, para que dê mais fruto. Permanecei em mim, e eu permanecerei em vós; como a vara de si mesma não pode dar fruto, se não permanecer na videira, assim também vós, se não permanecerdes em mim. Eu sou a videira, vós as varas; quem permanece em mim, e eu nele, esse dá muito fruto; porque sem mim nada podeis fazer.",
+    referencia: "João 15:1-5",
+    interpretacao: "O ramo não produz por esforço; produz por conexão. Se estou ligado a Cristo, o fruto vem no tempo. Se me desconecto, nem esforço resolve. E ainda tem a poda: até o ramo que dá fruto é limpo, pra dar mais. Poda dói, mas não é castigo — é cuidado. O corte é do agricultor, não do acaso. E o convite central é um verbo simples: permanecer. Ficar.",
+  },
+  {
+    id: "m-tg1",
+    tempo: "medio",
+    titulo: "Pedir sabedoria",
+    passagem: "Meus irmãos, tende por motivo de toda a alegria o passardes por várias provações, sabendo que a prova da vossa fé produz a perseverança. Tenha, porém, a perseverança a sua obra perfeita, para que sejais perfeitos e completos, sem que vos falte coisa alguma. E, se algum de vós tem falta de sabedoria, peça-a a Deus, que a todos dá liberalmente, e não o lança em rosto, e ser-lhe-á dada.",
+    referencia: "Tiago 1:2-5",
+    interpretacao: "Tiago faz uma conta difícil: prova produz perseverança, perseverança produz maturidade. A prova não é ruim porque me quebra; é boa porque me forma. E ele oferece o recurso: se falta sabedoria, peça. Deus dá 'liberalmente', sem cobrar rosto depois. Não é 'ah, você de novo aqui pedindo?'. É Pai. Peça hoje o que falta.",
+  },
+  {
+    id: "m-lc10",
+    tempo: "medio",
+    titulo: "Marta e Maria",
+    passagem: "E, indo eles de caminho, entrou numa aldeia; e uma mulher, por nome Marta, o recebeu em sua casa. E tinha esta uma irmã chamada Maria, a qual, assentando-se aos pés de Jesus, ouvia a sua palavra. Marta, porém, andava distraída em muitos serviços; e, chegando, disse: Senhor, não se te dá de que minha irmã me deixe servir só? Dize-lhe que me ajude. E, respondendo Jesus, disse-lhe: Marta, Marta, estás ansiosa e afadigada com muitas coisas, mas uma só é necessária; e Maria escolheu a boa parte, a qual não lhe será tirada.",
+    referencia: "Lucas 10:38-42",
+    interpretacao: "Jesus não repreende Marta por servir; repreende a distração ansiosa. Ela cuidava dEle sem estar com Ele. Maria escolheu ficar aos pés. A vida cristã tem serviço, mas o serviço nasce do estar. Muitos hoje somos Marta: agitados fazendo coisas 'pra Deus', mas sem tempo pra Ele. Repare qual das duas você tem sido essa semana.",
+  },
+  {
+    id: "m-ef2",
+    tempo: "medio",
+    titulo: "Salvos pela graça",
+    passagem: "Porque pela graça sois salvos, por meio da fé; e isto não vem de vós; é dom de Deus. Não vem das obras, para que ninguém se glorie; porque somos feitura sua, criados em Cristo Jesus para as boas obras, as quais Deus preparou para que andássemos nelas.",
+    referencia: "Efésios 2:8-10",
+    interpretacao: "Salvação não é troféu; é presente. Ninguém compra, ninguém merece. E logo depois vem a beleza: fomos feitos, sim, pra boas obras — mas essas obras Deus já preparou. Não sou eu inventando o que fazer pra agradar; é Ele plantando oportunidades no meu caminho. Meu trabalho é caminhar dentro delas.",
+  },
+  {
+    id: "m-1co13",
+    tempo: "medio",
+    titulo: "O amor",
+    passagem: "O amor é sofredor, é benigno; o amor não é invejoso; o amor não trata com leviandade, não se ensoberbece. Não se porta com indecência, não busca os seus interesses, não se irrita, não suspeita mal; não folga com a injustiça, mas folga com a verdade; tudo sofre, tudo crê, tudo espera, tudo suporta. O amor nunca falha.",
+    referencia: "1 Coríntios 13:4-8",
+    interpretacao: "Paulo troca uma definição de amor por descrição do que ele faz. Repare que quase tudo é sobre atitude com o outro, não sobre sentimento em si. Troque a palavra 'amor' pelo seu nome e leia de novo. Onde não bate, é aí que Deus quer trabalhar em você. E o consolo: 'nunca falha'. Amor de Deus não desiste no meio do caminho.",
+  },
+  {
+    id: "m-sl91",
+    tempo: "medio",
+    titulo: "À sombra do Altíssimo",
+    passagem: "Aquele que habita no esconderijo do Altíssimo, à sombra do Onipotente descansará. Direi do Senhor: Ele é o meu Deus, o meu refúgio, a minha fortaleza, e nele confiarei. Porque ele te livrará do laço do passarinheiro e da peste perniciosa. Ele te cobrirá com as suas penas, e debaixo das suas asas te confiarás.",
+    referencia: "Salmos 91:1-4",
+    interpretacao: "'Habita' e 'descansará' andam juntos. Quem visita Deus vez ou outra sente algo; quem habita descansa. O Salmo usa imagens de proteção: refúgio, fortaleza, asas. Deus escolhe metáfora de mãe pássaro pra falar da própria força — poder que abraça. Fique embaixo dessas asas neste minuto.",
+  },
+  {
+    id: "m-gl522",
+    tempo: "medio",
+    titulo: "Fruto do Espírito",
+    passagem: "Mas o fruto do Espírito é: amor, gozo, paz, longanimidade, benignidade, bondade, fé, mansidão, temperança. Contra estas coisas não há lei. E os que são de Cristo crucificaram a carne com as suas paixões e concupiscências. Se vivemos no Espírito, andemos também no Espírito.",
+    referencia: "Gálatas 5:22-25",
+    interpretacao: "Repare: 'fruto', singular. Não é lista de opções pra escolher qual você tem. É um pacote que cresce junto na árvore certa. E fruto não se produz, se colhe — a árvore só precisa estar plantada em terra boa. Se um fruto está escasso em você, a pergunta não é 'como me esforço mais', é 'estou plantado no Espírito?'.",
+  },
+  {
+    id: "m-mc4",
+    tempo: "medio",
+    titulo: "Cala-te, aquieta-te",
+    passagem: "E, despedindo a multidão, o levaram consigo no barco, como estava; e havia também com ele outros barquinhos. E levantou-se grande temporal de vento, e subiam as ondas por cima do barco, de maneira que já se enchia. E ele estava na popa dormindo sobre uma almofada, e despertaram-no. E disseram-lhe: Mestre, não se te dá que pereçamos? E ele, despertando, repreendeu o vento e disse ao mar: Cala-te, aquieta-te. E o vento se aquietou, e houve grande bonança.",
+    referencia: "Marcos 4:36-39",
+    interpretacao: "Repare: Jesus está no barco. A tempestade não O acorda; os discípulos O acordam. Ele dormia porque não tinha o que temer. Quando ordena, o vento obedece. A mesma voz que criou o mar sabe calar o mar. Se o seu barco está enchendo de água, olhe pra quem está dentro dele com você.",
+  },
+  {
+    id: "m-hb4",
+    tempo: "medio",
+    titulo: "Trono da graça",
+    passagem: "Porque não temos um sumo sacerdote que não possa compadecer-se das nossas fraquezas; porém um que, como nós, em tudo foi tentado, mas sem pecado. Cheguemos, pois, com confiança ao trono da graça, para que possamos alcançar misericórdia e achar graça, a fim de sermos ajudados em tempo oportuno.",
+    referencia: "Hebreus 4:15-16",
+    interpretacao: "Jesus não é um sacerdote distante; conhece de dentro o que é ser humano. E o texto convida a chegar 'com confiança', não pisando em ovos. O trono é 'da graça', não do julgamento. Ajuda 'em tempo oportuno' — Deus não atrasa. Traga o que você tem escondido de todo mundo. É pra isso que esse trono existe.",
+  },
+  {
+    id: "m-cl3",
+    tempo: "medio",
+    titulo: "Buscai as coisas do alto",
+    passagem: "Portanto, se já ressuscitastes com Cristo, buscai as coisas que são de cima, onde Cristo está assentado à destra de Deus. Pensai nas coisas que são de cima, e não nas que são da terra; porque já estais mortos, e a vossa vida está escondida com Cristo em Deus. Quando Cristo, que é a nossa vida, se manifestar, então também vós vos manifestareis com ele em glória.",
+    referencia: "Colossenses 3:1-4",
+    interpretacao: "Paulo não pede que você fuja do mundo; pede que oriente o pensamento pra cima. É diferente. Onde a atenção vai, a vida vai atrás. E dá uma imagem forte: 'a vossa vida está escondida com Cristo em Deus'. Você não é definido pelo que aparece, mas por Quem já te guarda. Isso muda ansiedade sobre identidade.",
+  },
+  {
+    id: "m-mt6",
+    tempo: "medio",
+    titulo: "Não vos inquieteis",
+    passagem: "Por isso vos digo: Não andeis cuidadosos quanto à vossa vida, pelo que haveis de comer ou pelo que haveis de beber; nem quanto ao vosso corpo, pelo que haveis de vestir. Não é a vida mais do que o mantimento, e o corpo mais do que o vestuário? Olhai para as aves do céu, que nem semeiam, nem segam, nem ajuntam em celeiros; e vosso Pai celestial as alimenta. Não tendes vós muito mais valor do que elas?",
+    referencia: "Mateus 6:25-26",
+    interpretacao: "Jesus argumenta do menor pro maior: se Deus cuida do passarinho que não faz plano, quanto mais cuida de você. Preocupação nasce quando esqueço o meu valor diante do Pai. Ele não promete abundância exagerada; promete cuidado. Aves comem, mas comem do que Deus dá — não do que estocam.",
+  },
+  {
+    id: "m-sl139-full",
+    tempo: "medio",
+    titulo: "Deus me formou",
+    passagem: "Pois possuíste o meu interior; entreteceste-me no ventre de minha mãe. Eu te louvarei, porque de um modo assombroso e maravilhoso fui feito; maravilhosas são as tuas obras, e a minha alma o sabe muito bem. Sonda-me, ó Deus, e conhece o meu coração; prova-me, e conhece os meus pensamentos; e vê se há em mim algum caminho mau, e guia-me pelo caminho eterno.",
+    referencia: "Salmos 139:13-14, 23-24",
+    interpretacao: "Davi olha pra dentro e pra trás: fui formado por Deus, com cuidado. Isso muda como me vejo no espelho. E fecha pedindo pra ser sondado — quem sabe que foi feito por amor não tem medo de ser inspecionado por amor. Se você luta com a própria imagem, releia devagar o versículo 14.",
+  },
+
+  // ================= LONGO (~5min) =================
+  {
+    id: "l-1co13-full",
+    tempo: "longo",
+    titulo: "O caminho mais excelente",
+    passagem: "Ainda que eu falasse as línguas dos homens e dos anjos, e não tivesse amor, seria como o metal que soa ou como o sino que tine. E ainda que tivesse o dom de profecia, e conhecesse todos os mistérios e toda a ciência, e ainda que tivesse toda a fé, de maneira tal que transportasse os montes, e não tivesse amor, nada seria. E ainda que distribuísse toda a minha fortuna para sustento dos pobres, e ainda que entregasse o meu corpo para ser queimado, e não tivesse amor, nada disso me aproveitaria. O amor é sofredor, é benigno; o amor não é invejoso; o amor não trata com leviandade, não se ensoberbece. Não se porta com indecência, não busca os seus interesses, não se irrita, não suspeita mal; não folga com a injustiça, mas folga com a verdade; tudo sofre, tudo crê, tudo espera, tudo suporta. O amor nunca falha; mas havendo profecias, serão aniquiladas; havendo línguas, cessarão; havendo ciência, desaparecerá. Agora, pois, permanecem a fé, a esperança e o amor, estes três; mas o maior destes é o amor.",
+    referencia: "1 Coríntios 13:1-8, 13",
+    interpretacao: "Paulo escreve pra uma igreja obcecada por dons espirituais e mostra que tudo, sem amor, é ruído. Repare que ele não define amor com sentimento — descreve com verbos. Amor age. E age no cotidiano: paciência, gentileza, não guardar mágoa. Faça o exercício: troque a palavra 'amor' pelo seu nome no meio do texto. É desconfortável, mas é diagnóstico. Não é pra te condenar; é pra te mostrar onde o Espírito Santo quer trabalhar. Note também as três grandes coisas que ficam: fé, esperança e amor. A fé um dia dá lugar à visão, a esperança à realização, mas o amor atravessa — é o único desses três que existirá pra sempre, porque Deus é amor. Isso deveria mudar o que você prioriza aprender e praticar hoje. Não é sobre fazer mais coisas espirituais; é sobre fazê-las de dentro do amor. Sem amor, o dom mais alto vira barulho. Com amor, o gesto mais simples vira eternidade.",
+  },
+  {
+    id: "l-jo3",
+    tempo: "longo",
+    titulo: "Nicodemos à noite",
+    passagem: "E havia entre os fariseus um homem, chamado Nicodemos, príncipe dos judeus. Este foi ter de noite com Jesus, e disse-lhe: Rabi, bem sabemos que és Mestre, vindo de Deus; porque ninguém pode fazer estes sinais que tu fazes, se Deus não for com ele. Jesus respondeu, e disse-lhe: Na verdade, na verdade te digo que aquele que não nascer de novo, não pode ver o reino de Deus. Disse-lhe Nicodemos: Como pode um homem nascer, sendo velho? Porventura pode tornar a entrar no ventre de sua mãe, e nascer? Jesus respondeu: Na verdade, na verdade te digo que aquele que não nascer da água e do Espírito, não pode entrar no reino de Deus. O que é nascido da carne é carne, e o que é nascido do Espírito é espírito. Não te maravilhes de te ter dito: Necessário vos é nascer de novo. O vento assopra onde quer, e ouves a sua voz; mas não sabes donde vem, nem para onde vai; assim é todo aquele que é nascido do Espírito. Porque Deus amou o mundo de tal maneira que deu o seu Filho unigênito, para que todo aquele que nele crê não pereça, mas tenha a vida eterna.",
+    referencia: "João 3:1-8, 16",
+    interpretacao: "Nicodemos era um homem importante, respeitado, religioso — e mesmo assim faltava algo. Vai à noite, talvez com vergonha, talvez em busca honesta longe dos olhares. Jesus não elogia o currículo dele; propõe algo mais radical: nascer de novo. Não é melhorar o que já é; é ganhar uma vida nova. E Jesus usa a metáfora do vento pra falar do Espírito — não se controla, se percebe. Você não vê o vento; vê o efeito. O novo nascimento acontece assim: silencioso, real, transformador. E logo depois vem o versículo mais conhecido da Bíblia: 'Deus amou o mundo de tal maneira que deu o seu Filho'. Deus não amou de longe; deu. Amor que se prova em entrega. Se hoje você se sente Nicodemos — respeitado por fora mas com vazio por dentro — o convite é o mesmo: nasça de novo. Não é fazer mais, é receber outro tipo de vida. E ela começa em crer em Alguém que já se entregou por você.",
+  },
+  {
+    id: "l-sl139-long",
+    tempo: "longo",
+    titulo: "Salmo 139 — Sondado por Deus",
+    passagem: "Senhor, tu me sondaste e me conheces. Tu conheces o meu sentar e o meu levantar; de longe entendes o meu pensamento. Cercas o meu andar, e o meu deitar; e conheces todos os meus caminhos. Sem que haja uma palavra na minha língua, eis que, ó Senhor, tudo conheces. Tu me cercaste por detrás e por diante; e puseste sobre mim a tua mão. Tal ciência é para mim maravilhosíssima; tão alta que não a posso atingir. Para onde me irei do teu Espírito, ou para onde fugirei da tua face? Se subir ao céu, tu aí estás; se fizer no Seol a minha cama, eis que tu ali estás também. Se tomar as asas da alva, se habitar nas extremidades do mar, até ali a tua mão me guiará e a tua destra me susterá. Pois possuíste o meu interior; entreteceste-me no ventre de minha mãe. Eu te louvarei, porque de um modo assombroso e maravilhoso fui feito; maravilhosas são as tuas obras, e a minha alma o sabe muito bem. Sonda-me, ó Deus, e conhece o meu coração; prova-me, e conhece os meus pensamentos; e vê se há em mim algum caminho mau, e guia-me pelo caminho eterno.",
+    referencia: "Salmos 139:1-10, 13-14, 23-24",
+    interpretacao: "Davi começa impressionado com o quanto Deus o conhece: sentar, levantar, pensar, palavras antes de nascer. É intimidade quase incômoda. E ainda assim, ele não foge — celebra. Depois faz a pergunta: 'pra onde vou fugir da Tua presença?'. E responde: em lugar nenhum. Vai ao céu, Ele está; vai ao lugar mais escuro, Ele está. A onipresença de Deus deixa de ser doutrina abstrata e vira consolo pessoal. Se estou no fundo do poço, Ele está no fundo do poço. Chega então a parte mais tocante: fui formado por Ele, com cuidado. 'Assombroso e maravilhoso' — nada em você é acidente. Isso muda como você se olha no espelho. E o Salmo fecha do jeito mais corajoso possível: 'Sonda-me'. Quem sabe que foi feito por amor não tem medo de ser inspecionado por amor. Deus não sonda pra condenar; sonda pra curar. Cura o que a gente deixa Ele tocar. Se você luta com a própria imagem, ou com a sensação de não ser visto, esse Salmo é uma carta pessoal pra você. Releia devagar. Deixe entrar. Você é conhecido — e amado assim.",
+  },
+  {
+    id: "l-rm8",
+    tempo: "longo",
+    titulo: "Nada nos separa",
+    passagem: "Que diremos, pois, a estas coisas? Se Deus é por nós, quem será contra nós? Aquele que nem mesmo a seu próprio Filho poupou, antes o entregou por todos nós, como nos não dará também com ele todas as coisas? Quem intentará acusação contra os escolhidos de Deus? É Deus quem os justifica. Quem os condenará? Cristo Jesus é quem morreu, ou antes quem ressuscitou dentre os mortos, o qual está à direita de Deus, e também intercede por nós. Quem nos separará do amor de Cristo? A tribulação, ou a angústia, ou a perseguição, ou a fome, ou a nudez, ou o perigo, ou a espada? Como está escrito: Por amor de ti somos entregues à morte todo o dia; fomos considerados como ovelhas para o matadouro. Mas em todas estas coisas somos mais que vencedores, por aquele que nos amou. Porque estou certo de que, nem a morte, nem a vida, nem os anjos, nem os principados, nem as potestades, nem o presente, nem o porvir, nem a altura, nem a profundidade, nem alguma outra criatura nos poderá separar do amor de Deus, que está em Cristo Jesus nosso Senhor.",
+    referencia: "Romanos 8:31-39",
+    interpretacao: "Paulo escreve isso como quem já viveu de tudo — prisão, espancamento, fome, naufrágio. Não é discurso de gabinete; é convicção provada. E ele faz perguntas retóricas que valem sentar e responder: 'Se Deus é por nós, quem será contra?'. A resposta é: pode ter muita coisa contra, mas nada com poder final. Deus já provou de que lado está — não poupou o próprio Filho. Se fez o maior, fará também os menores. Depois Paulo elenca coisas que a gente teme: tribulação, angústia, perseguição, fome, perigo. E responde: 'em todas estas coisas somos mais que vencedores'. Repare: 'em', não 'sem'. Não é que essas coisas somem; é que dentro delas eu já venci, porque Cristo já venceu. E fecha com a lista mais completa possível: nem morte, nem vida, nem anjos, nem futuro, nem presente, absolutamente nada pode me arrancar do amor de Deus. Se você teme que Deus se canse de você, esse texto responde: impossível. O amor dEle não é sentimento oscilante; é aliança selada em sangue. Descanse aqui hoje.",
+  },
+  {
+    id: "l-lc15",
+    tempo: "longo",
+    titulo: "O filho pródigo",
+    passagem: "E disse: Um certo homem tinha dois filhos. E o mais moço deles disse ao pai: Pai, dá-me a parte da fazenda que me pertence. E repartiu por eles a fazenda. E, poucos dias depois, o filho mais novo, ajuntando tudo, partiu para uma terra longínqua, e ali desperdiçou a sua fazenda, vivendo dissolutamente. E, havendo ele gastado tudo, houve naquela terra uma grande fome, e começou a padecer necessidades. E foi, e chegou-se a um dos cidadãos daquela terra, o qual o mandou para os seus campos, a apascentar porcos. E desejava encher o seu estômago com as bolotas que os porcos comiam, e ninguém lhe dava nada. E, caindo em si, disse: Quantos jornaleiros de meu pai têm abundância de pão, e eu aqui pereço de fome! Levantar-me-ei, e irei ter com meu pai, e dir-lhe-ei: Pai, pequei contra o céu e perante ti; já não sou digno de ser chamado teu filho. E, levantando-se, foi para seu pai; e, quando ainda estava longe, viu-o seu pai, e se moveu de íntima compaixão, e, correndo, lançou-se-lhe ao pescoço e o beijou. Disse-lhe o pai: Trazei depressa a melhor roupa; e ponde-lha, e ponde-lhe um anel na mão, e alparcas nos pés; e trazei o bezerro cevado, e matai-o; e comamos, e alegremo-nos; porque este meu filho estava morto, e reviveu; tinha-se perdido, e foi achado.",
+    referencia: "Lucas 15:11-24",
+    interpretacao: "O jovem pede a herança em vida — no contexto, é como dizer 'queria você morto pra ter o que é meu'. E o pai, que poderia ter recusado, concede. Deus respeita a liberdade humana, mesmo quando ela dói. O filho vai, gasta, chega ao fundo — cuidando de porcos, o mais impuro pra um judeu. E ali 'cai em si'. Note: ele ainda não conhecia o pai de verdade; achava que voltaria como empregado. O plano dele era discurso ensaiado. Mas o pai o vê de longe — quer dizer que ele estava olhando o horizonte. Correu (algo indigno pra um patriarca oriental), abraçou, beijou. Nem deixa o filho terminar o discurso. Roupa, anel, sapatos — símbolos de restauração como filho, não como servo. Se você se sente longe de Deus hoje, essa é a leitura pra você. O caminho de volta é mais curto do que parece, porque o Pai já está olhando o horizonte. Você não precisa preparar o discurso perfeito. Só precisa levantar e ir.",
+  },
+  {
+    id: "l-mt5-longo",
+    tempo: "longo",
+    titulo: "Sal e luz, e a vida no Reino",
+    passagem: "Vós sois o sal da terra; e se o sal for insípido, com que se há de salgar? Para nada mais presta senão para se lançar fora, e ser pisado pelos homens. Vós sois a luz do mundo; não se pode esconder uma cidade edificada sobre um monte; nem se acende a candeia e se coloca debaixo do alqueire, mas no velador, e dá luz a todos que estão na casa. Assim resplandeça a vossa luz diante dos homens, para que vejam as vossas boas obras e glorifiquem a vosso Pai, que está nos céus. Não cuideis que vim destruir a lei ou os profetas: não vim ab-rogar, mas cumprir. Ouvistes que foi dito aos antigos: Não matarás; mas qualquer que matar será réu de juízo. Eu, porém, vos digo que qualquer que, sem motivo, se encolerizar contra seu irmão, será réu de juízo. Portanto, se trouxeres a tua oferta ao altar, e aí te lembrares de que teu irmão tem alguma coisa contra ti, deixa ali diante do altar a tua oferta, e vai reconciliar-te primeiro com teu irmão, e depois vem e apresenta a tua oferta.",
+    referencia: "Mateus 5:13-17, 21-24",
+    interpretacao: "Jesus não diz 'sejam sal e luz'; diz 'vocês são'. É identidade antes de tarefa. Sal muda o sabor sem aparecer, e conserva. Luz não é opção — se está no monte, vai ser vista. A pergunta não é 'como brilho'; é 'o que está cobrindo minha luz?'. Depois, Ele reinterpreta a Lei. Não veio destruir; veio elevar. Antes era 'não mate'; agora é 'não guarde raiva sem causa'. Antes era 'não cometa adultério'; agora é 'não olhe pra desejar'. Ele traz o padrão pro coração, não só pro comportamento. E fecha com algo prático: reconciliar-se antes de adorar. Deus prefere que você largue a oferta e vá acertar com o irmão do que continue no ritual religioso enquanto tem gente doída por você. Isso é radical. Aplicação: existe alguém com quem você precisa acertar antes de sua próxima oração 'normal' ter peso? Vá. Depois volte pra oferta.",
+  },
+  {
+    id: "l-fp4-longo",
+    tempo: "longo",
+    titulo: "O segredo do contentamento",
+    passagem: "Alegrai-vos sempre no Senhor; outra vez digo, alegrai-vos. Seja a vossa moderação conhecida de todos os homens. Perto está o Senhor. Não estejais inquietos por coisa alguma; antes as vossas petições sejam em tudo conhecidas diante de Deus pela oração e pela súplica, com ações de graças. E a paz de Deus, que excede todo o entendimento, guardará os vossos corações e os vossos pensamentos em Cristo Jesus. Quanto ao mais, irmãos, tudo o que é verdadeiro, tudo o que é honesto, tudo o que é justo, tudo o que é puro, tudo o que é amável, tudo o que é de boa fama, se há alguma virtude, e se há algum louvor, nisso pensai. Aprendi a viver contente em toda e qualquer situação. Sei estar abatido, e sei também ter abundância; em toda a maneira, e em todas as coisas estou instruído, tanto a ter fartura, como a ter fome; tanto a ter abundância, como a padecer necessidade. Posso todas as coisas em Cristo que me fortalece.",
+    referencia: "Filipenses 4:4-8, 11-13",
+    interpretacao: "Paulo escreve preso, sem saber se vai sair vivo. E ainda assim diz 'alegrai-vos sempre'. Não é fingimento; é a alegria que vem de saber Quem está por perto: 'Perto está o Senhor'. Depois vem o antídoto da ansiedade em três passos: oração + súplica + gratidão. Sem gratidão, oração vira reclamação; sem súplica, gratidão vira negação; sem oração, os dois viram esforço próprio. Juntos, produzem 'a paz que excede todo o entendimento' — você sente sem saber explicar. Ela guarda como um vigia. Em seguida ele redireciona o pensamento: pense no que é verdadeiro, honesto, justo, puro. A mente é jardim; o que você rega cresce. E fecha com o famoso 'posso todas as coisas em Cristo' — mas note o contexto. Ele aprendeu a viver contente na abundância e na escassez. 'Tudo posso' não é 'vou ganhar sempre'; é 'aguento tudo em Cristo'. Contentamento é aprendizado, não temperamento. Paulo se treinou. Você também pode.",
+  },
+  {
+    id: "l-hb11-12",
+    tempo: "longo",
+    titulo: "Corramos com paciência",
+    passagem: "Ora, a fé é o firme fundamento das coisas que se esperam, e a prova das coisas que se não veem. Porque por ela os antigos alcançaram testemunho. Pela fé entendemos que os mundos, pela palavra de Deus, foram criados; de maneira que aquilo que se vê não foi feito do que é aparente. Pela fé, Abel ofereceu a Deus maior sacrifício do que Caim. Pela fé, Noé, divinamente advertido das coisas que ainda se não viam, temeu, e, para salvação da sua família, preparou a arca. Pela fé, Abraão, sendo chamado, obedeceu, indo para um lugar que havia de receber por herança; e saiu, sem saber para onde ia. Portanto, nós também, pois que estamos rodeados de uma tão grande nuvem de testemunhas, deixemos todo o embaraço, e o pecado que tão de perto nos rodeia, e corramos com paciência a carreira que nos está proposta, olhando para Jesus, autor e consumador da fé.",
+    referencia: "Hebreus 11:1-3, 4, 7-8; 12:1-2",
+    interpretacao: "O autor de Hebreus define fé como 'firme fundamento' das coisas esperadas. Fé não é sentir; é sustentar. É o chão em que piso quando não vejo o degrau. Depois vem a galeria dos heróis: Abel, Noé, Abraão. Repare em Abraão: 'saiu sem saber para onde ia'. Fé assim é rara. Deus não deu o mapa; só a direção. E ele foi. No capítulo 12, o autor faz uma imagem esportiva: uma nuvem de testemunhas ao redor, como uma arquibancada. Não pra te avaliar, mas pra te lembrar — 'a gente também correu, também deu certo, continua'. E o segredo da corrida está no final: 'olhando para Jesus'. Não olhando pra outros, nem pros próprios pés. Ele é o começo (autor) e o fim (consumador). Se você está exausto na sua corrida hoje, larga o que embaraça (não é só pecado, é também peso legítimo mas desnecessário) e olha só pra Ele. Corrida da fé se faz de olho fixo, não de esforço frenético.",
+  },
+  {
+    id: "l-2co4",
+    tempo: "longo",
+    titulo: "Tesouro em vasos de barro",
+    passagem: "Temos, porém, este tesouro em vasos de barro, para que a excelência do poder seja de Deus e não de nós. Em tudo somos atribulados, mas não angustiados; perplexos, mas não desanimados. Perseguidos, mas não desamparados; abatidos, mas não destruídos. Trazendo sempre por toda a parte a mortificação do Senhor Jesus no nosso corpo, para que a vida de Jesus se manifeste também nos nossos corpos. Por isso não desfalecemos; mas, ainda que o nosso homem exterior se corrompa, o interior, contudo, se renova de dia em dia. Porque a nossa leve e momentânea tribulação produz para nós um peso eterno de glória mui excelente; não atentando nós nas coisas que se veem, mas nas que se não veem; porque as que se veem são temporais, e as que se não veem são eternas.",
+    referencia: "2 Coríntios 4:7-11, 16-18",
+    interpretacao: "Paulo usa a metáfora do vaso de barro — barato, frágil, quebra com facilidade. Diz: somos assim, e Deus decidiu colocar o tesouro dEle dentro de gente frágil. Por quê? Pra ficar claro que o brilho não vem do vaso; vem do conteúdo. Se você se sente frágil demais pra ser usado por Deus, esse é seu lugar exato. Ele prefere assim. Depois vem uma série de contrastes que só quem passou entende: atribulado mas não angustiado, perplexo mas não desanimado. O 'mas' é a graça de Deus. Ela não tira o problema; sustenta dentro dele. E vem uma frase pra guardar: 'o homem exterior se corrompe, o interior se renova'. Enquanto você envelhece por fora, Deus está te fazendo novo por dentro. E o final é uma reorientação: olhe pras coisas que não se veem, porque essas são as eternas. Muita ansiedade nossa vem de dar peso demais ao que é temporário. Reajuste a lente hoje.",
+  },
+  {
+    id: "l-jo14",
+    tempo: "longo",
+    titulo: "Não se turbe o coração",
+    passagem: "Não se turbe o vosso coração; credes em Deus, crede também em mim. Na casa de meu Pai há muitas moradas; se não fosse assim, eu vo-lo teria dito. Vou preparar-vos lugar. E, se eu for e vos preparar lugar, virei outra vez, e vos levarei para mim mesmo, para que onde eu estiver estejais vós também. Disse-lhe Tomé: Senhor, nós não sabemos para onde vais; e como podemos saber o caminho? Disse-lhe Jesus: Eu sou o caminho, e a verdade e a vida; ninguém vem ao Pai, senão por mim. Deixo-vos a paz, a minha paz vos dou; não vo-la dou como o mundo a dá. Não se turbe o vosso coração, nem se atemorize.",
+    referencia: "João 14:1-6, 27",
+    interpretacao: "Jesus fala isso na última noite antes de morrer. Os discípulos estão confusos e assustados. Ele começa com um imperativo suave: 'não se turbe'. E dá o remédio: 'credes em Deus, crede também em mim'. Fé em Deus se prova em fé em Cristo. Depois vem a promessa da 'casa do Pai' com muitas moradas — não é só metáfora bonita, é garantia de lugar preparado. Tomé pergunta o caminho, e Jesus responde: 'Eu sou o caminho'. Ou seja, o caminho é uma Pessoa, não um sistema. Você não vai a Deus por regras, mas por Cristo. No fim, Ele deixa a paz — mas faz questão de dizer 'não como o mundo dá'. Paz do mundo depende de circunstância. Paz de Cristo mora dentro da tempestade. Se hoje o seu coração está turbado, releia devagar. Jesus não te manda não sentir; te oferece a paz dEle no lugar do que te ocupa. Recebe.",
+  },
+  {
+    id: "l-tg1-longo",
+    tempo: "longo",
+    titulo: "Ouvir e fazer",
+    passagem: "Meus irmãos, tende por motivo de toda a alegria o passardes por várias provações, sabendo que a prova da vossa fé produz a perseverança. Tenha, porém, a perseverança a sua obra perfeita, para que sejais perfeitos e completos, sem que vos falte coisa alguma. E, se algum de vós tem falta de sabedoria, peça-a a Deus, que a todos dá liberalmente, e não o lança em rosto, e ser-lhe-á dada. Peça-a, porém, com fé, não duvidando; porque o que duvida é semelhante à onda do mar, que é levada pelo vento, e lançada de uma para outra parte. Não pense o tal homem que receberá do Senhor alguma coisa. Sabeis isto, meus amados irmãos; mas todo o homem seja pronto para ouvir, tardio para falar, tardio para se irar. Porque a ira do homem não opera a justiça de Deus. Sede cumpridores da palavra, e não somente ouvintes, enganando-vos com falsos discursos. Porque, se alguém é ouvinte da palavra, e não cumpridor, é semelhante ao homem que contempla ao espelho o seu rosto natural; porque se contempla a si mesmo, e vai-se, e logo se esquece de como era.",
+    referencia: "Tiago 1:2-8, 19-24",
+    interpretacao: "Tiago é o irmão mais prático do Novo Testamento. Começa com uma frase quase absurda: 'tende por motivo de toda a alegria as provações'. Não porque provação é boa em si, mas porque produz perseverança, e perseverança forma caráter. Provação sem perseverança só quebra; com perseverança, forma. Depois oferece o recurso: se falta sabedoria, peça. Deus dá 'liberalmente', sem cobrar rosto. Mas peça com fé — não porque duvidar te desqualifica moralmente, mas porque quem duvida oscila e não consegue receber o que Deus quer dar. Depois vem a parte prática: 'pronto para ouvir, tardio para falar, tardio para se irar'. Repare a ordem. A maioria de nós inverte: rápido pra falar, rápido pra se irar, lento pra ouvir. E o texto fecha com a imagem do espelho: ouvir a Palavra sem fazer é como olhar no espelho e esquecer sua própria cara. A Palavra é diagnóstico, mas também remédio — só serve quando você toma. Um passo prático hoje: qual verdade da Palavra você tem ouvido e não vivido?",
+  },
+  {
+    id: "l-mt6-longo",
+    tempo: "longo",
+    titulo: "Como orar e não se preocupar",
+    passagem: "Portanto, vós orareis assim: Pai nosso, que estás nos céus, santificado seja o teu nome; venha o teu reino, seja feita a tua vontade, assim na terra como no céu; o pão nosso de cada dia nos dá hoje; e perdoa-nos as nossas dívidas, assim como nós perdoamos aos nossos devedores; e não nos induzas à tentação; mas livra-nos do mal; porque teu é o reino, e o poder, e a glória, para sempre. Amém. Não ajunteis tesouros na terra, onde a traça e a ferrugem tudo consomem, e onde os ladrões minam e roubam. Mas ajuntai tesouros no céu, onde nem a traça nem a ferrugem consomem, e onde os ladrões não minam nem roubam. Porque onde estiver o vosso tesouro, aí estará também o vosso coração. Por isso vos digo: Não andeis cuidadosos quanto à vossa vida; olhai para as aves do céu, que nem semeiam, nem segam, nem ajuntam em celeiros; e vosso Pai celestial as alimenta. Não tendes vós muito mais valor do que elas?",
+    referencia: "Mateus 6:9-13, 19-21, 25-26",
+    interpretacao: "Jesus ensina a orar não com fórmula mágica, mas com prioridade. Começa com 'Pai' — relação antes de pedido. Depois 'santificado seja o teu nome, venha o teu reino, seja feita a tua vontade'. Três votos alinhados com Deus antes de pedir uma coisa pra si. Só depois vem 'o pão nosso de cada dia'. Não pão da semana, do mês, do ano — de hoje. Deus dá dependência diária, não estoque. E vem perdão — receber e dar, sempre juntos. Depois Jesus vai pra tesouros. Onde está seu dinheiro, sua atenção, seu tempo — ali está seu coração. Você quer saber onde está seu coração hoje? Veja seu extrato bancário e sua agenda. Fim do capítulo, vem o antídoto da ansiedade: olhe pros passarinhos. Argumento do menor pro maior — se Deus cuida deles, quanto mais de você. Preocupação nasce do esquecimento do próprio valor pra Deus. Retome hoje: relação com Ele em primeiro lugar, prioridade certa, tesouro no lugar certo — a paz vem junto.",
+  },
+];
+
+export function getLeituraPorTempo(tempo: TempoLeitura, excluir?: string): Leitura {
+  const pool = LEITURAS.filter((l) => l.tempo === tempo && l.id !== excluir);
+  const fonte = pool.length ? pool : LEITURAS.filter((l) => l.tempo === tempo);
+  return fonte[Math.floor(Math.random() * fonte.length)];
+}
+
+export function getLeituraById(id: string): Leitura | undefined {
+  return LEITURAS.find((l) => l.id === id);
+}
