@@ -139,6 +139,18 @@ function ConversePage() {
   const restantes = Math.max(0, DAILY_LIMIT - usadoHoje);
   const semSaldo = restantes === 0;
 
+  const [msRestantes, setMsRestantes] = useState<number>(() => msAteMeiaNoite());
+  useEffect(() => {
+    if (!semSaldo) return;
+    setMsRestantes(msAteMeiaNoite());
+    const id = window.setInterval(() => {
+      const v = msAteMeiaNoite();
+      setMsRestantes(v);
+      if (v <= 0) setUsadoHoje(0);
+    }, 1000);
+    return () => window.clearInterval(id);
+  }, [semSaldo]);
+
   // Placeholder cycling
   const [placeholderIdx, setPlaceholderIdx] = useState(() =>
     Math.floor(Math.random() * EXEMPLOS.length),
