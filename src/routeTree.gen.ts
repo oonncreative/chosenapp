@@ -15,6 +15,7 @@ import { Route as OnboardingRouteImport } from './routes/onboarding'
 import { Route as MeutempoRouteImport } from './routes/meutempo'
 import { Route as HomeRouteImport } from './routes/home'
 import { Route as EscolhidasRouteImport } from './routes/escolhidas'
+import { Route as DevocionalRouteImport } from './routes/devocional'
 import { Route as ConverseRouteImport } from './routes/converse'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as PPayloadRouteImport } from './routes/p.$payload'
@@ -51,6 +52,11 @@ const EscolhidasRoute = EscolhidasRouteImport.update({
   path: '/escolhidas',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DevocionalRoute = DevocionalRouteImport.update({
+  id: '/devocional',
+  path: '/devocional',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ConverseRoute = ConverseRouteImport.update({
   id: '/converse',
   path: '/converse',
@@ -80,6 +86,7 @@ const AtalhoAcaoRoute = AtalhoAcaoRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/converse': typeof ConverseRoute
+  '/devocional': typeof DevocionalRoute
   '/escolhidas': typeof EscolhidasRoute
   '/home': typeof HomeRoute
   '/meutempo': typeof MeutempoRoute
@@ -93,6 +100,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/converse': typeof ConverseRoute
+  '/devocional': typeof DevocionalRoute
   '/escolhidas': typeof EscolhidasRoute
   '/home': typeof HomeRoute
   '/meutempo': typeof MeutempoRoute
@@ -107,6 +115,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/converse': typeof ConverseRoute
+  '/devocional': typeof DevocionalRoute
   '/escolhidas': typeof EscolhidasRoute
   '/home': typeof HomeRoute
   '/meutempo': typeof MeutempoRoute
@@ -122,6 +131,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/converse'
+    | '/devocional'
     | '/escolhidas'
     | '/home'
     | '/meutempo'
@@ -135,6 +145,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/converse'
+    | '/devocional'
     | '/escolhidas'
     | '/home'
     | '/meutempo'
@@ -148,6 +159,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/converse'
+    | '/devocional'
     | '/escolhidas'
     | '/home'
     | '/meutempo'
@@ -162,6 +174,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   ConverseRoute: typeof ConverseRoute
+  DevocionalRoute: typeof DevocionalRoute
   EscolhidasRoute: typeof EscolhidasRoute
   HomeRoute: typeof HomeRoute
   MeutempoRoute: typeof MeutempoRoute
@@ -217,6 +230,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof EscolhidasRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/devocional': {
+      id: '/devocional'
+      path: '/devocional'
+      fullPath: '/devocional'
+      preLoaderRoute: typeof DevocionalRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/converse': {
       id: '/converse'
       path: '/converse'
@@ -258,6 +278,7 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   ConverseRoute: ConverseRoute,
+  DevocionalRoute: DevocionalRoute,
   EscolhidasRoute: EscolhidasRoute,
   HomeRoute: HomeRoute,
   MeutempoRoute: MeutempoRoute,
