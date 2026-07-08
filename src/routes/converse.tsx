@@ -221,10 +221,9 @@ function ConversePage() {
         >
           <ArrowLeft className="h-6 w-6 text-gray-400" />
         </Link>
-        <div className="flex items-center justify-center gap-1.5">
-          <img src={chosenLogo} alt="" className="h-5 w-5 object-contain" />
-          <span className="text-[10px] font-bold tracking-[0.25em] uppercase text-black/60">
-            IA
+        <div className="flex items-center justify-center">
+          <span className="text-sm font-bold tracking-[0.3em] uppercase text-black">
+            CHOSEN <span className="text-black/40">IA</span>
           </span>
         </div>
         <span />
@@ -283,7 +282,7 @@ function ConversePage() {
 
           {loading && (
             <div className="flex flex-col items-center justify-center py-24 gap-4 text-gray-400">
-              <img src={chosenLogo} alt="" className="h-10 w-10 object-contain animate-pulse" />
+              <Sparkles className="h-8 w-8 text-black/30 animate-pulse" strokeWidth={1.5} />
               <div className="flex items-center gap-1.5">
                 <span className="h-1.5 w-1.5 rounded-full bg-gray-400 animate-bounce [animation-delay:-0.3s]" />
                 <span className="h-1.5 w-1.5 rounded-full bg-gray-400 animate-bounce [animation-delay:-0.15s]" />
@@ -324,31 +323,24 @@ function ConversePage() {
                 </p>
               </div>
 
-              <div className="flex flex-wrap items-center justify-center gap-2 pt-2">
+              <div className="flex flex-col gap-2 pt-2">
                 <button
                   onClick={salvar}
-                  className={`inline-flex items-center gap-1.5 rounded-full border px-4 py-2 text-xs transition ${
+                  className={`inline-flex items-center justify-center gap-1.5 rounded-full border h-11 w-full text-sm font-medium transition ${
                     saved
                       ? "bg-black text-white border-black"
-                      : "bg-white text-black border-black/10 active:scale-95"
+                      : "bg-white text-black border-black/10 active:scale-[0.98]"
                   }`}
                 >
-                  <Heart className={`h-3.5 w-3.5 ${saved ? "fill-current" : ""}`} />
-                  {saved ? "Salvo" : "Salvar"}
-                </button>
-                <button
-                  onClick={compartilhar}
-                  className="inline-flex items-center gap-1.5 rounded-full border border-black/10 bg-white px-4 py-2 text-xs text-black active:scale-95"
-                >
-                  <Share2 className="h-3.5 w-3.5" />
-                  Compartilhar
+                  <Heart className={`h-4 w-4 ${saved ? "fill-current" : ""}`} />
+                  {saved ? "Salvo em escolhidas" : "Salvar"}
                 </button>
                 <button
                   onClick={outraPalavra}
-                  className="inline-flex items-center gap-1.5 rounded-full border border-black/10 bg-white px-4 py-2 text-xs text-black active:scale-95"
+                  className="inline-flex items-center justify-center gap-1.5 rounded-full h-11 w-full text-sm font-medium bg-[#f1f26c] text-black active:scale-[0.98] transition"
                 >
-                  <RefreshCw className="h-3.5 w-3.5" />
-                  Nova
+                  <RefreshCw className="h-4 w-4" />
+                  Nova conversa
                 </button>
               </div>
             </div>
