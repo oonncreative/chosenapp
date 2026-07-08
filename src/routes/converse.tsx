@@ -1,7 +1,7 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { useEffect, useRef, useState } from "react";
-import { ArrowLeft, Heart, ArrowUp, RefreshCw, Share2 } from "lucide-react";
+import { ArrowLeft, Heart, Sparkles, RefreshCw, Share2 } from "lucide-react";
 import { toast } from "sonner";
 import { converseChosen, type RespostaConversa } from "@/lib/converse.functions";
 import { toggleFavorite } from "@/lib/favorites";
@@ -179,14 +179,52 @@ function ConversePage() {
       </header>
 
       <main className="flex-1 min-h-0 overflow-y-auto no-scrollbar px-5">
-        <div className="mx-auto w-full max-w-md pb-6">
+        <div className="mx-auto w-full max-w-md pb-40">
           {!resposta && !loading && (
-            <div className="flex flex-col items-center text-center pt-6 pb-2">
-              <h1 className="text-[26px] leading-tight font-light text-black tracking-tight">
-                Como você está<br />se sentindo agora?
-              </h1>
-              <p className="mt-3 text-[13px] text-gray-400 leading-relaxed max-w-[280px]">
-                Escreva com suas palavras. Uma palavra escolhida pra você.
+            <div className="flex flex-col pt-4">
+              <div className="text-center">
+                <h1 className="text-[24px] leading-tight font-light text-black tracking-tight">
+                  Como você está<br />se sentindo agora?
+                </h1>
+                <p className="mt-2 text-[13px] text-gray-400 leading-relaxed">
+                  Escreva com suas palavras.
+                </p>
+              </div>
+
+              <div className="mt-5 rounded-2xl bg-gray-50 border border-black/5 focus-within:border-black/20 transition">
+                <textarea
+                  ref={textareaRef}
+                  value={texto}
+                  onChange={(e) => setTexto(e.target.value)}
+                  placeholder={`Ex.: ${EXEMPLOS[placeholderIdx]}`}
+                  rows={6}
+                  maxLength={1000}
+                  disabled={loading || semSaldo}
+                  className="w-full resize-none bg-transparent outline-none text-[15px] text-black placeholder:text-gray-400 leading-relaxed px-4 py-3 rounded-2xl"
+                  style={{ minHeight: "160px" }}
+                />
+              </div>
+
+              <div className="flex items-center justify-between mt-2 px-1 text-[11px] text-gray-400">
+                <span>
+                  {semSaldo
+                    ? "Sem conversas hoje — volte amanhã"
+                    : `${restantes} de ${DAILY_LIMIT} conversas por dia`}
+                </span>
+                <span>{texto.length}/1000</span>
+              </div>
+
+              <button
+                onClick={enviar}
+                disabled={!podeEnviar}
+                className="mt-4 h-12 w-full rounded-full bg-[#f1f26c] text-black font-semibold text-sm tracking-wide flex items-center justify-center gap-2 disabled:bg-gray-100 disabled:text-gray-400 active:scale-[0.98] transition shadow-sm"
+              >
+                <Sparkles className="h-4 w-4" strokeWidth={2.5} />
+                Receber uma palavra
+              </button>
+
+              <p className="mt-3 text-center text-[10px] text-gray-400 leading-relaxed">
+                Limite de 2 conversas por dia · até 1000 caracteres por mensagem
               </p>
             </div>
           )}
@@ -266,49 +304,6 @@ function ConversePage() {
         </div>
       </main>
 
-      {!resposta && (
-        <div
-          className="shrink-0 bg-white border-t border-black/5 px-4 pt-3"
-          style={{ paddingBottom: "max(env(safe-area-inset-bottom), 0.75rem)" }}
-        >
-          <div className="mx-auto w-full max-w-md">
-            <div className="relative flex items-end gap-2 rounded-3xl bg-gray-50 border border-black/5 px-3 py-2.5 focus-within:border-black/20 transition">
-              <textarea
-                ref={textareaRef}
-                value={texto}
-                onChange={(e) => setTexto(e.target.value)}
-                onFocus={() => {
-                  setTimeout(() => {
-                    textareaRef.current?.scrollIntoView({ block: "center", behavior: "smooth" });
-                  }, 250);
-                }}
-                placeholder={`Ex.: ${EXEMPLOS[placeholderIdx]}`}
-                rows={1}
-                maxLength={1000}
-                disabled={loading || semSaldo}
-                className="flex-1 resize-none bg-transparent outline-none text-[15px] text-black placeholder:text-gray-400 leading-snug max-h-[200px] py-1.5"
-                style={{ minHeight: "24px" }}
-              />
-              <button
-                onClick={enviar}
-                disabled={!podeEnviar}
-                aria-label="Enviar"
-                className="shrink-0 h-9 w-9 rounded-full bg-black text-white flex items-center justify-center disabled:bg-gray-200 disabled:text-gray-400 active:scale-95 transition"
-              >
-                <ArrowUp className="h-5 w-5" strokeWidth={2.5} />
-              </button>
-            </div>
-            <div className="flex items-center justify-between mt-2 px-1 text-[10px] text-gray-400">
-              <span>
-                {semSaldo
-                  ? "Volte amanhã pra novas conversas"
-                  : `${restantes} de ${DAILY_LIMIT} conversas hoje`}
-              </span>
-              <span>{texto.length}/1000</span>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 }
