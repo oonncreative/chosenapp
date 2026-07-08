@@ -2,8 +2,6 @@ import { useEffect, useMemo, useState } from "react";
 import { useNavigate, useRouterState } from "@tanstack/react-router";
 import { Menu, RefreshCw, Sparkles, CalendarClock, Share2, HelpCircle, Trash2, Heart, Send, Smile, Shuffle, BellRing, Wind, Copy, Check, PlayCircle, Bell } from "lucide-react";
 import { toast } from "sonner";
-import chosenLogoAsset from "@/assets/chosen-logo.png.asset.json";
-const chosenLogo = chosenLogoAsset.url;
 import {
   Sheet,
   SheetContent,
