@@ -41,7 +41,7 @@ function MeuTempoPage() {
         <span />
       </header>
 
-      <main className="flex-1 px-6 pb-24 pt-4 flex flex-col items-center">
+      <main className="flex-1 px-6 pb-24 pt-10 flex flex-col items-center">
         <div className="w-full max-w-md">
           <div className="flex items-center gap-2 mb-2">
             <Clock className="h-5 w-5 text-black/70" strokeWidth={2} />
