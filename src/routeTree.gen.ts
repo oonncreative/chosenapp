@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as TermsRouteImport } from './routes/terms'
 import { Route as SilencioRouteImport } from './routes/silencio'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as OracoesRouteImport } from './routes/oracoes'
@@ -26,6 +27,11 @@ import { Route as MeutempoLerRouteImport } from './routes/meutempo.ler'
 import { Route as MensagemSentimentoRouteImport } from './routes/mensagem/$sentimento'
 import { Route as AtalhoAcaoRouteImport } from './routes/atalho.$acao'
 
+const TermsRoute = TermsRouteImport.update({
+  id: '/terms',
+  path: '/terms',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SilencioRoute = SilencioRouteImport.update({
   id: '/silencio',
   path: '/silencio',
@@ -119,6 +125,7 @@ export interface FileRoutesByFullPath {
   '/oracoes': typeof OracoesRoute
   '/privacy': typeof PrivacyRoute
   '/silencio': typeof SilencioRoute
+  '/terms': typeof TermsRoute
   '/atalho/$acao': typeof AtalhoAcaoRoute
   '/mensagem/$sentimento': typeof MensagemSentimentoRoute
   '/meutempo/ler': typeof MeutempoLerRoute
@@ -136,6 +143,7 @@ export interface FileRoutesByTo {
   '/oracoes': typeof OracoesRoute
   '/privacy': typeof PrivacyRoute
   '/silencio': typeof SilencioRoute
+  '/terms': typeof TermsRoute
   '/atalho/$acao': typeof AtalhoAcaoRoute
   '/mensagem/$sentimento': typeof MensagemSentimentoRoute
   '/meutempo/ler': typeof MeutempoLerRoute
@@ -155,6 +163,7 @@ export interface FileRoutesById {
   '/oracoes': typeof OracoesRoute
   '/privacy': typeof PrivacyRoute
   '/silencio': typeof SilencioRoute
+  '/terms': typeof TermsRoute
   '/atalho/$acao': typeof AtalhoAcaoRoute
   '/mensagem/$sentimento': typeof MensagemSentimentoRoute
   '/meutempo/ler': typeof MeutempoLerRoute
@@ -175,6 +184,7 @@ export interface FileRouteTypes {
     | '/oracoes'
     | '/privacy'
     | '/silencio'
+    | '/terms'
     | '/atalho/$acao'
     | '/mensagem/$sentimento'
     | '/meutempo/ler'
@@ -192,6 +202,7 @@ export interface FileRouteTypes {
     | '/oracoes'
     | '/privacy'
     | '/silencio'
+    | '/terms'
     | '/atalho/$acao'
     | '/mensagem/$sentimento'
     | '/meutempo/ler'
@@ -210,6 +221,7 @@ export interface FileRouteTypes {
     | '/oracoes'
     | '/privacy'
     | '/silencio'
+    | '/terms'
     | '/atalho/$acao'
     | '/mensagem/$sentimento'
     | '/meutempo/ler'
@@ -229,6 +241,7 @@ export interface RootRouteChildren {
   OracoesRoute: typeof OracoesRoute
   PrivacyRoute: typeof PrivacyRoute
   SilencioRoute: typeof SilencioRoute
+  TermsRoute: typeof TermsRoute
   AtalhoAcaoRoute: typeof AtalhoAcaoRoute
   MensagemSentimentoRoute: typeof MensagemSentimentoRoute
   PPayloadRoute: typeof PPayloadRoute
@@ -236,6 +249,13 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/terms': {
+      id: '/terms'
+      path: '/terms'
+      fullPath: '/terms'
+      preLoaderRoute: typeof TermsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/silencio': {
       id: '/silencio'
       path: '/silencio'
@@ -377,6 +397,7 @@ const rootRouteChildren: RootRouteChildren = {
   OracoesRoute: OracoesRoute,
   PrivacyRoute: PrivacyRoute,
   SilencioRoute: SilencioRoute,
+  TermsRoute: TermsRoute,
   AtalhoAcaoRoute: AtalhoAcaoRoute,
   MensagemSentimentoRoute: MensagemSentimentoRoute,
   PPayloadRoute: PPayloadRoute,
