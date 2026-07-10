@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as SilencioRouteImport } from './routes/silencio'
+import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as OracoesRouteImport } from './routes/oracoes'
 import { Route as OraComigoRouteImport } from './routes/ora-comigo'
 import { Route as OnboardingRouteImport } from './routes/onboarding'
@@ -28,6 +29,11 @@ import { Route as AtalhoAcaoRouteImport } from './routes/atalho.$acao'
 const SilencioRoute = SilencioRouteImport.update({
   id: '/silencio',
   path: '/silencio',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PrivacyRoute = PrivacyRouteImport.update({
+  id: '/privacy',
+  path: '/privacy',
   getParentRoute: () => rootRouteImport,
 } as any)
 const OracoesRoute = OracoesRouteImport.update({
@@ -111,6 +117,7 @@ export interface FileRoutesByFullPath {
   '/onboarding': typeof OnboardingRoute
   '/ora-comigo': typeof OraComigoRoute
   '/oracoes': typeof OracoesRoute
+  '/privacy': typeof PrivacyRoute
   '/silencio': typeof SilencioRoute
   '/atalho/$acao': typeof AtalhoAcaoRoute
   '/mensagem/$sentimento': typeof MensagemSentimentoRoute
@@ -127,6 +134,7 @@ export interface FileRoutesByTo {
   '/onboarding': typeof OnboardingRoute
   '/ora-comigo': typeof OraComigoRoute
   '/oracoes': typeof OracoesRoute
+  '/privacy': typeof PrivacyRoute
   '/silencio': typeof SilencioRoute
   '/atalho/$acao': typeof AtalhoAcaoRoute
   '/mensagem/$sentimento': typeof MensagemSentimentoRoute
@@ -145,6 +153,7 @@ export interface FileRoutesById {
   '/onboarding': typeof OnboardingRoute
   '/ora-comigo': typeof OraComigoRoute
   '/oracoes': typeof OracoesRoute
+  '/privacy': typeof PrivacyRoute
   '/silencio': typeof SilencioRoute
   '/atalho/$acao': typeof AtalhoAcaoRoute
   '/mensagem/$sentimento': typeof MensagemSentimentoRoute
@@ -164,6 +173,7 @@ export interface FileRouteTypes {
     | '/onboarding'
     | '/ora-comigo'
     | '/oracoes'
+    | '/privacy'
     | '/silencio'
     | '/atalho/$acao'
     | '/mensagem/$sentimento'
@@ -180,6 +190,7 @@ export interface FileRouteTypes {
     | '/onboarding'
     | '/ora-comigo'
     | '/oracoes'
+    | '/privacy'
     | '/silencio'
     | '/atalho/$acao'
     | '/mensagem/$sentimento'
@@ -197,6 +208,7 @@ export interface FileRouteTypes {
     | '/onboarding'
     | '/ora-comigo'
     | '/oracoes'
+    | '/privacy'
     | '/silencio'
     | '/atalho/$acao'
     | '/mensagem/$sentimento'
@@ -215,6 +227,7 @@ export interface RootRouteChildren {
   OnboardingRoute: typeof OnboardingRoute
   OraComigoRoute: typeof OraComigoRoute
   OracoesRoute: typeof OracoesRoute
+  PrivacyRoute: typeof PrivacyRoute
   SilencioRoute: typeof SilencioRoute
   AtalhoAcaoRoute: typeof AtalhoAcaoRoute
   MensagemSentimentoRoute: typeof MensagemSentimentoRoute
@@ -228,6 +241,13 @@ declare module '@tanstack/react-router' {
       path: '/silencio'
       fullPath: '/silencio'
       preLoaderRoute: typeof SilencioRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/privacy': {
+      id: '/privacy'
+      path: '/privacy'
+      fullPath: '/privacy'
+      preLoaderRoute: typeof PrivacyRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/oracoes': {
@@ -355,6 +375,7 @@ const rootRouteChildren: RootRouteChildren = {
   OnboardingRoute: OnboardingRoute,
   OraComigoRoute: OraComigoRoute,
   OracoesRoute: OracoesRoute,
+  PrivacyRoute: PrivacyRoute,
   SilencioRoute: SilencioRoute,
   AtalhoAcaoRoute: AtalhoAcaoRoute,
   MensagemSentimentoRoute: MensagemSentimentoRoute,
@@ -363,13 +384,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
