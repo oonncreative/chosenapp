@@ -4,6 +4,7 @@ import SwiftUI
 struct ChosenMessage: Codable {
     let texto: String
     let referencia: String
+    let resumo: String?
 }
 
 struct ChosenMessagesResponse: Codable {
@@ -14,16 +15,17 @@ struct ChosenEntry: TimelineEntry {
     let date: Date
     let texto: String
     let referencia: String
+    let resumo: String?
     let background: ChosenWidgetBackground
 }
 
 struct ChosenProvider: AppIntentTimelineProvider {
     func placeholder(in context: Context) -> ChosenEntry {
-        ChosenEntry(date: Date(), texto: "Uma palavra para agora.", referencia: "CHOSEN", background: .padrao)
+        ChosenEntry(date: Date(), texto: "Uma palavra para agora.", referencia: "CHOSEN", resumo: nil, background: .padrao)
     }
 
     func snapshot(for configuration: ConfigurationAppIntent, in context: Context) async -> ChosenEntry {
-        ChosenEntry(date: Date(), texto: "Uma palavra para agora.", referencia: "CHOSEN", background: configuration.background)
+        ChosenEntry(date: Date(), texto: "Uma palavra para agora.", referencia: "CHOSEN", resumo: nil, background: configuration.background)
     }
 
     func timeline(for configuration: ConfigurationAppIntent, in context: Context) async -> Timeline<ChosenEntry> {
@@ -32,11 +34,11 @@ struct ChosenProvider: AppIntentTimelineProvider {
         var entries: [ChosenEntry] = []
 
         if messages.isEmpty {
-            entries.append(ChosenEntry(date: now, texto: "Uma palavra para agora.", referencia: "CHOSEN", background: configuration.background))
+            entries.append(ChosenEntry(date: now, texto: "Uma palavra para agora.", referencia: "CHOSEN", resumo: nil, background: configuration.background))
         } else {
             for (index, message) in messages.enumerated() {
                 let entryDate = Calendar.current.date(byAdding: .hour, value: index * 4, to: now) ?? now
-                entries.append(ChosenEntry(date: entryDate, texto: message.texto, referencia: message.referencia, background: configuration.background))
+                entries.append(ChosenEntry(date: entryDate, texto: message.texto, referencia: message.referencia, resumo: message.resumo, background: configuration.background))
             }
         }
 
@@ -81,6 +83,32 @@ struct ChosenWidgetEntryView: View {
         }
     }
 
+    private var textLineLimit: Int {
+        switch family {
+        case .systemMedium: return 4
+        case .systemLarge: return 5
+        default: return 3
+        }
+    }
+
+    private var textFontSize: CGFloat {
+        switch family {
+        case .systemLarge: return 17
+        case .systemMedium: return 15
+        default: return 14
+        }
+    }
+
+    private var resumoTruncado: String? {
+        guard let resumo = entry.resumo, !resumo.isEmpty else { return nil }
+        let limite = 280
+        if resumo.count <= limite {
+            return resumo
+        }
+        let indice = resumo.index(resumo.startIndex, offsetBy: limite)
+        return String(resumo[..<indice]) + "..."
+    }
+
     var body: some View {
         content
             .containerBackground(backgroundColor, for: .widget)
@@ -106,16 +134,29 @@ struct ChosenWidgetEntryView: View {
                 Text(entry.referencia)
                     .font(.system(size: 9))
             }
-        default:
-            VStack(alignment: .leading, spacing: 4) {
+        case .systemSmall, .systemMedium, .systemLarge:
+            VStack(alignment: .leading, spacing: 6) {
                 Text(entry.texto)
-                    .font(.system(size: 14, weight: .medium))
+                    .font(.system(size: textFontSize, weight: .medium))
                     .foregroundStyle(textColor)
+                    .lineLimit(textLineLimit)
+                    .fixedSize(horizontal: false, vertical: true)
+
+                if family == .systemLarge, let resumo = resumoTruncado {
+                    Text(resumo)
+                        .font(.system(size: 12))
+                        .foregroundStyle(textColor.opacity(0.8))
+                        .lineLimit(8)
+                }
+
+                Spacer(minLength: 0)
                 Text(entry.referencia)
                     .font(.system(size: 12))
                     .foregroundStyle(textColor.opacity(0.7))
             }
             .padding()
+        default:
+            EmptyView()
         }
     }
 }
@@ -129,6 +170,6 @@ struct ChosenWidget: Widget {
         }
         .configurationDisplayName("CHOSEN")
         .description("Uma palavra bíblica para o seu dia.")
-        .supportedFamilies([.accessoryRectangular, .accessoryCircular, .accessoryInline, .systemSmall])
+        .supportedFamilies([.accessoryRectangular, .accessoryCircular, .accessoryInline, .systemSmall, .systemMedium, .systemLarge])
     }
 }
