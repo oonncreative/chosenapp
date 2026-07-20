@@ -29,16 +29,18 @@ export const Route = createFileRoute("/api/public/widget-messages")({
       OPTIONS: async () => new Response(null, { status: 204, headers: CORS_HEADERS }),
       GET: async () => {
         const now = new Date();
-        // Seed do dia em UTC (widgets podem estar em qualquer fuso; manter estável).
-        const daySeed = Math.floor(now.getTime() / (24 * 60 * 60 * 1000));
+        // Seed do dia em horário de Brasília (America/Sao_Paulo, UTC-3, sem DST
+        // desde 2019). Vira à meia-noite local — faz sentido para o público BR.
+        const BRT_OFFSET_MS = 3 * 60 * 60 * 1000;
+        const daySeed = Math.floor((now.getTime() - BRT_OFFSET_MS) / (24 * 60 * 60 * 1000));
 
         const mensagens = [0, 1, 2].map((slot) => {
           const item = pickForSlot(daySeed, slot);
           return { texto: item.text, referencia: item.ref };
         });
 
-        // "Atualizado em" = início do dia UTC (marca clara para o widget cachear).
-        const atualizado_em = new Date(daySeed * 24 * 60 * 60 * 1000).toISOString();
+        // "Atualizado em" = meia-noite de Brasília desse dia (em ISO UTC).
+        const atualizado_em = new Date(daySeed * 24 * 60 * 60 * 1000 + BRT_OFFSET_MS).toISOString();
 
         return new Response(
           JSON.stringify({ mensagens, atualizado_em }, null, 2),
