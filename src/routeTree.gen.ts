@@ -26,6 +26,7 @@ import { Route as PPayloadRouteImport } from './routes/p.$payload'
 import { Route as MeutempoLerRouteImport } from './routes/meutempo.ler'
 import { Route as MensagemSentimentoRouteImport } from './routes/mensagem/$sentimento'
 import { Route as AtalhoAcaoRouteImport } from './routes/atalho.$acao'
+import { Route as ApiPublicWidgetMessagesRouteImport } from './routes/api/public/widget-messages'
 
 const TermsRoute = TermsRouteImport.update({
   id: '/terms',
@@ -112,6 +113,11 @@ const AtalhoAcaoRoute = AtalhoAcaoRouteImport.update({
   path: '/atalho/$acao',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicWidgetMessagesRoute = ApiPublicWidgetMessagesRouteImport.update({
+  id: '/api/public/widget-messages',
+  path: '/api/public/widget-messages',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -131,6 +137,7 @@ export interface FileRoutesByFullPath {
   '/meutempo/ler': typeof MeutempoLerRoute
   '/p/$payload': typeof PPayloadRoute
   '/meutempo/': typeof MeutempoIndexRoute
+  '/api/public/widget-messages': typeof ApiPublicWidgetMessagesRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -149,6 +156,7 @@ export interface FileRoutesByTo {
   '/meutempo/ler': typeof MeutempoLerRoute
   '/p/$payload': typeof PPayloadRoute
   '/meutempo': typeof MeutempoIndexRoute
+  '/api/public/widget-messages': typeof ApiPublicWidgetMessagesRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -169,6 +177,7 @@ export interface FileRoutesById {
   '/meutempo/ler': typeof MeutempoLerRoute
   '/p/$payload': typeof PPayloadRoute
   '/meutempo/': typeof MeutempoIndexRoute
+  '/api/public/widget-messages': typeof ApiPublicWidgetMessagesRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -190,6 +199,7 @@ export interface FileRouteTypes {
     | '/meutempo/ler'
     | '/p/$payload'
     | '/meutempo/'
+    | '/api/public/widget-messages'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -208,6 +218,7 @@ export interface FileRouteTypes {
     | '/meutempo/ler'
     | '/p/$payload'
     | '/meutempo'
+    | '/api/public/widget-messages'
   id:
     | '__root__'
     | '/'
@@ -227,6 +238,7 @@ export interface FileRouteTypes {
     | '/meutempo/ler'
     | '/p/$payload'
     | '/meutempo/'
+    | '/api/public/widget-messages'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -245,6 +257,7 @@ export interface RootRouteChildren {
   AtalhoAcaoRoute: typeof AtalhoAcaoRoute
   MensagemSentimentoRoute: typeof MensagemSentimentoRoute
   PPayloadRoute: typeof PPayloadRoute
+  ApiPublicWidgetMessagesRoute: typeof ApiPublicWidgetMessagesRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -368,6 +381,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AtalhoAcaoRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/widget-messages': {
+      id: '/api/public/widget-messages'
+      path: '/api/public/widget-messages'
+      fullPath: '/api/public/widget-messages'
+      preLoaderRoute: typeof ApiPublicWidgetMessagesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -401,17 +421,8 @@ const rootRouteChildren: RootRouteChildren = {
   AtalhoAcaoRoute: AtalhoAcaoRoute,
   MensagemSentimentoRoute: MensagemSentimentoRoute,
   PPayloadRoute: PPayloadRoute,
+  ApiPublicWidgetMessagesRoute: ApiPublicWidgetMessagesRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
