@@ -1,18 +1,24 @@
-//
-//  AppIntent.swift
-//  ChosenWidget
-//
-//  Created by Norton Luiz Bristot Rosa on 20/07/26.
-//
-
 import WidgetKit
 import AppIntents
 
-struct ConfigurationAppIntent: WidgetConfigurationIntent {
-    static var title: LocalizedStringResource { "Configuration" }
-    static var description: IntentDescription { "This is an example widget." }
+enum ChosenWidgetBackground: String, AppEnum {
+    case padrao
+    case amarelo
+    case branco
 
-    // An example configurable parameter.
-    @Parameter(title: "Favorite Emoji", default: "😃")
-    var favoriteEmoji: String
+    static var typeDisplayRepresentation: TypeDisplayRepresentation = "Fundo do Widget"
+
+    static var caseDisplayRepresentations: [ChosenWidgetBackground: DisplayRepresentation] = [
+        .padrao: "Padrão",
+        .amarelo: "Amarelo",
+        .branco: "Branco"
+    ]
+}
+
+struct ConfigurationAppIntent: WidgetConfigurationIntent {
+    static var title: LocalizedStringResource = "CHOSEN"
+    static var description = IntentDescription("Escolha o visual do widget CHOSEN.")
+
+    @Parameter(title: "Fundo", default: .padrao)
+    var background: ChosenWidgetBackground
 }

@@ -14,53 +14,47 @@ struct ChosenEntry: TimelineEntry {
     let date: Date
     let texto: String
     let referencia: String
+    let background: ChosenWidgetBackground
 }
 
-struct ChosenProvider: TimelineProvider {
+struct ChosenProvider: AppIntentTimelineProvider {
     func placeholder(in context: Context) -> ChosenEntry {
-        ChosenEntry(date: Date(), texto: "Uma palavra para agora.", referencia: "CHOSEN")
+        ChosenEntry(date: Date(), texto: "Uma palavra para agora.", referencia: "CHOSEN", background: .padrao)
     }
 
-    func getSnapshot(in context: Context, completion: @escaping (ChosenEntry) -> Void) {
-        completion(ChosenEntry(date: Date(), texto: "Uma palavra para agora.", referencia: "CHOSEN"))
+    func snapshot(for configuration: ConfigurationAppIntent, in context: Context) async -> ChosenEntry {
+        ChosenEntry(date: Date(), texto: "Uma palavra para agora.", referencia: "CHOSEN", background: configuration.background)
     }
 
-    func getTimeline(in context: Context, completion: @escaping (Timeline<ChosenEntry>) -> Void) {
-        fetchMessages { messages in
-            let now = Date()
-            var entries: [ChosenEntry] = []
+    func timeline(for configuration: ConfigurationAppIntent, in context: Context) async -> Timeline<ChosenEntry> {
+        let messages = await fetchMessages()
+        let now = Date()
+        var entries: [ChosenEntry] = []
 
-            if messages.isEmpty {
-                entries.append(ChosenEntry(date: now, texto: "Uma palavra para agora.", referencia: "CHOSEN"))
-            } else {
-                for (index, message) in messages.enumerated() {
-                    let entryDate = Calendar.current.date(byAdding: .hour, value: index * 4, to: now) ?? now
-                    entries.append(ChosenEntry(date: entryDate, texto: message.texto, referencia: message.referencia))
-                }
+        if messages.isEmpty {
+            entries.append(ChosenEntry(date: now, texto: "Uma palavra para agora.", referencia: "CHOSEN", background: configuration.background))
+        } else {
+            for (index, message) in messages.enumerated() {
+                let entryDate = Calendar.current.date(byAdding: .hour, value: index * 4, to: now) ?? now
+                entries.append(ChosenEntry(date: entryDate, texto: message.texto, referencia: message.referencia, background: configuration.background))
             }
-
-            let nextRefresh = Calendar.current.date(byAdding: .hour, value: 1, to: now) ?? now
-            completion(Timeline(entries: entries, policy: .after(nextRefresh)))
         }
+
+        let nextRefresh = Calendar.current.date(byAdding: .hour, value: 1, to: now) ?? now
+        return Timeline(entries: entries, policy: .after(nextRefresh))
     }
 
-    private func fetchMessages(completion: @escaping ([ChosenMessage]) -> Void) {
+    private func fetchMessages() async -> [ChosenMessage] {
         guard let url = URL(string: "https://chosen.oonn.com.br/api/public/widget-messages") else {
-            completion([])
-            return
+            return []
         }
-        URLSession.shared.dataTask(with: url) { data, _, error in
-            guard let data = data, error == nil else {
-                completion([])
-                return
-            }
-            do {
-                let decoded = try JSONDecoder().decode(ChosenMessagesResponse.self, from: data)
-                completion(decoded.mensagens)
-            } catch {
-                completion([])
-            }
-        }.resume()
+        do {
+            let (data, _) = try await URLSession.shared.data(from: url)
+            let decoded = try JSONDecoder().decode(ChosenMessagesResponse.self, from: data)
+            return decoded.mensagens
+        } catch {
+            return []
+        }
     }
 }
 
@@ -68,7 +62,28 @@ struct ChosenWidgetEntryView: View {
     var entry: ChosenProvider.Entry
     @Environment(\.widgetFamily) var family
 
+    private var backgroundColor: Color {
+        switch entry.background {
+        case .padrao: return Color(.systemGray6)
+        case .amarelo: return Color(red: 0.97, green: 0.93, blue: 0.42)
+        case .branco: return .white
+        }
+    }
+
+    private var textColor: Color {
+        switch entry.background {
+        case .padrao: return .primary
+        case .amarelo, .branco: return .black
+        }
+    }
+
     var body: some View {
+        content
+            .containerBackground(backgroundColor, for: .widget)
+    }
+
+    @ViewBuilder
+    private var content: some View {
         switch family {
         case .accessoryRectangular:
             VStack(alignment: .leading, spacing: 2) {
@@ -91,9 +106,10 @@ struct ChosenWidgetEntryView: View {
             VStack(alignment: .leading, spacing: 4) {
                 Text(entry.texto)
                     .font(.system(size: 14, weight: .medium))
+                    .foregroundStyle(textColor)
                 Text(entry.referencia)
                     .font(.system(size: 12))
-                    .opacity(0.7)
+                    .foregroundStyle(textColor.opacity(0.7))
             }
             .padding()
         }
@@ -104,9 +120,8 @@ struct ChosenWidget: Widget {
     let kind: String = "ChosenWidget"
 
     var body: some WidgetConfiguration {
-        StaticConfiguration(kind: kind, provider: ChosenProvider()) { entry in
+        AppIntentConfiguration(kind: kind, intent: ConfigurationAppIntent.self, provider: ChosenProvider()) { entry in
             ChosenWidgetEntryView(entry: entry)
-                .containerBackground(.fill.tertiary, for: .widget)
         }
         .configurationDisplayName("CHOSEN")
         .description("Uma palavra bíblica para o seu dia.")
