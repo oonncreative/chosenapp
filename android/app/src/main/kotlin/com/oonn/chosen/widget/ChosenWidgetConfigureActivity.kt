@@ -28,6 +28,9 @@ import androidx.glance.appwidget.state.updateAppWidgetState
 import androidx.glance.appwidget.updateAll
 import kotlinx.coroutines.launch
 import androidx.lifecycle.lifecycleScope
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkManager
+import androidx.work.workDataOf
 
 class ChosenWidgetConfigureActivity : ComponentActivity() {
 
@@ -59,19 +62,35 @@ class ChosenWidgetConfigureActivity : ComponentActivity() {
 
     private fun saveAndFinish(background: String, contentType: String) {
         lifecycleScope.launch {
-            val glanceId = GlanceAppWidgetManager(this@ChosenWidgetConfigureActivity)
-                .getGlanceIdBy(appWidgetId)
+            try {
+                android.util.Log.d("ChosenWidget", "Salvando config: appWidgetId=$appWidgetId background=$background contentType=$contentType")
 
-            updateAppWidgetState(this@ChosenWidgetConfigureActivity, glanceId) { prefs ->
-                prefs[KEY_BACKGROUND] = background
-                prefs[KEY_CONTENT_TYPE] = contentType
+                val glanceId = GlanceAppWidgetManager(this@ChosenWidgetConfigureActivity)
+                    .getGlanceIdBy(appWidgetId)
+
+                android.util.Log.d("ChosenWidget", "glanceId encontrado: $glanceId")
+
+                updateAppWidgetState(this@ChosenWidgetConfigureActivity, glanceId) { prefs ->
+                    prefs[KEY_BACKGROUND] = background
+                    prefs[KEY_CONTENT_TYPE] = contentType
+                }
+
+                android.util.Log.d("ChosenWidget", "Estado salvo, agendando atualização via WorkManager")
+
+                val workRequest = OneTimeWorkRequestBuilder<ChosenWidgetUpdateWorker>()
+                    .setInputData(workDataOf("appWidgetId" to appWidgetId))
+                    .build()
+                WorkManager.getInstance(applicationContext).enqueue(workRequest)
+
+                android.util.Log.d("ChosenWidget", "Atualização agendada")
+
+                val resultValue = Intent().putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
+                setResult(Activity.RESULT_OK, resultValue)
+            } catch (e: Exception) {
+                android.util.Log.e("ChosenWidget", "Erro ao salvar configuração", e)
+            } finally {
+                finish()
             }
-
-            ChosenWidget().updateAll(this@ChosenWidgetConfigureActivity)
-
-            val resultValue = Intent().putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
-            setResult(Activity.RESULT_OK, resultValue)
-            finish()
         }
     }
 }

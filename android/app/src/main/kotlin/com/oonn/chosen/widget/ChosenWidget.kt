@@ -25,6 +25,8 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.graphics.Color
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import java.net.HttpURLConnection
 import java.net.URL
 
@@ -42,19 +44,22 @@ class ChosenWidget : GlanceAppWidget() {
     override val stateDefinition: GlanceStateDefinition<*> = PreferencesGlanceStateDefinition
 
     override suspend fun provideGlance(context: Context, id: GlanceId) {
+        android.util.Log.d("ChosenWidget", "provideGlance chamado para id=$id")
         val prefs = androidx.glance.appwidget.state.getAppWidgetState(context, PreferencesGlanceStateDefinition, id)
         val background = prefs[KEY_BACKGROUND] ?: "padrao"
         val contentType = prefs[KEY_CONTENT_TYPE] ?: "misto"
+        android.util.Log.d("ChosenWidget", "Lido do estado: background=$background contentType=$contentType")
 
         val message = fetchMessage(contentType)
+        android.util.Log.d("ChosenWidget", "Mensagem obtida: ${message.texto}")
 
         provideContent {
             WidgetContent(message = message, background = background)
         }
     }
 
-    private suspend fun fetchMessage(contentType: String): ChosenMessage {
-        return try {
+    private suspend fun fetchMessage(contentType: String): ChosenMessage = withContext(Dispatchers.IO) {
+        try {
             var urlString = "https://chosen.oonn.com.br/api/public/widget-messages"
             if (contentType != "misto") {
                 urlString += "?tipo=$contentType"
@@ -66,6 +71,7 @@ class ChosenWidget : GlanceAppWidget() {
             val decoded = Json { ignoreUnknownKeys = true }.decodeFromString<ChosenMessagesResponse>(body)
             decoded.mensagens.firstOrNull() ?: fallbackMessage()
         } catch (e: Exception) {
+            android.util.Log.e("ChosenWidget", "Erro ao buscar mensagem", e)
             fallbackMessage()
         }
     }
