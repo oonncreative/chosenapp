@@ -19,6 +19,16 @@ const CORS_HEADERS = {
   "Access-Control-Allow-Headers": "Content-Type",
 } as const;
 
+// Lookup de resumo (reflexão devocional) por texto da mensagem.
+// Existe em data.ts para versículos, salmos, reflexões e itens de Motivação.
+// Frases-convite (INVITATION_MESSAGES) e orações curtas não têm resumo → null.
+const RESUMO_BY_TEXT = new Map<string, string>();
+for (const arr of Object.values(MENSAGENS)) {
+  for (const m of arr) {
+    if (m.resumo) RESUMO_BY_TEXT.set(m.texto, m.resumo);
+  }
+}
+
 // Pools por tipo. "misto" = comportamento original (tudo em data.ts).
 const MOTIVACIONAL_POOL: ChosenItem[] = [
   ...(MENSAGENS["Motivação"] || []).map((m) => ({ ref: m.referencia, text: m.texto })),
@@ -75,7 +85,11 @@ export const Route = createFileRoute("/api/public/widget-messages")({
 
         const mensagens = [0, 1, 2].map((slot) => {
           const item = pickForSlot(pool, daySeed, slot);
-          return { texto: item.text, referencia: item.ref };
+          return {
+            texto: item.text,
+            referencia: item.ref,
+            resumo: RESUMO_BY_TEXT.get(item.text) ?? null,
+          };
         });
 
         // "Atualizado em" = meia-noite de Brasília desse dia (em ISO UTC).
