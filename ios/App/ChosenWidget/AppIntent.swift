@@ -15,10 +15,29 @@ enum ChosenWidgetBackground: String, AppEnum {
     ]
 }
 
+enum ChosenWidgetContentType: String, AppEnum {
+    case misto
+    case versiculo
+    case oracao
+    case motivacional
+
+    static var typeDisplayRepresentation: TypeDisplayRepresentation = "Tipo de Conteúdo"
+
+    static var caseDisplayRepresentations: [ChosenWidgetContentType: DisplayRepresentation] = [
+        .misto: "Misto",
+        .versiculo: "Versículos",
+        .oracao: "Orações",
+        .motivacional: "Motivacional"
+    ]
+}
+
 struct ConfigurationAppIntent: WidgetConfigurationIntent {
     static var title: LocalizedStringResource = "CHOSEN"
-    static var description = IntentDescription("Escolha o visual do widget CHOSEN.")
+    static var description = IntentDescription("Escolha o visual e o conteúdo do widget CHOSEN.")
 
     @Parameter(title: "Fundo", default: .padrao)
     var background: ChosenWidgetBackground
+
+    @Parameter(title: "Conteúdo", default: .misto)
+    var contentType: ChosenWidgetContentType
 }

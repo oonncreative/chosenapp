@@ -27,7 +27,7 @@ struct ChosenProvider: AppIntentTimelineProvider {
     }
 
     func timeline(for configuration: ConfigurationAppIntent, in context: Context) async -> Timeline<ChosenEntry> {
-        let messages = await fetchMessages()
+        let messages = await fetchMessages(tipo: configuration.contentType)
         let now = Date()
         var entries: [ChosenEntry] = []
 
@@ -44,8 +44,12 @@ struct ChosenProvider: AppIntentTimelineProvider {
         return Timeline(entries: entries, policy: .after(nextRefresh))
     }
 
-    private func fetchMessages() async -> [ChosenMessage] {
-        guard let url = URL(string: "https://chosen.oonn.com.br/api/public/widget-messages") else {
+    private func fetchMessages(tipo: ChosenWidgetContentType) async -> [ChosenMessage] {
+        var urlString = "https://chosen.oonn.com.br/api/public/widget-messages"
+        if tipo != .misto {
+            urlString += "?tipo=\(tipo.rawValue)"
+        }
+        guard let url = URL(string: urlString) else {
             return []
         }
         do {
