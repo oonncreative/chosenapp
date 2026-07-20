@@ -1,6 +1,7 @@
 apply plugin: 'com.android.application'
 apply plugin: 'org.jetbrains.kotlin.android'
 apply plugin: 'org.jetbrains.kotlin.plugin.compose'
+apply plugin: 'org.jetbrains.kotlin.plugin.serialization'
 
 android {
     namespace = "com.oonn.chosen"
@@ -27,8 +28,12 @@ android {
     buildFeatures {
         compose true
     }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_21
+        targetCompatibility JavaVersion.VERSION_21
+    }
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "21"
     }
 }
 
@@ -52,6 +57,8 @@ dependencies {
     implementation "androidx.glance:glance-appwidget:1.1.1"
     implementation "androidx.glance:glance-material3:1.1.1"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.8.1"
+    implementation "androidx.work:work-runtime-ktx:2.9.1"
+    implementation "org.jetbrains.kotlinx:kotlinx-serialization-json:1.7.3"
 }
 
 apply from: 'capacitor.build.gradle'
