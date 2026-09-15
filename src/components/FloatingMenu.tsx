@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate, useRouterState } from "@tanstack/react-router";
-import { Menu, RefreshCw, Sparkles, CalendarClock, Share2, HelpCircle, Trash2, Heart, Send, Smile, Shuffle, BellRing, Wind, Copy, Check, PlayCircle, Bell, Clock, BookOpen, HandHeart, Sun } from "lucide-react";
+import { Menu, Plus, RefreshCw, Sparkles, CalendarClock, Share2, HelpCircle, Trash2, Heart, Send, Smile, Shuffle, BellRing, Wind, Copy, Check, PlayCircle, Bell, Clock, BookOpen, HandHeart, Sun } from "lucide-react";
 import { toast } from "sonner";
 import {
   Sheet,
@@ -34,6 +34,8 @@ import {
 } from "@/lib/notificationPrefs";
 import { rescheduleNotifications } from "@/hooks/useNativeNotifications";
 import { isTimeThemeEnabled, setTimeThemeEnabled } from "@/lib/timeThemePrefs";
+import { getMarcador, getMarcadorManual, type Marcador as BibliaMarcador } from "@/lib/biblia/marcador";
+import { getLivro } from "@/lib/biblia";
 
 const SCHEDULED_KEY = "chosen_user_schedules";
 const PWA_SCHEDULE_BASE_ID = 50000;
