@@ -1,11 +1,14 @@
 import { createFileRoute, Link, notFound, useNavigate } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
-import { ArrowLeft, Bookmark, ChevronLeft, ChevronRight } from "lucide-react";
+import { ArrowLeft, Bookmark, Check, ChevronLeft, ChevronRight } from "lucide-react";
 import { toast } from "sonner";
 import { carregarLivro, getLivro, livroAnterior, livroSeguinte } from "@/lib/biblia";
 import {
   getMarcadorManual,
+  isLido,
+  setLido,
   setMarcador,
+  toggleLido,
   toggleMarcadorManual,
   type Marcador,
 } from "@/lib/biblia/marcador";
@@ -48,6 +51,8 @@ function LeituraPage() {
   const [versiculos, setVersiculos] = useState<string[] | null>(null);
   const [manual, setManual] = useState<Marcador | null>(null);
   const [progresso, setProgresso] = useState(0);
+  const [versAtual, setVersAtual] = useState(1);
+  const [lido, setLidoState] = useState(false);
   const scrollRef = useRef<HTMLElement | null>(null);
 
   useEffect(() => {
@@ -64,6 +69,9 @@ function LeituraPage() {
 
   useEffect(() => {
     setManual(getMarcadorManual());
+    setLidoState(isLido(livro.slug, cap));
+    setVersAtual(1);
+    setProgresso(0);
   }, [livro.slug, cap]);
 
   // Salva automaticamente o ponto de leitura enquanto a pessoa rola.
@@ -81,6 +89,11 @@ function LeituraPage() {
           ...visiveis.map((e) => parseInt(e.target.getAttribute("data-versiculo") || "1", 10)),
         );
         setProgresso(Math.round((n / versiculos.length) * 100));
+        setVersAtual(n);
+        if (n >= versiculos.length) {
+          setLido(livro.slug, cap, true);
+          setLidoState(true);
+        }
         window.clearTimeout(timer);
         timer = window.setTimeout(() => {
           setMarcador({ livro: livro.slug, nome: livro.nome, capitulo: cap, versiculo: n });
@@ -155,6 +168,29 @@ function LeituraPage() {
   const marcado = (n: number) =>
     !!manual && manual.livro === livro.slug && manual.capitulo === cap && manual.versiculo === n;
 
+  const pareiAqui = () => {
+    const n = versAtual;
+    toggleMarcadorManual({
+      livro: livro.slug,
+      nome: livro.nome,
+      capitulo: cap,
+      versiculo: n,
+    });
+    setMarcador({ livro: livro.slug, nome: livro.nome, capitulo: cap, versiculo: n });
+    setManual(getMarcadorManual());
+    toast(`Salvo no celular: ${livro.nome} ${cap}:${n}`);
+  };
+
+  const alternarLido = () => {
+    const novo = toggleLido(livro.slug, cap);
+    setLidoState(novo);
+    toast(
+      novo
+        ? `${livro.nome} ${cap} marcado como lido`
+        : `${livro.nome} ${cap} desmarcado`,
+    );
+  };
+
   return (
     <div className="flex flex-col h-[100dvh] bg-white">
       <header className="shrink-0 px-4 pt-[max(env(safe-area-inset-top),2rem)] pb-2">
@@ -170,7 +206,17 @@ function LeituraPage() {
           <span className="text-sm font-bold tracking-[0.2em] uppercase text-black text-center truncate">
             {livro.abrev} {cap}
           </span>
-          <span />
+          <button
+            onClick={alternarLido}
+            aria-pressed={lido}
+            aria-label="Marcar capítulo como lido"
+            className={`justify-self-end flex h-9 items-center gap-1.5 rounded-full px-3 text-[11px] font-semibold transition ${
+              lido ? "bg-black text-white" : "bg-black/[0.05] text-black/60"
+            }`}
+          >
+            <Check className="h-3.5 w-3.5" />
+            {lido ? "Lido" : "Lido?"}
+          </button>
         </div>
         <div className="mt-2 h-0.5 w-full rounded-full bg-black/5">
           <div
@@ -186,7 +232,8 @@ function LeituraPage() {
             {livro.nome} {cap}
           </h1>
           <p className="text-[11px] text-black/40 mb-6">
-            Toque no número do versículo para marcar onde parou.
+            Toque no número do versículo, ou use o botão “Parei aqui” lá embaixo. Fica salvo no seu
+            celular.
           </p>
 
           {!versiculos && (
@@ -235,6 +282,15 @@ function LeituraPage() {
         className="shrink-0 border-t border-black/5 bg-white px-[4.5rem] py-3"
         style={{ paddingBottom: "max(env(safe-area-inset-bottom), 0.75rem)" }}
       >
+        <div className="mx-auto mb-2 w-full max-w-md">
+          <button
+            onClick={pareiAqui}
+            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-black text-[14px] font-semibold text-white active:scale-[0.98] transition"
+          >
+            <Bookmark className="h-4 w-4 fill-[#f1f26c] text-[#f1f26c]" />
+            Parei aqui · versículo {versAtual}
+          </button>
+        </div>
         <div className="mx-auto flex w-full max-w-md items-center gap-2">
           <button
             onClick={irAnterior}

@@ -1,12 +1,14 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { ArrowLeft, BookOpen, ChevronRight, Bookmark } from "lucide-react";
+import { ArrowLeft, BookOpen, Check, ChevronRight, Bookmark } from "lucide-react";
 import { AppFooter } from "@/components/AppFooter";
 import { LIVROS_EVANGELHOS_CARTAS, LIVRO_APOCALIPSE } from "@/lib/biblia";
 import {
   formatarMarcador,
+  getLidos,
   getMarcador,
   getMarcadorManual,
+  type Lidos,
   type Marcador,
 } from "@/lib/biblia/marcador";
 
@@ -34,11 +36,15 @@ export const Route = createFileRoute("/biblia/")({
 function BibliaIndex() {
   const [auto, setAuto] = useState<Marcador | null>(null);
   const [manual, setManual] = useState<Marcador | null>(null);
+  const [lidos, setLidos] = useState<Lidos>({});
 
   useEffect(() => {
     setAuto(getMarcador());
     setManual(getMarcadorManual());
+    setLidos(getLidos());
   }, []);
+
+  const ondeParou = manual ?? auto;
 
   return (
     <div className="flex flex-col min-h-[100dvh] bg-white">
@@ -89,17 +95,13 @@ function BibliaIndex() {
           <ul className="flex flex-col gap-1.5">
             {LIVROS_EVANGELHOS_CARTAS.map((l) => (
               <li key={l.slug}>
-                <Link
-                  to="/biblia/$livro"
-                  params={{ livro: l.slug }}
-                  className="flex items-center justify-between rounded-2xl bg-black/[0.04] hover:bg-black/[0.07] active:scale-[0.99] transition-all px-4 py-3"
-                >
-                  <span className="text-[15px] text-black">{l.nome}</span>
-                  <span className="flex items-center gap-2 text-[11px] text-black/40">
-                    {l.capitulos} cap.
-                    <ChevronRight className="h-4 w-4" />
-                  </span>
-                </Link>
+                <LivroLinha
+                  slug={l.slug}
+                  nome={l.nome}
+                  capitulos={l.capitulos}
+                  lidos={(lidos[l.slug] ?? []).length}
+                  aqui={ondeParou?.livro === l.slug ? ondeParou.capitulo : null}
+                />
               </li>
             ))}
           </ul>
@@ -107,24 +109,72 @@ function BibliaIndex() {
           <h2 className="text-[10px] font-bold tracking-[0.3em] uppercase text-black/40 mt-8 mb-3">
             Profecia
           </h2>
-          <Link
-            to="/biblia/$livro"
-            params={{ livro: LIVRO_APOCALIPSE.slug }}
-            className="flex items-center justify-between rounded-2xl bg-[#f1f26c] active:scale-[0.99] transition-all px-4 py-4"
-          >
-            <span className="text-[15px] font-semibold text-black">
-              {LIVRO_APOCALIPSE.nome}
-            </span>
-            <span className="flex items-center gap-2 text-[11px] text-black/50">
-              {LIVRO_APOCALIPSE.capitulos} cap.
-              <ChevronRight className="h-4 w-4" />
-            </span>
-          </Link>
+          <LivroLinha
+            slug={LIVRO_APOCALIPSE.slug}
+            nome={LIVRO_APOCALIPSE.nome}
+            capitulos={LIVRO_APOCALIPSE.capitulos}
+            lidos={(lidos[LIVRO_APOCALIPSE.slug] ?? []).length}
+            aqui={ondeParou?.livro === LIVRO_APOCALIPSE.slug ? ondeParou.capitulo : null}
+            destaque
+          />
         </div>
       </main>
 
       <AppFooter />
     </div>
+  );
+}
+
+function LivroLinha({
+  slug,
+  nome,
+  capitulos,
+  lidos,
+  aqui,
+  destaque,
+}: {
+  slug: string;
+  nome: string;
+  capitulos: number;
+  lidos: number;
+  aqui: number | null;
+  destaque?: boolean;
+}) {
+  const completo = lidos >= capitulos;
+  const pct = Math.round((lidos / capitulos) * 100);
+  return (
+    <Link
+      to="/biblia/$livro"
+      params={{ livro: slug }}
+      className={`flex items-center gap-3 rounded-2xl active:scale-[0.99] transition-all px-4 py-3 ${
+        destaque ? "bg-[#f1f26c]" : "bg-black/[0.04] hover:bg-black/[0.07]"
+      }`}
+    >
+      <span className="flex-1 min-w-0">
+        <span className="flex items-center gap-2">
+          <span className={`text-[15px] text-black truncate ${destaque ? "font-semibold" : ""}`}>
+            {nome}
+          </span>
+          {completo && <Check className="h-3.5 w-3.5 shrink-0 text-black/60" />}
+          {aqui !== null && (
+            <span className="flex items-center gap-1 rounded-full bg-black px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider text-white shrink-0">
+              <Bookmark className="h-2.5 w-2.5 fill-[#f1f26c] text-[#f1f26c]" />
+              Cap. {aqui}
+            </span>
+          )}
+        </span>
+        <span className="mt-1.5 block h-1 w-full rounded-full bg-black/10">
+          <span
+            className="block h-1 rounded-full bg-black transition-all"
+            style={{ width: `${pct}%` }}
+          />
+        </span>
+      </span>
+      <span className="flex items-center gap-2 text-[11px] text-black/40 shrink-0">
+        {lidos}/{capitulos}
+        <ChevronRight className="h-4 w-4" />
+      </span>
+    </Link>
   );
 }
 

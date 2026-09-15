@@ -64,3 +64,61 @@ export function toggleMarcadorManual(m: Omit<Marcador, "at">): boolean {
 export function formatarMarcador(m: Marcador): string {
   return `${m.nome} ${m.capitulo} · versículo ${m.versiculo}`;
 }
+
+// ---------- Capítulos lidos ----------
+
+const KEY_LIDOS = "chosen_biblia_lidos";
+
+export type Lidos = Record<string, number[]>;
+
+export function getLidos(): Lidos {
+  if (typeof window === "undefined") return {};
+  try {
+    const raw = localStorage.getItem(KEY_LIDOS);
+    if (!raw) return {};
+    const obj = JSON.parse(raw);
+    return obj && typeof obj === "object" ? (obj as Lidos) : {};
+  } catch {
+    return {};
+  }
+}
+
+function gravarLidos(l: Lidos) {
+  if (typeof window === "undefined") return;
+  try {
+    localStorage.setItem(KEY_LIDOS, JSON.stringify(l));
+  } catch {}
+}
+
+export function getLidosDoLivro(livro: string): number[] {
+  return getLidos()[livro] ?? [];
+}
+
+export function isLido(livro: string, capitulo: number): boolean {
+  return getLidosDoLivro(livro).includes(capitulo);
+}
+
+export function setLido(livro: string, capitulo: number, lido: boolean) {
+  const todos = getLidos();
+  const atual = new Set(todos[livro] ?? []);
+  if (lido) atual.add(capitulo);
+  else atual.delete(capitulo);
+  const lista = Array.from(atual).sort((a, b) => a - b);
+  if (lista.length) todos[livro] = lista;
+  else delete todos[livro];
+  gravarLidos(todos);
+}
+
+export function toggleLido(livro: string, capitulo: number): boolean {
+  const novo = !isLido(livro, capitulo);
+  setLido(livro, capitulo, novo);
+  return novo;
+}
+
+export function contarLidos(livro: string): number {
+  return getLidosDoLivro(livro).length;
+}
+
+export function totalLidos(): number {
+  return Object.values(getLidos()).reduce((s, v) => s + v.length, 0);
+}
