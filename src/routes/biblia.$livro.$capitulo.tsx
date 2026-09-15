@@ -69,6 +69,9 @@ function LeituraPage() {
 
   useEffect(() => {
     setManual(getMarcadorManual());
+    setLidoState(isLido(livro.slug, cap));
+    setVersAtual(1);
+    setProgresso(0);
   }, [livro.slug, cap]);
 
   // Salva automaticamente o ponto de leitura enquanto a pessoa rola.
