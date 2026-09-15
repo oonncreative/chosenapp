@@ -87,75 +87,49 @@ function CapitulosPage() {
 
       <main className="flex-1 px-6 pb-28 pt-8">
         <div className="mx-auto w-full max-w-md">
-          <h1 className="text-[26px] font-light text-black tracking-tight">{livro.nome}</h1>
-          <p className="text-sm text-black/50 mt-1">
-            {livro.capitulos} {livro.capitulos === 1 ? "capítulo" : "capítulos"} ·{" "}
-            {lidos.length} {lidos.length === 1 ? "lido" : "lidos"}
-          </p>
-
-          <div className="mt-3 mb-5 h-1 w-full rounded-full bg-black/5">
-            <div
-              className="h-1 rounded-full bg-black transition-all duration-300"
-              style={{ width: `${pct}%` }}
-            />
+          <div className="rounded-3xl bg-[#f1f26c] px-5 py-5">
+            <p className="text-[10px] font-bold tracking-[0.3em] uppercase text-black/50">
+              Novo Testamento
+            </p>
+            <h1 className="mt-1 text-[30px] leading-none font-semibold text-black tracking-tight">
+              {livro.nome}
+            </h1>
+            <p className="text-[13px] text-black/60 mt-2">
+              {livro.capitulos} {livro.capitulos === 1 ? "capítulo" : "capítulos"} ·{" "}
+              {lidos.length} {lidos.length === 1 ? "lido" : "lidos"} · {pct}%
+            </p>
+            <div className="mt-3 h-1.5 w-full rounded-full bg-black/10">
+              <div
+                className="h-1.5 rounded-full bg-black transition-all duration-300"
+                style={{ width: `${pct}%` }}
+              />
+            </div>
           </div>
 
-          <p className="text-[11px] text-black/40 mb-3">
-            Toque no número para ler. Toque no quadradinho de cada capítulo para marcar como lido.
+          <p className="text-[11px] text-black/40 mt-5 mb-1">
+            Siga a trilha: toque no número para ler e no tique para marcar como lido.
           </p>
 
           {(lidos.length > 0 || ultimoCap !== null) && (
             <button
               onClick={reiniciar}
-              className="mb-4 flex h-9 items-center gap-1.5 rounded-full bg-black/[0.04] px-3 text-[12px] font-medium text-black/60 active:scale-[0.98] transition"
+              className="mb-2 flex h-9 items-center gap-1.5 rounded-full bg-black/[0.04] px-3 text-[12px] font-medium text-black/60 active:scale-[0.98] transition"
             >
               <RotateCcw className="h-3.5 w-3.5" />
               Reiniciar leitura deste livro
             </button>
           )}
 
-          <div className="grid grid-cols-4 gap-2">
-            {Array.from({ length: livro.capitulos }, (_, i) => i + 1).map((c) => {
-              const lido = lidos.includes(c);
-              const parou = ultimoCap === c;
-              return (
-                <div key={c} className="relative">
-                  <Link
-                    to="/biblia/$livro/$capitulo"
-                    params={{ livro: livro.slug, capitulo: String(c) }}
-                    className={`flex h-14 items-center justify-center rounded-xl text-[15px] tabular-nums transition-all active:scale-95 ${
-                      parou
-                        ? "bg-black text-white font-semibold"
-                        : lido
-                          ? "bg-[#f1f26c] text-black font-medium"
-                          : "bg-black/[0.04] text-black hover:bg-black/[0.08]"
-                    }`}
-                  >
-                    {c}
-                  </Link>
-                  {parou && (
-                    <Bookmark className="absolute -top-1 -left-1 h-4 w-4 fill-[#f1f26c] text-[#f1f26c]" />
-                  )}
-                  <button
-                    onClick={() => alternar(c)}
-                    aria-pressed={lido}
-                    aria-label={`Marcar capítulo ${c} como lido`}
-                    className={`absolute bottom-1 right-1 flex h-5 w-5 items-center justify-center rounded-md border transition ${
-                      lido
-                        ? "border-black bg-black text-white"
-                        : parou
-                          ? "border-white/40 text-white/60"
-                          : "border-black/15 text-transparent"
-                    }`}
-                  >
-                    <Check className="h-3 w-3" />
-                  </button>
-                </div>
-              );
-            })}
-          </div>
+          <TrilhaCapitulos
+            slug={livro.slug}
+            total={livro.capitulos}
+            lidos={lidos}
+            atual={atual}
+            onAlternar={alternar}
+          />
         </div>
       </main>
+
 
       <AppFooter />
     </div>
