@@ -121,11 +121,60 @@ function BibliaIndex() {
       </main>
 
       <AppFooter />
-        </div>
-      </main>
-
-      <AppFooter />
     </div>
+  );
+}
+
+function LivroLinha({
+  slug,
+  nome,
+  capitulos,
+  lidos,
+  aqui,
+  destaque,
+}: {
+  slug: string;
+  nome: string;
+  capitulos: number;
+  lidos: number;
+  aqui: number | null;
+  destaque?: boolean;
+}) {
+  const completo = lidos >= capitulos;
+  const pct = Math.round((lidos / capitulos) * 100);
+  return (
+    <Link
+      to="/biblia/$livro"
+      params={{ livro: slug }}
+      className={`flex items-center gap-3 rounded-2xl active:scale-[0.99] transition-all px-4 py-3 ${
+        destaque ? "bg-[#f1f26c]" : "bg-black/[0.04] hover:bg-black/[0.07]"
+      }`}
+    >
+      <span className="flex-1 min-w-0">
+        <span className="flex items-center gap-2">
+          <span className={`text-[15px] text-black truncate ${destaque ? "font-semibold" : ""}`}>
+            {nome}
+          </span>
+          {completo && <Check className="h-3.5 w-3.5 shrink-0 text-black/60" />}
+          {aqui !== null && (
+            <span className="flex items-center gap-1 rounded-full bg-black px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider text-white shrink-0">
+              <Bookmark className="h-2.5 w-2.5 fill-[#f1f26c] text-[#f1f26c]" />
+              Cap. {aqui}
+            </span>
+          )}
+        </span>
+        <span className="mt-1.5 block h-1 w-full rounded-full bg-black/10">
+          <span
+            className="block h-1 rounded-full bg-black transition-all"
+            style={{ width: `${pct}%` }}
+          />
+        </span>
+      </span>
+      <span className="flex items-center gap-2 text-[11px] text-black/40 shrink-0">
+        {lidos}/{capitulos}
+        <ChevronRight className="h-4 w-4" />
+      </span>
+    </Link>
   );
 }
 
