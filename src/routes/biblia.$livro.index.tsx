@@ -77,7 +77,7 @@ function CapitulosPage() {
   const atual = ultimoCap ?? primeiroNaoLido;
 
   return (
-    <div className="flex flex-col min-h-[100dvh] bg-white">
+    <div className="flex flex-col h-[100dvh] bg-white">
       <header className="grid grid-cols-3 items-center px-4 pt-[max(env(safe-area-inset-top),2rem)] pb-2 shrink-0">
         <Link
           to="/biblia"
