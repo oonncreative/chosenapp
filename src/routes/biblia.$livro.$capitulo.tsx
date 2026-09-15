@@ -51,6 +51,8 @@ function LeituraPage() {
   const [versiculos, setVersiculos] = useState<string[] | null>(null);
   const [manual, setManual] = useState<Marcador | null>(null);
   const [progresso, setProgresso] = useState(0);
+  const [versAtual, setVersAtual] = useState(1);
+  const [lido, setLidoState] = useState(false);
   const scrollRef = useRef<HTMLElement | null>(null);
 
   useEffect(() => {
