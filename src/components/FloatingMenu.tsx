@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate, useRouterState } from "@tanstack/react-router";
-import { Menu, RefreshCw, Sparkles, CalendarClock, Share2, HelpCircle, Trash2, Heart, Send, Smile, Shuffle, BellRing, Wind, Copy, Check, PlayCircle, Bell, Clock, BookOpen, HandHeart, Sun } from "lucide-react";
+import { Menu, Plus, RefreshCw, Sparkles, CalendarClock, Share2, HelpCircle, Trash2, Heart, Send, Smile, Shuffle, BellRing, Wind, Copy, Check, PlayCircle, Bell, Clock, BookOpen, HandHeart, Sun } from "lucide-react";
 import { toast } from "sonner";
 import {
   Sheet,
@@ -25,6 +25,7 @@ import { PSALMS, INVITATION_MESSAGES, NOTIFICATION_TITLES } from "@/lib/psalms";
 import { getFavorites, removeFavorite, type Favorite } from "@/lib/favorites";
 import { getRandomMensagemGlobal, getMensagemById, getProximaMensagem, CATEGORIAS, type Categoria } from "@/lib/data";
 import { buildShareUrl } from "@/lib/share";
+import { SMART_LINK } from "@/lib/storeLinks";
 import {
   getNotificationIntensity,
   setNotificationIntensity,
@@ -33,6 +34,8 @@ import {
 } from "@/lib/notificationPrefs";
 import { rescheduleNotifications } from "@/hooks/useNativeNotifications";
 import { isTimeThemeEnabled, setTimeThemeEnabled } from "@/lib/timeThemePrefs";
+import { getMarcador, getMarcadorManual, type Marcador as BibliaMarcador } from "@/lib/biblia/marcador";
+import { getLivro } from "@/lib/biblia";
 
 const SCHEDULED_KEY = "chosen_user_schedules";
 const PWA_SCHEDULE_BASE_ID = 50000;
@@ -178,15 +181,30 @@ export function FloatingMenu() {
 
   const handleCompartilhar = async () => {
     setOpen(false);
-    const url = "https://chosen.oonn.com.br";
+    const url = SMART_LINK;
     const text = `CHOSEN — Inspirações escolhidas pra cada momento do seu dia 💛\nBaixe e use também: ${url}`;
     try {
+      if (isCapacitor()) {
+        const { Share } = await import("@capacitor/share");
+        await Share.share({ title: "Chosen", text, url, dialogTitle: "Compartilhar" });
+        return;
+      }
+      if (typeof navigator !== "undefined" && navigator.share) {
+        await navigator.share({ title: "Chosen", text, url });
+        return;
+      }
       await navigator.clipboard.writeText(text);
       toast("Link copiado!", {
         description: "Cole onde quiser compartilhar 💛",
       });
-    } catch {
-      toast.error("Não foi possível copiar", { description: url });
+    } catch (e) {
+      if ((e as Error)?.name === "AbortError") return;
+      try {
+        await navigator.clipboard.writeText(text);
+        toast("Link copiado!", { description: "Cole onde quiser compartilhar 💛" });
+      } catch {
+        toast.error("Não foi possível compartilhar", { description: url });
+      }
     }
   };
 
@@ -212,16 +230,9 @@ export function FloatingMenu() {
 
   return (
     <>
-      <button
-        onClick={() => navigate({ to: "/converse" })}
-        aria-label="Fale com o Chosen (IA)"
-        className="fixed z-40 bottom-[max(env(safe-area-inset-bottom),0.5rem)] left-4 mb-9 w-12 h-12 rounded-full bg-[#f1f26c] text-black shadow-lg flex items-center justify-center active:scale-95 transition-transform"
-      >
-        <Sparkles className="h-5 w-5" strokeWidth={2.25} />
-        <span className="absolute -top-1 -right-1 bg-black text-[#f1f26c] text-[9px] font-bold tracking-wider px-1.5 py-0.5 rounded-full leading-none">
-          IA
-        </span>
-      </button>
+      <QuickActions />
+
+
 
 
       <button
@@ -245,6 +256,11 @@ export function FloatingMenu() {
           </SheetHeader>
 
           <div className="mt-2 flex flex-col">
+            <MenuItem
+              icon={<BookOpen className="h-5 w-5" />}
+              label="Bíblia — Novo Testamento"
+              onClick={() => { setOpen(false); navigate({ to: "/biblia" }); }}
+            />
             <MenuItem icon={<Sparkles className="h-5 w-5" />} label="Orações" onClick={handleOracoes} />
             <MenuItem
               icon={<HandHeart className="h-5 w-5" />}
@@ -722,6 +738,7 @@ function HelpDialog({
   const features = [
     { icon: <Smile className="h-4 w-4" />, title: "Check-in de humor", desc: "Escolha como você está e receba a palavra certa." },
     { icon: <Shuffle className="h-4 w-4" />, title: "Aleatório", desc: "Um salmo ou uma motivação a qualquer hora." },
+    { icon: <BookOpen className="h-4 w-4" />, title: "Bíblia — Novo Testamento", desc: "Mateus a Judas e Apocalipse, com marcador de onde você parou." },
     { icon: <Sparkles className="h-4 w-4" />, title: "Orações", desc: "Guia ACTS + orações para cada momento do dia." },
     { icon: <Wind className="h-4 w-4" />, title: "Palavra de silêncio", desc: "Um instante calmo para respirar e ouvir." },
     { icon: <Heart className="h-4 w-4" />, title: "Minhas escolhidas", desc: "Suas favoritas e histórico, disponíveis offline." },
@@ -1056,3 +1073,85 @@ function SendDialog({
     </Dialog>
   );
 }
+function QuickActions() {
+  const navigate = useNavigate();
+  const [open, setOpen] = useState(false);
+  const [marcador, setMarcador] = useState<BibliaMarcador | null>(null);
+
+  const lerMarcador = () => setMarcador(getMarcadorManual() ?? getMarcador());
+
+  useEffect(() => {
+    lerMarcador();
+    const onFocus = () => lerMarcador();
+    window.addEventListener("focus", onFocus);
+    window.addEventListener("storage", onFocus);
+    return () => {
+      window.removeEventListener("focus", onFocus);
+      window.removeEventListener("storage", onFocus);
+    };
+  }, []);
+
+  const abrev = marcador ? (getLivro(marcador.livro)?.abrev ?? marcador.nome) : null;
+
+  const irBiblia = () => {
+    setOpen(false);
+    if (marcador) {
+      navigate({
+        to: "/biblia/$livro/$capitulo",
+        params: { livro: marcador.livro, capitulo: String(marcador.capitulo) },
+        hash: `v${marcador.versiculo}`,
+      });
+    } else {
+      navigate({ to: "/biblia" });
+    }
+  };
+
+  return (
+    <div className="fixed z-40 bottom-[max(env(safe-area-inset-bottom),0.5rem)] left-4 mb-9 flex flex-col-reverse items-start gap-2">
+      <button
+        onClick={() => {
+          lerMarcador();
+          setOpen((v) => !v);
+        }}
+        aria-label={open ? "Fechar atalhos" : "Abrir atalhos"}
+        aria-expanded={open}
+        className="relative w-12 h-12 shrink-0 rounded-full bg-[#f1f26c] text-black shadow-lg flex items-center justify-center active:scale-95 transition-transform"
+      >
+        <Plus
+          className={`h-5 w-5 transition-transform duration-200 ${open ? "rotate-45" : ""}`}
+          strokeWidth={2.25}
+        />
+      </button>
+
+      <div
+        className={`flex flex-col-reverse items-start gap-2 transition-all duration-200 ${
+          open ? "opacity-100 translate-y-0" : "pointer-events-none opacity-0 translate-y-2"
+        }`}
+      >
+        <button
+          onClick={irBiblia}
+          aria-label="Bíblia — Novo Testamento"
+          className="h-12 pl-3 pr-4 rounded-full bg-[#f1f26c] text-black shadow-lg flex items-center gap-2 active:scale-95 transition-transform"
+        >
+          <BookOpen className="h-5 w-5" strokeWidth={2.25} />
+          <span className="text-[13px] font-medium leading-none">
+            {abrev ? `${abrev} ${marcador!.capitulo}` : "Bíblia"}
+          </span>
+        </button>
+
+        <button
+          onClick={() => {
+            setOpen(false);
+            navigate({ to: "/converse" });
+          }}
+          aria-label="Fale com o Chosen (IA)"
+          className="h-12 px-4 rounded-full bg-[#f1f26c] text-black shadow-lg flex items-center gap-2 active:scale-95 transition-transform"
+        >
+          <Sparkles className="h-5 w-5" strokeWidth={2.25} />
+          <span className="text-[13px] font-bold leading-none tracking-wider">IA</span>
+        </button>
+      </div>
+    </div>
+  );
+}
+

@@ -291,17 +291,24 @@ function ListView({ navigate }: { navigate: NavFn }) {
   return (
     <section className="flex-1 min-h-0 overflow-y-auto no-scrollbar px-4 sm:px-6 pb-6 pt-2">
       <div className="flex flex-col gap-3 w-full">
-        {CATEGORIAS.map((sentimento) => (
+        {CATEGORIAS.map((sentimento, i) => (
           <Link
             key={sentimento}
             to="/mensagem/$sentimento"
             params={{ sentimento }}
             search={{ color: "#f1f26c", id: getRandomIdForCategoria(sentimento) }}
             onClick={() => { void triggerHaptic(); }}
-            className="group relative flex items-center gap-3 sm:gap-4 min-h-[88px] px-4 sm:px-5 py-4 transition-all active:scale-[0.98] rounded-[28px] bg-white hover:-translate-y-0.5 w-full"
+            className="group relative flex items-center gap-3 sm:gap-4 min-h-[100px] px-4 sm:px-5 py-4 transition-all active:scale-[0.98] rounded-[28px] bg-white hover:-translate-y-0.5 w-full mascote-enter"
+            style={{ animationDelay: `${Math.min(i, 9) * 55}ms` }}
           >
-            <div className="shrink-0 w-14 h-14 sm:w-16 sm:h-16 flex items-center justify-center">
-              <img src={MASCOTES[sentimento]} alt={sentimento} className="w-full h-full object-contain" loading="lazy" />
+            <div className="mascote-wrap shrink-0 w-[4.75rem] h-[4.75rem] sm:w-[5.25rem] sm:h-[5.25rem] flex items-center justify-center">
+              <img
+                src={MASCOTES[sentimento]}
+                alt={sentimento}
+                className="mascote-anim w-full h-full object-contain"
+                style={{ animationDelay: `${(i % 5) * 400}ms` }}
+                loading="lazy"
+              />
             </div>
             <span className="flex-1 min-w-0 text-base sm:text-lg font-medium tracking-tight uppercase text-black truncate">{sentimento}</span>
             <div className="shrink-0 opacity-40 group-hover:opacity-100 transition-opacity text-black">
@@ -367,8 +374,12 @@ function SwipeView({ navigate }: { navigate: NavFn }) {
                 onClick={() => offset === 0 && goTo(navigate, sentimento)}
                 className="w-full h-full rounded-[32px] bg-white flex flex-col items-center justify-center gap-4 sm:gap-6 p-6 sm:p-8 active:scale-[0.98] transition-transform"
               >
-                <div className="w-[40vw] max-w-40 aspect-square flex items-center justify-center">
-                  <img src={MASCOTES[sentimento]} alt={sentimento} className="w-full h-full object-contain" />
+                <div className="mascote-wrap w-[52vw] max-w-52 aspect-square flex items-center justify-center">
+                  <img
+                    src={MASCOTES[sentimento]}
+                    alt={sentimento}
+                    className={`w-full h-full object-contain ${offset === 0 ? "mascote-anim" : ""}`}
+                  />
                 </div>
                 <span className="text-xl sm:text-2xl font-medium tracking-tight uppercase text-black text-center break-words">{sentimento}</span>
               </button>

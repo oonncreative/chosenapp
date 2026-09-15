@@ -6,7 +6,7 @@ import { toast } from "sonner";
 import { converseChosen, type RespostaConversa } from "@/lib/converse.functions";
 import { toggleFavorite } from "@/lib/favorites";
 
-const DAILY_LIMIT = 2;
+const DAILY_LIMIT = 1;
 const USAGE_KEY = "chosen_converse_usage_v2";
 const HISTORY_KEY = "chosen_converse_history_v1";
 const HISTORY_TTL_MS = 24 * 60 * 60 * 1000;
@@ -179,7 +179,7 @@ function ConversePage() {
       return;
     }
     if (semSaldo) {
-      toast.error("Você já usou suas 5 conversas de hoje", {
+      toast.error("Você já usou sua conversa de hoje", {
         description: "Volte amanhã. Enquanto isso, escolha um sentimento na home.",
       });
       return;
@@ -293,7 +293,7 @@ function ConversePage() {
                       Libera em {formatCountdown(msRestantes)}
                     </span>
                   ) : (
-                    `${restantes} de ${DAILY_LIMIT} conversas por dia`
+                    `${restantes} de ${DAILY_LIMIT} conversa por dia`
                   )}
                 </span>
                 <span>{texto.length}/1000</span>
@@ -309,7 +309,7 @@ function ConversePage() {
               </button>
 
               <p className="mt-3 text-center text-[10px] text-gray-400 leading-relaxed">
-                Limite de 2 conversas por dia · até 1000 caracteres por mensagem
+                Limite de 1 conversa por dia · até 1000 caracteres por mensagem
               </p>
 
               {historico.length > 0 && (
