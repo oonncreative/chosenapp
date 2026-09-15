@@ -324,13 +324,14 @@ function LeituraPage() {
               {versiculos.map((texto, i) => {
                 const n = i + 1;
                 const ativo = marcado(n);
+                const sel = selecionados.includes(n);
                 return (
                   <li
                     key={n}
                     id={`v${n}`}
                     data-versiculo={n}
                     className={`flex items-start gap-3 rounded-xl -mx-2 px-2 py-1 transition-colors ${
-                      ativo ? "bg-[#f1f26c]/50" : ""
+                      sel ? "bg-[#f1f26c]" : ativo ? "bg-[#f1f26c]/50" : ""
                     }`}
                   >
                     <button
@@ -340,7 +341,21 @@ function LeituraPage() {
                     >
                       {ativo ? <Bookmark className="h-3.5 w-3.5 fill-black text-black" /> : n}
                     </button>
-                    <p className="text-[16px] leading-relaxed text-black font-light">{texto}</p>
+                    <button
+                      onClick={() => alternarSelecao(n)}
+                      aria-pressed={sel}
+                      aria-label={`Selecionar ${livro.nome} ${cap}:${n} para compartilhar`}
+                      className="flex-1 text-left"
+                    >
+                      <span className="block text-[16px] leading-relaxed text-black font-light">
+                        {texto}
+                      </span>
+                      {sel && (
+                        <span className="mt-1 block text-[10px] font-semibold uppercase tracking-wider text-black/50">
+                          {livro.nome} {cap}:{n}
+                        </span>
+                      )}
+                    </button>
                   </li>
                 );
               })}
