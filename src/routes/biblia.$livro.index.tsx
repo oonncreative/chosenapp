@@ -41,12 +41,22 @@ export const Route = createFileRoute("/biblia/$livro/")({
 function CapitulosPage() {
   const livro = Route.useLoaderData();
   const [ultimoCap, setUltimoCap] = useState<number | null>(null);
+  const [lidos, setLidos] = useState<number[]>([]);
 
   useEffect(() => {
     const m = getMarcadorManual() ?? getMarcador();
     if (m && m.livro === livro.slug) setUltimoCap(m.capitulo);
     else setUltimoCap(null);
+    setLidos(getLidosDoLivro(livro.slug));
   }, [livro.slug]);
+
+  const alternar = (c: number) => {
+    const novo = !lidos.includes(c);
+    setLido(livro.slug, c, novo);
+    setLidos(getLidosDoLivro(livro.slug));
+  };
+
+  const pct = Math.round((lidos.length / livro.capitulos) * 100);
 
   return (
     <div className="flex flex-col min-h-[100dvh] bg-white">
