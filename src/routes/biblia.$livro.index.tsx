@@ -77,7 +77,7 @@ function CapitulosPage() {
   const atual = ultimoCap ?? primeiroNaoLido;
 
   return (
-    <div className="flex flex-col min-h-[100dvh] bg-white">
+    <div className="flex flex-col h-[100dvh] bg-white">
       <header className="grid grid-cols-3 items-center px-4 pt-[max(env(safe-area-inset-top),2rem)] pb-2 shrink-0">
         <Link
           to="/biblia"
@@ -92,7 +92,7 @@ function CapitulosPage() {
         <span />
       </header>
 
-      <main className="flex-1 px-6 pb-28 pt-8">
+      <main className="flex-1 min-h-0 overflow-y-auto overscroll-contain px-6 pb-28 pt-8">
         <div className="mx-auto w-full max-w-md">
           <div className="rounded-3xl bg-[#f1f26c] px-5 py-5">
             <p className="text-[10px] font-bold tracking-[0.3em] uppercase text-black/50">
