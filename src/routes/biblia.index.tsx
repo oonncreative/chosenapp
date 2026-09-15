@@ -96,7 +96,7 @@ function BibliaIndex() {
           </p>
 
           {(manual || auto) && (
-            <div className="flex flex-col gap-2 mb-8">
+            <div className="flex flex-col gap-2 mb-3">
               {manual && (
                 <ContinuarCard
                   titulo="Você marcou aqui"
@@ -107,6 +107,27 @@ function BibliaIndex() {
               {auto && (!manual || manual.livro !== auto.livro || manual.capitulo !== auto.capitulo) && (
                 <ContinuarCard titulo="Continuar de onde parei" marcador={auto} />
               )}
+            </div>
+          )}
+
+          {(manual || auto || temLidos) && (
+            <div className="mb-8 flex flex-wrap gap-2">
+              {(manual || auto) && (
+                <button
+                  onClick={desmarcar}
+                  className="flex h-9 items-center gap-1.5 rounded-full bg-black/[0.04] px-3 text-[12px] font-medium text-black/60 active:scale-[0.98] transition"
+                >
+                  <BookmarkX className="h-3.5 w-3.5" />
+                  Desmarcar
+                </button>
+              )}
+              <button
+                onClick={reiniciar}
+                className="flex h-9 items-center gap-1.5 rounded-full bg-black/[0.04] px-3 text-[12px] font-medium text-black/60 active:scale-[0.98] transition"
+              >
+                <RotateCcw className="h-3.5 w-3.5" />
+                Reiniciar tudo
+              </button>
             </div>
           )}
 
