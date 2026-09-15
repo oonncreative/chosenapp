@@ -70,6 +70,12 @@ function CapitulosPage() {
 
   const pct = Math.round((lidos.length / livro.capitulos) * 100);
 
+  // Onde o mascote fica: marcador, senão o primeiro capítulo ainda não lido.
+  const primeiroNaoLido =
+    Array.from({ length: livro.capitulos }, (_, i) => i + 1).find((c) => !lidos.includes(c)) ??
+    livro.capitulos;
+  const atual = ultimoCap ?? primeiroNaoLido;
+
   return (
     <div className="flex flex-col min-h-[100dvh] bg-white">
       <header className="grid grid-cols-3 items-center px-4 pt-[max(env(safe-area-inset-top),2rem)] pb-2 shrink-0">
