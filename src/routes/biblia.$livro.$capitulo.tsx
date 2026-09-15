@@ -219,6 +219,36 @@ function LeituraPage() {
     );
   };
 
+  const desmarcarMarcador = () => {
+    limparMarcadores();
+    setManual(null);
+    toast("Marcador removido");
+  };
+
+  const alternarSelecao = (n: number) => {
+    setSelecionados((s) => (s.includes(n) ? s.filter((v) => v !== n) : [...s, n].sort((a, b) => a - b)));
+  };
+
+  const referenciaSelecao = useMemo(
+    () => (selecionados.length ? montarReferencia(livro.nome, cap, selecionados) : ""),
+    [selecionados, livro.nome, cap],
+  );
+
+  const mensagemSelecao = useMemo(() => {
+    if (!versiculos || selecionados.length === 0) return null;
+    const texto = [...selecionados]
+      .sort((a, b) => a - b)
+      .map((n) => versiculos[n - 1])
+      .filter(Boolean)
+      .join(" ");
+    return {
+      id: `biblia-${livro.slug}-${cap}-${selecionados.join("-")}`,
+      texto,
+      referencia: referenciaSelecao,
+      tipo: "versiculo" as const,
+    };
+  }, [versiculos, selecionados, referenciaSelecao, livro.slug, cap]);
+
   return (
     <div className="flex flex-col h-[100dvh] bg-white">
       <header className="shrink-0 px-4 pt-[max(env(safe-area-inset-top),2rem)] pb-2">
