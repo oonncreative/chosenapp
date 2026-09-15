@@ -142,3 +142,151 @@ function CapitulosPage() {
     </div>
   );
 }
+
+// Trilha em zigue-zague: cada capítulo é uma parada do caminho e o mascote
+// caminha até onde a pessoa está.
+function TrilhaCapitulos({
+  slug,
+  total,
+  lidos,
+  atual,
+  onAlternar,
+}: {
+  slug: string;
+  total: number;
+  lidos: number[];
+  atual: number;
+  onAlternar: (c: number) => void;
+}) {
+  const navigate = useNavigate();
+  const COLS = 4;
+  const W = 320;
+  const ROW_H = 88;
+  const TOP = 64;
+  const linhas = Math.ceil(total / COLS);
+  const H = TOP + (linhas - 1) * ROW_H + 60;
+
+  const pontos = Array.from({ length: total }, (_, i) => {
+    const cap = i + 1;
+    const linha = Math.floor(i / COLS);
+    const idx = i % COLS;
+    const col = linha % 2 === 0 ? idx : COLS - 1 - idx;
+    return { cap, x: 40 + col * 80, y: TOP + linha * ROW_H };
+  });
+
+  const d = pontos.map((p, i) => `${i === 0 ? "M" : "L"} ${p.x} ${p.y}`).join(" ");
+  const lidosSet = new Set(lidos);
+  const ultimoLidoIdx = pontos.reduce((acc, p, i) => (lidosSet.has(p.cap) ? i : acc), -1);
+  const dFeito =
+    ultimoLidoIdx >= 0
+      ? pontos
+          .slice(0, ultimoLidoIdx + 1)
+          .map((p, i) => `${i === 0 ? "M" : "L"} ${p.x} ${p.y}`)
+          .join(" ")
+      : "";
+
+  return (
+    <svg
+      viewBox={`0 0 ${W} ${H}`}
+      className="w-full"
+      role="list"
+      aria-label="Trilha de capítulos"
+    >
+      <path
+        d={d}
+        fill="none"
+        stroke="currentColor"
+        className="text-black/10"
+        strokeWidth={6}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeDasharray="1 14"
+      />
+      {dFeito && (
+        <path
+          d={dFeito}
+          fill="none"
+          stroke="currentColor"
+          className="text-black/70"
+          strokeWidth={6}
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeDasharray="1 14"
+        />
+      )}
+
+      {pontos.map((p) => {
+        const lido = lidosSet.has(p.cap);
+        const aqui = p.cap === atual;
+        const fill = aqui ? "#000000" : lido ? "#f1f26c" : "#f2f2f2";
+        const texto = aqui ? "#ffffff" : "#000000";
+        return (
+          <g key={p.cap} role="listitem">
+            {aqui && (
+              <circle cx={p.x} cy={p.y} r={30} fill="none" stroke="#f1f26c" strokeWidth={3} />
+            )}
+            <g
+              onClick={() =>
+                navigate({
+                  to: "/biblia/$livro/$capitulo",
+                  params: { livro: slug, capitulo: String(p.cap) },
+                })
+              }
+              className="cursor-pointer"
+            >
+              <circle cx={p.x} cy={p.y} r={24} fill={fill} />
+              <text
+                x={p.x}
+                y={p.y + 6}
+                textAnchor="middle"
+                fontSize={16}
+                fontWeight={aqui ? 700 : 500}
+                fill={texto}
+              >
+                {p.cap}
+              </text>
+            </g>
+
+            <g
+              onClick={(e) => {
+                e.stopPropagation();
+                onAlternar(p.cap);
+              }}
+              className="cursor-pointer"
+              role="button"
+              aria-label={`Marcar capítulo ${p.cap} como lido`}
+            >
+              <circle
+                cx={p.x + 19}
+                cy={p.y - 19}
+                r={10}
+                fill={lido ? "#000000" : "#ffffff"}
+                stroke={lido ? "#000000" : "rgba(0,0,0,0.15)"}
+                strokeWidth={1.5}
+              />
+              <path
+                d={`M ${p.x + 14.5} ${p.y - 19} l 3 3 l 5.5 -5.5`}
+                fill="none"
+                stroke={lido ? "#ffffff" : "rgba(0,0,0,0.2)"}
+                strokeWidth={2}
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </g>
+
+            {aqui && (
+              <image
+                href={mascote.url}
+                x={p.x - 24}
+                y={p.y - 78}
+                width={48}
+                height={48}
+                preserveAspectRatio="xMidYMid meet"
+              />
+            )}
+          </g>
+        );
+      })}
+    </svg>
+  );
+}
