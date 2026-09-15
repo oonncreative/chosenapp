@@ -1,9 +1,10 @@
-import { createFileRoute, Link, notFound } from "@tanstack/react-router";
+import { createFileRoute, Link, notFound, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { ArrowLeft, Bookmark, Check, RotateCcw } from "lucide-react";
+import { ArrowLeft, RotateCcw } from "lucide-react";
 import { toast } from "sonner";
 import { AppFooter } from "@/components/AppFooter";
 import { getLivro } from "@/lib/biblia";
+import mascote from "@/assets/mascotes/mascote-1.png.asset.json";
 import {
   getLidosDoLivro,
   getMarcador,
