@@ -31,6 +31,7 @@ import { Route as PPayloadRouteImport } from './routes/p.$payload'
 import { Route as MeutempoLerRouteImport } from './routes/meutempo.ler'
 import { Route as MensagemSentimentoRouteImport } from './routes/mensagem/$sentimento'
 import { Route as AtalhoAcaoRouteImport } from './routes/atalho.$acao'
+import { Route as AdminPushRouteImport } from './routes/admin.push'
 import { Route as BibliaLivroIndexRouteImport } from './routes/biblia.$livro.index'
 import { Route as BibliaLivroCapituloRouteImport } from './routes/biblia.$livro.$capitulo'
 import { Route as ApiPublicWidgetMessagesRouteImport } from './routes/api/public/widget-messages'
@@ -145,6 +146,11 @@ const AtalhoAcaoRoute = AtalhoAcaoRouteImport.update({
   path: '/atalho/$acao',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminPushRoute = AdminPushRouteImport.update({
+  id: '/push',
+  path: '/push',
+  getParentRoute: () => AdminRoute,
+} as any)
 const BibliaLivroIndexRoute = BibliaLivroIndexRouteImport.update({
   id: '/$livro/',
   path: '/$livro/',
@@ -177,6 +183,7 @@ export interface FileRoutesByFullPath {
   '/privacy': typeof PrivacyRoute
   '/silencio': typeof SilencioRoute
   '/terms': typeof TermsRoute
+  '/admin/push': typeof AdminPushRoute
   '/atalho/$acao': typeof AtalhoAcaoRoute
   '/mensagem/$sentimento': typeof MensagemSentimentoRoute
   '/meutempo/ler': typeof MeutempoLerRoute
@@ -201,6 +208,7 @@ export interface FileRoutesByTo {
   '/privacy': typeof PrivacyRoute
   '/silencio': typeof SilencioRoute
   '/terms': typeof TermsRoute
+  '/admin/push': typeof AdminPushRoute
   '/atalho/$acao': typeof AtalhoAcaoRoute
   '/mensagem/$sentimento': typeof MensagemSentimentoRoute
   '/meutempo/ler': typeof MeutempoLerRoute
@@ -229,6 +237,7 @@ export interface FileRoutesById {
   '/privacy': typeof PrivacyRoute
   '/silencio': typeof SilencioRoute
   '/terms': typeof TermsRoute
+  '/admin/push': typeof AdminPushRoute
   '/atalho/$acao': typeof AtalhoAcaoRoute
   '/mensagem/$sentimento': typeof MensagemSentimentoRoute
   '/meutempo/ler': typeof MeutempoLerRoute
@@ -258,6 +267,7 @@ export interface FileRouteTypes {
     | '/privacy'
     | '/silencio'
     | '/terms'
+    | '/admin/push'
     | '/atalho/$acao'
     | '/mensagem/$sentimento'
     | '/meutempo/ler'
@@ -282,6 +292,7 @@ export interface FileRouteTypes {
     | '/privacy'
     | '/silencio'
     | '/terms'
+    | '/admin/push'
     | '/atalho/$acao'
     | '/mensagem/$sentimento'
     | '/meutempo/ler'
@@ -309,6 +320,7 @@ export interface FileRouteTypes {
     | '/privacy'
     | '/silencio'
     | '/terms'
+    | '/admin/push'
     | '/atalho/$acao'
     | '/mensagem/$sentimento'
     | '/meutempo/ler'
@@ -499,6 +511,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AtalhoAcaoRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/push': {
+      id: '/admin/push'
+      path: '/push'
+      fullPath: '/admin/push'
+      preLoaderRoute: typeof AdminPushRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/biblia/$livro/': {
       id: '/biblia/$livro/'
       path: '/$livro'
@@ -524,10 +543,12 @@ declare module '@tanstack/react-router' {
 }
 
 interface AdminRouteChildren {
+  AdminPushRoute: typeof AdminPushRoute
   AdminIndexRoute: typeof AdminIndexRoute
 }
 
 const AdminRouteChildren: AdminRouteChildren = {
+  AdminPushRoute: AdminPushRoute,
   AdminIndexRoute: AdminIndexRoute,
 }
 
