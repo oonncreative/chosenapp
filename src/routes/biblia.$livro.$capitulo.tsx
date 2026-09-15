@@ -289,10 +289,23 @@ function LeituraPage() {
           <h1 className="text-[26px] font-light text-black tracking-tight mb-1">
             {livro.nome} {cap}
           </h1>
-          <p className="text-[11px] text-black/40 mb-6">
-            Toque no número do versículo, ou use o botão “Parei aqui” lá embaixo. Fica salvo no seu
-            celular.
+          <p className="text-[11px] text-black/40 mb-1">
+            Texto completo · Almeida Atualizada
           </p>
+          <p className="text-[11px] text-black/40 mb-3">
+            Toque no número do versículo para marcar onde parou. Toque no texto para selecionar e
+            compartilhar (ex.: {livro.nome} {cap}:1).
+          </p>
+
+          {manual && manual.livro === livro.slug && manual.capitulo === cap && (
+            <button
+              onClick={desmarcarMarcador}
+              className="mb-4 flex h-9 items-center gap-1.5 rounded-full bg-black/[0.04] px-3 text-[12px] font-medium text-black/60 active:scale-[0.98] transition"
+            >
+              <BookmarkX className="h-3.5 w-3.5" />
+              Desmarcar “parei aqui”
+            </button>
+          )}
 
           {!versiculos && (
             <div className="flex flex-col gap-3 pt-4">
