@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "629975239900",
+    "project_id": "chosen-app-fbf25",
+    "storage_bucket": "chosen-app-fbf25.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:629975239900:android:ce9491267a088dfcfff819",
+        "android_client_info": {
+          "package_name": "com.oonn.chosen"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCWZhMMMWIFT0nUlYP5AB415LqmAcUWZ5c"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
