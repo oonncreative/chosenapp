@@ -78,6 +78,8 @@ function LeituraPage() {
   const [progresso, setProgresso] = useState(0);
   const [versAtual, setVersAtual] = useState(1);
   const [lido, setLidoState] = useState(false);
+  const [selecionados, setSelecionados] = useState<number[]>([]);
+  const [shareOpen, setShareOpen] = useState(false);
   const scrollRef = useRef<HTMLElement | null>(null);
 
   useEffect(() => {
