@@ -36,11 +36,15 @@ export const Route = createFileRoute("/biblia/")({
 function BibliaIndex() {
   const [auto, setAuto] = useState<Marcador | null>(null);
   const [manual, setManual] = useState<Marcador | null>(null);
+  const [lidos, setLidos] = useState<Lidos>({});
 
   useEffect(() => {
     setAuto(getMarcador());
     setManual(getMarcadorManual());
+    setLidos(getLidos());
   }, []);
+
+  const ondeParou = manual ?? auto;
 
   return (
     <div className="flex flex-col min-h-[100dvh] bg-white">
