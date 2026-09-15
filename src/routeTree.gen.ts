@@ -22,9 +22,11 @@ import { Route as DevocionalRouteImport } from './routes/devocional'
 import { Route as ConverseRouteImport } from './routes/converse'
 import { Route as BibliaRouteImport } from './routes/biblia'
 import { Route as BaixarRouteImport } from './routes/baixar'
+import { Route as AdminRouteImport } from './routes/admin'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as MeutempoIndexRouteImport } from './routes/meutempo.index'
 import { Route as BibliaIndexRouteImport } from './routes/biblia.index'
+import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as PPayloadRouteImport } from './routes/p.$payload'
 import { Route as MeutempoLerRouteImport } from './routes/meutempo.ler'
 import { Route as MensagemSentimentoRouteImport } from './routes/mensagem/$sentimento'
@@ -98,6 +100,11 @@ const BaixarRoute = BaixarRouteImport.update({
   path: '/baixar',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminRoute = AdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -112,6 +119,11 @@ const BibliaIndexRoute = BibliaIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => BibliaRoute,
+} as any)
+const AdminIndexRoute = AdminIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AdminRoute,
 } as any)
 const PPayloadRoute = PPayloadRouteImport.update({
   id: '/p/$payload',
@@ -151,6 +163,7 @@ const ApiPublicWidgetMessagesRoute = ApiPublicWidgetMessagesRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/admin': typeof AdminRouteWithChildren
   '/baixar': typeof BaixarRoute
   '/biblia': typeof BibliaRouteWithChildren
   '/converse': typeof ConverseRoute
@@ -168,6 +181,7 @@ export interface FileRoutesByFullPath {
   '/mensagem/$sentimento': typeof MensagemSentimentoRoute
   '/meutempo/ler': typeof MeutempoLerRoute
   '/p/$payload': typeof PPayloadRoute
+  '/admin/': typeof AdminIndexRoute
   '/biblia/': typeof BibliaIndexRoute
   '/meutempo/': typeof MeutempoIndexRoute
   '/api/public/widget-messages': typeof ApiPublicWidgetMessagesRoute
@@ -191,6 +205,7 @@ export interface FileRoutesByTo {
   '/mensagem/$sentimento': typeof MensagemSentimentoRoute
   '/meutempo/ler': typeof MeutempoLerRoute
   '/p/$payload': typeof PPayloadRoute
+  '/admin': typeof AdminIndexRoute
   '/biblia': typeof BibliaIndexRoute
   '/meutempo': typeof MeutempoIndexRoute
   '/api/public/widget-messages': typeof ApiPublicWidgetMessagesRoute
@@ -200,6 +215,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/admin': typeof AdminRouteWithChildren
   '/baixar': typeof BaixarRoute
   '/biblia': typeof BibliaRouteWithChildren
   '/converse': typeof ConverseRoute
@@ -217,6 +233,7 @@ export interface FileRoutesById {
   '/mensagem/$sentimento': typeof MensagemSentimentoRoute
   '/meutempo/ler': typeof MeutempoLerRoute
   '/p/$payload': typeof PPayloadRoute
+  '/admin/': typeof AdminIndexRoute
   '/biblia/': typeof BibliaIndexRoute
   '/meutempo/': typeof MeutempoIndexRoute
   '/api/public/widget-messages': typeof ApiPublicWidgetMessagesRoute
@@ -227,6 +244,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/admin'
     | '/baixar'
     | '/biblia'
     | '/converse'
@@ -244,6 +262,7 @@ export interface FileRouteTypes {
     | '/mensagem/$sentimento'
     | '/meutempo/ler'
     | '/p/$payload'
+    | '/admin/'
     | '/biblia/'
     | '/meutempo/'
     | '/api/public/widget-messages'
@@ -267,6 +286,7 @@ export interface FileRouteTypes {
     | '/mensagem/$sentimento'
     | '/meutempo/ler'
     | '/p/$payload'
+    | '/admin'
     | '/biblia'
     | '/meutempo'
     | '/api/public/widget-messages'
@@ -275,6 +295,7 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/admin'
     | '/baixar'
     | '/biblia'
     | '/converse'
@@ -292,6 +313,7 @@ export interface FileRouteTypes {
     | '/mensagem/$sentimento'
     | '/meutempo/ler'
     | '/p/$payload'
+    | '/admin/'
     | '/biblia/'
     | '/meutempo/'
     | '/api/public/widget-messages'
@@ -301,6 +323,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AdminRoute: typeof AdminRouteWithChildren
   BaixarRoute: typeof BaixarRoute
   BibliaRoute: typeof BibliaRouteWithChildren
   ConverseRoute: typeof ConverseRoute
@@ -413,6 +436,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BaixarRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin': {
+      id: '/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -433,6 +463,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/biblia/'
       preLoaderRoute: typeof BibliaIndexRouteImport
       parentRoute: typeof BibliaRoute
+    }
+    '/admin/': {
+      id: '/admin/'
+      path: '/'
+      fullPath: '/admin/'
+      preLoaderRoute: typeof AdminIndexRouteImport
+      parentRoute: typeof AdminRoute
     }
     '/p/$payload': {
       id: '/p/$payload'
@@ -486,6 +523,16 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface AdminRouteChildren {
+  AdminIndexRoute: typeof AdminIndexRoute
+}
+
+const AdminRouteChildren: AdminRouteChildren = {
+  AdminIndexRoute: AdminIndexRoute,
+}
+
+const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
+
 interface BibliaRouteChildren {
   BibliaIndexRoute: typeof BibliaIndexRoute
   BibliaLivroCapituloRoute: typeof BibliaLivroCapituloRoute
@@ -517,6 +564,7 @@ const MeutempoRouteWithChildren = MeutempoRoute._addFileChildren(
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AdminRoute: AdminRouteWithChildren,
   BaixarRoute: BaixarRoute,
   BibliaRoute: BibliaRouteWithChildren,
   ConverseRoute: ConverseRoute,
