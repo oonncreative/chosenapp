@@ -94,7 +94,6 @@ function AdminHome() {
     setSalvandoSenha(true);
     const { error } = await supabase.auth.updateUser({
       password: novaSenha,
-      // @ts-expect-error current_password é aceito pelo Cloud Auth
       current_password: senhaAtual,
     });
     if (error) {
