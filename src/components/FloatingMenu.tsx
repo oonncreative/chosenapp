@@ -181,7 +181,8 @@ export function FloatingMenu() {
     const url = SMART_LINK;
     const text = `CHOSEN — Inspirações escolhidas pra cada momento do seu dia 💛\nBaixe e use também: ${url}`;
     try {
-      if (Capacitor.isNativePlatform()) {
+      if (isCapacitor()) {
+        const { Share } = await import("@capacitor/share");
         await Share.share({ title: "Chosen", text, url, dialogTitle: "Compartilhar" });
         return;
       }
