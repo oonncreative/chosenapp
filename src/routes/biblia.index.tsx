@@ -83,7 +83,7 @@ function BibliaIndex() {
         <span />
       </header>
 
-      <main className="flex-1 px-6 pb-28 pt-8">
+      <main className="flex-1 min-h-0 overflow-y-auto overscroll-contain px-6 pb-28 pt-8">
         <div className="mx-auto w-full max-w-md">
           <div className="flex items-center gap-2 mb-2">
             <BookOpen className="h-5 w-5 text-black/70" strokeWidth={2} />
