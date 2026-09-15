@@ -18,6 +18,7 @@ import {
   hasStreak,
 } from '@/lib/moodMemory';
 import { addMoment } from '@/lib/gratitudeLog';
+import { getMarcador, getMarcadorManual } from '@/lib/biblia/marcador';
 
 const ENABLED_KEY = 'chosen_notifications_enabled';
 const NATIVE_SCHEDULED_KEY = 'chosen_native_scheduled_date';
@@ -304,15 +305,25 @@ async function scheduleNativeNotifications() {
     const gratefulStreak = hasStreak('Feliz', 3);
 
     // Slots de "palavra pronta" (salmo/motivação alternado) por intensidade.
+    // Estes são os PRIORITÁRIOS: versículos e frases com o texto no próprio push.
     const WORD_SCHEDULE_PRESENT = [
       { hour: 8,  minute: 8,  title: COPY.wordSlots.morning },
       { hour: 10, minute: 10, title: COPY.wordSlots.midMorning },
       { hour: 12, minute: 12, title: COPY.wordSlots.lunch },
       { hour: 14, minute: 14, title: COPY.wordSlots.afternoon },
+      { hour: 16, minute: 16, title: COPY.wordSlots.afternoon },
+      { hour: 18, minute: 18, title: COPY.wordSlots.lateAfternoon },
+      { hour: 20, minute: 20, title: COPY.wordSlots.night },
+      { hour: 21, minute: 21, title: COPY.wordSlots.night },
+    ];
+    const WORD_SCHEDULE_NORMAL = [
+      { hour: 8,  minute: 8,  title: COPY.wordSlots.morning },
+      { hour: 10, minute: 10, title: COPY.wordSlots.midMorning },
+      { hour: 12, minute: 12, title: COPY.wordSlots.lunch },
+      { hour: 15, minute: 15, title: COPY.wordSlots.afternoon },
       { hour: 18, minute: 18, title: COPY.wordSlots.lateAfternoon },
       { hour: 21, minute: 21, title: COPY.wordSlots.night },
     ];
-    const WORD_SCHEDULE_NORMAL = WORD_SCHEDULE_PRESENT;
     const WORD_SCHEDULE_LIGHT = [
       { hour: 8,  minute: 8,  title: COPY.wordSlots.morning },
       { hour: 12, minute: 12, title: COPY.wordSlots.lunch },
@@ -326,23 +337,29 @@ async function scheduleNativeNotifications() {
         ? WORD_SCHEDULE_NORMAL
         : WORD_SCHEDULE_PRESENT;
 
-    // Se já temos amostras suficientes, usa as top horas do usuário.
-    // No modo "leve" mantemos os 4 slots fixos pra não estourar o volume.
-    const learned = intensity === 'light' ? null : getPreferredHours(6);
+    // Horas aprendidas entram COMO EXTRA (não substituem mais os slots fixos),
+    // pra garantir que as mensagens com versículo nunca sumam do push.
+    const learned = intensity === 'light' ? null : getPreferredHours(3);
     const learnedTitle = COPY.wordByMood(dominantMood);
-    const SCHEDULE = learned
-      ? learned.map((h) => ({
-          hour: h,
-          minute: h, // mantém variação tipo 8h08, 14h14
-          title: learnedTitle,
-        }))
-      : DEFAULT_SCHEDULE;
+    const usadas = new Set(DEFAULT_SCHEDULE.map((s) => s.hour));
+    const SCHEDULE = [
+      ...DEFAULT_SCHEDULE,
+      ...(learned || [])
+        .filter((h) => !usadas.has(h))
+        .slice(0, 2)
+        .map((h) => ({ hour: h, minute: h, title: learnedTitle })),
+    ].sort((a, b) => a.hour - b.hour);
+
+    // iOS guarda no máximo 64 notificações locais agendadas — as mais próximas.
+    // Por isso limitamos o horizonte: palavras por mais dias, perguntas por poucos.
+    const WORD_DAYS = intensity === 'light' ? 7 : 4;
+    const ASK_DAYS = intensity === 'present' ? 2 : 3;
 
     const notifications: any[] = [];
     const now = new Date();
     let id = 1;
 
-    for (let day = 0; day <= 6; day++) {
+    for (let day = 0; day < WORD_DAYS; day++) {
       SCHEDULE.forEach((slot, slotIndex) => {
         const scheduledDate = new Date(now);
         scheduledDate.setDate(now.getDate() + day);
@@ -380,6 +397,35 @@ async function scheduleNativeNotifications() {
       });
     }
 
+    // ===== Lembrete de leitura da Bíblia — 07:30, próximos 7 dias =====
+    try {
+      const marcador = getMarcadorManual() || getMarcador();
+      for (let day = 0; day < 7; day++) {
+        const d = new Date(now);
+        d.setDate(now.getDate() + day);
+        d.setHours(7, 30, 0, 0);
+        if (d <= now) continue;
+        notifications.push({
+          id: id++,
+          title: marcador
+            ? `Continue em ${marcador.nome} ${marcador.capitulo}`
+            : 'Comece o dia na Palavra',
+          body: marcador
+            ? 'Você parou aqui. Vamos seguir a leitura hoje?'
+            : 'Abra o Novo Testamento e comece por Mateus 1.',
+          schedule: { at: d },
+          smallIcon: 'ic_stat_chosen',
+          iconColor: '#f1f26c',
+          extra: {
+            url: marcador
+              ? `/biblia/${marcador.livro}/${marcador.capitulo}#v${marcador.versiculo}`
+              : '/biblia',
+            type: 'biblia_reminder',
+          },
+        } as any);
+      }
+    } catch {}
+
     // ===== Extras por intensidade =====
     // "light" = apenas as palavras acima. Sai daqui.
     if (intensity === 'light') {
@@ -391,7 +437,7 @@ async function scheduleNativeNotifications() {
     }
 
     // Palavra do silêncio — sábados às 09:09, próximas 4 semanas.
-    for (let week = 0; week < 4; week++) {
+    for (let week = 0; week < 2; week++) {
       const d = nextWeekday(now, 6);
       d.setDate(d.getDate() + week * 7);
       d.setHours(9, 9, 0, 0);
@@ -411,7 +457,7 @@ async function scheduleNativeNotifications() {
     }
 
     // Palavra do silêncio — dias alternados às 19:19 (próximas 2 semanas).
-    for (let day = 1; day <= 14; day += 2) {
+    for (let day = 1; day <= 6; day += 2) {
       const d = new Date(now);
       d.setDate(now.getDate() + day);
       d.setHours(19, 19, 0, 0);
@@ -432,7 +478,7 @@ async function scheduleNativeNotifications() {
     }
 
     // Como foi seu dia até agora? — todos os dias às 17h, próximas 2 semanas.
-    for (let day = 0; day < 14; day++) {
+    for (let day = 0; day < ASK_DAYS; day++) {
       const d = new Date(now);
       d.setDate(now.getDate() + day);
       d.setHours(17, 0, 0, 0);
@@ -454,7 +500,7 @@ async function scheduleNativeNotifications() {
     // No modo "present" adicionamos os 5 check-ins interativos extras.
 
     // Check-in de tipo de mensagem — 11h (normal) ou substituído por TALK_INVITE (present).
-    for (let day = 0; day < 14; day++) {
+    for (let day = 0; day < ASK_DAYS; day++) {
       const d = new Date(now);
       d.setDate(now.getDate() + day);
       d.setHours(11, 0, 0, 0);
@@ -474,7 +520,7 @@ async function scheduleNativeNotifications() {
 
     if (intensity === 'present') {
       // 07:00 — Bom dia. Como você acordou hoje?
-      for (let day = 0; day < 14; day++) {
+      for (let day = 0; day < ASK_DAYS; day++) {
         const d = new Date(now);
         d.setDate(now.getDate() + day);
         d.setHours(7, 0, 0, 0);
@@ -501,7 +547,7 @@ async function scheduleNativeNotifications() {
       }
 
       // 11:00 — Quer conversar com o Chosen agora?
-      for (let day = 0; day < 14; day++) {
+      for (let day = 0; day < ASK_DAYS; day++) {
         const d = new Date(now);
         d.setDate(now.getDate() + day);
         d.setHours(11, 0, 0, 0);
@@ -520,7 +566,7 @@ async function scheduleNativeNotifications() {
       }
 
       // 13:30 — Tá precisando de quê agora?
-      for (let day = 0; day < 14; day++) {
+      for (let day = 0; day < ASK_DAYS; day++) {
         const d = new Date(now);
         d.setDate(now.getDate() + day);
         d.setHours(13, 30, 0, 0);
@@ -539,7 +585,7 @@ async function scheduleNativeNotifications() {
       }
 
       // 15:30 — Micro-check da tarde
-      for (let day = 0; day < 14; day++) {
+      for (let day = 0; day < ASK_DAYS; day++) {
         const d = new Date(now);
         d.setDate(now.getDate() + day);
         d.setHours(15, 30, 0, 0);
@@ -558,7 +604,7 @@ async function scheduleNativeNotifications() {
       }
 
       // 20:30 — Quer levar uma palavra pra dormir?
-      for (let day = 0; day < 14; day++) {
+      for (let day = 0; day < ASK_DAYS; day++) {
         const d = new Date(now);
         d.setDate(now.getDate() + day);
         d.setHours(20, 30, 0, 0);
@@ -577,7 +623,7 @@ async function scheduleNativeNotifications() {
       }
 
       // 22:00 — Gratidão do dia
-      for (let day = 0; day < 14; day++) {
+      for (let day = 0; day < ASK_DAYS; day++) {
         const d = new Date(now);
         d.setDate(now.getDate() + day);
         d.setHours(22, 0, 0, 0);
@@ -629,8 +675,18 @@ async function scheduleNativeNotifications() {
       } catch {}
     }
 
-    if (notifications.length > 0) {
-      await LocalNotifications.schedule({ notifications });
+    // iOS só guarda 64 notificações locais. Ordena por horário e corta o excesso
+    // para que nada seja descartado em silêncio pelo sistema.
+    const final = notifications
+      .slice()
+      .sort(
+        (a, b) =>
+          new Date(a.schedule.at).getTime() - new Date(b.schedule.at).getTime()
+      )
+      .slice(0, 60);
+
+    if (final.length > 0) {
+      await LocalNotifications.schedule({ notifications: final });
       try {
         localStorage.setItem(NATIVE_SCHEDULED_KEY, new Date().toDateString());
       } catch {}
