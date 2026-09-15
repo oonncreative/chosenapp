@@ -245,6 +245,11 @@ export function FloatingMenu() {
           </SheetHeader>
 
           <div className="mt-2 flex flex-col">
+            <MenuItem
+              icon={<BookOpen className="h-5 w-5" />}
+              label="Bíblia — Novo Testamento"
+              onClick={() => { setOpen(false); navigate({ to: "/biblia" }); }}
+            />
             <MenuItem icon={<Sparkles className="h-5 w-5" />} label="Orações" onClick={handleOracoes} />
             <MenuItem
               icon={<HandHeart className="h-5 w-5" />}
@@ -722,6 +727,7 @@ function HelpDialog({
   const features = [
     { icon: <Smile className="h-4 w-4" />, title: "Check-in de humor", desc: "Escolha como você está e receba a palavra certa." },
     { icon: <Shuffle className="h-4 w-4" />, title: "Aleatório", desc: "Um salmo ou uma motivação a qualquer hora." },
+    { icon: <BookOpen className="h-4 w-4" />, title: "Bíblia — Novo Testamento", desc: "Mateus a Judas e Apocalipse, com marcador de onde você parou." },
     { icon: <Sparkles className="h-4 w-4" />, title: "Orações", desc: "Guia ACTS + orações para cada momento do dia." },
     { icon: <Wind className="h-4 w-4" />, title: "Palavra de silêncio", desc: "Um instante calmo para respirar e ouvir." },
     { icon: <Heart className="h-4 w-4" />, title: "Minhas escolhidas", desc: "Suas favoritas e histórico, disponíveis offline." },
