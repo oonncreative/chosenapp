@@ -122,3 +122,29 @@ export function contarLidos(livro: string): number {
 export function totalLidos(): number {
   return Object.values(getLidos()).reduce((s, v) => s + v.length, 0);
 }
+
+// ---------- Reiniciar ----------
+
+// Limpa capítulos lidos e marcadores de um livro só.
+export function reiniciarLivro(livro: string) {
+  const todos = getLidos();
+  delete todos[livro];
+  gravarLidos(todos);
+  const auto = getMarcador();
+  if (auto && auto.livro === livro) gravar(KEY, null);
+  const manual = getMarcadorManual();
+  if (manual && manual.livro === livro) gravar(KEY_MANUAL, null);
+}
+
+// Limpa tudo: lidos + marcadores de todos os livros.
+export function reiniciarTudo() {
+  gravarLidos({});
+  gravar(KEY, null);
+  gravar(KEY_MANUAL, null);
+}
+
+// Remove só os marcadores (mantém os capítulos lidos).
+export function limparMarcadores() {
+  gravar(KEY, null);
+  gravar(KEY_MANUAL, null);
+}
