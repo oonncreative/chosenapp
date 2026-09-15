@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { ArrowLeft, BookOpen, Check, ChevronRight, Bookmark } from "lucide-react";
+import { ArrowLeft, BookOpen, Check, ChevronRight, Bookmark, RotateCcw, BookmarkX } from "lucide-react";
+import { toast } from "sonner";
 import { AppFooter } from "@/components/AppFooter";
 import { LIVROS_EVANGELHOS_CARTAS, LIVRO_APOCALIPSE } from "@/lib/biblia";
 import {
@@ -8,6 +9,8 @@ import {
   getLidos,
   getMarcador,
   getMarcadorManual,
+  limparMarcadores,
+  reiniciarTudo,
   type Lidos,
   type Marcador,
 } from "@/lib/biblia/marcador";
@@ -45,6 +48,24 @@ function BibliaIndex() {
   }, []);
 
   const ondeParou = manual ?? auto;
+  const temLidos = Object.keys(lidos).length > 0;
+
+  const desmarcar = () => {
+    limparMarcadores();
+    setAuto(null);
+    setManual(null);
+    toast("Marcador removido");
+  };
+
+  const reiniciar = () => {
+    if (!window.confirm("Reiniciar toda a leitura? Isso apaga os capítulos lidos e os marcadores."))
+      return;
+    reiniciarTudo();
+    setAuto(null);
+    setManual(null);
+    setLidos({});
+    toast("Leitura reiniciada");
+  };
 
   return (
     <div className="flex flex-col min-h-[100dvh] bg-white">
@@ -75,7 +96,7 @@ function BibliaIndex() {
           </p>
 
           {(manual || auto) && (
-            <div className="flex flex-col gap-2 mb-8">
+            <div className="flex flex-col gap-2 mb-3">
               {manual && (
                 <ContinuarCard
                   titulo="Você marcou aqui"
@@ -86,6 +107,27 @@ function BibliaIndex() {
               {auto && (!manual || manual.livro !== auto.livro || manual.capitulo !== auto.capitulo) && (
                 <ContinuarCard titulo="Continuar de onde parei" marcador={auto} />
               )}
+            </div>
+          )}
+
+          {(manual || auto || temLidos) && (
+            <div className="mb-8 flex flex-wrap gap-2">
+              {(manual || auto) && (
+                <button
+                  onClick={desmarcar}
+                  className="flex h-9 items-center gap-1.5 rounded-full bg-black/[0.04] px-3 text-[12px] font-medium text-black/60 active:scale-[0.98] transition"
+                >
+                  <BookmarkX className="h-3.5 w-3.5" />
+                  Desmarcar
+                </button>
+              )}
+              <button
+                onClick={reiniciar}
+                className="flex h-9 items-center gap-1.5 rounded-full bg-black/[0.04] px-3 text-[12px] font-medium text-black/60 active:scale-[0.98] transition"
+              >
+                <RotateCcw className="h-3.5 w-3.5" />
+                Reiniciar tudo
+              </button>
             </div>
           )}
 

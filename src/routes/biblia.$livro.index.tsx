@@ -1,12 +1,14 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { ArrowLeft, Bookmark, Check } from "lucide-react";
+import { ArrowLeft, Bookmark, Check, RotateCcw } from "lucide-react";
+import { toast } from "sonner";
 import { AppFooter } from "@/components/AppFooter";
 import { getLivro } from "@/lib/biblia";
 import {
   getLidosDoLivro,
   getMarcador,
   getMarcadorManual,
+  reiniciarLivro,
   setLido,
 } from "@/lib/biblia/marcador";
 
@@ -56,6 +58,15 @@ function CapitulosPage() {
     setLidos(getLidosDoLivro(livro.slug));
   };
 
+  const reiniciar = () => {
+    if (!window.confirm(`Reiniciar a leitura de ${livro.nome}? Isso apaga os capítulos lidos e o marcador deste livro.`))
+      return;
+    reiniciarLivro(livro.slug);
+    setLidos([]);
+    setUltimoCap(null);
+    toast(`Leitura de ${livro.nome} reiniciada`);
+  };
+
   const pct = Math.round((lidos.length / livro.capitulos) * 100);
 
   return (
@@ -89,9 +100,19 @@ function CapitulosPage() {
             />
           </div>
 
-          <p className="text-[11px] text-black/40 mb-4">
+          <p className="text-[11px] text-black/40 mb-3">
             Toque no número para ler. Toque no quadradinho de cada capítulo para marcar como lido.
           </p>
+
+          {(lidos.length > 0 || ultimoCap !== null) && (
+            <button
+              onClick={reiniciar}
+              className="mb-4 flex h-9 items-center gap-1.5 rounded-full bg-black/[0.04] px-3 text-[12px] font-medium text-black/60 active:scale-[0.98] transition"
+            >
+              <RotateCcw className="h-3.5 w-3.5" />
+              Reiniciar leitura deste livro
+            </button>
+          )}
 
           <div className="grid grid-cols-4 gap-2">
             {Array.from({ length: livro.capitulos }, (_, i) => i + 1).map((c) => {

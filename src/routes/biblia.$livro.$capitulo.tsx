@@ -1,17 +1,42 @@
 import { createFileRoute, Link, notFound, useNavigate } from "@tanstack/react-router";
-import { useEffect, useRef, useState } from "react";
-import { ArrowLeft, Bookmark, Check, ChevronLeft, ChevronRight } from "lucide-react";
+import { useEffect, useMemo, useRef, useState } from "react";
+import {
+  ArrowLeft,
+  Bookmark,
+  BookmarkX,
+  Check,
+  ChevronLeft,
+  ChevronRight,
+  Share2,
+  X,
+} from "lucide-react";
 import { toast } from "sonner";
 import { carregarLivro, getLivro, livroAnterior, livroSeguinte } from "@/lib/biblia";
+import { ShareSheet } from "@/components/share/ShareSheet";
 import {
   getMarcadorManual,
   isLido,
+  limparMarcadores,
   setLido,
   setMarcador,
   toggleLido,
   toggleMarcadorManual,
   type Marcador,
 } from "@/lib/biblia/marcador";
+
+// Monta a referência no formato "Mateus 1:1", "Mateus 1:1-3" ou "Mateus 1:1,4".
+function montarReferencia(nome: string, cap: number, versos: number[]): string {
+  const ord = [...versos].sort((a, b) => a - b);
+  const partes: string[] = [];
+  let i = 0;
+  while (i < ord.length) {
+    let j = i;
+    while (j + 1 < ord.length && ord[j + 1] === ord[j] + 1) j++;
+    partes.push(i === j ? `${ord[i]}` : `${ord[i]}-${ord[j]}`);
+    i = j + 1;
+  }
+  return `${nome} ${cap}:${partes.join(",")}`;
+}
 
 export const Route = createFileRoute("/biblia/$livro/$capitulo")({
   loader: ({ params }) => {
@@ -53,6 +78,8 @@ function LeituraPage() {
   const [progresso, setProgresso] = useState(0);
   const [versAtual, setVersAtual] = useState(1);
   const [lido, setLidoState] = useState(false);
+  const [selecionados, setSelecionados] = useState<number[]>([]);
+  const [shareOpen, setShareOpen] = useState(false);
   const scrollRef = useRef<HTMLElement | null>(null);
 
   useEffect(() => {
@@ -72,6 +99,7 @@ function LeituraPage() {
     setLidoState(isLido(livro.slug, cap));
     setVersAtual(1);
     setProgresso(0);
+    setSelecionados([]);
   }, [livro.slug, cap]);
 
   // Salva automaticamente o ponto de leitura enquanto a pessoa rola.
@@ -191,6 +219,36 @@ function LeituraPage() {
     );
   };
 
+  const desmarcarMarcador = () => {
+    limparMarcadores();
+    setManual(null);
+    toast("Marcador removido");
+  };
+
+  const alternarSelecao = (n: number) => {
+    setSelecionados((s) => (s.includes(n) ? s.filter((v) => v !== n) : [...s, n].sort((a, b) => a - b)));
+  };
+
+  const referenciaSelecao = useMemo(
+    () => (selecionados.length ? montarReferencia(livro.nome, cap, selecionados) : ""),
+    [selecionados, livro.nome, cap],
+  );
+
+  const mensagemSelecao = useMemo(() => {
+    if (!versiculos || selecionados.length === 0) return null;
+    const texto = [...selecionados]
+      .sort((a, b) => a - b)
+      .map((n) => versiculos[n - 1])
+      .filter(Boolean)
+      .join(" ");
+    return {
+      id: `biblia-${livro.slug}-${cap}-${selecionados.join("-")}`,
+      texto,
+      referencia: referenciaSelecao,
+      tipo: "versiculo" as const,
+    };
+  }, [versiculos, selecionados, referenciaSelecao, livro.slug, cap]);
+
   return (
     <div className="flex flex-col h-[100dvh] bg-white">
       <header className="shrink-0 px-4 pt-[max(env(safe-area-inset-top),2rem)] pb-2">
@@ -231,10 +289,23 @@ function LeituraPage() {
           <h1 className="text-[26px] font-light text-black tracking-tight mb-1">
             {livro.nome} {cap}
           </h1>
-          <p className="text-[11px] text-black/40 mb-6">
-            Toque no número do versículo, ou use o botão “Parei aqui” lá embaixo. Fica salvo no seu
-            celular.
+          <p className="text-[11px] text-black/40 mb-1">
+            Texto completo · Almeida Atualizada
           </p>
+          <p className="text-[11px] text-black/40 mb-3">
+            Toque no número do versículo para marcar onde parou. Toque no texto para selecionar e
+            compartilhar (ex.: {livro.nome} {cap}:1).
+          </p>
+
+          {manual && manual.livro === livro.slug && manual.capitulo === cap && (
+            <button
+              onClick={desmarcarMarcador}
+              className="mb-4 flex h-9 items-center gap-1.5 rounded-full bg-black/[0.04] px-3 text-[12px] font-medium text-black/60 active:scale-[0.98] transition"
+            >
+              <BookmarkX className="h-3.5 w-3.5" />
+              Desmarcar “parei aqui”
+            </button>
+          )}
 
           {!versiculos && (
             <div className="flex flex-col gap-3 pt-4">
@@ -253,13 +324,14 @@ function LeituraPage() {
               {versiculos.map((texto, i) => {
                 const n = i + 1;
                 const ativo = marcado(n);
+                const sel = selecionados.includes(n);
                 return (
                   <li
                     key={n}
                     id={`v${n}`}
                     data-versiculo={n}
                     className={`flex items-start gap-3 rounded-xl -mx-2 px-2 py-1 transition-colors ${
-                      ativo ? "bg-[#f1f26c]/50" : ""
+                      sel ? "bg-[#f1f26c]" : ativo ? "bg-[#f1f26c]/50" : ""
                     }`}
                   >
                     <button
@@ -269,7 +341,21 @@ function LeituraPage() {
                     >
                       {ativo ? <Bookmark className="h-3.5 w-3.5 fill-black text-black" /> : n}
                     </button>
-                    <p className="text-[16px] leading-relaxed text-black font-light">{texto}</p>
+                    <button
+                      onClick={() => alternarSelecao(n)}
+                      aria-pressed={sel}
+                      aria-label={`Selecionar ${livro.nome} ${cap}:${n} para compartilhar`}
+                      className="flex-1 text-left"
+                    >
+                      <span className="block text-[16px] leading-relaxed text-black font-light">
+                        {texto}
+                      </span>
+                      {sel && (
+                        <span className="mt-1 block text-[10px] font-semibold uppercase tracking-wider text-black/50">
+                          {livro.nome} {cap}:{n}
+                        </span>
+                      )}
+                    </button>
                   </li>
                 );
               })}
@@ -282,6 +368,27 @@ function LeituraPage() {
         className="shrink-0 border-t border-black/5 bg-white px-[4.5rem] py-3"
         style={{ paddingBottom: "max(env(safe-area-inset-bottom), 0.75rem)" }}
       >
+        {selecionados.length > 0 && (
+          <div className="mx-auto mb-2 flex w-full max-w-md items-center gap-2 rounded-2xl bg-black px-3 py-2">
+            <span className="flex-1 min-w-0 truncate text-[12px] font-medium text-white">
+              {referenciaSelecao}
+            </span>
+            <button
+              onClick={() => setShareOpen(true)}
+              className="flex h-9 items-center gap-1.5 rounded-full bg-[#f1f26c] px-3 text-[12px] font-semibold text-black active:scale-[0.98] transition"
+            >
+              <Share2 className="h-3.5 w-3.5" />
+              Compartilhar
+            </button>
+            <button
+              onClick={() => setSelecionados([])}
+              aria-label="Limpar seleção"
+              className="flex h-9 w-9 items-center justify-center rounded-full bg-white/10 text-white"
+            >
+              <X className="h-4 w-4" />
+            </button>
+          </div>
+        )}
         <div className="mx-auto mb-2 w-full max-w-md">
           <button
             onClick={pareiAqui}
@@ -310,6 +417,15 @@ function LeituraPage() {
           </button>
         </div>
       </div>
+
+      {mensagemSelecao && (
+        <ShareSheet
+          open={shareOpen}
+          onOpenChange={setShareOpen}
+          mensagem={mensagemSelecao}
+          sentimento="biblia"
+        />
+      )}
     </div>
   );
 }
