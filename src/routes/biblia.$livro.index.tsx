@@ -1,12 +1,14 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { ArrowLeft, Bookmark, Check } from "lucide-react";
+import { ArrowLeft, Bookmark, Check, RotateCcw } from "lucide-react";
+import { toast } from "sonner";
 import { AppFooter } from "@/components/AppFooter";
 import { getLivro } from "@/lib/biblia";
 import {
   getLidosDoLivro,
   getMarcador,
   getMarcadorManual,
+  reiniciarLivro,
   setLido,
 } from "@/lib/biblia/marcador";
 
