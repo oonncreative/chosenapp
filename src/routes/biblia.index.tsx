@@ -48,6 +48,24 @@ function BibliaIndex() {
   }, []);
 
   const ondeParou = manual ?? auto;
+  const temLidos = Object.keys(lidos).length > 0;
+
+  const desmarcar = () => {
+    limparMarcadores();
+    setAuto(null);
+    setManual(null);
+    toast("Marcador removido");
+  };
+
+  const reiniciar = () => {
+    if (!window.confirm("Reiniciar toda a leitura? Isso apaga os capítulos lidos e os marcadores."))
+      return;
+    reiniciarTudo();
+    setAuto(null);
+    setManual(null);
+    setLidos({});
+    toast("Leitura reiniciada");
+  };
 
   return (
     <div className="flex flex-col min-h-[100dvh] bg-white">
