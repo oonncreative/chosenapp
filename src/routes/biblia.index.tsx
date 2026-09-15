@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { ArrowLeft, BookOpen, Check, ChevronRight, Bookmark } from "lucide-react";
+import { ArrowLeft, BookOpen, Check, ChevronRight, Bookmark, RotateCcw, BookmarkX } from "lucide-react";
+import { toast } from "sonner";
 import { AppFooter } from "@/components/AppFooter";
 import { LIVROS_EVANGELHOS_CARTAS, LIVRO_APOCALIPSE } from "@/lib/biblia";
 import {
@@ -8,6 +9,8 @@ import {
   getLidos,
   getMarcador,
   getMarcadorManual,
+  limparMarcadores,
+  reiniciarTudo,
   type Lidos,
   type Marcador,
 } from "@/lib/biblia/marcador";
