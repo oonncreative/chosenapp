@@ -1,9 +1,10 @@
-import { createFileRoute, Link, notFound } from "@tanstack/react-router";
+import { createFileRoute, Link, notFound, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { ArrowLeft, Bookmark, Check, RotateCcw } from "lucide-react";
+import { ArrowLeft, RotateCcw } from "lucide-react";
 import { toast } from "sonner";
 import { AppFooter } from "@/components/AppFooter";
 import { getLivro } from "@/lib/biblia";
+import mascote from "@/assets/mascotes/mascote-1.png.asset.json";
 import {
   getLidosDoLivro,
   getMarcador,
@@ -69,6 +70,12 @@ function CapitulosPage() {
 
   const pct = Math.round((lidos.length / livro.capitulos) * 100);
 
+  // Onde o mascote fica: marcador, senão o primeiro capítulo ainda não lido.
+  const primeiroNaoLido =
+    Array.from({ length: livro.capitulos }, (_, i) => i + 1).find((c) => !lidos.includes(c)) ??
+    livro.capitulos;
+  const atual = ultimoCap ?? primeiroNaoLido;
+
   return (
     <div className="flex flex-col min-h-[100dvh] bg-white">
       <header className="grid grid-cols-3 items-center px-4 pt-[max(env(safe-area-inset-top),2rem)] pb-2 shrink-0">
@@ -87,77 +94,199 @@ function CapitulosPage() {
 
       <main className="flex-1 px-6 pb-28 pt-8">
         <div className="mx-auto w-full max-w-md">
-          <h1 className="text-[26px] font-light text-black tracking-tight">{livro.nome}</h1>
-          <p className="text-sm text-black/50 mt-1">
-            {livro.capitulos} {livro.capitulos === 1 ? "capítulo" : "capítulos"} ·{" "}
-            {lidos.length} {lidos.length === 1 ? "lido" : "lidos"}
-          </p>
-
-          <div className="mt-3 mb-5 h-1 w-full rounded-full bg-black/5">
-            <div
-              className="h-1 rounded-full bg-black transition-all duration-300"
-              style={{ width: `${pct}%` }}
-            />
+          <div className="rounded-3xl bg-[#f1f26c] px-5 py-5">
+            <p className="text-[10px] font-bold tracking-[0.3em] uppercase text-black/50">
+              Novo Testamento
+            </p>
+            <h1 className="mt-1 text-[30px] leading-none font-semibold text-black tracking-tight">
+              {livro.nome}
+            </h1>
+            <p className="text-[13px] text-black/60 mt-2">
+              {livro.capitulos} {livro.capitulos === 1 ? "capítulo" : "capítulos"} ·{" "}
+              {lidos.length} {lidos.length === 1 ? "lido" : "lidos"} · {pct}%
+            </p>
+            <div className="mt-3 h-1.5 w-full rounded-full bg-black/10">
+              <div
+                className="h-1.5 rounded-full bg-black transition-all duration-300"
+                style={{ width: `${pct}%` }}
+              />
+            </div>
           </div>
 
-          <p className="text-[11px] text-black/40 mb-3">
-            Toque no número para ler. Toque no quadradinho de cada capítulo para marcar como lido.
+          <p className="text-[11px] text-black/40 mt-5 mb-1">
+            Siga a trilha: toque no número para ler e no tique para marcar como lido.
           </p>
 
           {(lidos.length > 0 || ultimoCap !== null) && (
             <button
               onClick={reiniciar}
-              className="mb-4 flex h-9 items-center gap-1.5 rounded-full bg-black/[0.04] px-3 text-[12px] font-medium text-black/60 active:scale-[0.98] transition"
+              className="mb-2 flex h-9 items-center gap-1.5 rounded-full bg-black/[0.04] px-3 text-[12px] font-medium text-black/60 active:scale-[0.98] transition"
             >
               <RotateCcw className="h-3.5 w-3.5" />
               Reiniciar leitura deste livro
             </button>
           )}
 
-          <div className="grid grid-cols-4 gap-2">
-            {Array.from({ length: livro.capitulos }, (_, i) => i + 1).map((c) => {
-              const lido = lidos.includes(c);
-              const parou = ultimoCap === c;
-              return (
-                <div key={c} className="relative">
-                  <Link
-                    to="/biblia/$livro/$capitulo"
-                    params={{ livro: livro.slug, capitulo: String(c) }}
-                    className={`flex h-14 items-center justify-center rounded-xl text-[15px] tabular-nums transition-all active:scale-95 ${
-                      parou
-                        ? "bg-black text-white font-semibold"
-                        : lido
-                          ? "bg-[#f1f26c] text-black font-medium"
-                          : "bg-black/[0.04] text-black hover:bg-black/[0.08]"
-                    }`}
-                  >
-                    {c}
-                  </Link>
-                  {parou && (
-                    <Bookmark className="absolute -top-1 -left-1 h-4 w-4 fill-[#f1f26c] text-[#f1f26c]" />
-                  )}
-                  <button
-                    onClick={() => alternar(c)}
-                    aria-pressed={lido}
-                    aria-label={`Marcar capítulo ${c} como lido`}
-                    className={`absolute bottom-1 right-1 flex h-5 w-5 items-center justify-center rounded-md border transition ${
-                      lido
-                        ? "border-black bg-black text-white"
-                        : parou
-                          ? "border-white/40 text-white/60"
-                          : "border-black/15 text-transparent"
-                    }`}
-                  >
-                    <Check className="h-3 w-3" />
-                  </button>
-                </div>
-              );
-            })}
-          </div>
+          <TrilhaCapitulos
+            slug={livro.slug}
+            total={livro.capitulos}
+            lidos={lidos}
+            atual={atual}
+            onAlternar={alternar}
+          />
         </div>
       </main>
 
+
       <AppFooter />
     </div>
+  );
+}
+
+// Trilha em zigue-zague: cada capítulo é uma parada do caminho e o mascote
+// caminha até onde a pessoa está.
+function TrilhaCapitulos({
+  slug,
+  total,
+  lidos,
+  atual,
+  onAlternar,
+}: {
+  slug: string;
+  total: number;
+  lidos: number[];
+  atual: number;
+  onAlternar: (c: number) => void;
+}) {
+  const navigate = useNavigate();
+  const COLS = 4;
+  const W = 320;
+  const ROW_H = 88;
+  const TOP = 82;
+  const linhas = Math.ceil(total / COLS);
+  const H = TOP + (linhas - 1) * ROW_H + 60;
+
+  const pontos = Array.from({ length: total }, (_, i) => {
+    const cap = i + 1;
+    const linha = Math.floor(i / COLS);
+    const idx = i % COLS;
+    const col = linha % 2 === 0 ? idx : COLS - 1 - idx;
+    return { cap, x: 40 + col * 80, y: TOP + linha * ROW_H };
+  });
+
+  const d = pontos.map((p, i) => `${i === 0 ? "M" : "L"} ${p.x} ${p.y}`).join(" ");
+  const lidosSet = new Set(lidos);
+  const ultimoLidoIdx = pontos.reduce((acc, p, i) => (lidosSet.has(p.cap) ? i : acc), -1);
+  const dFeito =
+    ultimoLidoIdx >= 0
+      ? pontos
+          .slice(0, ultimoLidoIdx + 1)
+          .map((p, i) => `${i === 0 ? "M" : "L"} ${p.x} ${p.y}`)
+          .join(" ")
+      : "";
+
+  return (
+    <svg
+      viewBox={`0 0 ${W} ${H}`}
+      className="w-full"
+      role="list"
+      aria-label="Trilha de capítulos"
+    >
+      <path
+        d={d}
+        fill="none"
+        stroke="currentColor"
+        className="text-black/10"
+        strokeWidth={6}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeDasharray="1 14"
+      />
+      {dFeito && (
+        <path
+          d={dFeito}
+          fill="none"
+          stroke="currentColor"
+          className="text-black/70"
+          strokeWidth={6}
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeDasharray="1 14"
+        />
+      )}
+
+      {pontos.map((p) => {
+        const lido = lidosSet.has(p.cap);
+        const aqui = p.cap === atual;
+        const fill = aqui ? "#000000" : lido ? "#f1f26c" : "#f2f2f2";
+        const texto = aqui ? "#ffffff" : "#000000";
+        return (
+          <g key={p.cap} role="listitem">
+            {aqui && (
+              <circle cx={p.x} cy={p.y} r={30} fill="none" stroke="#f1f26c" strokeWidth={3} />
+            )}
+            <g
+              onClick={() =>
+                navigate({
+                  to: "/biblia/$livro/$capitulo",
+                  params: { livro: slug, capitulo: String(p.cap) },
+                })
+              }
+              className="cursor-pointer"
+            >
+              <circle cx={p.x} cy={p.y} r={24} fill={fill} />
+              <text
+                x={p.x}
+                y={p.y + 6}
+                textAnchor="middle"
+                fontSize={16}
+                fontWeight={aqui ? 700 : 500}
+                fill={texto}
+              >
+                {p.cap}
+              </text>
+            </g>
+
+            <g
+              onClick={(e) => {
+                e.stopPropagation();
+                onAlternar(p.cap);
+              }}
+              className="cursor-pointer"
+              role="button"
+              aria-label={`Marcar capítulo ${p.cap} como lido`}
+            >
+              <circle
+                cx={p.x + 19}
+                cy={p.y - 19}
+                r={10}
+                fill={lido ? "#000000" : "#ffffff"}
+                stroke={lido ? "#000000" : "rgba(0,0,0,0.15)"}
+                strokeWidth={1.5}
+              />
+              <path
+                d={`M ${p.x + 14.5} ${p.y - 19} l 3 3 l 5.5 -5.5`}
+                fill="none"
+                stroke={lido ? "#ffffff" : "rgba(0,0,0,0.2)"}
+                strokeWidth={2}
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </g>
+
+            {aqui && (
+              <image
+                href={mascote.url}
+                x={p.x - 24}
+                y={p.y - 78}
+                width={48}
+                height={48}
+                preserveAspectRatio="xMidYMid meet"
+              />
+            )}
+          </g>
+        );
+      })}
+    </svg>
   );
 }
