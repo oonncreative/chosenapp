@@ -407,7 +407,7 @@ async function scheduleNativeNotifications() {
     }
 
     // Palavra do silêncio — sábados às 09:09, próximas 4 semanas.
-    for (let week = 0; week < 4; week++) {
+    for (let week = 0; week < 2; week++) {
       const d = nextWeekday(now, 6);
       d.setDate(d.getDate() + week * 7);
       d.setHours(9, 9, 0, 0);
@@ -427,7 +427,7 @@ async function scheduleNativeNotifications() {
     }
 
     // Palavra do silêncio — dias alternados às 19:19 (próximas 2 semanas).
-    for (let day = 1; day <= 14; day += 2) {
+    for (let day = 1; day <= 6; day += 2) {
       const d = new Date(now);
       d.setDate(now.getDate() + day);
       d.setHours(19, 19, 0, 0);
@@ -448,7 +448,7 @@ async function scheduleNativeNotifications() {
     }
 
     // Como foi seu dia até agora? — todos os dias às 17h, próximas 2 semanas.
-    for (let day = 0; day < 14; day++) {
+    for (let day = 0; day < ASK_DAYS; day++) {
       const d = new Date(now);
       d.setDate(now.getDate() + day);
       d.setHours(17, 0, 0, 0);
@@ -470,7 +470,7 @@ async function scheduleNativeNotifications() {
     // No modo "present" adicionamos os 5 check-ins interativos extras.
 
     // Check-in de tipo de mensagem — 11h (normal) ou substituído por TALK_INVITE (present).
-    for (let day = 0; day < 14; day++) {
+    for (let day = 0; day < ASK_DAYS; day++) {
       const d = new Date(now);
       d.setDate(now.getDate() + day);
       d.setHours(11, 0, 0, 0);
@@ -490,7 +490,7 @@ async function scheduleNativeNotifications() {
 
     if (intensity === 'present') {
       // 07:00 — Bom dia. Como você acordou hoje?
-      for (let day = 0; day < 14; day++) {
+      for (let day = 0; day < ASK_DAYS; day++) {
         const d = new Date(now);
         d.setDate(now.getDate() + day);
         d.setHours(7, 0, 0, 0);
@@ -517,7 +517,7 @@ async function scheduleNativeNotifications() {
       }
 
       // 11:00 — Quer conversar com o Chosen agora?
-      for (let day = 0; day < 14; day++) {
+      for (let day = 0; day < ASK_DAYS; day++) {
         const d = new Date(now);
         d.setDate(now.getDate() + day);
         d.setHours(11, 0, 0, 0);
@@ -536,7 +536,7 @@ async function scheduleNativeNotifications() {
       }
 
       // 13:30 — Tá precisando de quê agora?
-      for (let day = 0; day < 14; day++) {
+      for (let day = 0; day < ASK_DAYS; day++) {
         const d = new Date(now);
         d.setDate(now.getDate() + day);
         d.setHours(13, 30, 0, 0);
@@ -555,7 +555,7 @@ async function scheduleNativeNotifications() {
       }
 
       // 15:30 — Micro-check da tarde
-      for (let day = 0; day < 14; day++) {
+      for (let day = 0; day < ASK_DAYS; day++) {
         const d = new Date(now);
         d.setDate(now.getDate() + day);
         d.setHours(15, 30, 0, 0);
@@ -574,7 +574,7 @@ async function scheduleNativeNotifications() {
       }
 
       // 20:30 — Quer levar uma palavra pra dormir?
-      for (let day = 0; day < 14; day++) {
+      for (let day = 0; day < ASK_DAYS; day++) {
         const d = new Date(now);
         d.setDate(now.getDate() + day);
         d.setHours(20, 30, 0, 0);
@@ -593,7 +593,7 @@ async function scheduleNativeNotifications() {
       }
 
       // 22:00 — Gratidão do dia
-      for (let day = 0; day < 14; day++) {
+      for (let day = 0; day < ASK_DAYS; day++) {
         const d = new Date(now);
         d.setDate(now.getDate() + day);
         d.setHours(22, 0, 0, 0);
