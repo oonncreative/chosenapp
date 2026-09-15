@@ -1078,8 +1078,17 @@ function QuickActions() {
   const [open, setOpen] = useState(false);
   const [marcador, setMarcador] = useState<BibliaMarcador | null>(null);
 
+  const lerMarcador = () => setMarcador(getMarcadorManual() ?? getMarcador());
+
   useEffect(() => {
-    setMarcador(getMarcadorManual() ?? getMarcador());
+    lerMarcador();
+    const onFocus = () => lerMarcador();
+    window.addEventListener("focus", onFocus);
+    window.addEventListener("storage", onFocus);
+    return () => {
+      window.removeEventListener("focus", onFocus);
+      window.removeEventListener("storage", onFocus);
+    };
   }, []);
 
   const abrev = marcador ? (getLivro(marcador.livro)?.abrev ?? marcador.nome) : null;
@@ -1098,9 +1107,12 @@ function QuickActions() {
   };
 
   return (
-    <div className="fixed z-40 bottom-[max(env(safe-area-inset-bottom),0.5rem)] left-4 mb-9 flex items-center gap-2">
+    <div className="fixed z-40 bottom-[max(env(safe-area-inset-bottom),0.5rem)] left-4 mb-9 flex flex-col-reverse items-start gap-2">
       <button
-        onClick={() => setOpen((v) => !v)}
+        onClick={() => {
+          lerMarcador();
+          setOpen((v) => !v);
+        }}
         aria-label={open ? "Fechar atalhos" : "Abrir atalhos"}
         aria-expanded={open}
         className="relative w-12 h-12 shrink-0 rounded-full bg-[#f1f26c] text-black shadow-lg flex items-center justify-center active:scale-95 transition-transform"
@@ -1112,8 +1124,8 @@ function QuickActions() {
       </button>
 
       <div
-        className={`flex items-center gap-2 transition-all duration-200 ${
-          open ? "opacity-100 translate-x-0" : "pointer-events-none opacity-0 -translate-x-2"
+        className={`flex flex-col-reverse items-start gap-2 transition-all duration-200 ${
+          open ? "opacity-100 translate-y-0" : "pointer-events-none opacity-0 translate-y-2"
         }`}
       >
         <button
@@ -1142,3 +1154,4 @@ function QuickActions() {
     </div>
   );
 }
+
