@@ -232,7 +232,8 @@ function LeituraPage() {
             {livro.nome} {cap}
           </h1>
           <p className="text-[11px] text-black/40 mb-6">
-            Toque no número do versículo para marcar onde parou.
+            Toque no número do versículo, ou use o botão “Parei aqui” lá embaixo. Fica salvo no seu
+            celular.
           </p>
 
           {!versiculos && (
