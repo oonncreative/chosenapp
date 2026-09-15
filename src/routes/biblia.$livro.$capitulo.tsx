@@ -282,6 +282,15 @@ function LeituraPage() {
         className="shrink-0 border-t border-black/5 bg-white px-[4.5rem] py-3"
         style={{ paddingBottom: "max(env(safe-area-inset-bottom), 0.75rem)" }}
       >
+        <div className="mx-auto mb-2 w-full max-w-md">
+          <button
+            onClick={pareiAqui}
+            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-black text-[14px] font-semibold text-white active:scale-[0.98] transition"
+          >
+            <Bookmark className="h-4 w-4 fill-[#f1f26c] text-[#f1f26c]" />
+            Parei aqui · versículo {versAtual}
+          </button>
+        </div>
         <div className="mx-auto flex w-full max-w-md items-center gap-2">
           <button
             onClick={irAnterior}
