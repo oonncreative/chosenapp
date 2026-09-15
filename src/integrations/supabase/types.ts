@@ -14,16 +14,153 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      admin_login_events: {
+        Row: {
+          created_at: string
+          email: string
+          id: string
+          success: boolean
+          user_agent: string | null
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          id?: string
+          success?: boolean
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          id?: string
+          success?: boolean
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      push_campaigns: {
+        Row: {
+          agendado_para: string | null
+          created_at: string
+          created_by: string | null
+          destino: string
+          enviado_em: string | null
+          erro: string | null
+          id: string
+          mensagem: string
+          publico: string
+          status: string
+          teste: boolean
+          titulo: string
+          total_alvo: number
+          total_enviado: number
+          total_falha: number
+        }
+        Insert: {
+          agendado_para?: string | null
+          created_at?: string
+          created_by?: string | null
+          destino?: string
+          enviado_em?: string | null
+          erro?: string | null
+          id?: string
+          mensagem: string
+          publico?: string
+          status?: string
+          teste?: boolean
+          titulo: string
+          total_alvo?: number
+          total_enviado?: number
+          total_falha?: number
+        }
+        Update: {
+          agendado_para?: string | null
+          created_at?: string
+          created_by?: string | null
+          destino?: string
+          enviado_em?: string | null
+          erro?: string | null
+          id?: string
+          mensagem?: string
+          publico?: string
+          status?: string
+          teste?: boolean
+          titulo?: string
+          total_alvo?: number
+          total_enviado?: number
+          total_falha?: number
+        }
+        Relationships: []
+      }
+      push_devices: {
+        Row: {
+          app_version: string | null
+          created_at: string
+          id: string
+          last_seen_at: string
+          platform: string
+          timezone: string | null
+          token: string
+        }
+        Insert: {
+          app_version?: string | null
+          created_at?: string
+          id?: string
+          last_seen_at?: string
+          platform: string
+          timezone?: string | null
+          token: string
+        }
+        Update: {
+          app_version?: string | null
+          created_at?: string
+          id?: string
+          last_seen_at?: string
+          platform?: string
+          timezone?: string | null
+          token?: string
+        }
+        Relationships: []
+      }
+      user_roles: {
+        Row: {
+          created_at: string
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "admin"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +287,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["admin"],
+    },
   },
 } as const
