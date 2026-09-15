@@ -99,6 +99,7 @@ function LeituraPage() {
     setLidoState(isLido(livro.slug, cap));
     setVersAtual(1);
     setProgresso(0);
+    setSelecionados([]);
   }, [livro.slug, cap]);
 
   // Salva automaticamente o ponto de leitura enquanto a pessoa rola.
