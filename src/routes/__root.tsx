@@ -18,6 +18,7 @@ import { useShakeToChosen } from "@/hooks/useShakeToChosen";
 import { useTimeOfDayTheme } from "@/hooks/useTimeOfDayTheme";
 import { useUsageTracker } from "@/hooks/useUsageTracker";
 import { useAppShortcuts } from "@/hooks/useAppShortcuts";
+import { usePushRegistration } from "@/hooks/usePushRegistration";
 
 function NotFoundComponent() {
   return (
