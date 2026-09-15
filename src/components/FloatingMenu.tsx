@@ -25,6 +25,7 @@ import { PSALMS, INVITATION_MESSAGES, NOTIFICATION_TITLES } from "@/lib/psalms";
 import { getFavorites, removeFavorite, type Favorite } from "@/lib/favorites";
 import { getRandomMensagemGlobal, getMensagemById, getProximaMensagem, CATEGORIAS, type Categoria } from "@/lib/data";
 import { buildShareUrl } from "@/lib/share";
+import { SMART_LINK } from "@/lib/storeLinks";
 import {
   getNotificationIntensity,
   setNotificationIntensity,
@@ -178,15 +179,30 @@ export function FloatingMenu() {
 
   const handleCompartilhar = async () => {
     setOpen(false);
-    const url = "https://chosen.oonn.com.br";
+    const url = SMART_LINK;
     const text = `CHOSEN — Inspirações escolhidas pra cada momento do seu dia 💛\nBaixe e use também: ${url}`;
     try {
+      if (isCapacitor()) {
+        const { Share } = await import("@capacitor/share");
+        await Share.share({ title: "Chosen", text, url, dialogTitle: "Compartilhar" });
+        return;
+      }
+      if (typeof navigator !== "undefined" && navigator.share) {
+        await navigator.share({ title: "Chosen", text, url });
+        return;
+      }
       await navigator.clipboard.writeText(text);
       toast("Link copiado!", {
         description: "Cole onde quiser compartilhar 💛",
       });
-    } catch {
-      toast.error("Não foi possível copiar", { description: url });
+    } catch (e) {
+      if ((e as Error)?.name === "AbortError") return;
+      try {
+        await navigator.clipboard.writeText(text);
+        toast("Link copiado!", { description: "Cole onde quiser compartilhar 💛" });
+      } catch {
+        toast.error("Não foi possível compartilhar", { description: url });
+      }
     }
   };
 

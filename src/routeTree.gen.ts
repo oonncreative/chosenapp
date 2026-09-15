@@ -21,6 +21,7 @@ import { Route as EscolhidasRouteImport } from './routes/escolhidas'
 import { Route as DevocionalRouteImport } from './routes/devocional'
 import { Route as ConverseRouteImport } from './routes/converse'
 import { Route as BibliaRouteImport } from './routes/biblia'
+import { Route as BaixarRouteImport } from './routes/baixar'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as MeutempoIndexRouteImport } from './routes/meutempo.index'
 import { Route as BibliaIndexRouteImport } from './routes/biblia.index'
@@ -92,6 +93,11 @@ const BibliaRoute = BibliaRouteImport.update({
   path: '/biblia',
   getParentRoute: () => rootRouteImport,
 } as any)
+const BaixarRoute = BaixarRouteImport.update({
+  id: '/baixar',
+  path: '/baixar',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -145,6 +151,7 @@ const ApiPublicWidgetMessagesRoute = ApiPublicWidgetMessagesRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/baixar': typeof BaixarRoute
   '/biblia': typeof BibliaRouteWithChildren
   '/converse': typeof ConverseRoute
   '/devocional': typeof DevocionalRoute
@@ -169,6 +176,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/baixar': typeof BaixarRoute
   '/converse': typeof ConverseRoute
   '/devocional': typeof DevocionalRoute
   '/escolhidas': typeof EscolhidasRoute
@@ -192,6 +200,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/baixar': typeof BaixarRoute
   '/biblia': typeof BibliaRouteWithChildren
   '/converse': typeof ConverseRoute
   '/devocional': typeof DevocionalRoute
@@ -218,6 +227,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/baixar'
     | '/biblia'
     | '/converse'
     | '/devocional'
@@ -242,6 +252,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/baixar'
     | '/converse'
     | '/devocional'
     | '/escolhidas'
@@ -264,6 +275,7 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/baixar'
     | '/biblia'
     | '/converse'
     | '/devocional'
@@ -289,6 +301,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  BaixarRoute: typeof BaixarRoute
   BibliaRoute: typeof BibliaRouteWithChildren
   ConverseRoute: typeof ConverseRoute
   DevocionalRoute: typeof DevocionalRoute
@@ -391,6 +404,13 @@ declare module '@tanstack/react-router' {
       path: '/biblia'
       fullPath: '/biblia'
       preLoaderRoute: typeof BibliaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/baixar': {
+      id: '/baixar'
+      path: '/baixar'
+      fullPath: '/baixar'
+      preLoaderRoute: typeof BaixarRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -497,6 +517,7 @@ const MeutempoRouteWithChildren = MeutempoRoute._addFileChildren(
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  BaixarRoute: BaixarRoute,
   BibliaRoute: BibliaRouteWithChildren,
   ConverseRoute: ConverseRoute,
   DevocionalRoute: DevocionalRoute,
