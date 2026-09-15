@@ -18,6 +18,7 @@ import {
   hasStreak,
 } from '@/lib/moodMemory';
 import { addMoment } from '@/lib/gratitudeLog';
+import { getMarcador, getMarcadorManual } from '@/lib/biblia/marcador';
 
 const ENABLED_KEY = 'chosen_notifications_enabled';
 const NATIVE_SCHEDULED_KEY = 'chosen_native_scheduled_date';
