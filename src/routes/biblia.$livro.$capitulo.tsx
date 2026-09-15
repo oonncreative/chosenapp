@@ -368,6 +368,27 @@ function LeituraPage() {
         className="shrink-0 border-t border-black/5 bg-white px-[4.5rem] py-3"
         style={{ paddingBottom: "max(env(safe-area-inset-bottom), 0.75rem)" }}
       >
+        {selecionados.length > 0 && (
+          <div className="mx-auto mb-2 flex w-full max-w-md items-center gap-2 rounded-2xl bg-black px-3 py-2">
+            <span className="flex-1 min-w-0 truncate text-[12px] font-medium text-white">
+              {referenciaSelecao}
+            </span>
+            <button
+              onClick={() => setShareOpen(true)}
+              className="flex h-9 items-center gap-1.5 rounded-full bg-[#f1f26c] px-3 text-[12px] font-semibold text-black active:scale-[0.98] transition"
+            >
+              <Share2 className="h-3.5 w-3.5" />
+              Compartilhar
+            </button>
+            <button
+              onClick={() => setSelecionados([])}
+              aria-label="Limpar seleção"
+              className="flex h-9 w-9 items-center justify-center rounded-full bg-white/10 text-white"
+            >
+              <X className="h-4 w-4" />
+            </button>
+          </div>
+        )}
         <div className="mx-auto mb-2 w-full max-w-md">
           <button
             onClick={pareiAqui}
