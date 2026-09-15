@@ -25,6 +25,7 @@ import { PSALMS, INVITATION_MESSAGES, NOTIFICATION_TITLES } from "@/lib/psalms";
 import { getFavorites, removeFavorite, type Favorite } from "@/lib/favorites";
 import { getRandomMensagemGlobal, getMensagemById, getProximaMensagem, CATEGORIAS, type Categoria } from "@/lib/data";
 import { buildShareUrl } from "@/lib/share";
+import { SMART_LINK } from "@/lib/storeLinks";
 import {
   getNotificationIntensity,
   setNotificationIntensity,
