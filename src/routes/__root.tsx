@@ -161,6 +161,7 @@ function RootComponent() {
   useTimeOfDayTheme();
   useUsageTracker();
   useAppShortcuts();
+  usePushRegistration();
 
   useEffect(() => {
     localStorage.setItem('isMono', isMono.toString());
