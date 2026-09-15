@@ -89,6 +89,11 @@ function LeituraPage() {
           ...visiveis.map((e) => parseInt(e.target.getAttribute("data-versiculo") || "1", 10)),
         );
         setProgresso(Math.round((n / versiculos.length) * 100));
+        setVersAtual(n);
+        if (n >= versiculos.length) {
+          setLido(livro.slug, cap, true);
+          setLidoState(true);
+        }
         window.clearTimeout(timer);
         timer = window.setTimeout(() => {
           setMarcador({ livro: livro.slug, nome: livro.nome, capitulo: cap, versiculo: n });
