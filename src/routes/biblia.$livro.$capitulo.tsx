@@ -1,17 +1,42 @@
 import { createFileRoute, Link, notFound, useNavigate } from "@tanstack/react-router";
-import { useEffect, useRef, useState } from "react";
-import { ArrowLeft, Bookmark, Check, ChevronLeft, ChevronRight } from "lucide-react";
+import { useEffect, useMemo, useRef, useState } from "react";
+import {
+  ArrowLeft,
+  Bookmark,
+  BookmarkX,
+  Check,
+  ChevronLeft,
+  ChevronRight,
+  Share2,
+  X,
+} from "lucide-react";
 import { toast } from "sonner";
 import { carregarLivro, getLivro, livroAnterior, livroSeguinte } from "@/lib/biblia";
+import { ShareSheet } from "@/components/share/ShareSheet";
 import {
   getMarcadorManual,
   isLido,
+  limparMarcadores,
   setLido,
   setMarcador,
   toggleLido,
   toggleMarcadorManual,
   type Marcador,
 } from "@/lib/biblia/marcador";
+
+// Monta a referência no formato "Mateus 1:1", "Mateus 1:1-3" ou "Mateus 1:1,4".
+function montarReferencia(nome: string, cap: number, versos: number[]): string {
+  const ord = [...versos].sort((a, b) => a - b);
+  const partes: string[] = [];
+  let i = 0;
+  while (i < ord.length) {
+    let j = i;
+    while (j + 1 < ord.length && ord[j + 1] === ord[j] + 1) j++;
+    partes.push(i === j ? `${ord[i]}` : `${ord[i]}-${ord[j]}`);
+    i = j + 1;
+  }
+  return `${nome} ${cap}:${partes.join(",")}`;
+}
 
 export const Route = createFileRoute("/biblia/$livro/$capitulo")({
   loader: ({ params }) => {
