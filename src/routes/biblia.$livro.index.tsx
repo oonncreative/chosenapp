@@ -1,9 +1,14 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Bookmark, Check } from "lucide-react";
 import { AppFooter } from "@/components/AppFooter";
 import { getLivro } from "@/lib/biblia";
-import { getMarcador, getMarcadorManual } from "@/lib/biblia/marcador";
+import {
+  getLidosDoLivro,
+  getMarcador,
+  getMarcadorManual,
+  setLido,
+} from "@/lib/biblia/marcador";
 
 export const Route = createFileRoute("/biblia/$livro/")({
   loader: ({ params }) => {
