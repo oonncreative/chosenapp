@@ -211,7 +211,7 @@ function LeituraPage() {
                     key={n}
                     id={`v${n}`}
                     data-versiculo={n}
-                    className={`flex gap-3 rounded-xl -mx-2 px-2 py-1 transition-colors ${
+                    className={`flex items-start gap-3 rounded-xl -mx-2 px-2 py-1 transition-colors ${
                       ativo ? "bg-[#f1f26c]/50" : ""
                     }`}
                   >
@@ -232,7 +232,7 @@ function LeituraPage() {
       </main>
 
       <div
-        className="shrink-0 border-t border-black/5 bg-white px-6 py-3"
+        className="shrink-0 border-t border-black/5 bg-white px-[4.5rem] py-3"
         style={{ paddingBottom: "max(env(safe-area-inset-bottom), 0.75rem)" }}
       >
         <div className="mx-auto flex w-full max-w-md items-center gap-2">
