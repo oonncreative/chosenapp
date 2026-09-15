@@ -228,16 +228,9 @@ export function FloatingMenu() {
 
   return (
     <>
-      <button
-        onClick={() => navigate({ to: "/converse" })}
-        aria-label="Fale com o Chosen (IA)"
-        className="fixed z-40 bottom-[max(env(safe-area-inset-bottom),0.5rem)] left-4 mb-9 w-12 h-12 rounded-full bg-[#f1f26c] text-black shadow-lg flex items-center justify-center active:scale-95 transition-transform"
-      >
-        <Sparkles className="h-5 w-5" strokeWidth={2.25} />
-        <span className="absolute -top-1 -right-1 bg-black text-[#f1f26c] text-[9px] font-bold tracking-wider px-1.5 py-0.5 rounded-full leading-none">
-          IA
-        </span>
-      </button>
+      <QuickActions />
+
+
 
 
       <button
