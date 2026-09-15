@@ -4,13 +4,12 @@ export const SITE_URL = "https://chosen.oonn.com.br";
 export const SMART_LINK = `${SITE_URL}/baixar`;
 
 // Android: package do Capacitor (com.oonn.chosen)
-export const PLAY_URL = "https://play.google.com/store/apps/details?id=com.oonn.chosen";
+export const PLAY_URL =
+  "https://play.google.com/store/apps/details?id=com.oonn.chosen&hl=pt_BR";
 
-// iOS: quando o app for publicado, troque por https://apps.apple.com/br/app/id0000000000
-export const APP_STORE_ID: string | null = null;
-export const APP_STORE_URL = APP_STORE_ID
-  ? `https://apps.apple.com/br/app/id${APP_STORE_ID}`
-  : "https://apps.apple.com/br/search?term=chosen%20oonn";
+// iOS: Chosen App na App Store
+export const APP_STORE_ID = "6780632933";
+export const APP_STORE_URL = "https://apps.apple.com/br/app/chosen-app/id6780632933";
 
 export type Plataforma = "ios" | "android" | "web";
 
