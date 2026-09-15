@@ -58,6 +58,15 @@ function CapitulosPage() {
     setLidos(getLidosDoLivro(livro.slug));
   };
 
+  const reiniciar = () => {
+    if (!window.confirm(`Reiniciar a leitura de ${livro.nome}? Isso apaga os capítulos lidos e o marcador deste livro.`))
+      return;
+    reiniciarLivro(livro.slug);
+    setLidos([]);
+    setUltimoCap(null);
+    toast(`Leitura de ${livro.nome} reiniciada`);
+  };
+
   const pct = Math.round((lidos.length / livro.capitulos) * 100);
 
   return (
