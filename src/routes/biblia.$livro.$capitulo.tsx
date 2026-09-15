@@ -1,11 +1,14 @@
 import { createFileRoute, Link, notFound, useNavigate } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
-import { ArrowLeft, Bookmark, ChevronLeft, ChevronRight } from "lucide-react";
+import { ArrowLeft, Bookmark, Check, ChevronLeft, ChevronRight } from "lucide-react";
 import { toast } from "sonner";
 import { carregarLivro, getLivro, livroAnterior, livroSeguinte } from "@/lib/biblia";
 import {
   getMarcadorManual,
+  isLido,
+  setLido,
   setMarcador,
+  toggleLido,
   toggleMarcadorManual,
   type Marcador,
 } from "@/lib/biblia/marcador";
