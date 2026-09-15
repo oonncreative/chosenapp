@@ -95,17 +95,13 @@ function BibliaIndex() {
           <ul className="flex flex-col gap-1.5">
             {LIVROS_EVANGELHOS_CARTAS.map((l) => (
               <li key={l.slug}>
-                <Link
-                  to="/biblia/$livro"
-                  params={{ livro: l.slug }}
-                  className="flex items-center justify-between rounded-2xl bg-black/[0.04] hover:bg-black/[0.07] active:scale-[0.99] transition-all px-4 py-3"
-                >
-                  <span className="text-[15px] text-black">{l.nome}</span>
-                  <span className="flex items-center gap-2 text-[11px] text-black/40">
-                    {l.capitulos} cap.
-                    <ChevronRight className="h-4 w-4" />
-                  </span>
-                </Link>
+                <LivroLinha
+                  slug={l.slug}
+                  nome={l.nome}
+                  capitulos={l.capitulos}
+                  lidos={(lidos[l.slug] ?? []).length}
+                  aqui={ondeParou?.livro === l.slug ? ondeParou.capitulo : null}
+                />
               </li>
             ))}
           </ul>
@@ -113,19 +109,18 @@ function BibliaIndex() {
           <h2 className="text-[10px] font-bold tracking-[0.3em] uppercase text-black/40 mt-8 mb-3">
             Profecia
           </h2>
-          <Link
-            to="/biblia/$livro"
-            params={{ livro: LIVRO_APOCALIPSE.slug }}
-            className="flex items-center justify-between rounded-2xl bg-[#f1f26c] active:scale-[0.99] transition-all px-4 py-4"
-          >
-            <span className="text-[15px] font-semibold text-black">
-              {LIVRO_APOCALIPSE.nome}
-            </span>
-            <span className="flex items-center gap-2 text-[11px] text-black/50">
-              {LIVRO_APOCALIPSE.capitulos} cap.
-              <ChevronRight className="h-4 w-4" />
-            </span>
-          </Link>
+          <LivroLinha
+            slug={LIVRO_APOCALIPSE.slug}
+            nome={LIVRO_APOCALIPSE.nome}
+            capitulos={LIVRO_APOCALIPSE.capitulos}
+            lidos={(lidos[LIVRO_APOCALIPSE.slug] ?? []).length}
+            aqui={ondeParou?.livro === LIVRO_APOCALIPSE.slug ? ondeParou.capitulo : null}
+            destaque
+          />
+        </div>
+      </main>
+
+      <AppFooter />
         </div>
       </main>
 
