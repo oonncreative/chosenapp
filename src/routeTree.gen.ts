@@ -20,12 +20,16 @@ import { Route as HomeRouteImport } from './routes/home'
 import { Route as EscolhidasRouteImport } from './routes/escolhidas'
 import { Route as DevocionalRouteImport } from './routes/devocional'
 import { Route as ConverseRouteImport } from './routes/converse'
+import { Route as BibliaRouteImport } from './routes/biblia'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as MeutempoIndexRouteImport } from './routes/meutempo.index'
+import { Route as BibliaIndexRouteImport } from './routes/biblia.index'
 import { Route as PPayloadRouteImport } from './routes/p.$payload'
 import { Route as MeutempoLerRouteImport } from './routes/meutempo.ler'
 import { Route as MensagemSentimentoRouteImport } from './routes/mensagem/$sentimento'
 import { Route as AtalhoAcaoRouteImport } from './routes/atalho.$acao'
+import { Route as BibliaLivroIndexRouteImport } from './routes/biblia.$livro.index'
+import { Route as BibliaLivroCapituloRouteImport } from './routes/biblia.$livro.$capitulo'
 import { Route as ApiPublicWidgetMessagesRouteImport } from './routes/api/public/widget-messages'
 
 const TermsRoute = TermsRouteImport.update({
@@ -83,6 +87,11 @@ const ConverseRoute = ConverseRouteImport.update({
   path: '/converse',
   getParentRoute: () => rootRouteImport,
 } as any)
+const BibliaRoute = BibliaRouteImport.update({
+  id: '/biblia',
+  path: '/biblia',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -92,6 +101,11 @@ const MeutempoIndexRoute = MeutempoIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => MeutempoRoute,
+} as any)
+const BibliaIndexRoute = BibliaIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => BibliaRoute,
 } as any)
 const PPayloadRoute = PPayloadRouteImport.update({
   id: '/p/$payload',
@@ -113,6 +127,16 @@ const AtalhoAcaoRoute = AtalhoAcaoRouteImport.update({
   path: '/atalho/$acao',
   getParentRoute: () => rootRouteImport,
 } as any)
+const BibliaLivroIndexRoute = BibliaLivroIndexRouteImport.update({
+  id: '/$livro/',
+  path: '/$livro/',
+  getParentRoute: () => BibliaRoute,
+} as any)
+const BibliaLivroCapituloRoute = BibliaLivroCapituloRouteImport.update({
+  id: '/$livro/$capitulo',
+  path: '/$livro/$capitulo',
+  getParentRoute: () => BibliaRoute,
+} as any)
 const ApiPublicWidgetMessagesRoute = ApiPublicWidgetMessagesRouteImport.update({
   id: '/api/public/widget-messages',
   path: '/api/public/widget-messages',
@@ -121,6 +145,7 @@ const ApiPublicWidgetMessagesRoute = ApiPublicWidgetMessagesRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/biblia': typeof BibliaRouteWithChildren
   '/converse': typeof ConverseRoute
   '/devocional': typeof DevocionalRoute
   '/escolhidas': typeof EscolhidasRoute
@@ -136,8 +161,11 @@ export interface FileRoutesByFullPath {
   '/mensagem/$sentimento': typeof MensagemSentimentoRoute
   '/meutempo/ler': typeof MeutempoLerRoute
   '/p/$payload': typeof PPayloadRoute
+  '/biblia/': typeof BibliaIndexRoute
   '/meutempo/': typeof MeutempoIndexRoute
   '/api/public/widget-messages': typeof ApiPublicWidgetMessagesRoute
+  '/biblia/$livro/$capitulo': typeof BibliaLivroCapituloRoute
+  '/biblia/$livro/': typeof BibliaLivroIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -155,12 +183,16 @@ export interface FileRoutesByTo {
   '/mensagem/$sentimento': typeof MensagemSentimentoRoute
   '/meutempo/ler': typeof MeutempoLerRoute
   '/p/$payload': typeof PPayloadRoute
+  '/biblia': typeof BibliaIndexRoute
   '/meutempo': typeof MeutempoIndexRoute
   '/api/public/widget-messages': typeof ApiPublicWidgetMessagesRoute
+  '/biblia/$livro/$capitulo': typeof BibliaLivroCapituloRoute
+  '/biblia/$livro': typeof BibliaLivroIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/biblia': typeof BibliaRouteWithChildren
   '/converse': typeof ConverseRoute
   '/devocional': typeof DevocionalRoute
   '/escolhidas': typeof EscolhidasRoute
@@ -176,13 +208,17 @@ export interface FileRoutesById {
   '/mensagem/$sentimento': typeof MensagemSentimentoRoute
   '/meutempo/ler': typeof MeutempoLerRoute
   '/p/$payload': typeof PPayloadRoute
+  '/biblia/': typeof BibliaIndexRoute
   '/meutempo/': typeof MeutempoIndexRoute
   '/api/public/widget-messages': typeof ApiPublicWidgetMessagesRoute
+  '/biblia/$livro/$capitulo': typeof BibliaLivroCapituloRoute
+  '/biblia/$livro/': typeof BibliaLivroIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/biblia'
     | '/converse'
     | '/devocional'
     | '/escolhidas'
@@ -198,8 +234,11 @@ export interface FileRouteTypes {
     | '/mensagem/$sentimento'
     | '/meutempo/ler'
     | '/p/$payload'
+    | '/biblia/'
     | '/meutempo/'
     | '/api/public/widget-messages'
+    | '/biblia/$livro/$capitulo'
+    | '/biblia/$livro/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -217,11 +256,15 @@ export interface FileRouteTypes {
     | '/mensagem/$sentimento'
     | '/meutempo/ler'
     | '/p/$payload'
+    | '/biblia'
     | '/meutempo'
     | '/api/public/widget-messages'
+    | '/biblia/$livro/$capitulo'
+    | '/biblia/$livro'
   id:
     | '__root__'
     | '/'
+    | '/biblia'
     | '/converse'
     | '/devocional'
     | '/escolhidas'
@@ -237,12 +280,16 @@ export interface FileRouteTypes {
     | '/mensagem/$sentimento'
     | '/meutempo/ler'
     | '/p/$payload'
+    | '/biblia/'
     | '/meutempo/'
     | '/api/public/widget-messages'
+    | '/biblia/$livro/$capitulo'
+    | '/biblia/$livro/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  BibliaRoute: typeof BibliaRouteWithChildren
   ConverseRoute: typeof ConverseRoute
   DevocionalRoute: typeof DevocionalRoute
   EscolhidasRoute: typeof EscolhidasRoute
@@ -339,6 +386,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ConverseRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/biblia': {
+      id: '/biblia'
+      path: '/biblia'
+      fullPath: '/biblia'
+      preLoaderRoute: typeof BibliaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -352,6 +406,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/meutempo/'
       preLoaderRoute: typeof MeutempoIndexRouteImport
       parentRoute: typeof MeutempoRoute
+    }
+    '/biblia/': {
+      id: '/biblia/'
+      path: '/'
+      fullPath: '/biblia/'
+      preLoaderRoute: typeof BibliaIndexRouteImport
+      parentRoute: typeof BibliaRoute
     }
     '/p/$payload': {
       id: '/p/$payload'
@@ -381,6 +442,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AtalhoAcaoRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/biblia/$livro/': {
+      id: '/biblia/$livro/'
+      path: '/$livro'
+      fullPath: '/biblia/$livro/'
+      preLoaderRoute: typeof BibliaLivroIndexRouteImport
+      parentRoute: typeof BibliaRoute
+    }
+    '/biblia/$livro/$capitulo': {
+      id: '/biblia/$livro/$capitulo'
+      path: '/$livro/$capitulo'
+      fullPath: '/biblia/$livro/$capitulo'
+      preLoaderRoute: typeof BibliaLivroCapituloRouteImport
+      parentRoute: typeof BibliaRoute
+    }
     '/api/public/widget-messages': {
       id: '/api/public/widget-messages'
       path: '/api/public/widget-messages'
@@ -390,6 +465,21 @@ declare module '@tanstack/react-router' {
     }
   }
 }
+
+interface BibliaRouteChildren {
+  BibliaIndexRoute: typeof BibliaIndexRoute
+  BibliaLivroCapituloRoute: typeof BibliaLivroCapituloRoute
+  BibliaLivroIndexRoute: typeof BibliaLivroIndexRoute
+}
+
+const BibliaRouteChildren: BibliaRouteChildren = {
+  BibliaIndexRoute: BibliaIndexRoute,
+  BibliaLivroCapituloRoute: BibliaLivroCapituloRoute,
+  BibliaLivroIndexRoute: BibliaLivroIndexRoute,
+}
+
+const BibliaRouteWithChildren =
+  BibliaRoute._addFileChildren(BibliaRouteChildren)
 
 interface MeutempoRouteChildren {
   MeutempoLerRoute: typeof MeutempoLerRoute
@@ -407,6 +497,7 @@ const MeutempoRouteWithChildren = MeutempoRoute._addFileChildren(
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  BibliaRoute: BibliaRouteWithChildren,
   ConverseRoute: ConverseRoute,
   DevocionalRoute: DevocionalRoute,
   EscolhidasRoute: EscolhidasRoute,
