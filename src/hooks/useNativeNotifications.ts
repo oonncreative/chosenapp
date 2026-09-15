@@ -304,15 +304,25 @@ async function scheduleNativeNotifications() {
     const gratefulStreak = hasStreak('Feliz', 3);
 
     // Slots de "palavra pronta" (salmo/motivação alternado) por intensidade.
+    // Estes são os PRIORITÁRIOS: versículos e frases com o texto no próprio push.
     const WORD_SCHEDULE_PRESENT = [
       { hour: 8,  minute: 8,  title: COPY.wordSlots.morning },
       { hour: 10, minute: 10, title: COPY.wordSlots.midMorning },
       { hour: 12, minute: 12, title: COPY.wordSlots.lunch },
       { hour: 14, minute: 14, title: COPY.wordSlots.afternoon },
+      { hour: 16, minute: 16, title: COPY.wordSlots.afternoon },
+      { hour: 18, minute: 18, title: COPY.wordSlots.lateAfternoon },
+      { hour: 20, minute: 20, title: COPY.wordSlots.night },
+      { hour: 21, minute: 21, title: COPY.wordSlots.night },
+    ];
+    const WORD_SCHEDULE_NORMAL = [
+      { hour: 8,  minute: 8,  title: COPY.wordSlots.morning },
+      { hour: 10, minute: 10, title: COPY.wordSlots.midMorning },
+      { hour: 12, minute: 12, title: COPY.wordSlots.lunch },
+      { hour: 15, minute: 15, title: COPY.wordSlots.afternoon },
       { hour: 18, minute: 18, title: COPY.wordSlots.lateAfternoon },
       { hour: 21, minute: 21, title: COPY.wordSlots.night },
     ];
-    const WORD_SCHEDULE_NORMAL = WORD_SCHEDULE_PRESENT;
     const WORD_SCHEDULE_LIGHT = [
       { hour: 8,  minute: 8,  title: COPY.wordSlots.morning },
       { hour: 12, minute: 12, title: COPY.wordSlots.lunch },
@@ -326,23 +336,29 @@ async function scheduleNativeNotifications() {
         ? WORD_SCHEDULE_NORMAL
         : WORD_SCHEDULE_PRESENT;
 
-    // Se já temos amostras suficientes, usa as top horas do usuário.
-    // No modo "leve" mantemos os 4 slots fixos pra não estourar o volume.
-    const learned = intensity === 'light' ? null : getPreferredHours(6);
+    // Horas aprendidas entram COMO EXTRA (não substituem mais os slots fixos),
+    // pra garantir que as mensagens com versículo nunca sumam do push.
+    const learned = intensity === 'light' ? null : getPreferredHours(3);
     const learnedTitle = COPY.wordByMood(dominantMood);
-    const SCHEDULE = learned
-      ? learned.map((h) => ({
-          hour: h,
-          minute: h, // mantém variação tipo 8h08, 14h14
-          title: learnedTitle,
-        }))
-      : DEFAULT_SCHEDULE;
+    const usadas = new Set(DEFAULT_SCHEDULE.map((s) => s.hour));
+    const SCHEDULE = [
+      ...DEFAULT_SCHEDULE,
+      ...(learned || [])
+        .filter((h) => !usadas.has(h))
+        .slice(0, 2)
+        .map((h) => ({ hour: h, minute: h, title: learnedTitle })),
+    ].sort((a, b) => a.hour - b.hour);
+
+    // iOS guarda no máximo 64 notificações locais agendadas — as mais próximas.
+    // Por isso limitamos o horizonte: palavras por mais dias, perguntas por poucos.
+    const WORD_DAYS = intensity === 'light' ? 7 : 4;
+    const ASK_DAYS = intensity === 'present' ? 2 : 3;
 
     const notifications: any[] = [];
     const now = new Date();
     let id = 1;
 
-    for (let day = 0; day <= 6; day++) {
+    for (let day = 0; day < WORD_DAYS; day++) {
       SCHEDULE.forEach((slot, slotIndex) => {
         const scheduledDate = new Date(now);
         scheduledDate.setDate(now.getDate() + day);
