@@ -188,7 +188,11 @@ function TrilhaCapitulos({
   return (
     <svg
       viewBox={`0 0 ${W} ${H}`}
-      className="w-full"
+      width={W}
+      height={H}
+      preserveAspectRatio="xMidYMin meet"
+      className="block w-full h-auto overflow-visible"
+      style={{ aspectRatio: `${W} / ${H}` }}
       role="list"
       aria-label="Trilha de capítulos"
     >
