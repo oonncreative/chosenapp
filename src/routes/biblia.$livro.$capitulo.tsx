@@ -206,7 +206,17 @@ function LeituraPage() {
           <span className="text-sm font-bold tracking-[0.2em] uppercase text-black text-center truncate">
             {livro.abrev} {cap}
           </span>
-          <span />
+          <button
+            onClick={alternarLido}
+            aria-pressed={lido}
+            aria-label="Marcar capítulo como lido"
+            className={`justify-self-end flex h-9 items-center gap-1.5 rounded-full px-3 text-[11px] font-semibold transition ${
+              lido ? "bg-black text-white" : "bg-black/[0.05] text-black/60"
+            }`}
+          >
+            <Check className="h-3.5 w-3.5" />
+            {lido ? "Lido" : "Lido?"}
+          </button>
         </div>
         <div className="mt-2 h-0.5 w-full rounded-full bg-black/5">
           <div
