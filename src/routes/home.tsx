@@ -374,8 +374,12 @@ function SwipeView({ navigate }: { navigate: NavFn }) {
                 onClick={() => offset === 0 && goTo(navigate, sentimento)}
                 className="w-full h-full rounded-[32px] bg-white flex flex-col items-center justify-center gap-4 sm:gap-6 p-6 sm:p-8 active:scale-[0.98] transition-transform"
               >
-                <div className="w-[40vw] max-w-40 aspect-square flex items-center justify-center">
-                  <img src={MASCOTES[sentimento]} alt={sentimento} className="w-full h-full object-contain" />
+                <div className="mascote-wrap w-[52vw] max-w-52 aspect-square flex items-center justify-center">
+                  <img
+                    src={MASCOTES[sentimento]}
+                    alt={sentimento}
+                    className={`w-full h-full object-contain ${offset === 0 ? "mascote-anim" : ""}`}
+                  />
                 </div>
                 <span className="text-xl sm:text-2xl font-medium tracking-tight uppercase text-black text-center break-words">{sentimento}</span>
               </button>
