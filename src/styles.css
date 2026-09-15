@@ -183,3 +183,33 @@
   .pb-safe { padding-bottom: max(env(safe-area-inset-bottom), 1rem); }
 }
 
+
+/* Mascotes: respiração contínua, pulinho ao tocar e entrada em cascata */
+@keyframes mascote-breathe {
+  0%, 100% { transform: translateY(0) scale(1); }
+  50% { transform: translateY(-3px) scale(1.025); }
+}
+
+@keyframes mascote-enter {
+  from { opacity: 0; transform: translateY(10px) scale(0.94); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.mascote-anim {
+  animation: mascote-breathe 3.6s ease-in-out infinite;
+  transform-origin: 50% 85%;
+  will-change: transform;
+}
+
+.mascote-enter {
+  animation: mascote-enter 420ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.mascote-wrap { transition: transform 220ms cubic-bezier(0.34, 1.56, 0.64, 1); }
+.group:active .mascote-wrap,
+.mascote-wrap:active { transform: translateY(-6px) scale(1.12); }
+
+@media (prefers-reduced-motion: reduce) {
+  .mascote-anim, .mascote-enter { animation: none; }
+  .mascote-wrap { transition: none; }
+}
