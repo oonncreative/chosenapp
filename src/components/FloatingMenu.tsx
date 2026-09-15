@@ -1071,3 +1071,72 @@ function SendDialog({
     </Dialog>
   );
 }
+function QuickActions() {
+  const navigate = useNavigate();
+  const [open, setOpen] = useState(false);
+  const [marcador, setMarcador] = useState<BibliaMarcador | null>(null);
+
+  useEffect(() => {
+    setMarcador(getMarcadorManual() ?? getMarcador());
+  }, []);
+
+  const abrev = marcador ? (getLivro(marcador.livro)?.abrev ?? marcador.nome) : null;
+
+  const irBiblia = () => {
+    setOpen(false);
+    if (marcador) {
+      navigate({
+        to: "/biblia/$livro/$capitulo",
+        params: { livro: marcador.livro, capitulo: String(marcador.capitulo) },
+        hash: `v${marcador.versiculo}`,
+      });
+    } else {
+      navigate({ to: "/biblia" });
+    }
+  };
+
+  return (
+    <div className="fixed z-40 bottom-[max(env(safe-area-inset-bottom),0.5rem)] left-4 mb-9 flex items-center gap-2">
+      <button
+        onClick={() => setOpen((v) => !v)}
+        aria-label={open ? "Fechar atalhos" : "Abrir atalhos"}
+        aria-expanded={open}
+        className="relative w-12 h-12 shrink-0 rounded-full bg-[#f1f26c] text-black shadow-lg flex items-center justify-center active:scale-95 transition-transform"
+      >
+        <Plus
+          className={`h-5 w-5 transition-transform duration-200 ${open ? "rotate-45" : ""}`}
+          strokeWidth={2.25}
+        />
+      </button>
+
+      <div
+        className={`flex items-center gap-2 transition-all duration-200 ${
+          open ? "opacity-100 translate-x-0" : "pointer-events-none opacity-0 -translate-x-2"
+        }`}
+      >
+        <button
+          onClick={irBiblia}
+          aria-label="Bíblia — Novo Testamento"
+          className="h-12 pl-3 pr-4 rounded-full bg-[#f1f26c] text-black shadow-lg flex items-center gap-2 active:scale-95 transition-transform"
+        >
+          <BookOpen className="h-5 w-5" strokeWidth={2.25} />
+          <span className="text-[13px] font-medium leading-none">
+            {abrev ? `${abrev} ${marcador!.capitulo}` : "Bíblia"}
+          </span>
+        </button>
+
+        <button
+          onClick={() => {
+            setOpen(false);
+            navigate({ to: "/converse" });
+          }}
+          aria-label="Fale com o Chosen (IA)"
+          className="h-12 px-4 rounded-full bg-[#f1f26c] text-black shadow-lg flex items-center gap-2 active:scale-95 transition-transform"
+        >
+          <Sparkles className="h-5 w-5" strokeWidth={2.25} />
+          <span className="text-[13px] font-bold leading-none tracking-wider">IA</span>
+        </button>
+      </div>
+    </div>
+  );
+}
