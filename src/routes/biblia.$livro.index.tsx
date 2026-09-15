@@ -162,7 +162,7 @@ function TrilhaCapitulos({
   const COLS = 4;
   const W = 320;
   const ROW_H = 88;
-  const TOP = 64;
+  const TOP = 82;
   const linhas = Math.ceil(total / COLS);
   const H = TOP + (linhas - 1) * ROW_H + 60;
 
