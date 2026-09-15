@@ -396,6 +396,35 @@ async function scheduleNativeNotifications() {
       });
     }
 
+    // ===== Lembrete de leitura da Bíblia — 07:30, próximos 7 dias =====
+    try {
+      const marcador = getMarcadorManual() || getMarcador();
+      for (let day = 0; day < 7; day++) {
+        const d = new Date(now);
+        d.setDate(now.getDate() + day);
+        d.setHours(7, 30, 0, 0);
+        if (d <= now) continue;
+        notifications.push({
+          id: id++,
+          title: marcador
+            ? `Continue em ${marcador.nome} ${marcador.capitulo}`
+            : 'Comece o dia na Palavra',
+          body: marcador
+            ? 'Você parou aqui. Vamos seguir a leitura hoje?'
+            : 'Abra o Novo Testamento e comece por Mateus 1.',
+          schedule: { at: d },
+          smallIcon: 'ic_stat_chosen',
+          iconColor: '#f1f26c',
+          extra: {
+            url: marcador
+              ? `/biblia/${marcador.livro}/${marcador.capitulo}#v${marcador.versiculo}`
+              : '/biblia',
+            type: 'biblia_reminder',
+          },
+        } as any);
+      }
+    } catch {}
+
     // ===== Extras por intensidade =====
     // "light" = apenas as palavras acima. Sai daqui.
     if (intensity === 'light') {
