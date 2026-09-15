@@ -674,8 +674,18 @@ async function scheduleNativeNotifications() {
       } catch {}
     }
 
-    if (notifications.length > 0) {
-      await LocalNotifications.schedule({ notifications });
+    // iOS só guarda 64 notificações locais. Ordena por horário e corta o excesso
+    // para que nada seja descartado em silêncio pelo sistema.
+    const final = notifications
+      .slice()
+      .sort(
+        (a, b) =>
+          new Date(a.schedule.at).getTime() - new Date(b.schedule.at).getTime()
+      )
+      .slice(0, 60);
+
+    if (final.length > 0) {
+      await LocalNotifications.schedule({ notifications: final });
       try {
         localStorage.setItem(NATIVE_SCHEDULED_KEY, new Date().toDateString());
       } catch {}
