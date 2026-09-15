@@ -5,8 +5,10 @@ import { AppFooter } from "@/components/AppFooter";
 import { LIVROS_EVANGELHOS_CARTAS, LIVRO_APOCALIPSE } from "@/lib/biblia";
 import {
   formatarMarcador,
+  getLidos,
   getMarcador,
   getMarcadorManual,
+  type Lidos,
   type Marcador,
 } from "@/lib/biblia/marcador";
 
