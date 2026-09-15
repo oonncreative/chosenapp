@@ -417,6 +417,15 @@ function LeituraPage() {
           </button>
         </div>
       </div>
+
+      {mensagemSelecao && (
+        <ShareSheet
+          open={shareOpen}
+          onOpenChange={setShareOpen}
+          mensagem={mensagemSelecao}
+          sentimento="biblia"
+        />
+      )}
     </div>
   );
 }
