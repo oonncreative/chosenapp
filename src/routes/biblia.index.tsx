@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { ArrowLeft, BookOpen, ChevronRight, Bookmark } from "lucide-react";
+import { ArrowLeft, BookOpen, Check, ChevronRight, Bookmark } from "lucide-react";
 import { AppFooter } from "@/components/AppFooter";
 import { LIVROS_EVANGELHOS_CARTAS, LIVRO_APOCALIPSE } from "@/lib/biblia";
 import {
