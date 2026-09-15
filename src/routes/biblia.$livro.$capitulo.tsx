@@ -168,6 +168,29 @@ function LeituraPage() {
   const marcado = (n: number) =>
     !!manual && manual.livro === livro.slug && manual.capitulo === cap && manual.versiculo === n;
 
+  const pareiAqui = () => {
+    const n = versAtual;
+    toggleMarcadorManual({
+      livro: livro.slug,
+      nome: livro.nome,
+      capitulo: cap,
+      versiculo: n,
+    });
+    setMarcador({ livro: livro.slug, nome: livro.nome, capitulo: cap, versiculo: n });
+    setManual(getMarcadorManual());
+    toast(`Salvo no celular: ${livro.nome} ${cap}:${n}`);
+  };
+
+  const alternarLido = () => {
+    const novo = toggleLido(livro.slug, cap);
+    setLidoState(novo);
+    toast(
+      novo
+        ? `${livro.nome} ${cap} marcado como lido`
+        : `${livro.nome} ${cap} desmarcado`,
+    );
+  };
+
   return (
     <div className="flex flex-col h-[100dvh] bg-white">
       <header className="shrink-0 px-4 pt-[max(env(safe-area-inset-top),2rem)] pb-2">
