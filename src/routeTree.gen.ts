@@ -16,6 +16,7 @@ import { Route as OracoesRouteImport } from './routes/oracoes'
 import { Route as OraComigoRouteImport } from './routes/ora-comigo'
 import { Route as OnboardingRouteImport } from './routes/onboarding'
 import { Route as MeutempoRouteImport } from './routes/meutempo'
+import { Route as LerBibliaRouteImport } from './routes/ler-biblia'
 import { Route as HomeRouteImport } from './routes/home'
 import { Route as EscolhidasRouteImport } from './routes/escolhidas'
 import { Route as DevocionalRouteImport } from './routes/devocional'
@@ -69,6 +70,11 @@ const OnboardingRoute = OnboardingRouteImport.update({
 const MeutempoRoute = MeutempoRouteImport.update({
   id: '/meutempo',
   path: '/meutempo',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LerBibliaRoute = LerBibliaRouteImport.update({
+  id: '/ler-biblia',
+  path: '/ler-biblia',
   getParentRoute: () => rootRouteImport,
 } as any)
 const HomeRoute = HomeRouteImport.update({
@@ -176,6 +182,7 @@ export interface FileRoutesByFullPath {
   '/devocional': typeof DevocionalRoute
   '/escolhidas': typeof EscolhidasRoute
   '/home': typeof HomeRoute
+  '/ler-biblia': typeof LerBibliaRoute
   '/meutempo': typeof MeutempoRouteWithChildren
   '/onboarding': typeof OnboardingRoute
   '/ora-comigo': typeof OraComigoRoute
@@ -202,6 +209,7 @@ export interface FileRoutesByTo {
   '/devocional': typeof DevocionalRoute
   '/escolhidas': typeof EscolhidasRoute
   '/home': typeof HomeRoute
+  '/ler-biblia': typeof LerBibliaRoute
   '/onboarding': typeof OnboardingRoute
   '/ora-comigo': typeof OraComigoRoute
   '/oracoes': typeof OracoesRoute
@@ -230,6 +238,7 @@ export interface FileRoutesById {
   '/devocional': typeof DevocionalRoute
   '/escolhidas': typeof EscolhidasRoute
   '/home': typeof HomeRoute
+  '/ler-biblia': typeof LerBibliaRoute
   '/meutempo': typeof MeutempoRouteWithChildren
   '/onboarding': typeof OnboardingRoute
   '/ora-comigo': typeof OraComigoRoute
@@ -260,6 +269,7 @@ export interface FileRouteTypes {
     | '/devocional'
     | '/escolhidas'
     | '/home'
+    | '/ler-biblia'
     | '/meutempo'
     | '/onboarding'
     | '/ora-comigo'
@@ -286,6 +296,7 @@ export interface FileRouteTypes {
     | '/devocional'
     | '/escolhidas'
     | '/home'
+    | '/ler-biblia'
     | '/onboarding'
     | '/ora-comigo'
     | '/oracoes'
@@ -313,6 +324,7 @@ export interface FileRouteTypes {
     | '/devocional'
     | '/escolhidas'
     | '/home'
+    | '/ler-biblia'
     | '/meutempo'
     | '/onboarding'
     | '/ora-comigo'
@@ -342,6 +354,7 @@ export interface RootRouteChildren {
   DevocionalRoute: typeof DevocionalRoute
   EscolhidasRoute: typeof EscolhidasRoute
   HomeRoute: typeof HomeRoute
+  LerBibliaRoute: typeof LerBibliaRoute
   MeutempoRoute: typeof MeutempoRouteWithChildren
   OnboardingRoute: typeof OnboardingRoute
   OraComigoRoute: typeof OraComigoRoute
@@ -404,6 +417,13 @@ declare module '@tanstack/react-router' {
       path: '/meutempo'
       fullPath: '/meutempo'
       preLoaderRoute: typeof MeutempoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/ler-biblia': {
+      id: '/ler-biblia'
+      path: '/ler-biblia'
+      fullPath: '/ler-biblia'
+      preLoaderRoute: typeof LerBibliaRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/home': {
@@ -592,6 +612,7 @@ const rootRouteChildren: RootRouteChildren = {
   DevocionalRoute: DevocionalRoute,
   EscolhidasRoute: EscolhidasRoute,
   HomeRoute: HomeRoute,
+  LerBibliaRoute: LerBibliaRoute,
   MeutempoRoute: MeutempoRouteWithChildren,
   OnboardingRoute: OnboardingRoute,
   OraComigoRoute: OraComigoRoute,
