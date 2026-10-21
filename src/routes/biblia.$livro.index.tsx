@@ -96,7 +96,7 @@ function CapitulosPage() {
         <div className="mx-auto w-full max-w-md">
           <div className="rounded-3xl bg-[#f1f26c] px-5 py-5">
             <p className="text-[10px] font-bold tracking-[0.3em] uppercase text-black/50">
-              Novo Testamento
+              {livro.testamento === "at" ? "Antigo Testamento" : "Novo Testamento"}
             </p>
             <h1 className="mt-1 text-[30px] leading-none font-semibold text-black tracking-tight">
               {livro.nome}
