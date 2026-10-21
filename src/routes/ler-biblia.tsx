@@ -28,7 +28,7 @@ export const Route = createFileRoute("/ler-biblia")({
 const EXEMPLOS = ["Êxodo 3:22", "Salmos 23", "João 3:16", "amor", "não temas"];
 
 function destacar(texto: string, consulta: string) {
-  const palavras = consulta.trim().split(/\s+/).filter((p) => p.length >= 2);
+  const palavras = consulta.trim().split(/\s+/).filter((p) => p.length >= 3);
   if (!palavras.length) return texto;
   const strip = (s: string) => s.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
   const base = strip(texto);
