@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate, useRouterState } from "@tanstack/react-router";
-import { Menu, Plus, RefreshCw, Sparkles, CalendarClock, Share2, HelpCircle, Trash2, Heart, Send, Smile, Shuffle, BellRing, Wind, Copy, Check, PlayCircle, Bell, Clock, BookOpen, HandHeart, Sun } from "lucide-react";
+import { Menu, Plus, RefreshCw, Sparkles, CalendarClock, Share2, HelpCircle, Trash2, Heart, Send, Smile, Shuffle, BellRing, Wind, Copy, Check, PlayCircle, Bell, Clock, BookOpen, HandHeart, Sun, Search } from "lucide-react";
 import { toast } from "sonner";
 import {
   Sheet,
@@ -256,6 +256,11 @@ export function FloatingMenu() {
           </SheetHeader>
 
           <div className="mt-2 flex flex-col">
+            <MenuItem
+              icon={<Search className="h-5 w-5" />}
+              label="Ler Bíblia"
+              onClick={() => { setOpen(false); navigate({ to: "/ler-biblia" }); }}
+            />
             <MenuItem
               icon={<BookOpen className="h-5 w-5" />}
               label="Bíblia — Novo Testamento"
@@ -1107,50 +1112,21 @@ function QuickActions() {
   };
 
   return (
-    <div className="fixed z-40 bottom-[max(env(safe-area-inset-bottom),0.5rem)] left-4 mb-9 flex flex-col-reverse items-start gap-2">
+    <div className="fixed z-40 bottom-[max(env(safe-area-inset-bottom),0.5rem)] left-4 mb-9">
       <button
         onClick={() => {
           lerMarcador();
-          setOpen((v) => !v);
+          irBiblia();
         }}
-        aria-label={open ? "Fechar atalhos" : "Abrir atalhos"}
-        aria-expanded={open}
-        className="relative w-12 h-12 shrink-0 rounded-full bg-[#f1f26c] text-black shadow-lg flex items-center justify-center active:scale-95 transition-transform"
+        onPointerDown={lerMarcador}
+        aria-label="Bíblia"
+        className="h-12 pl-3 pr-4 rounded-full bg-[#f1f26c] text-black shadow-lg flex items-center gap-2 active:scale-95 transition-transform"
       >
-        <Plus
-          className={`h-5 w-5 transition-transform duration-200 ${open ? "rotate-45" : ""}`}
-          strokeWidth={2.25}
-        />
+        <BookOpen className="h-5 w-5" strokeWidth={2.25} />
+        <span className="text-[13px] font-medium leading-none">
+          {abrev ? `${abrev} ${marcador!.capitulo}` : "Bíblia"}
+        </span>
       </button>
-
-      <div
-        className={`flex flex-col-reverse items-start gap-2 transition-all duration-200 ${
-          open ? "opacity-100 translate-y-0" : "pointer-events-none opacity-0 translate-y-2"
-        }`}
-      >
-        <button
-          onClick={irBiblia}
-          aria-label="Bíblia — Novo Testamento"
-          className="h-12 pl-3 pr-4 rounded-full bg-[#f1f26c] text-black shadow-lg flex items-center gap-2 active:scale-95 transition-transform"
-        >
-          <BookOpen className="h-5 w-5" strokeWidth={2.25} />
-          <span className="text-[13px] font-medium leading-none">
-            {abrev ? `${abrev} ${marcador!.capitulo}` : "Bíblia"}
-          </span>
-        </button>
-
-        <button
-          onClick={() => {
-            setOpen(false);
-            navigate({ to: "/converse" });
-          }}
-          aria-label="Fale com o Chosen (IA)"
-          className="h-12 px-4 rounded-full bg-[#f1f26c] text-black shadow-lg flex items-center gap-2 active:scale-95 transition-transform"
-        >
-          <Sparkles className="h-5 w-5" strokeWidth={2.25} />
-          <span className="text-[13px] font-bold leading-none tracking-wider">IA</span>
-        </button>
-      </div>
     </div>
   );
 }

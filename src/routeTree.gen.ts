@@ -9,96 +9,37 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as TermsRouteImport } from './routes/terms'
-import { Route as SilencioRouteImport } from './routes/silencio'
-import { Route as PrivacyRouteImport } from './routes/privacy'
-import { Route as OracoesRouteImport } from './routes/oracoes'
-import { Route as OraComigoRouteImport } from './routes/ora-comigo'
-import { Route as OnboardingRouteImport } from './routes/onboarding'
-import { Route as MeutempoRouteImport } from './routes/meutempo'
-import { Route as HomeRouteImport } from './routes/home'
-import { Route as EscolhidasRouteImport } from './routes/escolhidas'
-import { Route as DevocionalRouteImport } from './routes/devocional'
-import { Route as ConverseRouteImport } from './routes/converse'
-import { Route as BibliaRouteImport } from './routes/biblia'
-import { Route as BaixarRouteImport } from './routes/baixar'
-import { Route as AdminRouteImport } from './routes/admin'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as MeutempoIndexRouteImport } from './routes/meutempo.index'
-import { Route as BibliaIndexRouteImport } from './routes/biblia.index'
+import { Route as AdminRouteImport } from './routes/admin'
+import { Route as BaixarRouteImport } from './routes/baixar'
+import { Route as BibliaRouteImport } from './routes/biblia'
+import { Route as ConverseRouteImport } from './routes/converse'
+import { Route as DevocionalRouteImport } from './routes/devocional'
+import { Route as EscolhidasRouteImport } from './routes/escolhidas'
+import { Route as HomeRouteImport } from './routes/home'
+import { Route as LerBibliaRouteImport } from './routes/ler-biblia'
+import { Route as MeutempoRouteImport } from './routes/meutempo'
+import { Route as OnboardingRouteImport } from './routes/onboarding'
+import { Route as OraComigoRouteImport } from './routes/ora-comigo'
+import { Route as OracoesRouteImport } from './routes/oracoes'
+import { Route as PrivacyRouteImport } from './routes/privacy'
+import { Route as SilencioRouteImport } from './routes/silencio'
+import { Route as TermsRouteImport } from './routes/terms'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
-import { Route as PPayloadRouteImport } from './routes/p.$payload'
-import { Route as MeutempoLerRouteImport } from './routes/meutempo.ler'
-import { Route as MensagemSentimentoRouteImport } from './routes/mensagem/$sentimento'
-import { Route as AtalhoAcaoRouteImport } from './routes/atalho.$acao'
 import { Route as AdminPushRouteImport } from './routes/admin.push'
+import { Route as AtalhoAcaoRouteImport } from './routes/atalho.$acao'
+import { Route as BibliaIndexRouteImport } from './routes/biblia.index'
+import { Route as MensagemSentimentoRouteImport } from './routes/mensagem/$sentimento'
+import { Route as MeutempoIndexRouteImport } from './routes/meutempo.index'
+import { Route as MeutempoLerRouteImport } from './routes/meutempo.ler'
+import { Route as PPayloadRouteImport } from './routes/p.$payload'
+import { Route as ApiPublicWidgetMessagesRouteImport } from './routes/api/public/widget-messages'
 import { Route as BibliaLivroIndexRouteImport } from './routes/biblia.$livro.index'
 import { Route as BibliaLivroCapituloRouteImport } from './routes/biblia.$livro.$capitulo'
-import { Route as ApiPublicWidgetMessagesRouteImport } from './routes/api/public/widget-messages'
 
-const TermsRoute = TermsRouteImport.update({
-  id: '/terms',
-  path: '/terms',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const SilencioRoute = SilencioRouteImport.update({
-  id: '/silencio',
-  path: '/silencio',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const PrivacyRoute = PrivacyRouteImport.update({
-  id: '/privacy',
-  path: '/privacy',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const OracoesRoute = OracoesRouteImport.update({
-  id: '/oracoes',
-  path: '/oracoes',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const OraComigoRoute = OraComigoRouteImport.update({
-  id: '/ora-comigo',
-  path: '/ora-comigo',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const OnboardingRoute = OnboardingRouteImport.update({
-  id: '/onboarding',
-  path: '/onboarding',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const MeutempoRoute = MeutempoRouteImport.update({
-  id: '/meutempo',
-  path: '/meutempo',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const HomeRoute = HomeRouteImport.update({
-  id: '/home',
-  path: '/home',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const EscolhidasRoute = EscolhidasRouteImport.update({
-  id: '/escolhidas',
-  path: '/escolhidas',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const DevocionalRoute = DevocionalRouteImport.update({
-  id: '/devocional',
-  path: '/devocional',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ConverseRoute = ConverseRouteImport.update({
-  id: '/converse',
-  path: '/converse',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const BibliaRoute = BibliaRouteImport.update({
-  id: '/biblia',
-  path: '/biblia',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const BaixarRoute = BaixarRouteImport.update({
-  id: '/baixar',
-  path: '/baixar',
+const IndexRoute = IndexRouteImport.update({
+  id: '/',
+  path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AdminRoute = AdminRouteImport.update({
@@ -106,9 +47,99 @@ const AdminRoute = AdminRouteImport.update({
   path: '/admin',
   getParentRoute: () => rootRouteImport,
 } as any)
-const IndexRoute = IndexRouteImport.update({
+const BaixarRoute = BaixarRouteImport.update({
+  id: '/baixar',
+  path: '/baixar',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BibliaRoute = BibliaRouteImport.update({
+  id: '/biblia',
+  path: '/biblia',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ConverseRoute = ConverseRouteImport.update({
+  id: '/converse',
+  path: '/converse',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DevocionalRoute = DevocionalRouteImport.update({
+  id: '/devocional',
+  path: '/devocional',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EscolhidasRoute = EscolhidasRouteImport.update({
+  id: '/escolhidas',
+  path: '/escolhidas',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const HomeRoute = HomeRouteImport.update({
+  id: '/home',
+  path: '/home',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LerBibliaRoute = LerBibliaRouteImport.update({
+  id: '/ler-biblia',
+  path: '/ler-biblia',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MeutempoRoute = MeutempoRouteImport.update({
+  id: '/meutempo',
+  path: '/meutempo',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const OnboardingRoute = OnboardingRouteImport.update({
+  id: '/onboarding',
+  path: '/onboarding',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const OraComigoRoute = OraComigoRouteImport.update({
+  id: '/ora-comigo',
+  path: '/ora-comigo',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const OracoesRoute = OracoesRouteImport.update({
+  id: '/oracoes',
+  path: '/oracoes',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PrivacyRoute = PrivacyRouteImport.update({
+  id: '/privacy',
+  path: '/privacy',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SilencioRoute = SilencioRouteImport.update({
+  id: '/silencio',
+  path: '/silencio',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TermsRoute = TermsRouteImport.update({
+  id: '/terms',
+  path: '/terms',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminIndexRoute = AdminIndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminPushRoute = AdminPushRouteImport.update({
+  id: '/push',
+  path: '/push',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AtalhoAcaoRoute = AtalhoAcaoRouteImport.update({
+  id: '/atalho/$acao',
+  path: '/atalho/$acao',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BibliaIndexRoute = BibliaIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => BibliaRoute,
+} as any)
+const MensagemSentimentoRoute = MensagemSentimentoRouteImport.update({
+  id: '/mensagem/$sentimento',
+  path: '/mensagem/$sentimento',
   getParentRoute: () => rootRouteImport,
 } as any)
 const MeutempoIndexRoute = MeutempoIndexRouteImport.update({
@@ -116,40 +147,20 @@ const MeutempoIndexRoute = MeutempoIndexRouteImport.update({
   path: '/',
   getParentRoute: () => MeutempoRoute,
 } as any)
-const BibliaIndexRoute = BibliaIndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => BibliaRoute,
-} as any)
-const AdminIndexRoute = AdminIndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => AdminRoute,
+const MeutempoLerRoute = MeutempoLerRouteImport.update({
+  id: '/ler',
+  path: '/ler',
+  getParentRoute: () => MeutempoRoute,
 } as any)
 const PPayloadRoute = PPayloadRouteImport.update({
   id: '/p/$payload',
   path: '/p/$payload',
   getParentRoute: () => rootRouteImport,
 } as any)
-const MeutempoLerRoute = MeutempoLerRouteImport.update({
-  id: '/ler',
-  path: '/ler',
-  getParentRoute: () => MeutempoRoute,
-} as any)
-const MensagemSentimentoRoute = MensagemSentimentoRouteImport.update({
-  id: '/mensagem/$sentimento',
-  path: '/mensagem/$sentimento',
+const ApiPublicWidgetMessagesRoute = ApiPublicWidgetMessagesRouteImport.update({
+  id: '/api/public/widget-messages',
+  path: '/api/public/widget-messages',
   getParentRoute: () => rootRouteImport,
-} as any)
-const AtalhoAcaoRoute = AtalhoAcaoRouteImport.update({
-  id: '/atalho/$acao',
-  path: '/atalho/$acao',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AdminPushRoute = AdminPushRouteImport.update({
-  id: '/push',
-  path: '/push',
-  getParentRoute: () => AdminRoute,
 } as any)
 const BibliaLivroIndexRoute = BibliaLivroIndexRouteImport.update({
   id: '/$livro/',
@@ -161,11 +172,6 @@ const BibliaLivroCapituloRoute = BibliaLivroCapituloRouteImport.update({
   path: '/$livro/$capitulo',
   getParentRoute: () => BibliaRoute,
 } as any)
-const ApiPublicWidgetMessagesRoute = ApiPublicWidgetMessagesRouteImport.update({
-  id: '/api/public/widget-messages',
-  path: '/api/public/widget-messages',
-  getParentRoute: () => rootRouteImport,
-} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -176,6 +182,7 @@ export interface FileRoutesByFullPath {
   '/devocional': typeof DevocionalRoute
   '/escolhidas': typeof EscolhidasRoute
   '/home': typeof HomeRoute
+  '/ler-biblia': typeof LerBibliaRoute
   '/meutempo': typeof MeutempoRouteWithChildren
   '/onboarding': typeof OnboardingRoute
   '/ora-comigo': typeof OraComigoRoute
@@ -202,6 +209,7 @@ export interface FileRoutesByTo {
   '/devocional': typeof DevocionalRoute
   '/escolhidas': typeof EscolhidasRoute
   '/home': typeof HomeRoute
+  '/ler-biblia': typeof LerBibliaRoute
   '/onboarding': typeof OnboardingRoute
   '/ora-comigo': typeof OraComigoRoute
   '/oracoes': typeof OracoesRoute
@@ -230,6 +238,7 @@ export interface FileRoutesById {
   '/devocional': typeof DevocionalRoute
   '/escolhidas': typeof EscolhidasRoute
   '/home': typeof HomeRoute
+  '/ler-biblia': typeof LerBibliaRoute
   '/meutempo': typeof MeutempoRouteWithChildren
   '/onboarding': typeof OnboardingRoute
   '/ora-comigo': typeof OraComigoRoute
@@ -260,6 +269,7 @@ export interface FileRouteTypes {
     | '/devocional'
     | '/escolhidas'
     | '/home'
+    | '/ler-biblia'
     | '/meutempo'
     | '/onboarding'
     | '/ora-comigo'
@@ -286,6 +296,7 @@ export interface FileRouteTypes {
     | '/devocional'
     | '/escolhidas'
     | '/home'
+    | '/ler-biblia'
     | '/onboarding'
     | '/ora-comigo'
     | '/oracoes'
@@ -313,6 +324,7 @@ export interface FileRouteTypes {
     | '/devocional'
     | '/escolhidas'
     | '/home'
+    | '/ler-biblia'
     | '/meutempo'
     | '/onboarding'
     | '/ora-comigo'
@@ -342,6 +354,7 @@ export interface RootRouteChildren {
   DevocionalRoute: typeof DevocionalRoute
   EscolhidasRoute: typeof EscolhidasRoute
   HomeRoute: typeof HomeRoute
+  LerBibliaRoute: typeof LerBibliaRoute
   MeutempoRoute: typeof MeutempoRouteWithChildren
   OnboardingRoute: typeof OnboardingRoute
   OraComigoRoute: typeof OraComigoRoute
@@ -357,95 +370,11 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/terms': {
-      id: '/terms'
-      path: '/terms'
-      fullPath: '/terms'
-      preLoaderRoute: typeof TermsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/silencio': {
-      id: '/silencio'
-      path: '/silencio'
-      fullPath: '/silencio'
-      preLoaderRoute: typeof SilencioRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/privacy': {
-      id: '/privacy'
-      path: '/privacy'
-      fullPath: '/privacy'
-      preLoaderRoute: typeof PrivacyRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/oracoes': {
-      id: '/oracoes'
-      path: '/oracoes'
-      fullPath: '/oracoes'
-      preLoaderRoute: typeof OracoesRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/ora-comigo': {
-      id: '/ora-comigo'
-      path: '/ora-comigo'
-      fullPath: '/ora-comigo'
-      preLoaderRoute: typeof OraComigoRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/onboarding': {
-      id: '/onboarding'
-      path: '/onboarding'
-      fullPath: '/onboarding'
-      preLoaderRoute: typeof OnboardingRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/meutempo': {
-      id: '/meutempo'
-      path: '/meutempo'
-      fullPath: '/meutempo'
-      preLoaderRoute: typeof MeutempoRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/home': {
-      id: '/home'
-      path: '/home'
-      fullPath: '/home'
-      preLoaderRoute: typeof HomeRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/escolhidas': {
-      id: '/escolhidas'
-      path: '/escolhidas'
-      fullPath: '/escolhidas'
-      preLoaderRoute: typeof EscolhidasRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/devocional': {
-      id: '/devocional'
-      path: '/devocional'
-      fullPath: '/devocional'
-      preLoaderRoute: typeof DevocionalRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/converse': {
-      id: '/converse'
-      path: '/converse'
-      fullPath: '/converse'
-      preLoaderRoute: typeof ConverseRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/biblia': {
-      id: '/biblia'
-      path: '/biblia'
-      fullPath: '/biblia'
-      preLoaderRoute: typeof BibliaRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/baixar': {
-      id: '/baixar'
-      path: '/baixar'
-      fullPath: '/baixar'
-      preLoaderRoute: typeof BaixarRouteImport
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/admin': {
@@ -455,11 +384,137 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/': {
-      id: '/'
+    '/baixar': {
+      id: '/baixar'
+      path: '/baixar'
+      fullPath: '/baixar'
+      preLoaderRoute: typeof BaixarRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/biblia': {
+      id: '/biblia'
+      path: '/biblia'
+      fullPath: '/biblia'
+      preLoaderRoute: typeof BibliaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/converse': {
+      id: '/converse'
+      path: '/converse'
+      fullPath: '/converse'
+      preLoaderRoute: typeof ConverseRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/devocional': {
+      id: '/devocional'
+      path: '/devocional'
+      fullPath: '/devocional'
+      preLoaderRoute: typeof DevocionalRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/escolhidas': {
+      id: '/escolhidas'
+      path: '/escolhidas'
+      fullPath: '/escolhidas'
+      preLoaderRoute: typeof EscolhidasRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/home': {
+      id: '/home'
+      path: '/home'
+      fullPath: '/home'
+      preLoaderRoute: typeof HomeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/ler-biblia': {
+      id: '/ler-biblia'
+      path: '/ler-biblia'
+      fullPath: '/ler-biblia'
+      preLoaderRoute: typeof LerBibliaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/meutempo': {
+      id: '/meutempo'
+      path: '/meutempo'
+      fullPath: '/meutempo'
+      preLoaderRoute: typeof MeutempoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/onboarding': {
+      id: '/onboarding'
+      path: '/onboarding'
+      fullPath: '/onboarding'
+      preLoaderRoute: typeof OnboardingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/ora-comigo': {
+      id: '/ora-comigo'
+      path: '/ora-comigo'
+      fullPath: '/ora-comigo'
+      preLoaderRoute: typeof OraComigoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/oracoes': {
+      id: '/oracoes'
+      path: '/oracoes'
+      fullPath: '/oracoes'
+      preLoaderRoute: typeof OracoesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/privacy': {
+      id: '/privacy'
+      path: '/privacy'
+      fullPath: '/privacy'
+      preLoaderRoute: typeof PrivacyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/silencio': {
+      id: '/silencio'
+      path: '/silencio'
+      fullPath: '/silencio'
+      preLoaderRoute: typeof SilencioRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/terms': {
+      id: '/terms'
+      path: '/terms'
+      fullPath: '/terms'
+      preLoaderRoute: typeof TermsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/': {
+      id: '/admin/'
       path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
+      fullPath: '/admin/'
+      preLoaderRoute: typeof AdminIndexRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/push': {
+      id: '/admin/push'
+      path: '/push'
+      fullPath: '/admin/push'
+      preLoaderRoute: typeof AdminPushRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/atalho/$acao': {
+      id: '/atalho/$acao'
+      path: '/atalho/$acao'
+      fullPath: '/atalho/$acao'
+      preLoaderRoute: typeof AtalhoAcaoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/biblia/': {
+      id: '/biblia/'
+      path: '/'
+      fullPath: '/biblia/'
+      preLoaderRoute: typeof BibliaIndexRouteImport
+      parentRoute: typeof BibliaRoute
+    }
+    '/mensagem/$sentimento': {
+      id: '/mensagem/$sentimento'
+      path: '/mensagem/$sentimento'
+      fullPath: '/mensagem/$sentimento'
+      preLoaderRoute: typeof MensagemSentimentoRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/meutempo/': {
@@ -469,19 +524,12 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MeutempoIndexRouteImport
       parentRoute: typeof MeutempoRoute
     }
-    '/biblia/': {
-      id: '/biblia/'
-      path: '/'
-      fullPath: '/biblia/'
-      preLoaderRoute: typeof BibliaIndexRouteImport
-      parentRoute: typeof BibliaRoute
-    }
-    '/admin/': {
-      id: '/admin/'
-      path: '/'
-      fullPath: '/admin/'
-      preLoaderRoute: typeof AdminIndexRouteImport
-      parentRoute: typeof AdminRoute
+    '/meutempo/ler': {
+      id: '/meutempo/ler'
+      path: '/ler'
+      fullPath: '/meutempo/ler'
+      preLoaderRoute: typeof MeutempoLerRouteImport
+      parentRoute: typeof MeutempoRoute
     }
     '/p/$payload': {
       id: '/p/$payload'
@@ -490,33 +538,12 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PPayloadRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/meutempo/ler': {
-      id: '/meutempo/ler'
-      path: '/ler'
-      fullPath: '/meutempo/ler'
-      preLoaderRoute: typeof MeutempoLerRouteImport
-      parentRoute: typeof MeutempoRoute
-    }
-    '/mensagem/$sentimento': {
-      id: '/mensagem/$sentimento'
-      path: '/mensagem/$sentimento'
-      fullPath: '/mensagem/$sentimento'
-      preLoaderRoute: typeof MensagemSentimentoRouteImport
+    '/api/public/widget-messages': {
+      id: '/api/public/widget-messages'
+      path: '/api/public/widget-messages'
+      fullPath: '/api/public/widget-messages'
+      preLoaderRoute: typeof ApiPublicWidgetMessagesRouteImport
       parentRoute: typeof rootRouteImport
-    }
-    '/atalho/$acao': {
-      id: '/atalho/$acao'
-      path: '/atalho/$acao'
-      fullPath: '/atalho/$acao'
-      preLoaderRoute: typeof AtalhoAcaoRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/admin/push': {
-      id: '/admin/push'
-      path: '/push'
-      fullPath: '/admin/push'
-      preLoaderRoute: typeof AdminPushRouteImport
-      parentRoute: typeof AdminRoute
     }
     '/biblia/$livro/': {
       id: '/biblia/$livro/'
@@ -531,13 +558,6 @@ declare module '@tanstack/react-router' {
       fullPath: '/biblia/$livro/$capitulo'
       preLoaderRoute: typeof BibliaLivroCapituloRouteImport
       parentRoute: typeof BibliaRoute
-    }
-    '/api/public/widget-messages': {
-      id: '/api/public/widget-messages'
-      path: '/api/public/widget-messages'
-      fullPath: '/api/public/widget-messages'
-      preLoaderRoute: typeof ApiPublicWidgetMessagesRouteImport
-      parentRoute: typeof rootRouteImport
     }
   }
 }
@@ -592,6 +612,7 @@ const rootRouteChildren: RootRouteChildren = {
   DevocionalRoute: DevocionalRoute,
   EscolhidasRoute: EscolhidasRoute,
   HomeRoute: HomeRoute,
+  LerBibliaRoute: LerBibliaRoute,
   MeutempoRoute: MeutempoRouteWithChildren,
   OnboardingRoute: OnboardingRoute,
   OraComigoRoute: OraComigoRoute,

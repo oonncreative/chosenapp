@@ -80,7 +80,7 @@ function CapitulosPage() {
     <div className="flex flex-col h-[100dvh] bg-white">
       <header className="grid grid-cols-3 items-center px-4 pt-[max(env(safe-area-inset-top),2rem)] pb-2 shrink-0">
         <Link
-          to="/biblia"
+          to={livro.testamento === "at" ? "/ler-biblia" : "/biblia"}
           aria-label="Voltar"
           className="flex h-10 w-10 items-center justify-center rounded-full hover:bg-gray-100 justify-self-start"
         >
@@ -96,7 +96,7 @@ function CapitulosPage() {
         <div className="mx-auto w-full max-w-md">
           <div className="rounded-3xl bg-[#f1f26c] px-5 py-5">
             <p className="text-[10px] font-bold tracking-[0.3em] uppercase text-black/50">
-              Novo Testamento
+              {livro.testamento === "at" ? "Antigo Testamento" : "Novo Testamento"}
             </p>
             <h1 className="mt-1 text-[30px] leading-none font-semibold text-black tracking-tight">
               {livro.nome}
